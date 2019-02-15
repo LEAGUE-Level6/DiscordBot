@@ -1,8 +1,5 @@
 package org.jointheleague.discordBotExample;
 
-import org.javacord.api.DiscordApi;
-import org.javacord.api.DiscordApiBuilder;
-
 /**
  * BotLauncher can launch one or more bots if needed.
  * 
