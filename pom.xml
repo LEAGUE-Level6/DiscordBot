@@ -5,11 +5,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.jointheleague</groupId>
-	<artifactId>discordBotExample</artifactId>
+	<artifactId>discord_bot_example</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>discordBotExample</name>
+	<name>discord_bot_example</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>

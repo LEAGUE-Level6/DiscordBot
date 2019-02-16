@@ -1,4 +1,4 @@
-package org.jointheleague.discordBotExample.config;
+package org.jointheleague.discord_bot_example.pojos;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

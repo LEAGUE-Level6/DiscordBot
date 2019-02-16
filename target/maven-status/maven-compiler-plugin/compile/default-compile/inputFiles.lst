@@ -1,3 +1,6 @@
-/Users/keithgroves/eclipse-workspace/leagueApp/discordBotExample/src/main/java/org/jointheleague/discordBotExample/Bot.java
-/Users/keithgroves/eclipse-workspace/leagueApp/discordBotExample/src/main/java/org/jointheleague/discordBotExample/BotLauncher.java
-/Users/keithgroves/eclipse-workspace/leagueApp/discordBotExample/src/main/java/org/jointheleague/discordBotExample/Listener.java
+/Users/keithgroves/eclipse-workspace/leagueApp/discordBotExample/src/main/java/org/jointheleague/discord_bot_example/Utilities.java
+/Users/keithgroves/eclipse-workspace/leagueApp/discordBotExample/src/main/java/org/jointheleague/discord_bot_example/BotLauncher.java
+/Users/keithgroves/eclipse-workspace/leagueApp/discordBotExample/src/main/java/org/jointheleague/discord_bot_example/Bot.java
+/Users/keithgroves/eclipse-workspace/leagueApp/discordBotExample/src/main/java/org/jointheleague/discord_bot_example/pojos/BotList.java
+/Users/keithgroves/eclipse-workspace/leagueApp/discordBotExample/src/main/java/org/jointheleague/discord_bot_example/Listener.java
+/Users/keithgroves/eclipse-workspace/leagueApp/discordBotExample/src/main/java/org/jointheleague/discord_bot_example/pojos/BotInfo.java

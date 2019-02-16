@@ -1,3 +1,6 @@
-org/jointheleague/discordBotExample/Bot.class
-org/jointheleague/discordBotExample/BotLauncher.class
-org/jointheleague/discordBotExample/Listener.class
+org/jointheleague/discord_bot_example/pojos/BotInfo.class
+org/jointheleague/discord_bot_example/Utilities.class
+org/jointheleague/discord_bot_example/pojos/BotList.class
+org/jointheleague/discord_bot_example/Listener.class
+org/jointheleague/discord_bot_example/Bot.class
+org/jointheleague/discord_bot_example/BotLauncher.class
