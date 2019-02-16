@@ -7,7 +7,7 @@ public class Listener implements MessageCreateListener {
 
 	@Override
 	public void onMessageCreate(MessageCreateEvent event) {
-		if(event.getMessageContent().equals("!hello")) {
+		if (event.getMessageContent().equals("!hello")) {
 			event.getChannel().sendMessage("Hi!");
 		}
 	}

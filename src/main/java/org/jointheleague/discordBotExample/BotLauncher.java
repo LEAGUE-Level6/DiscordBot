@@ -1,5 +1,17 @@
 package org.jointheleague.discordBotExample;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+
+import org.jointheleague.discordBotExample.config.BotInfo;
+import org.jointheleague.discordBotExample.config.BotList;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 /**
  * BotLauncher can launch one or more bots if needed.
  * 
@@ -12,7 +24,9 @@ public class BotLauncher {
 	}
 
 	public void launch() {
-		System.out.println("Launching bots!");
-		Bot myBot = new Bot("NTQ1Nzg4MDMzMTk1MTgwMDMy.D0ew-A.qwhq9WRTZ-MoYigFMONR4VS7aUw");
+		BotList p = Utilities.loadBots();
+		for (BotInfo b : p.getBots()) {
+			new Bot(b.getToken(), b.getChannel()).connect();
+		}
 	}
 }
