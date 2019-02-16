@@ -1,5 +1,4 @@
-{
-  "bots": [
+ [
     {
       "channel": "bot",
       "token": "NTQ1Nzg4MDMzMTk1MTgwMDMy.D0ew-A.qwhq9WRTZ-MoYigFMONR4VS7aUw"
@@ -9,4 +8,3 @@
       "token": "NTI0NDI0MDc2NTgwNzQ5MzMy.Dvn3hw.G55b9TvFlWnOIQKH0VnO1Ni2aNw"
     }
   ]
-}

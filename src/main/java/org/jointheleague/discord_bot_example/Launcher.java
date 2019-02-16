@@ -1,7 +1,8 @@
 package org.jointheleague.discord_bot_example;
 
+import java.util.List;
+
 import org.jointheleague.discord_bot_example.pojos.BotInfo;
-import org.jointheleague.discord_bot_example.pojos.BotList;
 
 /**
  * 
@@ -19,8 +20,8 @@ public class Launcher {
 
 	public void launch(String[] args) {
 		for (String botName : args) {
-			BotList list = Utilities.loadBotsFromJson();
-			for (BotInfo info : list.getBots()) {
+			List<BotInfo> list = Utilities.loadBotsFromJson();
+			for (BotInfo info : list) {
 				if (info.getChannel().equals(botName))
 					new Bot(info.getToken(), info.getChannel()).connect();
 			}

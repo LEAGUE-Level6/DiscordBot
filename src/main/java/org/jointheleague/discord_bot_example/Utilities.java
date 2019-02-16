@@ -2,27 +2,28 @@ package org.jointheleague.discord_bot_example;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.List;
 
 import org.jointheleague.discord_bot_example.pojos.BotInfo;
-import org.jointheleague.discord_bot_example.pojos.BotList;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 public class Utilities {
 	private Utilities() {
 	}
+
 	/**
 	 * 
 	 * @return list of bots
 	 */
-	public static BotList loadBotsFromJson() {
+	public static List<BotInfo> loadBotsFromJson() {
 		try (Reader reader = new InputStreamReader(
 				Utilities.class.getClassLoader().getResourceAsStream("config.json"))) {
 			System.out.println("Loading bots");
 			Gson gson = new GsonBuilder().create();
-			BotList botList = gson.fromJson(reader, BotList.class);
-			return botList;
+			return gson.fromJson(reader,new TypeToken<List<BotInfo>>(){}.getType());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
