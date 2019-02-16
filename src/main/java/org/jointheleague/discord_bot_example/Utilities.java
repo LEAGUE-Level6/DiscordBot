@@ -2,9 +2,7 @@ package org.jointheleague.discord_bot_example;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.List;
-
-import org.jointheleague.discord_bot_example.pojos.BotInfo;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,12 +16,12 @@ public class Utilities {
 	 * 
 	 * @return list of bots
 	 */
-	public static List<BotInfo> loadBotsFromJson() {
+	public static Map<String, BotInfo> loadBotsFromJson() {
 		try (Reader reader = new InputStreamReader(
 				Utilities.class.getClassLoader().getResourceAsStream("config.json"))) {
 			System.out.println("Loading bots");
 			Gson gson = new GsonBuilder().create();
-			return gson.fromJson(reader,new TypeToken<List<BotInfo>>(){}.getType());
+			return gson.fromJson(reader, new TypeToken<Map<String, BotInfo>>(){}.getType());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

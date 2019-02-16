@@ -1,8 +1,12 @@
-package org.jointheleague.discord_bot_example.pojos;
+package org.jointheleague.discord_bot_example;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
+/**
+ * Pojo for Json
+ * @author keithgroves
+ *
+ */
 public class BotInfo {
 
 @SerializedName("channel")

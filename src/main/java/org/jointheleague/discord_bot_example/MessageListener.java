@@ -2,9 +2,13 @@ package org.jointheleague.discord_bot_example;
 
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
+import org.jointheleague.modules.Ping;
 
 public class MessageListener implements MessageCreateListener {
-	String channelName;
+	private String channelName;
+	
+	//modules
+	Ping ping = new Ping();
 
 	public MessageListener(String channelName) {
 		this.channelName = channelName;
@@ -15,7 +19,7 @@ public class MessageListener implements MessageCreateListener {
 		event.getServerTextChannel().ifPresent(e -> {
 			if (e.getName().equals(channelName)) {
 				if (event.getMessageContent().equalsIgnoreCase("!ping")) {
-					event.getChannel().sendMessage("Pong!");
+					ping.handlePing(event);
 				} else if (event.getMessageContent().equalsIgnoreCase("!bing")) {
 					event.getChannel().sendMessage("Bong!");
 				}
@@ -23,6 +27,5 @@ public class MessageListener implements MessageCreateListener {
 
 		});
 
-	
-}
+	}
 }

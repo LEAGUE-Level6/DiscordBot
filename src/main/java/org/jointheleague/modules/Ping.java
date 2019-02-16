@@ -1,7 +1,11 @@
 package org.jointheleague.modules;
 
+import org.javacord.api.event.message.MessageCreateEvent;
+
 public class Ping {
-	String handlePing() {
-		return "pong";
+	private static final String RESPONSE = "pong";
+
+	public void handlePing(MessageCreateEvent event) {
+		event.getChannel().sendMessage(RESPONSE);
 	}
 }
