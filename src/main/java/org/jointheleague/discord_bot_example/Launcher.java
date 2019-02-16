@@ -17,12 +17,11 @@ public class Launcher {
 	}
 
 	public void launch(String[] args) {
+		Map<String, BotInfo> map = Utilities.loadBotsFromJson();
 		for (String name : args) {
-			Map<String, BotInfo> map = Utilities.loadBotsFromJson();
 			BotInfo n = map.get(name);
 			new Bot(n.getToken(), n.getChannel()).connect();
-			
-		
+
 		}
 	}
 }
