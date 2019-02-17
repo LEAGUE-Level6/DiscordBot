@@ -21,7 +21,6 @@ public class Launcher {
 		for (String name : args) {
 			BotInfo n = map.get(name);
 			new Bot(n.getToken(), n.getChannel()).connect();
-
 		}
 	}
 }
