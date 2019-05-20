@@ -3,6 +3,7 @@ package org.jointheleague.discord_bot_example;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.jointheleague.modules.ClockMessageListener;
+import org.jointheleague.modules.ComicMessageListener;
 import org.jointheleague.modules.PingMessageListener;
 
 public class Bot  {
@@ -23,6 +24,7 @@ public class Bot  {
 		//add Listeners
 		api.addMessageCreateListener(new PingMessageListener(channelName));
 		api.addMessageCreateListener(new ClockMessageListener(channelName));
+		api.addMessageCreateListener(new ComicMessageListener(channelName));
 	}
 
 }
