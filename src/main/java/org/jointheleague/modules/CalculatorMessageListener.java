@@ -27,15 +27,27 @@ public class CalculatorMessageListener extends CustomMessageCreateListener {
 	}
 	
 	/** Processes a calculation. */
-	public Object[] processCalc(String s) {
-		if (calc.matches(calcregex)) {
+	public Object[] processCalc(String s, MessageCreateEvent event) {
+		String calcregex = "(\\d+) {0,1}(\\+|-|\\*|\\/) {0,1}(\\d+)";
+		
+		if (s.matches(calcregex)) {
+			Pattern calcpattern = Pattern.compile(s, Pattern.MULTILINE);
+			Matcher matcher = calcpattern.matcher(calcregex);
+			matcher.replaceAll("$0");
+			
+		} else {
+			event.getChannel().sendMessage("Dude, that is not a valid arithmetic operation.");
+		}
+		
+		if (s.matches(calcregex)) {
 			Pattern calcpattern = Pattern.compile(calcregex, Pattern.MULTILINE);
 			Matcher matcher = calcpattern.matcher(calcregex);
 			
 		} else {
 			event.getChannel().sendMessage("Dude, that is not a valid arithmetic operation.");
 		}
-		return Object[]
+		
+		return null;
 	}
 
 }
