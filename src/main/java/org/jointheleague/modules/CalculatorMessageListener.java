@@ -7,8 +7,6 @@ import org.javacord.api.event.message.MessageCreateEvent;
 
 public class CalculatorMessageListener extends CustomMessageCreateListener {
 
-	
-
 	public CalculatorMessageListener(String channelName) {
 		super(channelName);
 	}
@@ -26,37 +24,36 @@ public class CalculatorMessageListener extends CustomMessageCreateListener {
 			}
 		}
 	}
-	
+
 	/** Processes a calculation. */
 	public void processCalc(String s, MessageCreateEvent event) {
 		String calcregex = "(\\d+) {0,1}(\\+|-|\\*|\\/) {0,1}(\\d+)";
-		
+
 		if (s.matches(calcregex)) {
-			Pattern calcpattern = Pattern.compile(s, Pattern.MULTILINE);
-			Matcher matcher = calcpattern.matcher(calcregex);
-			
+			Pattern calcpattern = Pattern.compile(calcregex, Pattern.MULTILINE);
+			Matcher matcher = calcpattern.matcher(s);
+
 			int dig1 = Integer.parseInt(matcher.replaceAll("$1"));
-
-			System.out.println(dig1+"");
 			String oper = matcher.replaceAll("$2");
-
-			System.out.println(oper);
 			int dig2 = Integer.parseInt(matcher.replaceAll("$3"));
-			System.out.println(dig2+"");
-			
-			switch (oper) {
-			case "+":
-				event.getChannel().sendMessage(dig1+dig2+"");
-				break;
-			case "-":
-				event.getChannel().sendMessage(dig1-dig2+"");
-				break;
-			case "*":
-				event.getChannel().sendMessage(dig1*dig2+"");
-				break;
-			case "/":
-				event.getChannel().sendMessage(dig1/dig2+"");
-				break;
+
+			try {
+				switch (oper) {
+				case "+":
+					event.getChannel().sendMessage(s + " = " + (dig1 + dig2));
+					break;
+				case "-":
+					event.getChannel().sendMessage(s + " = " + (dig1 - dig2));
+					break;
+				case "*":
+					event.getChannel().sendMessage(s + " = " + (dig1 * dig2));
+					break;
+				case "/":
+					event.getChannel().sendMessage(s + " = " + (dig1 / dig2));
+					break;
+				}
+			} catch (ArithmeticException e) {
+				event.getChannel().sendMessage("OMG HOMIE MY HEAD IS EXPLODING FROM TRYING TO SOLVE DAT MATH");
 			}
 		} else {
 			event.getChannel().sendMessage("Dude, that is not a valid arithmetic operation.");

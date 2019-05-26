@@ -6,7 +6,10 @@ import org.jointheleague.modules.CalculatorMessageListener;
 import org.jointheleague.modules.ClockMessageListener;
 import org.jointheleague.modules.PingMessageListener;
 
-public class Bot  {
+public class Bot {
+	// FOR FUTURE CODERS:
+	// If you get an exception involving websockets, check your config.json file
+	// in the src/main/resources folder. It should have your bot's token and channel.
 	private String token;
 	private String channelName;
 	DiscordApi api;
