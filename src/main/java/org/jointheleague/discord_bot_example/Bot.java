@@ -1,9 +1,8 @@
 package org.jointheleague.discord_bot_example;
 
-import org.javacord.api.DiscordApi;
+import org.javacord.api.DiscordApi; 
 import org.javacord.api.DiscordApiBuilder;
-import org.jointheleague.modules.ClockMessageListener;
-import org.jointheleague.modules.PingMessageListener;
+import org.jointheleague.modules.RandomNumber;
 
 public class Bot  {
 	private String token;
@@ -21,8 +20,7 @@ public class Bot  {
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 		
 		//add Listeners
-		api.addMessageCreateListener(new PingMessageListener(channelName));
-		api.addMessageCreateListener(new ClockMessageListener(channelName));
+		api.addMessageCreateListener(new RandomNumber(channelName));
 	}
 
 }
