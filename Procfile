@@ -1,1 +1,1 @@
-web java [PUT JAVA FILE'S NAME HERE, DO NOT INCLUDE .java EXTENSION]
+web java src/main/java/org/jointheleague/discord_bot_example/Launcher.java
