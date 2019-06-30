@@ -34,6 +34,7 @@ public class Bot  {
 		api.addMessageCreateListener(new ComicMessageListener(channelName));
 		api.addMessageCreateListener(new ElmoMessageListener(channelName));
 		api.addMessageCreateListener(new FactMessageListener(channelName));
+		api.addMessageCreateListener(new leetMessageListener(channelName));
 	}
 
 }
