@@ -1,7 +1,11 @@
 
 package org.jointheleague.modules;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,7 +13,7 @@ public class Emoji {
 
     @SerializedName("emoji")
     @Expose
-    private char emoji;
+    private String emoji;
     @SerializedName("description")
     @Expose
     private String description;
@@ -29,11 +33,30 @@ public class Emoji {
     @Expose
     private String iosVersion;
 
-    public char getEmoji() {
+    public Emoji(JsonObject o) {
+    	emoji = o.get("emoji").getAsString();
+    	description = o.get("description").getAsString();
+    	category = o.get("category").getAsString();
+    	aliases = convertToList(o.get("aliases").getAsJsonArray());
+    	tags = convertToList(o.get("tags").getAsJsonArray());
+    	unicodeVersion = o.get("unicode_version").getAsString();
+    	iosVersion = o.get("ios_version").getAsString();
+    }
+    
+    public List<String> convertToList(JsonArray a) {
+    	ArrayList<String> list = new ArrayList<>();
+    	for (int i = 0; i < a.size(); i++) {
+    		list.add(a.get(i).getAsString());
+    	}
+    	
+    	return list;
+    }
+    
+    public String getEmoji() {
         return emoji;
     }
 
-    public void setEmoji(char emoji) {
+    public void setEmoji(String emoji) {
         this.emoji = emoji;
     }
 

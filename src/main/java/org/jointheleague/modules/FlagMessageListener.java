@@ -25,6 +25,8 @@ public class FlagMessageListener extends CustomMessageCreateListener {
 			String country = event.getMessageContent().substring(5);
 			Emoji em = null;
 			
+//			event.getChannel().sendMessage(data.array.get(0).getEmoji());
+			
 			for (Emoji e : data.array) {
 				if (e.getCategory().equals("Flags")) {
 					if (e.getAliases().contains(country.toLowerCase())) {
@@ -42,7 +44,7 @@ public class FlagMessageListener extends CustomMessageCreateListener {
 		String jsonline = "";
 		
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(new File("emoji.json")));
+			BufferedReader br = new BufferedReader(new FileReader(new File("src/main/java/org/jointheleague/modules/emoji.json")));
 			while (br.ready()) {
 				jsonline += br.readLine() + "\n";
 			}
@@ -54,8 +56,16 @@ public class FlagMessageListener extends CustomMessageCreateListener {
 			e.printStackTrace();
 		}
 		
-		Gson gson = new GsonBuilder().create();
-        EmojiArray data = gson.fromJson(jsonline, EmojiArray.class);
+		//Gson gson = new GsonBuilder().create();
+        //EmojiArray data = gson.fromJson(jsonline, EmojiArray.class);
+        
+		JsonElement jelement = new JsonParser().parse(jsonline);
+	    JsonArray jarray = jelement.getAsJsonArray();
+	    EmojiArray data = new EmojiArray();
+	    
+	    for (int i = 0; i < jarray.size(); i++) {
+	    	data.array.add(new Emoji(jarray.get(i).getAsJsonObject()));
+	    }
 	    
 	    return data;
 	}
