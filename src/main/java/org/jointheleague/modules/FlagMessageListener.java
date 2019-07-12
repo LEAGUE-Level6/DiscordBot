@@ -25,18 +25,15 @@ public class FlagMessageListener extends CustomMessageCreateListener {
 			String country = event.getMessageContent().substring(5);
 			Emoji em = null;
 			
-//			event.getChannel().sendMessage(data.array.get(0).getEmoji());
-			
 			for (Emoji e : data.array) {
-				if (e.getCategory().equals("Flags")) {
-					if (e.getAliases().contains(country.toLowerCase())) {
-						em = e;
-						break;
-					}
+				if (e.getDescription().toLowerCase().contains(country)) {
+					em = e;
+					break;
 				}
 			}
 			
 			event.getChannel().sendMessage(""+em.getEmoji());
+			event.getChannel().sendMessage("https://en.wikipedia.org/wiki/"+(country.trim()));
 		}
 	}
 	
