@@ -26,7 +26,7 @@ public class FlagMessageListener extends CustomMessageCreateListener {
 			Emoji em = null;
 			
 			for (Emoji e : data.array) {
-				if (e.getDescription().toLowerCase().contains(country)) {
+				if (e.getDescription().toLowerCase().contains(country.toLowerCase())) {
 					em = e;
 					break;
 				}
