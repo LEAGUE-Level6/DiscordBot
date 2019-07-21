@@ -1,19 +1,38 @@
 package org.jointheleague.modules;
 
-import java.util.concurrent.ExecutionException;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
-import org.javacord.api.entity.user.User;
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.javacord.api.listener.message.MessageCreateListener;
 
-public class RandomNumber implements MessageCreateListener {
+public class RandomNumber extends CustomMessageCreateListener {
 
-	private static final String PREFIX = "!weather";
-	
+	private static final String COMMAND = "!random";
+
+	public RandomNumber(String channelName) {
+		super(channelName);
+	}
+
 	@Override
-	public void onMessageCreate(MessageCreateEvent event) {
-		// TODO Auto-generated method stub
-		if(event.getMessageContent().startsWith(PREFIX)) {
+	public void handle(MessageCreateEvent event) {
+		if (event.getMessageContent().contains(COMMAND)) {
+			
+			String cmd = event.getMessageContent().replaceAll(" ", "").replace("!random","");
+			
+			if(cmd.equals("")) {
+				
+				Random r = new Random();
+				event.getChannel().sendMessage("Your random number is " + r.nextInt(1000));
+				
+				
+			} else {
+				
+				String rlow = cmd.substring(0, cmd.indexOf('-'));
+				String rhigh = cmd.replace(rlow + '-', "");
+				
+				event.getChannel().sendMessage("Your random number between " + rlow + " and " + rhigh + " is " + ThreadLocalRandom.current().nextInt(Integer.parseInt(rlow), Integer.parseInt(rhigh)));
+				
+			}
 			
 		}
 	}

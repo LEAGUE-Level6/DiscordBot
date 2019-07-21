@@ -24,4 +24,4 @@ hs_err_pid*
 /target/
 
 target/
-config.json
+*.config.json

@@ -1,6 +1,6 @@
  { 
     "default" :     {
-      "channel": "bot",
+      "channel": "",
       "token": ""
     }
 
