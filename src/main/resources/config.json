@@ -1,7 +1,7 @@
  { 
-    "default" :     {
-      "channel": "theo",
-      "token": "NTgyMjU4NzAxNzY4MDY1MDI0.XQ-11A.JzYXkdb_iS_ZpfnGHYaGWDAmzEk"
+    "default":   {
+       "channel": "",
+       "token": ""
     }
 
 }
