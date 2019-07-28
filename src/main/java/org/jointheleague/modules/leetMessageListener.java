@@ -25,47 +25,47 @@ public class leetMessageListener extends CustomMessageCreateListener
 					
 					if(arr.get(i).toLowerCase().equals("l"))
 					{
-						arr.get(i).equals("1");
-					}
+						arr.set(i, "1");					}
 					else if(arr.get(i).toLowerCase().equals("z"))
 					{
-						arr.get(i).equals("2");
-					}
+						arr.set(i, "2");					}
 					else if(arr.get(i).toLowerCase().equals("e"))
 					{
-						arr.get(i).equals("3");
-					}
+						arr.set(i, "3");					}
 					else if(arr.get(i).toLowerCase().equals("h"))
 					{
-						arr.get(i).equals("4");
-					}
+						arr.set(i, "4");					}
 					else if(arr.get(i).toLowerCase().equals("s"))
 					{
-						arr.get(i).equals("5");
-					}
+						arr.set(i, "5");					}
 					else if(arr.get(i).toLowerCase().equals("g"))
 					{
-						arr.get(i).equals("6");
+						arr.set(i, "6");
 					}
 					else if(arr.get(i).toLowerCase().equals("t"))
 					{
-						arr.get(i).equals("7");
+						arr.set(i, "7");
 					}
 					else if(arr.get(i).toLowerCase().equals("b"))
 					{
-						arr.get(i).equals("8");
+						arr.set(i, "8");
 					}
 					else if(arr.get(i).toLowerCase().equals("g"))
 					{
-						arr.get(i).equals("9");
+					
+						arr.set(i, "9");
 					}
 					else
 					{
-						int l = 0;
-						int f = 10;
+					//i'm baby
 					}
 					
+					
 				}
+				for (int i = 0; i < arr.size(); i++) {
+					System.out.print(arr.get(i));
+				}
+				
 				
 			
 		}
