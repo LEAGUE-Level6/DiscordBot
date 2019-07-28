@@ -14,9 +14,11 @@ public class leetMessageListener extends CustomMessageCreateListener
 	@Override
 	public void handle(MessageCreateEvent event) {
 		if (event.getMessageContent().startsWith("!leet")) {
+		String s = event.getMessageContent();
 				ArrayList<String> arr = new ArrayList<>();
-				String s = event.getMessageContent();
+				
 				String st = s.substring(4,s.length()-1);
+				
 				System.out.println("1337 letters and translations: L = 1, Z = 2, E = 3, H = 4, S = 5, G = 6, T = 7, B = 8, and G = 9");
 				for(int i =0;i<st.length()-1;i++)
 				{
