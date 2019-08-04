@@ -27,7 +27,7 @@ public class leetMessageListener extends CustomMessageCreateListener
 					//leet letters and translations. l=1 e=3 b = 8 s=5 7=t 4=h 2=z 6 = g 9 =g 
 					if(arr.get(i).toLowerCase().equals("o"))
 					{
-					arr.set(i,"1");}
+					arr.set(i,"0");}
 					if(arr.get(i).toLowerCase().equals("l"))
 					{
 						arr.set(i, "1");					}
