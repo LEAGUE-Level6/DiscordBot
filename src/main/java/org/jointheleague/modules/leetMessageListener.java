@@ -19,13 +19,15 @@ public class leetMessageListener extends CustomMessageCreateListener
 				ArrayList<String> arr = new ArrayList<>();
 				
 				String st = s.substring(5,s.length()-1);
-				event.getChannel().sendMessage("1337 letters and translations: L = 1, Z = 2, E = 3, H = 4");
+				event.getChannel().sendMessage("1337 letters and translations: O = 0, L = 1, Z = 2, E = 3, H = 4");
 				event.getChannel().sendMessage(" S = 5, G = 6, T = 7, B = 8, and G = 9");
 				for(int i =0;i<st.length()-1;i++)
 				{
 					arr.add(st.substring(i, i+1));
 					//leet letters and translations. l=1 e=3 b = 8 s=5 7=t 4=h 2=z 6 = g 9 =g 
-					
+					if(arr.get(i).toLowerCase().equals("o"))
+					{
+					arr.set(i,"1");}
 					if(arr.get(i).toLowerCase().equals("l"))
 					{
 						arr.set(i, "1");					}
