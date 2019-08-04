@@ -2,6 +2,8 @@ package org.jointheleague.modules;
 
 import java.awt.Event;
 
+import org.javacord.api.entity.message.MessageAuthor;
+import org.javacord.api.entity.user.User;
 import org.javacord.api.event.message.MessageCreateEvent;
 
 public class TextAdventure extends CustomMessageCreateListener {
@@ -17,8 +19,8 @@ public class TextAdventure extends CustomMessageCreateListener {
 			super(channelName);
 		}
 		public void setup() {
-			int r = 9;
-			int c = 9;
+			 r = 9;
+			 c = 9;
 			for (int i = 0; i < 10; i++) {
 				cells[0][i]="o";
 			}
@@ -88,12 +90,13 @@ public class TextAdventure extends CustomMessageCreateListener {
 		public void handle(MessageCreateEvent event) {
 			// TODO Auto-generated method stub
 			String a= event.getMessageContent();
-			
+		
 		
 			if(a.equalsIgnoreCase("!textadventure")) {
+				 
 				setup();
 				playing=true;
-				event.getChannel().sendMessage("Welcome to text adventure! \nYou wake up in a dark forest of a deserted island and don't know how to escape. You feel invisible walls to the south and east.\nType \"w\" to go west, \"n\" to go north, and etc.");
+				event.getChannel().sendMessage("Welcome to text adventure! \nYou wake up in a dark forest of a deserted island and don't know how to escape. You feel hesitant to explore south or east.\nType \"w\" to go west, \"n\" to go north, and etc.\nTo quit the game, type 'stop'");
 						
 			}
 			if(playing && a.equalsIgnoreCase("w")) {
@@ -145,10 +148,21 @@ public class TextAdventure extends CustomMessageCreateListener {
 					
 				}
 			}
+			if(playing && a.equalsIgnoreCase("stop")) {
+				event.getChannel().sendMessage("Thanks for playing! If you want to play again, type !textadventure");
+				playing=false;
+			}
 			
 			
 		}
 		public void currentCell(MessageCreateEvent e){
+			if(cells[r][c].equals("start")) {
+				e.getChannel().sendMessage("This area seems familiar. It must be where you woke up earlier");
+			}
+			if(cells[r][c].equals("m")) {
+				e.getChannel().sendMessage("You find a map covered in dirt. You pick it up. It's mostly unclear and faded, except for the location of the buried map and a drawing of a house west and slightly north of it.");
+				
+			}
 			if(cells[r][c].equals("o")) {
 				e.getChannel().sendMessage("You wade in a shallow ocean. It seems to get deeper pretty close by and you can't swim");
 				
@@ -161,7 +175,7 @@ public class TextAdventure extends CustomMessageCreateListener {
 				e.getChannel().sendMessage("You're in a grass field. There's something uneasy about it. You're on guard");
 			}
 			if(cells[r][c].equals("f")) {
-				e.getChannel().sendMessage("You're in a deep, dark forest. If you didn't have a compass, you'd definetly get lost in here. There's no way to get around with just your senses");
+				e.getChannel().sendMessage("You're in a deep, dark forest. If you didn't have a compass, you'd definetly get lost in here. There's no way to get around with just your five senses");
 			}
 			if(cells[r][c].equals("d1")) {
 				playing=false;
@@ -195,7 +209,7 @@ public class TextAdventure extends CustomMessageCreateListener {
 			}
 			if(cells[r][c].equals("h")) {
 				e.getChannel().sendMessage("As you explore the forest, you find a house! It's very old and looks kind of haunted. Enter it?");
-				e.getChannel().sendMessage("Typen 'yes' for yes and 'no' for no");
+				e.getChannel().sendMessage("Type 'yes' for yes and 'no' for no");
 				if(e.getMessageContent().equalsIgnoreCase("yes")) {
 					e.getChannel().sendMessage("You creak open the door. It's dark and scary, but you find some wood and building tools. You take them.");
 					materials=true;
@@ -206,14 +220,37 @@ public class TextAdventure extends CustomMessageCreateListener {
 			}
 			if(cells[r][c].equals("end") && !materials) {
 				e.getChannel().sendMessage("You find a dock, some oars, and a bucket. It looks like you could escape the island if you had a boat. Somehow.");
+				needMaterials=true;
 			}
-			if(cells[r][c].equals("end") && materials && !lava) {
-				e.getChannel().sendMessage("You have materials for a boat");
+			if(cells[r][c].equals("end") && materials && !lava &&!needLava) {
+				if(needMaterials) {
+				e.getChannel().sendMessage("You have materials for a boat!\nYou quikcly build a boat, but as you put it into the water, you realize there's a small hole! If only there was some type of liquid that solifidied quickly, to patch up the hole. You take the bucket on the dock, just in case.");
+				}
+				else {
+				e.getChannel().sendMessage("You find a dock, some oars, and a bucket. It looks like you could escape the island if you had a boat.\nWait, you have wood and building tools!\nYou quikcly build a boat, but as you put it into the water, you realize there's a small hole! If only there was some type of liquid that solifidied quickly, to patch up the hole");
+				}
+				needLava=true;
+			}
+			if(cells[r][c].equals("end") && materials && !lava &&needLava) {
+				e.getChannel().sendMessage("If only there was some type of liquid that solifidied quickly, to patch up the hole");
+			}
+			if(cells[r][c].equals("end") && materials && lava &&needLava) {
+				e.getChannel().sendMessage("You place the lava carefully in the hole. It's cooled down enough to not burn the wood, but not enough to solidify. It solidifies when you use the bucket to collect water and cool the lava down. The boat is fixed!\nYou depart on the boat, and use the oars to travel away from the island to find some land with people. As you disappear into the horizon, you smile, relieved that the dangerous adventure has come to a close.");
+				e.getChannel().sendMessage("Congratulations! You escaped the island and won the game! Type !textadventure to play again");
+				playing=false;
 			}
 			if(cells[r][c].equals("lo") && !needLava) {
 				playing=false;
 			e.getChannel().sendMessage("You trip and fall into a small oasis of lava next to the sand. No wonder it was so hot. Better luck next time!");
 			e.getChannel().sendMessage("type !textadventure to play again!");
 			}
-		}//different outcome if: house then dock vs. dock then house then dock, hence "need materials". need lava true when realized boat has hole, then go to lava and take some, go back to dock and fix boat, win
+			if(cells[r][c].equals("lo") && needLava &&!lava) {
+				e.getChannel().sendMessage("You walk through the sand and ALMOST fall into a lava oasis in the sand, but catch yourself just in time. There's some cool, solid lava next to it too.\nWait. You can grab some of this in the bucket and use it to patch up the boat! You grab some lava.");
+				lava=true;
+			}
+			if(cells[r][c].equals("lo") && needLava &&lava) {
+				e.getChannel().sendMessage("You grab some lava for the boat.");
+				
+			}
+		}//fix house yes and no, need to put the listners for yes and no in handle method, wont work if its in CurrentCell, figure it out, use more booleans
 }
