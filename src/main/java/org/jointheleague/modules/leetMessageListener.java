@@ -15,9 +15,10 @@ public class leetMessageListener extends CustomMessageCreateListener
 	public void handle(MessageCreateEvent event) {
 		if (event.getMessageContent().startsWith("!leet")) {
 		String s = event.getMessageContent();
+		String str = "";
 				ArrayList<String> arr = new ArrayList<>();
 				
-				String st = s.substring(4,s.length()-1);
+				String st = s.substring(5,s.length()-1);
 				event.getChannel().sendMessage("1337 letters and translations: L = 1, Z = 2, E = 3, H = 4");
 				event.getChannel().sendMessage(" S = 5, G = 6, T = 7, B = 8, and G = 9");
 				for(int i =0;i<st.length()-1;i++)
@@ -36,7 +37,9 @@ public class leetMessageListener extends CustomMessageCreateListener
 						arr.set(i, "3");					}
 					else if(arr.get(i).toLowerCase().equals("h"))
 					{
-						arr.set(i, "4");					}
+						arr.set(i, "4");	
+						s.a
+						}
 					else if(arr.get(i).toLowerCase().equals("s"))
 					{
 						arr.set(i, "5");					}
@@ -66,9 +69,9 @@ public class leetMessageListener extends CustomMessageCreateListener
 				}
 				for (int i = 0; i < arr.size(); i++) {
 					
-					event.getChannel().sendMessage(arr.get(i));
+					str+=arr.get(i);
 				}
-				
+				event.getChannel().sendMessage(str);
 				
 			
 		}
