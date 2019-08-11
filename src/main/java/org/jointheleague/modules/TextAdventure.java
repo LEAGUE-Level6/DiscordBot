@@ -15,10 +15,17 @@ public class TextAdventure extends CustomMessageCreateListener {
 		boolean needMaterials = false;
 		boolean needLava=false;
 		boolean lava = false;
+		boolean inHouse=false;
 		public TextAdventure(String channelName) {
 			super(channelName);
 		}
 		public void setup() {
+			materials=false;
+			needMaterials=false;
+			needLava=false;
+			lava=false;
+			inHouse=false;
+			
 			 r = 9;
 			 c = 9;
 			for (int i = 0; i < 10; i++) {
@@ -99,7 +106,7 @@ public class TextAdventure extends CustomMessageCreateListener {
 				event.getChannel().sendMessage("Welcome to text adventure! \nYou wake up in a dark forest of a deserted island and don't know how to escape. You feel hesitant to explore south or east.\nType \"w\" to go west, \"n\" to go north, and etc.\nTo quit the game, type 'stop'");
 						
 			}
-			if(playing && a.equalsIgnoreCase("w")) {
+			if(playing && !inHouse && a.equalsIgnoreCase("w")) {
 				if(c!=0) {
 					c--;
 					currentCell(event);
@@ -112,7 +119,7 @@ public class TextAdventure extends CustomMessageCreateListener {
 				}
 			}
 			
-			if(playing && a.equalsIgnoreCase("n")) {
+			if(playing && !inHouse && a.equalsIgnoreCase("n")) {
 				if(r!=0) {
 					r--;
 					currentCell(event);
@@ -124,7 +131,7 @@ public class TextAdventure extends CustomMessageCreateListener {
 					
 				}
 			}
-			if(playing && a.equalsIgnoreCase("s")) {
+			if(playing && !inHouse && a.equalsIgnoreCase("s")) {
 				if(r!=9) {
 					r++;
 					currentCell(event);
@@ -136,7 +143,7 @@ public class TextAdventure extends CustomMessageCreateListener {
 					
 				}
 			}
-			if(playing && a.equalsIgnoreCase("e")) {
+			if(playing && !inHouse && a.equalsIgnoreCase("e")) {
 				if(c!=9) {
 					c++;
 					currentCell(event);
@@ -151,6 +158,15 @@ public class TextAdventure extends CustomMessageCreateListener {
 			if(playing && a.equalsIgnoreCase("stop")) {
 				event.getChannel().sendMessage("Thanks for playing! If you want to play again, type !textadventure");
 				playing=false;
+			}
+			if(playing && inHouse && a.equalsIgnoreCase("yes")) {
+				event.getChannel().sendMessage("You creak open the door. It's dark and scary, but you find some wood and building tools. You take them.");
+				materials=true;
+				inHouse=false;
+			}
+			if(playing && inHouse && a.equalsIgnoreCase("no")) {
+				event.getChannel().sendMessage("You decide not to go in. Maybe it's for the better.");
+				inHouse=false;
 			}
 			
 			
@@ -210,13 +226,9 @@ public class TextAdventure extends CustomMessageCreateListener {
 			if(cells[r][c].equals("h")) {
 				e.getChannel().sendMessage("As you explore the forest, you find a house! It's very old and looks kind of haunted. Enter it?");
 				e.getChannel().sendMessage("Type 'yes' for yes and 'no' for no");
-				if(e.getMessageContent().equalsIgnoreCase("yes")) {
-					e.getChannel().sendMessage("You creak open the door. It's dark and scary, but you find some wood and building tools. You take them.");
-					materials=true;
-				}
-				if(e.getMessageContent().equalsIgnoreCase("no")) {
-					e.getChannel().sendMessage("You decide not to go in. Maybe it's for the better.");
-				}
+				inHouse=true;
+				
+				
 			}
 			if(cells[r][c].equals("end") && !materials) {
 				e.getChannel().sendMessage("You find a dock, some oars, and a bucket. It looks like you could escape the island if you had a boat. Somehow.");
@@ -253,4 +265,5 @@ public class TextAdventure extends CustomMessageCreateListener {
 				
 			}
 		}//fix house yes and no, need to put the listners for yes and no in handle method, wont work if its in CurrentCell, figure it out, use more booleans
+		
 }
