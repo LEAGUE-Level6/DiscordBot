@@ -21,7 +21,7 @@ public class leetMessageListener extends CustomMessageCreateListener
 				String st = s.substring(5,s.length());
 				event.getChannel().sendMessage("1337 letters and translations: O = 0, L = 1, Z = 2, E = 3, H = 4");
 				event.getChannel().sendMessage(" S = 5, G = 6, T = 7, B = 8, and G = 9");
-				for(int i =0;i<st.length()-1;i++)
+				for(int i =0;i<st.length();i++)
 				{
 					arr.add(st.substring(i, i+1));
 					//leet letters and translations. l=1 e=3 b = 8 s=5 7=t 4=h 2=z 6 = g 9 =g 
@@ -72,7 +72,7 @@ public class leetMessageListener extends CustomMessageCreateListener
 					
 					str+=arr.get(i);
 				}
-				event.getChannel().sendMessage(str);
+				event.getChannel().sendMessage(str.toUpperCase());
 				
 			
 		}
