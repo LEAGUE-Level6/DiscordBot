@@ -40,7 +40,6 @@ public class leetMessageListener extends CustomMessageCreateListener
 					else if(arr.get(i).toLowerCase().equals("h"))
 					{
 						arr.set(i, "4");	
-						s.a
 						}
 					else if(arr.get(i).toLowerCase().equals("s"))
 					{
