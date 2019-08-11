@@ -20,9 +20,10 @@ public class ComicMessageListener extends CustomMessageCreateListener {
 		// Get the XKCD URLs
 		try {
 			BufferedReader br = new BufferedReader(
-					new FileReader(new File("src/main/java/org/jointheleague/modules/BestOfXKCD.txt")));
+					new FileReader(new File("src/main/resources/BestOfXKCD.txt")));
 			while (br.ready()) {
 				xURLS.add(br.readLine());
+				System.out.println(br.readLine());
 			}
 
 			br.close();
@@ -35,7 +36,7 @@ public class ComicMessageListener extends CustomMessageCreateListener {
 
 		try {
 			BufferedReader br = new BufferedReader(
-					new FileReader(new File("src/main/java/org/jointheleague/modules/BestOfTinyStripz.txt")));
+					new FileReader(new File("src/main/resources/BestOfTinyStripz.txt")));
 			while (br.ready()) {
 				tURLS.add(br.readLine());
 			}

@@ -1,7 +1,9 @@
  { 
-    "default" :     {
-      "channel": "danieltestbot",
-      "token": "NTc3MTg1NTYyNTk1OTUwNjMz.XVBQxw.YFMynwwsDgNS0KQahArb0vUWVf8"
+
+    "default":   {
+       "channel": "",
+       "token": ""
+
     }
 
 }
