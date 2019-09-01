@@ -9,7 +9,8 @@ import net.aksingh.owmjapis.api.APIException;
 
 public class Frown extends CustomMessageCreateListener {
 
-	private static final String COMMAND = "happy";
+	private static final String COMMAND1 = "🙂";
+	private static final String COMMAND2 =  "🙃";
 
 	public Frown(String channelName) {
 		super(channelName);
@@ -19,8 +20,11 @@ public class Frown extends CustomMessageCreateListener {
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		// TODO Auto-generated method stub
-		if (event.getMessageContent().contains(COMMAND)) {
-			event.getChannel().sendMessage(":)");
+		if (event.getMessageContent().contains(COMMAND1) && event.getMessageAuthor().isYourself() == false) {
+			event.getChannel().sendMessage("Turn that smile upside down!");
+		}
+		if (event.getMessageContent().contains(COMMAND2) && event.getMessageAuthor().isYourself() == false) {
+			event.getChannel().sendMessage("Good job!");
 		}
 	}
 
