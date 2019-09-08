@@ -345,6 +345,139 @@ public class PollMessageListener extends CustomMessageCreateListener {
 	}
 	
 	
+	private void doVote(MessageCreateEvent event) {
+		String command = "!votePoll ";
+		EmbedBuilder formatCorrection = new EmbedBuilder()
+				.setTitle("Invalid Parameters")
+				.setDescription("!votePoll \"<Poll Name>\" <option> (Only use quotations around the Poll Name if it is multi-word)");
+		try {
+			String parameters = event.getMessageContent().substring(command.length());
+			String[] params = parameters.split(" ");
+			String nameP = null;
+			int currentIndex = 0;
+			if(params[0].contains("\"")) {
+				for(int k = 1; k < params.length; k++) {
+					if(params[k].contains("\"")) {
+						currentIndex = k+1;
+						nameP = "";
+						for(int l = 0; l <= k; l++) {
+							nameP += params[l];
+							if(l != k) {
+								nameP += " ";
+							}
+						}
+						break;
+					}
+				}
+			}
+			else {
+				nameP = params[0];
+				currentIndex++;
+			}
+			
+			if(nameP == null) {
+				event.getChannel().sendMessage("There was a problem getting the name of the poll.");
+				return;
+			}
+			
+			
+			JsonArray allCPolls = channelPolls.get("cPolls").getAsJsonArray();
+			for(int j = 0; j < allCPolls.size(); j++) {
+				if(allCPolls.get(j).getAsJsonObject().get("name").getAsString().equals(nameP)) {
+					//Poll exists
+					JsonArray participants = allCPolls.get(j).getAsJsonObject().get("participants").getAsJsonArray();
+					for(int r = 0; r < participants.size(); r++) {
+						JsonObject partPointer = participants.get(r).getAsJsonObject();
+						if(partPointer.get("userTag").getAsString().equals(event.getMessageAuthor().asUser().get().getMentionTag())) {
+							event.getChannel().sendMessage("You already voted.");
+							return;
+						}
+					}
+					//User has not voted
+					String chosenOption = params[currentIndex];
+					JsonArray allOptions = allCPolls.get(j).getAsJsonObject().get("options").getAsJsonArray();
+					for(int p = 0; p < allOptions.size(); p++) {
+						JsonObject optPointer = allOptions.get(p).getAsJsonObject();
+						if(optPointer.get("optionName").getAsString().equals(chosenOption)) {
+							String optCount = optPointer.get("optionCount").getAsString();
+							int countInt = Integer.valueOf(optCount);
+							countInt++;
+							optPointer.remove("optionCount");
+							optPointer.addProperty("optionCount", String.valueOf(countInt));
+							
+							JsonObject newParticipant = new JsonObject();
+							newParticipant.addProperty("userTag", event.getMessageAuthor().asUser().get().getMentionTag());
+							newParticipant.addProperty("userOption", chosenOption);
+							participants.add(newParticipant);
+							event.getChannel().sendMessage(new EmbedBuilder().setTitle("Vote Submitted")
+									.setDescription("Your vote for the following poll has been submitted: "+nameP)
+									.setColor(Color.GREEN));
+							//TODO DM poll status to user
+							event.getMessage().delete();
+							saveJson();
+							return;
+						}
+					}
+					event.getChannel().sendMessage("Invalid Option Name");
+					return;
+				}
+			}
+			event.getChannel().sendMessage("Invalid Poll");
+		}
+		catch(IndexOutOfBoundsException e) {
+			event.getChannel().sendMessage(formatCorrection);
+		}
+		catch(NumberFormatException e) {
+			event.getChannel().sendMessage("There was an internal error");
+		}
+		
+	}
+	
+	private void getPollStatus(MessageCreateEvent event) {
+		String command = "!checkPoll ";
+		String pollName = "";
+		try {
+			pollName = event.getMessageContent().substring(command.length());
+		}
+		catch(IndexOutOfBoundsException e) {
+			event.getChannel().sendMessage(new EmbedBuilder()
+					.setTitle("Invalid Parameters")
+					.setDescription("!checkPoll \"<Poll Name>\"(Only use quotations is the poll name is multi-word)")
+					.setColor(Color.RED));
+			return;
+		}
+		
+		JsonArray cPollio = channelPolls.get("cPolls").getAsJsonArray();
+		for(int j = 0; j < cPollio.size(); j++) {
+			JsonObject pollPointer = cPollio.get(j).getAsJsonObject();
+			if(pollPointer.get("name").getAsString().equals(pollName)) {
+				//Found Poll
+				EmbedBuilder toDirect = new EmbedBuilder().setTitle("Poll Status for: "+pollName).setColor(Color.ORANGE);
+				JsonArray allPossOpt = pollPointer.get("options").getAsJsonArray();
+				
+				
+				for(int k = 0; k < allPossOpt.size(); k++) {
+					JsonObject optPointer = allPossOpt.get(k).getAsJsonObject();
+					toDirect.addField(optPointer.get("optionName").getAsString(), optPointer.get("optionCount").getAsString());
+				}
+				if(true) {
+					JsonArray allParts = pollPointer.get("participants").getAsJsonArray();
+					for(int q = 0; q < allParts.size(); q++) {
+						JsonObject currentPart = allParts.get(q).getAsJsonObject();
+						if(currentPart.get("userTag").getAsString().equals(event.getMessageAuthor().asUser().get().getMentionTag())) {
+							event.getMessageAuthor().asUser().get().sendMessage(toDirect);
+							event.getChannel().sendMessage("Status Information sent.");
+							return;
+						}
+					}
+					event.getChannel().sendMessage("You didn't vote on this poll yet.");
+				}
+				
+				return;
+			}
+		}
+		event.getChannel().sendMessage("Invalid Poll");
+	}
 	
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
@@ -355,7 +488,7 @@ public class PollMessageListener extends CustomMessageCreateListener {
 		
 		
 		//Will make an embed message of all the polls on a channel if there are any;
-		if(event.getMessageContent().equals("!polls")) {
+		if(event.getMessageContent().equals("!poll-list")) {
 			event.getChannel().sendMessage("Preparing...");
 			getPolls(event.getChannel().getId());
 			if(channelPolls == null) {
@@ -379,7 +512,10 @@ public class PollMessageListener extends CustomMessageCreateListener {
 			removePollParse(event);
 		}
 		else if(event.getMessageContent().startsWith("!votePoll")) {
-			
+			doVote(event);
+		}
+		else if(event.getMessageContent().startsWith("!checkPoll")) {
+			getPollStatus(event);
 		}
 		
 	}
@@ -390,7 +526,6 @@ public class PollMessageListener extends CustomMessageCreateListener {
 			pw.print(jArr.toString());
 			pw.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
