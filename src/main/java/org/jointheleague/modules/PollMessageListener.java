@@ -528,6 +528,7 @@ public class PollMessageListener extends CustomMessageCreateListener {
 			helpStuff.addField("!poll-list","Lists all the Polls");
 			helpStuff.addField("!poll-create <Poll Name> <option1,option2,option3> <Poll Description>", "Create a Poll");
 			helpStuff.addField("!poll-remove <Poll Name>", "Remove one of your Polls");
+			helpStuff.addField("!poll-info <Poll Name>", "Get basic information about the poll (Name, Description, Option, Owner)");
 			helpStuff.addField("!poll-vote <Poll Name> <Option Name>", "Vote on the specified Poll");
 			helpStuff.addField("!poll-status <Poll Name>", "Gets the Status of the Poll");
 			helpStuff.addField("!poll-help", "Gives you information about Poll Commands");
