@@ -65,7 +65,7 @@ public class PollMessageListener extends CustomMessageCreateListener {
 		}
 		
 		String fullMessage = event.getMessageContent();
-		int commandLength = new String("!createPoll").length();
+		int commandLength = new String("!poll-create").length();
 		if(fullMessage.length() > commandLength) {
 			
 			
@@ -201,16 +201,16 @@ public class PollMessageListener extends CustomMessageCreateListener {
 					saveJson();
 				}
 				catch(IndexOutOfBoundsException e) {
-					event.getChannel().sendMessage(new EmbedBuilder().setTitle("Invalid Parameters (IndexOutOfBoundsException)").setDescription("!createPoll \"<Poll Name>\" <Option1,Option2,Option3,...> \"<Description>\" (Only use quotations around the desc and/or name is you want it to be multi-word)").setColor(Color.RED));
+					event.getChannel().sendMessage(new EmbedBuilder().setTitle("Invalid Parameters (IndexOutOfBoundsException)").setDescription("!poll-create \"<Poll Name>\" <Option1,Option2,Option3,...> \"<Description>\" (Only use quotations around the desc and/or name is you want it to be multi-word)").setColor(Color.RED));
 				}
 				
 			}
 			else {
-				event.getChannel().sendMessage(new EmbedBuilder().setTitle("Invalid Parameters").setDescription("!createPoll \"<Poll Name>\" <Option1,Option2,Option3,...> \"<Description>\" (Only use quotations around the desc and/or name is you want it to be multi-word)").setColor(Color.RED));
+				event.getChannel().sendMessage(new EmbedBuilder().setTitle("Invalid Parameters").setDescription("!poll-create \"<Poll Name>\" <Option1,Option2,Option3,...> \"<Description>\" (Only use quotations around the desc and/or name is you want it to be multi-word)").setColor(Color.RED));
 			}
 		}
 		else {
-			event.getChannel().sendMessage(new EmbedBuilder().setTitle("Invalid Parameters").setDescription("!createPoll \"<Poll Name>\" <Option1,Option2,Option3,...> \"<Description>\" (Only use quotations around the desc and/or name is you want it to be multi-word)").setColor(Color.RED));
+			event.getChannel().sendMessage(new EmbedBuilder().setTitle("Invalid Parameters").setDescription("!poll-create \"<Poll Name>\" <Option1,Option2,Option3,...> \"<Description>\" (Only use quotations around the desc and/or name is you want it to be multi-word)").setColor(Color.RED));
 		}
 		
 	}
@@ -231,13 +231,13 @@ public class PollMessageListener extends CustomMessageCreateListener {
 	
 	private void infoForPoll(MessageCreateEvent event) {
 		String fullMessage = event.getMessageContent();
-		String command = "!pollInfo";
+		String command = "!poll-info";
 		try {
 			String pollName = fullMessage.substring(command.length()).trim().replaceAll("\"", "");
 			if(pollName.trim().equals("")) {
 				event.getChannel().sendMessage(new EmbedBuilder()
 						.setTitle("Invalid Parameters")
-						.setDescription("!pollInfo \"<Poll Name>\"")
+						.setDescription("!poll-info \"<Poll Name>\"")
 						.setColor(Color.RED)
 						);
 				return;
@@ -258,7 +258,7 @@ public class PollMessageListener extends CustomMessageCreateListener {
 		catch(IndexOutOfBoundsException e) {
 			event.getChannel().sendMessage(new EmbedBuilder()
 					.setTitle("Invalid Parameters")
-					.setDescription("!pollInfo \"<Poll Name>\"")
+					.setDescription("!poll-info \"<Poll Name>\"")
 					.setColor(Color.RED)
 					);
 		}
@@ -290,13 +290,13 @@ public class PollMessageListener extends CustomMessageCreateListener {
 	
 	private void removePollParse(MessageCreateEvent event) {
 		String fullMessage = event.getMessageContent();
-		String command = "!removePoll" ;
+		String command = "!poll-remove" ;
 		try {
 			String pollName = fullMessage.substring(command.length()).trim().replaceAll("\"", "");
 			if(pollName.trim().equals("")) {
 				event.getChannel().sendMessage(new EmbedBuilder()
 						.setTitle("Invalid Parameters")
-						.setDescription("!removePoll \"<Poll Name>\"")
+						.setDescription("!poll-remove \"<Poll Name>\" (Use quotations if the poll name is multi-word)")
 						.setColor(Color.RED)
 						);
 				return;
@@ -325,7 +325,7 @@ public class PollMessageListener extends CustomMessageCreateListener {
 		catch(IndexOutOfBoundsException e) {
 			event.getChannel().sendMessage(new EmbedBuilder()
 					.setTitle("Invalid Parameters")
-					.setDescription("!removePoll \"<Poll Name>\"")
+					.setDescription("!poll-remove \"<Poll Name>\" (Use quotations if the poll name is multi-word)")
 					.setColor(Color.RED)
 					);
 		}
@@ -346,10 +346,10 @@ public class PollMessageListener extends CustomMessageCreateListener {
 	
 	
 	private void doVote(MessageCreateEvent event) {
-		String command = "!votePoll ";
+		String command = "!poll-vote ";
 		EmbedBuilder formatCorrection = new EmbedBuilder()
 				.setTitle("Invalid Parameters")
-				.setDescription("!votePoll \"<Poll Name>\" <option> (Only use quotations around the Poll Name if it is multi-word)");
+				.setDescription("!poll-vote \"<Poll Name>\" <option> (Only use quotations around the Poll Name if it is multi-word)");
 		try {
 			String parameters = event.getMessageContent().substring(command.length());
 			String[] params = parameters.split(" ");
@@ -380,9 +380,12 @@ public class PollMessageListener extends CustomMessageCreateListener {
 				return;
 			}
 			
+			nameP = nameP.replaceAll("\"", "");
 			
 			JsonArray allCPolls = channelPolls.get("cPolls").getAsJsonArray();
 			for(int j = 0; j < allCPolls.size(); j++) {
+				System.out.println(allCPolls.get(j).getAsJsonObject().get("name").getAsString());
+				System.out.println(nameP);
 				if(allCPolls.get(j).getAsJsonObject().get("name").getAsString().equals(nameP)) {
 					//Poll exists
 					JsonArray participants = allCPolls.get(j).getAsJsonObject().get("participants").getAsJsonArray();
@@ -415,6 +418,7 @@ public class PollMessageListener extends CustomMessageCreateListener {
 							//TODO DM poll status to user
 							event.getMessage().delete();
 							saveJson();
+							event.getChannel().sendMessage("You voted! You can check the status of the poll by using the command '!poll-status'");
 							return;
 						}
 					}
@@ -434,7 +438,7 @@ public class PollMessageListener extends CustomMessageCreateListener {
 	}
 	
 	private void getPollStatus(MessageCreateEvent event) {
-		String command = "!checkPoll ";
+		String command = "!poll-status ";
 		String pollName = "";
 		try {
 			pollName = event.getMessageContent().substring(command.length());
@@ -442,11 +446,12 @@ public class PollMessageListener extends CustomMessageCreateListener {
 		catch(IndexOutOfBoundsException e) {
 			event.getChannel().sendMessage(new EmbedBuilder()
 					.setTitle("Invalid Parameters")
-					.setDescription("!checkPoll \"<Poll Name>\"(Only use quotations is the poll name is multi-word)")
+					.setDescription("!poll-status \"<Poll Name>\"(Only use quotations is the poll name is multi-word)")
 					.setColor(Color.RED));
 			return;
 		}
 		
+		pollName = pollName.replaceAll("\"", "");
 		JsonArray cPollio = channelPolls.get("cPolls").getAsJsonArray();
 		for(int j = 0; j < cPollio.size(); j++) {
 			JsonObject pollPointer = cPollio.get(j).getAsJsonObject();
@@ -501,21 +506,32 @@ public class PollMessageListener extends CustomMessageCreateListener {
 		}
 		
 		//Creates a Poll on the channel using the createPoll method
-		else if(event.getMessageContent().startsWith("!createPoll")) {
+		else if(event.getMessageContent().startsWith("!poll-create")) {
 			getPolls(event.getChannel().getId());
 			createPoll(event);
 		}
-		else if(event.getMessageContent().startsWith("!pollInfo")) {
+		else if(event.getMessageContent().startsWith("!poll-info")) {
 			infoForPoll(event);
 		}
-		else if (event.getMessageContent().startsWith("!removePoll")) {
+		else if (event.getMessageContent().startsWith("!poll-remove")) {
 			removePollParse(event);
 		}
-		else if(event.getMessageContent().startsWith("!votePoll")) {
+		else if(event.getMessageContent().startsWith("!poll-vote")) {
 			doVote(event);
 		}
-		else if(event.getMessageContent().startsWith("!checkPoll")) {
+		else if(event.getMessageContent().startsWith("!poll-status")) {
 			getPollStatus(event);
+		}
+		else if(event.getMessageContent().startsWith("!poll-help")) {
+			EmbedBuilder helpStuff = new EmbedBuilder().setTitle("Poll Commands").setColor(Color.BLUE);
+			helpStuff.setDescription("Note: For multi-word parameters, surround the parameter in quotations. Poll options cannot be multiword");
+			helpStuff.addField("!poll-list","Lists all the Polls");
+			helpStuff.addField("!poll-create <Poll Name> <option1,option2,option3> <Poll Description>", "Create a Poll");
+			helpStuff.addField("!poll-remove <Poll Name>", "Remove one of your Polls");
+			helpStuff.addField("!poll-vote <Poll Name> <Option Name>", "Vote on the specified Poll");
+			helpStuff.addField("!poll-status <Poll Name>", "Gets the Status of the Poll");
+			helpStuff.addField("!poll-help", "Gives you information about Poll Commands");
+			event.getChannel().sendMessage(helpStuff);
 		}
 		
 	}
