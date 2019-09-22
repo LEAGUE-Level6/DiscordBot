@@ -39,8 +39,14 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 		
 	}
 	
-	void getEmojiForCell() {
+	String getEmojiForCell(MinesweeperGame.Cell cell) {
+		if(cell.state == MinesweeperGame.BlockState.UNDISCOVERED) {return ":white_large:square:";}
+		else if(cell.state == MinesweeperGame.BlockState.FLAGGED) {return ":triangular_flag_on_post:";}
+		else if(cell.state == MinesweeperGame.BlockState.DISCOVERED) {
+			
+		}
 		
+		return null;
 	}
 	
 	void interactCommand() {
