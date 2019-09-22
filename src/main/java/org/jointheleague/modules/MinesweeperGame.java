@@ -10,7 +10,9 @@ public class MinesweeperGame {
 	
 	private int dimensions;
 	private int mineCount;
+	Cell[][] playingField;
 	
+	//Double Checks the given parameters and calls the generateMap function
 	MinesweeperGame(int dimensions, int mineCount) {
 		
 		if(dimensions > 10 || mineCount > dimensions*dimensions) {
@@ -23,7 +25,15 @@ public class MinesweeperGame {
 		generateMap();
 	}
 	
+	//Generates the Playing Field
 	void generateMap() {
+		playingField = new Cell[dimensions][dimensions];
+		
+		for(int i = 0; i < playingField.length; i++) {
+			for(int j = 0; j < playingField[i].length; j++) {
+				playingField[i][j] = new Cell();
+			}
+		}
 		
 	}
 	
@@ -52,7 +62,7 @@ public class MinesweeperGame {
 	}
 	
 	class Cell {
-		BlockType type;
+		BlockType type = BlockType.EMPTY;
 		BlockState state = BlockState.UNDISCOVERED;
 		
 		void interact() {
