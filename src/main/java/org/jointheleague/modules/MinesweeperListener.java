@@ -13,7 +13,7 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 	//Stores each game with a String of a user mention id so the code knows which game is being played based on the user
 	HashMap<String, MinesweeperGame> games = new HashMap<String, MinesweeperGame>();
 	
-	//Command
+	//Commands
 	static final String GENERATE_COMMAND = "!minesweeper-create";
 	
 	public MinesweeperListener(String channelName) {
@@ -36,6 +36,22 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 	}
 	
 	void displayGrid(MessageCreateEvent event) {
+		String playerId = event.getMessageAuthor().asUser().get().getMentionTag();
+		MinesweeperGame.Cell[][] toDisplay = games.get(playerId).playingField;
+		String[] lines = new String[toDisplay.length];
+		
+		//TODO display the grid (remember how coordinates work)
+		for(int i = 0; i < toDisplay.length; i++) {
+			for(int j = 0; j < toDisplay[i].length; j++) {
+				lines[j] = lines[j] + getEmojiForCell(toDisplay[i][j]);
+			}
+		}
+		
+		//Put on Discord
+		for(int k = 0; k < lines.length; k++) {
+			event.getChannel().sendMessage(lines[k]);
+		}
+		
 		
 	}
 	
@@ -43,7 +59,28 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 		if(cell.state == MinesweeperGame.BlockState.UNDISCOVERED) {return ":white_large:square:";}
 		else if(cell.state == MinesweeperGame.BlockState.FLAGGED) {return ":triangular_flag_on_post:";}
 		else if(cell.state == MinesweeperGame.BlockState.DISCOVERED) {
-			
+			switch(cell.type) {
+			case EMPTY:
+				return "black_large_square";
+			case ONE:
+				return "one";
+			case TWO:
+				return "two";
+			case THREE:
+				return "three";
+			case FOUR:
+				return "four";
+			case FIVE:
+				return "five";
+			case SIX:
+				return "six";
+			case SEVEN:
+				return "seven";
+			case EIGHT:
+				return "eight";
+			case BOMB:
+				return ":bomb:";
+			}
 		}
 		
 		return null;
