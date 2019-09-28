@@ -59,6 +59,10 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 		//TODO display the grid (remember how coordinates work)
 		for(int i = 0; i < toDisplay.length; i++) {
 			for(int j = 0; j < toDisplay[i].length; j++) {
+				if(i == 0) {
+					lines[j] = "";
+				}
+				String emoji = getEmojiForCell(toDisplay[i][j]);
 				lines[j] = lines[j] + getEmojiForCell(toDisplay[i][j]);
 			}
 		}
@@ -72,7 +76,7 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 	}
 	
 	String getEmojiForCell(MinesweeperGame.Cell cell) {
-		if(cell.state == MinesweeperGame.BlockState.UNDISCOVERED) {return ":white_large:square:";}
+		if(cell.state == MinesweeperGame.BlockState.UNDISCOVERED) {return ":white_large_square:";}
 		else if(cell.state == MinesweeperGame.BlockState.FLAGGED) {return ":triangular_flag_on_post:";}
 		else if(cell.state == MinesweeperGame.BlockState.DISCOVERED) {
 			switch(cell.type) {
