@@ -197,6 +197,9 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 		if(event.getMessageContent().startsWith(INTERACT_COMMAND)) {
 			interactCommand(event);
 		}
+		if(event.getMessageContent().startsWith(FLAG_COMMAND)) {
+			flagCommand(event);
+		}
 	}
 
 }
