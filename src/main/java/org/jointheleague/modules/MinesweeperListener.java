@@ -10,6 +10,8 @@ import net.aksingh.owmjapis.api.APIException;
 
 public class MinesweeperListener extends CustomMessageCreateListener {
 	
+	//Final Todo List: Help command, Code cleanliness
+	
 	//Stores each game with a String of a user mention id so the code knows which game is being played based on the user
 	HashMap<String, MinesweeperGame> games = new HashMap<String, MinesweeperGame>();
 	
@@ -17,17 +19,24 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 	static final String GENERATE_COMMAND = "!minesweeper-create";
 	static final String INTERACT_COMMAND = "!minesweeper-interact";
 	static final String FLAG_COMMAND = "!minesweeper-flag";
+	static final String DISPLAY_COMMAND = "!minesweeper-display";
+	static final String QUIT_COMMAND = "!minesweeper-quit";
+	static final String SURRENDER_COMMAND = "!minesweeper-surrender";
+	static final String LOCATE_COMMAND = "!minesweeper-locate";
 	
 	public MinesweeperListener(String channelName) {
 		super(channelName);
 	}
 
-	int[] parsePositions(String[] parameters) {
+	int[] parsePositions(String[] parameters, MinesweeperGame game) {
 		if(parameters.length == 2) {
 			int[] coordinates = new int[2];
 			try {
 				coordinates[0] = Integer.valueOf(parameters[0]);
 				coordinates[1] = Integer.valueOf(parameters[1]);
+				if(coordinates[0] >= game.playingField.length || coordinates[1] >= game.playingField.length) {
+					return null;
+				}
 			}
 			catch(NumberFormatException e) {
 				return null;
@@ -51,7 +60,14 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 		}
 	}
 	
-	void displayGrid(MessageCreateEvent event) {
+	void displayGrid(MessageCreateEvent event, int[] locateCoords) {
+		EmbedBuilder invalidPlayer = new EmbedBuilder().setTitle("No Active Game").setDescription("You don't have a game running at the moment").setColor(Color.RED);
+		
+		if(!(games.containsKey(event.getMessage().getAuthor().asUser().get().getMentionTag()))) {
+			event.getChannel().sendMessage(invalidPlayer);
+			return;
+		}
+		
 		String playerId = event.getMessageAuthor().asUser().get().getMentionTag();
 		MinesweeperGame.Cell[][] toDisplay = games.get(playerId).playingField;
 		String[] lines = new String[toDisplay.length];
@@ -63,15 +79,21 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 					lines[j] = "";
 				}
 				String emoji = getEmojiForCell(toDisplay[i][j]);
-				lines[j] = lines[j] + getEmojiForCell(toDisplay[i][j]);
+				if(locateCoords != null) {
+					if(locateCoords[0] == i && locateCoords[1] == j) {
+						emoji = ":mouse_three_button:";
+					}
+				}
+				lines[j] = lines[j] + emoji;
 			}
 		}
 		
 		//Put on Discord
+		String messageString = "";
 		for(int k = 0; k < lines.length; k++) {
 			event.getChannel().sendMessage(lines[k]);
 		}
-		
+		event.getChannel().sendMessage("Display Complete!");
 		
 	}
 	
@@ -81,23 +103,23 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 		else if(cell.state == MinesweeperGame.BlockState.DISCOVERED) {
 			switch(cell.type) {
 			case EMPTY:
-				return "black_large_square";
+				return ":black_large_square:";
 			case ONE:
-				return "one";
+				return ":one:";
 			case TWO:
-				return "two";
+				return ":two:";
 			case THREE:
-				return "three";
+				return ":three:";
 			case FOUR:
-				return "four";
+				return ":four:";
 			case FIVE:
-				return "five";
+				return ":five:";
 			case SIX:
-				return "six";
+				return ":six:";
 			case SEVEN:
-				return "seven";
+				return ":seven:";
 			case EIGHT:
-				return "eight";
+				return ":eight:";
 			case BOMB:
 				return ":bomb:";
 			}
@@ -109,30 +131,64 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 	void interactCommand(MessageCreateEvent event) {
 		
 		EmbedBuilder invalidParameters = new EmbedBuilder().setTitle("Invalid Parameters").setDescription("!minesweeper-interact (x coordinate) (y coordinate)").setColor(Color.RED);
+		EmbedBuilder invalidPlayer = new EmbedBuilder().setTitle("No Active Game").setDescription("You don't have a game running at the moment").setColor(Color.RED);
 		
 		String[] parameterStr = parseParameters(INTERACT_COMMAND, event.getMessageContent());
-		int[] coords = parsePositions(parameterStr);
+		int[] coords = parsePositions(parameterStr, games.get(event.getMessage().getAuthor().asUser().get().getMentionTag()));
 		if(coords == null) {
 			event.getChannel().sendMessage(invalidParameters);
 			return;
 		}
 		
-		games.get(event.getMessage().getAuthor().asUser().get().getMentionTag()).interactCell(coords[0], coords[1]);
-		displayGrid(event);
+		if(games.get(event.getMessage().getAuthor().asUser().get().getMentionTag()) != null) {
+			games.get(event.getMessage().getAuthor().asUser().get().getMentionTag()).interactCell(coords[0], coords[1]);
+			if(games.get(event.getMessage().getAuthor().asUser().get().getMentionTag()).gameOver) {
+				displayGrid(event, null);
+				event.getChannel().sendMessage(new EmbedBuilder().setTitle("Game Over!").setColor(Color.ORANGE));
+				quitCommand(event);
+				return;
+			}
+			else if(games.get(event.getMessage().getAuthor().asUser().get().getMentionTag()).winOver) {
+				displayGrid(event, null);
+				event.getChannel().sendMessage(new EmbedBuilder().setTitle("You Won!").setColor(Color.BLUE));
+				quitCommand(event);
+				return;
+			}
+		}
+		else {
+			event.getChannel().sendMessage(invalidPlayer);
+			return;
+		}
+		
+		displayGrid(event, null);
 	}
 	
 	void flagCommand(MessageCreateEvent event) {
 		EmbedBuilder invalidParameters = new EmbedBuilder().setTitle("Invalid Parameters").setDescription("!minesweeper-flag (x coordinate) (y coordinate)").setColor(Color.RED);
+		EmbedBuilder invalidPlayer = new EmbedBuilder().setTitle("No Active Game").setDescription("You don't have a game running at the moment").setColor(Color.RED);
 		
 		String[] parameterStr = parseParameters(FLAG_COMMAND, event.getMessageContent());
-		int[] coords = parsePositions(parameterStr);
+		int[] coords = parsePositions(parameterStr, games.get(event.getMessage().getAuthor().asUser().get().getMentionTag()));
 		if(coords == null) {
 			event.getChannel().sendMessage(invalidParameters);
 			return;
 		}
 		
-		games.get(event.getMessage().getAuthor().asUser().get().getMentionTag()).flagCell(coords[0], coords[1]);
-		displayGrid(event);
+		if(games.get(event.getMessage().getAuthor().asUser().get().getMentionTag()) != null) {
+			games.get(event.getMessage().getAuthor().asUser().get().getMentionTag()).flagCell(coords[0], coords[1]);
+			if(games.get(event.getMessage().getAuthor().asUser().get().getMentionTag()).winOver) {
+				displayGrid(event, null);
+				event.getChannel().sendMessage(new EmbedBuilder().setTitle("You Won!").setColor(Color.BLUE));
+				quitCommand(event);
+				return;
+			}
+		}
+		else {
+			event.getChannel().sendMessage(invalidPlayer);
+			return;
+		}
+		
+		displayGrid(event, null);
 	}
 	
 	void createCommand(MessageCreateEvent event) {
@@ -182,7 +238,7 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 			//Creates a new Minesweeper Game and displays the playing field. It will also add it to the map of all running games.
 			MinesweeperGame brandNewGame = new MinesweeperGame(sideLength, mineCount);
 			games.put(event.getMessageAuthor().asUser().get().getMentionTag(), brandNewGame);
-			displayGrid(event);
+			displayGrid(event, null);
 		}
 		else {
 			event.getChannel().sendMessage(errorMessage);
@@ -190,7 +246,32 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 	}
 	
 	void quitCommand(MessageCreateEvent event) {
+		EmbedBuilder invalidPlayer = new EmbedBuilder().setTitle("No Active Game").setDescription("You don't have a game running at the moment").setColor(Color.RED);
 		
+		if(!(games.containsKey(event.getMessage().getAuthor().asUser().get().getMentionTag()))) {
+			event.getChannel().sendMessage(invalidPlayer);
+			return;
+		}
+		games.remove(event.getMessage().getAuthor().asUser().get().getMentionTag());
+		event.getChannel().sendMessage(new EmbedBuilder().setTitle("Your Game has been Deleted").setColor(Color.ORANGE));
+	}
+	
+	void surrenderCommand(MessageCreateEvent event) {
+		EmbedBuilder invalidPlayer = new EmbedBuilder().setTitle("No Active Game").setDescription("You don't have a game running at the moment").setColor(Color.RED);
+		
+		if(!(games.containsKey(event.getMessage().getAuthor().asUser().get().getMentionTag()))) {
+			event.getChannel().sendMessage(invalidPlayer);
+			return;
+		}
+		games.get(event.getMessage().getAuthor().asUser().get().getMentionTag()).loseGame();
+		displayGrid(event, null);
+		event.getChannel().sendMessage(new EmbedBuilder().setTitle("You have Surrendered!").setColor(Color.ORANGE));
+		quitCommand(event);
+	}
+	
+	void locateCommand(MessageCreateEvent event) {
+		int[] wantedCoords = parsePositions(parseParameters(LOCATE_COMMAND, event.getMessageContent()), games.get(event.getMessage().getAuthor().asUser().get().getMentionTag()));
+		displayGrid(event, wantedCoords);
 	}
 	
 	@Override
@@ -203,6 +284,18 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 		}
 		if(event.getMessageContent().startsWith(FLAG_COMMAND)) {
 			flagCommand(event);
+		}
+		if(event.getMessageContent().startsWith(DISPLAY_COMMAND)) {
+			displayGrid(event, null);
+		}
+		else if(event.getMessageContent().startsWith(QUIT_COMMAND)) {
+			quitCommand(event);
+		}
+		else if(event.getMessageContent().startsWith(SURRENDER_COMMAND)) {
+			surrenderCommand(event);
+		}
+		else if(event.getMessageContent().startsWith(LOCATE_COMMAND)) {
+			locateCommand(event);
 		}
 	}
 

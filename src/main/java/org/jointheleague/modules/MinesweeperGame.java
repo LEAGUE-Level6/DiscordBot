@@ -15,7 +15,10 @@ public class MinesweeperGame {
 	private int mineCount;
 	Cell[][] playingField;
 	int tileCounter = 0;
+	int flagCounter = 0;
 	int winAmount;
+	boolean gameOver = false;
+	boolean winOver = false;
 	
 	//Double Checks the given parameters and calls the generateMap function
 	MinesweeperGame(int dimensions, int mineCount) {
@@ -111,7 +114,13 @@ public class MinesweeperGame {
 	public void flagCell(int xPos, int yPos) {
 		if(playingField[xPos][yPos].state == BlockState.UNDISCOVERED) {
 			playingField[xPos][yPos].state = BlockState.FLAGGED;
+			flagCounter++;
 		}
+		else if(playingField[xPos][yPos].state == BlockState.FLAGGED) {
+			playingField[xPos][yPos].state = BlockState.UNDISCOVERED;
+			flagCounter--;
+		}
+		checkForWin();
 	}
 	public void interactCell(int xPos, int yPos) {
 		if(playingField[xPos][yPos].state == BlockState.UNDISCOVERED) {
@@ -126,7 +135,11 @@ public class MinesweeperGame {
 		checkForWin();
 	}
 	void checkForWin() {
-		
+		if(tileCounter == winAmount) {
+			if(flagCounter == mineCount) {
+				winOver = true;
+			}
+		}
 	}
 	
 	BlockType getTypeFromNumber(int value) {
@@ -140,7 +153,18 @@ public class MinesweeperGame {
 	}
 	
 	void loseGame() {
-		
+		for(int i = 0; i < playingField.length; i++) {
+			for(int j = 0; j < playingField[i].length; j++) {
+				if(playingField[i][j].state == BlockState.FLAGGED && playingField[i][j].type == BlockType.BOMB) {
+					//Do Nothing
+				}
+				else {
+					playingField[i][j].state = BlockState.DISCOVERED;
+				}
+				
+			}
+		}
+		gameOver = true;
 	}
 	
 	class Cell {
@@ -158,9 +182,11 @@ public class MinesweeperGame {
 		void flag() {
 			if(state == BlockState.FLAGGED) {
 				state = BlockState.UNDISCOVERED;
+				flagCounter--;
 			}
 			else if(state == BlockState.UNDISCOVERED) {
 				state = BlockState.FLAGGED;
+				flagCounter++;
 			}
 		}
 	}
