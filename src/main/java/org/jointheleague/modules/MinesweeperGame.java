@@ -14,6 +14,8 @@ public class MinesweeperGame {
 	private int dimensions;
 	private int mineCount;
 	Cell[][] playingField;
+	int tileCounter = 0;
+	int winAmount;
 	
 	//Double Checks the given parameters and calls the generateMap function
 	MinesweeperGame(int dimensions, int mineCount) {
@@ -25,6 +27,7 @@ public class MinesweeperGame {
 		
 		this.dimensions = dimensions;
 		this.mineCount = mineCount;
+		this.winAmount = (dimensions*dimensions)-mineCount;
 		generateMap();
 	}
 	
@@ -106,10 +109,21 @@ public class MinesweeperGame {
 	}
 	
 	public void flagCell(int xPos, int yPos) {
-		
+		if(playingField[xPos][yPos].state == BlockState.UNDISCOVERED) {
+			playingField[xPos][yPos].state = BlockState.FLAGGED;
+		}
 	}
 	public void interactCell(int xPos, int yPos) {
-		
+		if(playingField[xPos][yPos].state == BlockState.UNDISCOVERED) {
+			playingField[xPos][yPos].state = BlockState.DISCOVERED;
+			if(playingField[xPos][yPos].type != BlockType.BOMB) {
+				tileCounter++;
+			}
+		}
+		if(playingField[xPos][yPos].type == BlockType.BOMB) {
+			loseGame();
+		}
+		checkForWin();
 	}
 	void checkForWin() {
 		

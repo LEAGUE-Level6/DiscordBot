@@ -15,12 +15,28 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 	
 	//Commands
 	static final String GENERATE_COMMAND = "!minesweeper-create";
+	static final String INTERACT_COMMAND = "!minesweeper-interact";
+	static final String FLAG_COMMAND = "!minesweeper-flag";
 	
 	public MinesweeperListener(String channelName) {
 		super(channelName);
 	}
 
-	void parsePositions() {
+	int[] parsePositions(String[] parameters) {
+		if(parameters.length == 2) {
+			int[] coordinates = new int[2];
+			try {
+				coordinates[0] = Integer.valueOf(parameters[0]);
+				coordinates[1] = Integer.valueOf(parameters[1]);
+			}
+			catch(NumberFormatException e) {
+				return null;
+			}
+			return coordinates;
+		}
+		else {
+			return null;
+		}
 		
 	}
 	
@@ -86,12 +102,33 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 		return null;
 	}
 	
-	void interactCommand() {
+	void interactCommand(MessageCreateEvent event) {
 		
+		EmbedBuilder invalidParameters = new EmbedBuilder().setTitle("Invalid Parameters").setDescription("!minesweeper-interact (x coordinate) (y coordinate)").setColor(Color.RED);
+		
+		String[] parameterStr = parseParameters(INTERACT_COMMAND, event.getMessageContent());
+		int[] coords = parsePositions(parameterStr);
+		if(coords == null) {
+			event.getChannel().sendMessage(invalidParameters);
+			return;
+		}
+		
+		games.get(event.getMessage().getAuthor().asUser().get().getMentionTag()).interactCell(coords[0], coords[1]);
+		displayGrid(event);
 	}
 	
-	void flagCommand() {
+	void flagCommand(MessageCreateEvent event) {
+		EmbedBuilder invalidParameters = new EmbedBuilder().setTitle("Invalid Parameters").setDescription("!minesweeper-flag (x coordinate) (y coordinate)").setColor(Color.RED);
 		
+		String[] parameterStr = parseParameters(FLAG_COMMAND, event.getMessageContent());
+		int[] coords = parsePositions(parameterStr);
+		if(coords == null) {
+			event.getChannel().sendMessage(invalidParameters);
+			return;
+		}
+		
+		games.get(event.getMessage().getAuthor().asUser().get().getMentionTag()).flagCell(coords[0], coords[1]);
+		displayGrid(event);
 	}
 	
 	void createCommand(MessageCreateEvent event) {
@@ -148,7 +185,7 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 		}
 	}
 	
-	void quitCommand() {
+	void quitCommand(MessageCreateEvent event) {
 		
 	}
 	
@@ -156,6 +193,9 @@ public class MinesweeperListener extends CustomMessageCreateListener {
 	public void handle(MessageCreateEvent event) throws APIException {
 		if(event.getMessageContent().startsWith(GENERATE_COMMAND)) {
 			createCommand(event);
+		}
+		if(event.getMessageContent().startsWith(INTERACT_COMMAND)) {
+			interactCommand(event);
 		}
 	}
 
