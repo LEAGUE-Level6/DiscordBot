@@ -5,7 +5,7 @@ import java.util.Random;
 
 /**
  * The representation of an individual game
- *
+ * @author FieryXY
  */
 public class MinesweeperGame {
 	public static enum BlockType {
