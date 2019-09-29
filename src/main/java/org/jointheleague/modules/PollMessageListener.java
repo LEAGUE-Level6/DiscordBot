@@ -491,7 +491,6 @@ public class PollMessageListener extends CustomMessageCreateListener {
 			getPolls(event.getChannel().getId());
 		}
 		
-		
 		//Will make an embed message of all the polls on a channel if there are any;
 		if(event.getMessageContent().equals("!poll-list")) {
 			event.getChannel().sendMessage("Preparing...");
