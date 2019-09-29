@@ -3,6 +3,10 @@ package org.jointheleague.modules;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * The representation of an individual game
+ *
+ */
 public class MinesweeperGame {
 	public static enum BlockType {
 		ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,EMPTY,BOMB;
@@ -20,7 +24,13 @@ public class MinesweeperGame {
 	boolean gameOver = false;
 	boolean winOver = false;
 	
-	//Double Checks the given parameters and calls the generateMap function
+	/**
+	 * The constructor makes sure that the side length does not exceed 10 and there are more cells than
+	 * mines on the playing field.
+	 * 
+	 * @param dimensions The side length of the playing field
+	 * @param mineCount The amount of mines in the playing field
+	 */
 	MinesweeperGame(int dimensions, int mineCount) {
 		
 		if(dimensions > 10 || mineCount > dimensions*dimensions) {
@@ -34,7 +44,10 @@ public class MinesweeperGame {
 		generateMap();
 	}
 	
-	//Generates the Playing Field
+	
+	/**
+	 * Generates a new board based on the given member variables of dimension/side length and mine count
+	 * */
 	void generateMap() {
 		playingField = new Cell[dimensions][dimensions];
 		
@@ -75,7 +88,12 @@ public class MinesweeperGame {
 		}
 	}
 	
-	//Manually checks if each of the eight possible slots around a slot exists, and if it does, adds it to an array of all surrounding cells.
+	/**
+	 * 
+	 * @param xPosition The x-position of the desired cell
+	 * @param yPosition The y-position of the desired cell
+	 * @return This returns an array of all the cells surrounding the given cell
+	 */
 	Cell[] getSurroundingCells(int xPosition, int yPosition) {
 		ArrayList<Cell> cellTempList = new ArrayList<Cell>();
 		if(xPosition > 0) {
@@ -111,6 +129,13 @@ public class MinesweeperGame {
 		
 	}
 	
+	
+	/**
+	 * The function will toggle the flag state on cells. Cells which are already discovered can't be flagged. Flagged cells will revert to undiscovered cells when the flag is toggled off
+	 * 
+	 * @param xPos X-position of target cell
+	 * @param yPos Y-position of target cell
+	 */
 	public void flagCell(int xPos, int yPos) {
 		if(playingField[xPos][yPos].state == BlockState.UNDISCOVERED) {
 			playingField[xPos][yPos].state = BlockState.FLAGGED;
@@ -122,6 +147,14 @@ public class MinesweeperGame {
 		}
 		checkForWin();
 	}
+	/**
+	 * The function will uncover cells which are undiscovered (flagged cells are not considered undiscovered, so they won't be able to be discovered)
+	 * If the discovered cell is a mine, the game is over.
+	 * 
+	 * @param xPos X-position of target cell
+	 * @param yPos Y-Position of target cell
+	 * @see #loseGame
+	 */
 	public void interactCell(int xPos, int yPos) {
 		if(playingField[xPos][yPos].state == BlockState.UNDISCOVERED) {
 			playingField[xPos][yPos].state = BlockState.DISCOVERED;
@@ -134,14 +167,22 @@ public class MinesweeperGame {
 		}
 		checkForWin();
 	}
+	/**
+	 * Checks if all tiles which aren't mines have been discovered and all mines have been flagged
+	 */
 	void checkForWin() {
 		if(tileCounter == winAmount) {
 			if(flagCounter == mineCount) {
+				//Notifies MinesweeperListener that the game has been won
 				winOver = true;
 			}
 		}
 	}
-	
+	/**
+	 * 
+	 * @param value Integer to convert into the form of BlockType. Must be between 1 and 8 inclusive.
+	 * @return The BlockType equivalent of the given number
+	 */
 	BlockType getTypeFromNumber(int value) {
 		int index = value-1;
 		if(value >= 0 && value < 8) {
@@ -152,7 +193,11 @@ public class MinesweeperGame {
 		}	
 	}
 	
+	/**
+	 * The functions requests the MinesweeperListener to display the completely undiscovered grid and delete the game object.
+	 */
 	void loseGame() {
+		//Set every cell to the state Discovered
 		for(int i = 0; i < playingField.length; i++) {
 			for(int j = 0; j < playingField[i].length; j++) {
 				if(playingField[i][j].state == BlockState.FLAGGED && playingField[i][j].type == BlockType.BOMB) {
@@ -164,30 +209,16 @@ public class MinesweeperGame {
 				
 			}
 		}
+		
+		//Set the gameOver boolean to true to notify MinesweeperListener that the game is over
 		gameOver = true;
 	}
 	
+	/**
+	 * Object representation of an individual game cell
+	 */
 	class Cell {
 		BlockType type = BlockType.EMPTY;
 		BlockState state = BlockState.UNDISCOVERED;
-		
-		void interact() {
-			if(state == BlockState.UNDISCOVERED) {
-				state = BlockState.DISCOVERED;
-				if(type == BlockType.BOMB) {
-					loseGame();
-				}
-			}
-		}
-		void flag() {
-			if(state == BlockState.FLAGGED) {
-				state = BlockState.UNDISCOVERED;
-				flagCounter--;
-			}
-			else if(state == BlockState.UNDISCOVERED) {
-				state = BlockState.FLAGGED;
-				flagCounter++;
-			}
-		}
 	}
 }
