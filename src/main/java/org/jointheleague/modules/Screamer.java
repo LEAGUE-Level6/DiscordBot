@@ -21,25 +21,28 @@ public class Screamer extends CustomMessageCreateListener {
 		boolean contains = false;
 		for (int i = 0; i < COMMANDS.length; i++)
 		{
-			if (mes.toLowerCase().contains(COMMANDS[i])) contains = true;
+			if (mes.toLowerCase().contains(COMMANDS[i])) 
+			{
+				contains = true;
+				break;
+			}
 		}
-		if (contains == true)
+		if (contains)
 		{
 			Random r = new Random();
 			int numberOfAs = r.nextInt(400);
 			int numberOfHs = r.nextInt(400);
-			String scream = "";
+			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < numberOfAs + 800; i++)
 			{
-				scream+=(r.nextInt()%2==0)? "a" : "A";
+				sb.append((r.nextInt()%2==0)? "a" : "A");
 			}
 			for (int i = 0; i < numberOfHs + 800; i++)
 			{
-				scream+=(r.nextInt()%2==0) ? "h" : "H";
+				sb.append((r.nextInt()%2==0) ? "h" : "H");
 			}
-			scream+="!";
-			scream+="\nIts " + NOUNS[r.nextInt(NOUNS.length)];
-			event.getChannel().sendMessage(scream);
+			sb.append("!\nIts " + NOUNS[r.nextInt(NOUNS.length)]);
+			event.getChannel().sendMessage(sb.toString());
 		}
 	}
 	
