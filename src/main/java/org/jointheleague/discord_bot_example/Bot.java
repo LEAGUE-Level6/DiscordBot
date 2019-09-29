@@ -11,6 +11,7 @@ import org.jointheleague.modules.ComicMessageListener;
 import org.jointheleague.modules.ElmoMessageListener;
 import org.jointheleague.modules.FactMessageListener;
 import org.jointheleague.modules.FlagMessageListener;
+import org.jointheleague.modules.Hangman;
 import org.jointheleague.modules.FashionAdvisor;
 import org.jointheleague.modules.leetMessageListener;
 
@@ -39,6 +40,7 @@ public class Bot  {
 		api.addMessageCreateListener(new ComicMessageListener(channelName));
 		api.addMessageCreateListener(new ElmoMessageListener(channelName));
 		api.addMessageCreateListener(new FactMessageListener(channelName));
+		api.addMessageCreateListener(new Hangman(channelName));
 
 		api.addMessageCreateListener(new leetMessageListener(channelName));
 
