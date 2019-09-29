@@ -1,8 +1,11 @@
 package org.jointheleague.modules;
 
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.javacord.api.entity.message.Message;
 import org.javacord.api.event.message.MessageCreateEvent;
 
 public class Screamer extends CustomMessageCreateListener {
@@ -30,19 +33,24 @@ public class Screamer extends CustomMessageCreateListener {
 		if (contains)
 		{
 			Random r = new Random();
-			int numberOfAs = r.nextInt(400);
-			int numberOfHs = r.nextInt(400);
+			int numberOfAs = r.nextInt(300);
+			int numberOfHs = r.nextInt(300);
 			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < numberOfAs + 800; i++)
+			for (int i = 0; i < numberOfAs + 400; i++)
 			{
-				sb.append((r.nextInt()%2==0)? "a" : "A");
+				sb.append((r.nextInt(2)==0)? "a" : "A");
 			}
-			for (int i = 0; i < numberOfHs + 800; i++)
+			for (int i = 0; i < numberOfHs + 400; i++)
 			{
-				sb.append((r.nextInt()%2==0) ? "h" : "H");
+				sb.append((r.nextInt(2)==0) ? "h" : "H");
 			}
 			sb.append("!\nIts " + NOUNS[r.nextInt(NOUNS.length)]);
-			event.getChannel().sendMessage(sb.toString());
+			CompletableFuture<Message> compFuture = event.getChannel().sendMessage(sb.toString());
+			try {
+				compFuture.get();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
