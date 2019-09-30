@@ -486,7 +486,7 @@ public class PollMessageListener extends CustomMessageCreateListener {
 	
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
-		
+	/*
 		if(channelPolls == null) {
 			getPolls(event.getChannel().getId());
 		}
@@ -533,7 +533,7 @@ public class PollMessageListener extends CustomMessageCreateListener {
 			helpStuff.addField("!poll-help", "Gives you information about Poll Commands");
 			event.getChannel().sendMessage(helpStuff);
 		}
-		
+		*/
 	}
 	
 	private void saveJson() {
