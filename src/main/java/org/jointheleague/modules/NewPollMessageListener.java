@@ -529,6 +529,12 @@ public class NewPollMessageListener extends CustomMessageCreateListener {
 		saveJson();
 	}
 	
+	/**
+	 * Generates a help page embed and displays it. The command function uses the final String variables instantiated to display
+	 * accurate and up-to-date syntaxes as well as descriptions for each command.
+	 * 
+	 * @param event
+	 */
 	void generateHelp(MessageCreateEvent event) {
 		//Create Help Page Embed
 		EmbedBuilder helpPage = new EmbedBuilder().setTitle("Poll Manager Help").setDescription("NOTE: If you entering a parameter which is multi-word while using this feature, make sure you surround it with quotation marks. If it is one word, do not.");
