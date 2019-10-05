@@ -30,10 +30,11 @@ public class NewPollMessageListener extends CustomMessageCreateListener {
 	static final String HELP_COMMAND = "!poll-help";
 	
 	//Command Syntaxes
-	static final String CREATE_SYNTAX = CREATE_COMMAND + " <Poll Name> <Poll Description> <Option 1> <Option 2> (You can have as many options as you want)";
+	static final String CREATE_SYNTAX = CREATE_COMMAND + " <Poll Name> <Poll Description> <Option 1> <Option 2> (You can have as many options as you want, but a minimum of two is required)";
 	static final String INFO_SYNTAX = INFO_COMMAND + " <Poll Name>";
 	static final String VOTE_SYNTAX = VOTE_COMMAND + " <Poll Name> <Poll Option>";
 	static final String STATUS_SYNTAX = STATUS_COMMAND + " <Poll Name>";
+	static final String REMOVE_SYNTAX = REMOVE_COMMAND + " <Poll Name>";
 	//Loaded Json Information
 	JsonObject channelPolls;
 	JsonArray fileData;
@@ -64,6 +65,12 @@ public class NewPollMessageListener extends CustomMessageCreateListener {
 		}
 		else if(event.getMessageContent().startsWith(STATUS_COMMAND)) {
 			statusOfPoll(event);
+		}
+		else if(event.getMessageContent().startsWith(REMOVE_COMMAND)) {
+			removePoll(event);
+		}
+		else if(event.getMessageContent().startsWith(HELP_COMMAND)) {
+			generateHelp(event);
 		}
 	}
 	
@@ -376,6 +383,7 @@ public class NewPollMessageListener extends CustomMessageCreateListener {
 		String[] commandParameters = parseParameters(VOTE_COMMAND, event.getMessageContent());
 		if(commandParameters.length != 2) {
 			event.getChannel().sendMessage(invalidParameters);
+			return;
 		}
 		
 		//Makes sure it is a valid poll
@@ -454,12 +462,14 @@ public class NewPollMessageListener extends CustomMessageCreateListener {
 		JsonObject targetPoll = getPollFromName(commandParameters[0]);
 		if(targetPoll == null) {
 			event.getChannel().sendMessage(pollNotFound);
+			return;
 		}
 		
 		//Makes sure the user has already voted
 		JsonArray participants = targetPoll.get("participants").getAsJsonArray();
 		if(findObjectFromProperty(participants, "userTag", event.getMessageAuthor().asUser().get().getMentionTag()) == null) {
 			event.getChannel().sendMessage(invalidUser);
+			return;
 		}
 		
 		//Beginning embed construction
@@ -477,6 +487,62 @@ public class NewPollMessageListener extends CustomMessageCreateListener {
 		event.getChannel().sendMessage("The Poll's Status has been sent via Direct Messaging.");
 		
 		
+	}
+	
+	/**
+	 * Given the user who requested the command is the owner of the poll, the poll will be removed from the JSON data.
+	 * 
+	 * @param event MessageCreateEvent from Javacord Listener
+	 */
+	void removePoll(MessageCreateEvent event) {
+		//Error Messages
+		EmbedBuilder invalidParameters = new EmbedBuilder().setTitle("Invalid Parameters").setDescription(REMOVE_SYNTAX).setColor(Color.RED);
+		EmbedBuilder pollNotFound = new EmbedBuilder().setTitle("Poll Not Found").setDescription("Double check the poll you requested exists").setColor(Color.RED);
+		EmbedBuilder invalidUser = new EmbedBuilder().setTitle("Insufficient Permissions").setDescription("You are not the owner of this poll.").setColor(Color.RED);
+		
+		//Makes sure there is one parameter
+		String[] commandParameters = parseParameters(REMOVE_COMMAND, event.getMessageContent());
+		if(commandParameters.length != 1) {
+			event.getChannel().sendMessage(invalidParameters);
+			return;
+		}
+		
+		//Get Poll from Parameter
+		JsonObject targetPoll = getPollFromName(commandParameters[0]);
+		if(targetPoll == null) {
+			event.getChannel().sendMessage(pollNotFound);
+			return;
+		}
+		
+		//Make sure the user is the owner of the poll or a server administrator
+		boolean isOwner = targetPoll.get("owner").getAsString().equals(event.getMessageAuthor().asUser().get().getMentionTag());
+		if(!isOwner && !(event.getMessageAuthor().isServerAdmin())) {
+			event.getChannel().sendMessage(invalidUser);
+			return;
+		}
+		
+		//Removes the poll
+		String displayNameOfPoll = targetPoll.get("name").getAsString();
+		channelPolls.get("cPolls").getAsJsonArray().remove(targetPoll);
+		EmbedBuilder toDisplay = new EmbedBuilder().setTitle("Poll Removed").setDescription("The poll: \""+displayNameOfPoll+"\" was removed.").setColor(Color.GREEN);
+		event.getChannel().sendMessage(toDisplay);
+		saveJson();
+	}
+	
+	void generateHelp(MessageCreateEvent event) {
+		//Create Help Page Embed
+		EmbedBuilder helpPage = new EmbedBuilder().setTitle("Poll Manager Help").setDescription("NOTE: If you entering a parameter which is multi-word while using this feature, make sure you surround it with quotation marks. If it is one word, do not.");
+		helpPage.setColor(Color.YELLOW);
+		
+		//Adding Commands to Help Page
+		helpPage.addField(LIST_COMMAND, "Lists all the polls for the channel");
+		helpPage.addField(CREATE_SYNTAX, "Allows you to create a poll of your own on the channel");
+		helpPage.addField(INFO_SYNTAX, "Gives you basic information, such as name, description, and options, of the poll");
+		helpPage.addField(REMOVE_SYNTAX, "Given you are the owner of the poll or an administrator of the server, you can remove the poll");
+		helpPage.addField(VOTE_SYNTAX, "Vote for the given poll with the given option. You can only vote once and you cannot take back your vote.");
+		helpPage.addField(STATUS_SYNTAX, "Direct Messages you the current standings of the poll. The information will include how many people voted for each of the options. You must have voted to view this information.");
+		
+		event.getChannel().sendMessage(helpPage);
 	}
 	
 
