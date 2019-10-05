@@ -32,6 +32,8 @@ public class NewPollMessageListener extends CustomMessageCreateListener {
 	//Command Syntaxes
 	static final String CREATE_SYNTAX = CREATE_COMMAND + " <Poll Name> <Poll Description> <Option 1> <Option 2> (You can have as many options as you want)";
 	static final String INFO_SYNTAX = INFO_COMMAND + " <Poll Name>";
+	static final String VOTE_SYNTAX = VOTE_COMMAND + " <Poll Name> <Poll Option>";
+	static final String STATUS_SYNTAX = STATUS_COMMAND + " <Poll Name>";
 	//Loaded Json Information
 	JsonObject channelPolls;
 	JsonArray fileData;
@@ -57,9 +59,15 @@ public class NewPollMessageListener extends CustomMessageCreateListener {
 		else if(event.getMessageContent().startsWith(LIST_COMMAND)) {
 			listPolls(event);
 		}
+		else if(event.getMessageContent().startsWith(VOTE_COMMAND)) {
+			votePoll(event);
+		}
+		else if(event.getMessageContent().startsWith(STATUS_COMMAND)) {
+			statusOfPoll(event);
+		}
 	}
 	
-	//Utility Functions:
+	//UTILITY FUNCTIONS:
 	
 	/**
 	 * 
@@ -103,19 +111,20 @@ public class NewPollMessageListener extends CustomMessageCreateListener {
 		
 		//This means that a beginning quotation was detected but not an end quotation, so the system got confused.
 		if(lastQuote >= 0) {
-			return null;
+			return new String[0];
 		}
 		//Converts the array list into an array, ready to return
 		return finalParams.toArray(new String[finalParams.size()]);
 	}
 	
 	/**
+	 * Concatenates a range of parameters in a String array with spaces in between. The function is most often used in
+	 * conjunction with {@link #parseParameters(String, String)}
 	 * 
 	 * @param beginIndex Index of the word with the first quotation
 	 * @param endIndex Index of the word with the second quotation
 	 * @param parameters An array of parameters passed by the parseParameters function
 	 * @return All words between the beginning and end index concatenated with spaces (inclusive)
-	 * @see #parseParameters(String, String)
 	 */
 	static String concatParameters(int beginIndex, int endIndex, String[] parameters) {
 		String toReturn = "";
@@ -145,24 +154,33 @@ public class NewPollMessageListener extends CustomMessageCreateListener {
 	}
 	/**
 	 * 
-	 * @param query The name to query for in the poll list
+	 * @param query The name to query for in the poll list. Utilizes {@link #findObjectFromProperty(JsonArray, String, String)}
 	 * @return JsonObject representing the poll. The function returns null if the poll can't be found.
 	 */
 	JsonObject getPollFromName(String query) {
+		return findObjectFromProperty(channelPolls.get("cPolls").getAsJsonArray(), "name", query);
+	}
+	
+	/**
+	 * 
+	 * @param toQuery JsonArray you want to query
+	 * @param propertyName The key of the Json Property which you want to query for
+	 * @param propertyValue The value you want the key to point to
+	 * @return A JsonObject containing the conditions above, if it exists. If it does not exist, it will return null
+	 */
+	JsonObject findObjectFromProperty(JsonArray toQuery, String propertyName, String propertyValue) {
 		
-		JsonArray allPolls = channelPolls.get("cPolls").getAsJsonArray();
-		for(int i = 0; i < allPolls.size(); i++) {
-			JsonObject currentIteration = allPolls.get(i).getAsJsonObject();
-			if(currentIteration.get("name").getAsString().equals(query)) {
-				return currentIteration;
+		for(int i = 0; i < toQuery.size(); i++) {
+			JsonObject iteration = toQuery.get(i).getAsJsonObject();
+			if(iteration.get(propertyName).getAsString().equals(propertyValue)) {
+				return iteration;
 			}
 		}
-		
 		return null;
 	}
 	
 	
-	//Command Functions:
+	//COMMAND FUNCTIONS:
 	
 	/**
 	 * Loads the file data from the permanent file storage. Usually called the first time the data is requested.
@@ -179,12 +197,10 @@ public class NewPollMessageListener extends CustomMessageCreateListener {
 			fileData = (JsonArray) parser.parse(reader);
 			
 			//Find the JSON Object for the channel
-			for(int j = 0; j < fileData.size(); j++) {
-				JsonObject channelObj = fileData.get(j).getAsJsonObject();
-				if(channelObj.get("id").getAsString().equals(String.valueOf(channelId))) {
-					channelPolls = channelObj;
-					return;
-				}
+			JsonObject checkForChannelPoll = findObjectFromProperty(fileData, "id", String.valueOf(channelId));
+			if(checkForChannelPoll != null) {
+				channelPolls = checkForChannelPoll;
+				return;
 			}
 			
 			//Create a JSON Object for the channel if it doesn't already exist
@@ -218,10 +234,6 @@ public class NewPollMessageListener extends CustomMessageCreateListener {
 		
 		String[] commandParameters = parseParameters(CREATE_COMMAND, event.getMessageContent());
 		
-		//This if statement checks if the parseParameters function had an issue. If so, it should have already sent an error message so we just return.
-		if(commandParameters == null) {
-			return;
-		}
 		//There should be a minimum of four parameters since every poll must have a title, description, and at least 2 options
 		if(commandParameters.length < 4) {
 			event.getChannel().sendMessage(invalidParameters);
@@ -345,6 +357,127 @@ public class NewPollMessageListener extends CustomMessageCreateListener {
 		event.getChannel().sendMessage(toDisplay);
 	}
 	
+	/**
+	 * Allows the user to vote on a poll, given two parameters: the name of the poll and the option of the poll which he/she wants to vote.
+	 * The function will also ensure that the user has not already voted.
+	 * 
+	 * @param event MessageCreateEvent from Javacord Listener
+	 */
+	void votePoll(MessageCreateEvent event) {
+		
+		//Error Messages
+		EmbedBuilder invalidParameters = new EmbedBuilder().setTitle("Invalid Parameters").setDescription(VOTE_SYNTAX).setColor(Color.RED);
+		EmbedBuilder pollNotFound = new EmbedBuilder().setTitle("Poll Not Found").setDescription("Double check the poll you requested exists").setColor(Color.RED);
+		EmbedBuilder alreadyVoted = new EmbedBuilder().setTitle("You have Already Voted").setDescription("You can't re-vote on a poll").setColor(Color.RED);
+		EmbedBuilder invalidOption = new EmbedBuilder().setTitle("Invalid Option").setDescription("That is not a valid option for this poll").setColor(Color.RED);
+		EmbedBuilder internalError = new EmbedBuilder().setTitle("Internal Error").setDescription("There was a problem reading the internal data").setColor(Color.RED);
+		
+		//Makes sure there are only two parameters
+		String[] commandParameters = parseParameters(VOTE_COMMAND, event.getMessageContent());
+		if(commandParameters.length != 2) {
+			event.getChannel().sendMessage(invalidParameters);
+		}
+		
+		//Makes sure it is a valid poll
+		JsonObject chosenPoll = getPollFromName(commandParameters[0]);
+		if(chosenPoll == null) {
+			event.getChannel().sendMessage(pollNotFound);
+			return;
+		}
+		
+	
+		
+		//Makes sure participant hasn't already voted
+		JsonArray participants = chosenPoll.get("participants").getAsJsonArray();
+		if(findObjectFromProperty(participants, "userTag", event.getMessageAuthor().asUser().get().getMentionTag()) != null) {
+			event.getChannel().sendMessage(alreadyVoted);
+			return;
+		}
+		
+		//Makes sure the option is a valid option for the poll
+		JsonArray options = chosenPoll.get("options").getAsJsonArray();
+		JsonObject usersOption = findObjectFromProperty(options, "optionName", commandParameters[1]);
+		if(usersOption == null) {
+			event.getChannel().sendMessage(invalidOption);
+			return;
+		}
+		
+		//Add entry for a new participant
+		JsonObject newParticipant = new JsonObject();
+		newParticipant.addProperty("userTag", event.getMessageAuthor().asUser().get().getMentionTag());
+		newParticipant.addProperty("userOption", commandParameters[1]);
+		participants.add(newParticipant);
+		
+		//Increment the option count for the given option
+		try {
+			int currentCount = Integer.valueOf(usersOption.get("optionCount").getAsString());
+			currentCount++;
+			usersOption.remove("optionCount");
+			usersOption.addProperty("optionCount", String.valueOf(currentCount));
+		}
+		catch(NumberFormatException e) {
+			event.getChannel().sendMessage(internalError);
+			return;
+		}
+		
+		//Notify the user that he has successfully voted
+		EmbedBuilder toDisplay = new EmbedBuilder().setTitle("You Voted!").setColor(Color.GREEN);
+		toDisplay.addField("Poll Name", commandParameters[0]);
+		toDisplay.addField("Option", commandParameters[1]);
+		event.getChannel().sendMessage(toDisplay);
+		event.getChannel().sendMessage("You can view the current standings of the poll via "+STATUS_COMMAND);
+		
+		//Save the data into the permanent JSON file
+		saveJson();
+		
+	}
+	
+	/**
+	 * Given that the user has already voted, the command can be used to obtain the status of the poll. In other words, how many people voted for each option.
+	 * 
+	 * @param event MessageCreateEvent from Javacord Listener
+	 */
+	void statusOfPoll(MessageCreateEvent event) {
+		//Error Messages
+		EmbedBuilder invalidParameters = new EmbedBuilder().setTitle("Invalid Parameters").setDescription(STATUS_SYNTAX).setColor(Color.RED);
+		EmbedBuilder pollNotFound = new EmbedBuilder().setTitle("Poll Not Found").setDescription("Double check the poll you requested exists").setColor(Color.RED);
+		EmbedBuilder invalidUser = new EmbedBuilder().setTitle("You Haven't Voted Yet").setDescription("Make sure to use "+VOTE_COMMAND+" to vote before you can look into the status of the poll.").setColor(Color.RED);
+		
+		//Makes sure there is one parameter
+		String[] commandParameters = parseParameters(STATUS_COMMAND, event.getMessageContent());
+		if(commandParameters.length != 1) {
+			event.getChannel().sendMessage(invalidParameters);
+			return;
+		}
+		
+		//Makes sure there is a poll for the given name and finds that poll
+		JsonObject targetPoll = getPollFromName(commandParameters[0]);
+		if(targetPoll == null) {
+			event.getChannel().sendMessage(pollNotFound);
+		}
+		
+		//Makes sure the user has already voted
+		JsonArray participants = targetPoll.get("participants").getAsJsonArray();
+		if(findObjectFromProperty(participants, "userTag", event.getMessageAuthor().asUser().get().getMentionTag()) == null) {
+			event.getChannel().sendMessage(invalidUser);
+		}
+		
+		//Beginning embed construction
+		EmbedBuilder toDisplay = new EmbedBuilder().setTitle("Poll Status: "+targetPoll.get("name").getAsString());
+		
+		//Adding fields for every option into the embed
+		JsonArray optionsForPoll = targetPoll.get("options").getAsJsonArray();
+		for(int i = 0; i < optionsForPoll.size(); i++) {
+			JsonObject currentOption = optionsForPoll.get(i).getAsJsonObject();
+			toDisplay.addField(currentOption.get("optionName").getAsString(), currentOption.get("optionCount").getAsString());
+		}
+		
+		//Sending Embed via DMs (Direct Messaging)
+		event.getMessageAuthor().asUser().get().sendMessage(toDisplay);
+		event.getChannel().sendMessage("The Poll's Status has been sent via Direct Messaging.");
+		
+		
+	}
 	
 
 }
