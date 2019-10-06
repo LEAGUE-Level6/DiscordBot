@@ -13,6 +13,7 @@ import org.jointheleague.modules.FactMessageListener;
 import org.jointheleague.modules.FlagMessageListener;
 import org.jointheleague.modules.FashionAdvisor;
 import org.jointheleague.modules.leetMessageListener;
+import org.jointheleague.modules.mafia.Mafia;
 
 
 public class Bot  {
@@ -41,6 +42,8 @@ public class Bot  {
 		api.addMessageCreateListener(new FactMessageListener(channelName));
 
 		api.addMessageCreateListener(new leetMessageListener(channelName));
+		
+		api.addMessageCreateListener(new Mafia(channelName));
 
 		api.addMessageCreateListener(new FlagMessageListener(channelName));
 
