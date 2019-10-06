@@ -11,6 +11,7 @@ import org.jointheleague.modules.ComicMessageListener;
 import org.jointheleague.modules.ElmoMessageListener;
 import org.jointheleague.modules.FactMessageListener;
 import org.jointheleague.modules.FlagMessageListener;
+import org.jointheleague.modules.LatexRender;
 import org.jointheleague.modules.FashionAdvisor;
 import org.jointheleague.modules.leetMessageListener;
 
@@ -46,7 +47,9 @@ public class Bot  {
 
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
+		api.addMessageCreateListener(new LatexRender(channelName));
 	}
+
 
 }
 
