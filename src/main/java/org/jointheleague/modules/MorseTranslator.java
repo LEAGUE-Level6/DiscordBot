@@ -2,7 +2,9 @@ package org.jointheleague.modules;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.CompletableFuture;
 
+import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 
 import net.aksingh.owmjapis.api.APIException;
@@ -26,9 +28,9 @@ public class MorseTranslator extends CustomMessageCreateListener {
 		return event.getMessageAuthor().asUser().get().getMentionTag();
 	}
 	
-	void editMessage(MessageCreateEvent event, String newMessage) {
+	/*void editMessage(MessageCreateEvent event, String newMessage) {
 		event.getMessage().edit(newMessage);
-	}
+	}*/
 	
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
@@ -45,7 +47,8 @@ public class MorseTranslator extends CustomMessageCreateListener {
 		}
 		//If the user has morse toggled, it will automatically edit his message to be in morse code
 		else if(toggledUsers.contains(findMentionTag(event))) {
-			editMessage(event, translateMorse(event.getMessageContent()));
+			event.deleteMessage();
+			event.getChannel().sendMessage(translateMorse(event.getMessageContent()));
 		}
 	}
 	
