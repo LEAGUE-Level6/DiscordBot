@@ -11,19 +11,23 @@ public class MorseTranslator extends CustomMessageCreateListener {
 	
 	//Commands
 	static final String TOGGLE_MORSE = "!morse-toggle";
-	static final String MANUAL_TRANSLATE = "!mrs";
 	
-	HashMap<Character, String> englishMorse = new HashMap<String, String>();
+	HashMap<Character, String> englishMorse = new HashMap<Character, String>();
 	ArrayList<String> toggledUsers = new ArrayList<String>();
 	
 	
 	public MorseTranslator(String channelName) {
 		super(channelName);
+		generateMorse();
 	}
 
 	//Utility
 	String findMentionTag(MessageCreateEvent event) {
 		return event.getMessageAuthor().asUser().get().getMentionTag();
+	}
+	
+	void editMessage(MessageCreateEvent event, String newMessage) {
+		event.getMessage().edit(newMessage);
 	}
 	
 	@Override
@@ -39,13 +43,9 @@ public class MorseTranslator extends CustomMessageCreateListener {
 				event.getChannel().sendMessage("Automatic Morse Translation Toggled On");
 			}
 		}
-		//Checks for the manual translation command
-		else if(event.getMessageContent().startsWith(MANUAL_TRANSLATE)) {
-			
-		}
 		//If the user has morse toggled, it will automatically edit his message to be in morse code
-		else if(toggledUsers.contains(event.getMessageAuthor().asUser().get().getMentionTag())) {
-			
+		else if(toggledUsers.contains(findMentionTag(event))) {
+			editMessage(event, translateMorse(event.getMessageContent()));
 		}
 	}
 	
@@ -53,12 +53,22 @@ public class MorseTranslator extends CustomMessageCreateListener {
 		
 		String translated = "";
 		for(int i = 0; i < english.length(); i++) {
+			
+			if(english.charAt(i) == ' ') {
+				continue;
+			}
+			
 			//Characters. Checks if the morse HashMap contains the character. If not, it just displays it in its original form.
 			if(englishMorse.containsKey(english.charAt(i))) {
 				translated += englishMorse.get(english.charAt(i));
 			}
-			else if(english.charAt(i) != ' '){
+			else {
 				translated += english.charAt(i);
+			}
+			
+			//Avoid the next part of the loop (whitespace) if it is the last character.
+			if(i >= english.length()-1) {
+				break;
 			}
 			
 			//Whitespace. In Morse Code. Spaces are three spaces (used to identify end of word) and one space is used to identify the end of a character and the beginning of another

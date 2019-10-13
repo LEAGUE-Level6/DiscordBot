@@ -1,18 +1,19 @@
 package org.jointheleague.discord_bot_example;
 
-import org.javacord.api.DiscordApi; 
+import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.jointheleague.modules.CalculatorMessageListener;
-import org.jointheleague.modules.RandomNumber;
-import org.jointheleague.modules.Weather;
-import org.jointheleague.modules.DadJokes;
 import org.jointheleague.modules.ClockMessageListener;
 import org.jointheleague.modules.ComicMessageListener;
+import org.jointheleague.modules.DadJokes;
 import org.jointheleague.modules.ElmoMessageListener;
 import org.jointheleague.modules.FactMessageListener;
-import org.jointheleague.modules.FlagMessageListener;
-import org.jointheleague.modules.NewPollMessageListener;
 import org.jointheleague.modules.FashionAdvisor;
+import org.jointheleague.modules.FlagMessageListener;
+import org.jointheleague.modules.MorseTranslator;
+import org.jointheleague.modules.NewPollMessageListener;
+import org.jointheleague.modules.RandomNumber;
+import org.jointheleague.modules.Weather;
 import org.jointheleague.modules.leetMessageListener;
 
 
@@ -48,6 +49,7 @@ public class Bot  {
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
+		api.addMessageCreateListener(new MorseTranslator(channelName));
 	}
 
 }
