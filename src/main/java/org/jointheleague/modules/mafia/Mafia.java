@@ -13,8 +13,7 @@ public class Mafia extends CustomMessageCreateListener {
 	private ArrayList<Player> players;
 	
 	private Stack<String> roles;
-	
-	private Channel mafia_channel;
+	RandomText rt;
 	
 	private boolean GAME_RUNNING = false;
 	private int GAME_STATE; //0 = choosing players, 1 = night, 2 = accuse, 3 = trial
@@ -29,79 +28,93 @@ public class Mafia extends CustomMessageCreateListener {
 	
 	public Mafia(String channelName) {
 		super(channelName);
+		rt = new RandomText();
 	}
 
 	@Override
 	public void handle(MessageCreateEvent event) {
-		if(event.getMessageContent().startsWith("!begin mafia ") && !GAME_RUNNING)
+		if(event.getMessageAuthor().isUser())
 		{
-			NUM_PLAYERS = Integer.parseInt(event.getMessageContent().replace("!begin mafia", "").replace(" ", ""));
-			event.getChannel().sendMessage("A game of mafia has started! Waiting for " + NUM_PLAYERS + " players to join.");
 			
-			GAME_RUNNING = true;
-			GAME_STATE = 0;
-			
-			players = new ArrayList<Player>();
-			roles = new Stack<String>();
-			
-			num_guilty = 0;
-			num_votes = 0;
-			GAME_STATE = 0;
-			
-			fillRoles();
-			
-		}
-		
-		if(event.getMessageContent().equals("!mafia help"))
-		{
-			event.getChannel().sendMessage("Commands: mafia help, begin mafia <player number>, stop mafia, join mafia, mafia player list, kill <player>, accuse <player>, vote guilty, vote innocent, remove accusation"); 
-		}
-		
-		if(GAME_RUNNING)
-		{
-			if(event.getMessageContent().equals("!stop mafia"))
+			if(event.getMessageContent().equals("!mafia help"))
 			{
-				GAME_RUNNING = false;
-				event.getChannel().sendMessage("The game has been cancelled!");
+				event.getChannel().sendMessage("Use the command \"!begin mafia <player number>\" to start a new game. Conversely, \"!stop mafia\" ends the game prematurely."
+						+ " To join an existing game, use the command \"!join mafia\"."
+						+ "\nThe game exists in three phases: night, accusation, and trial. "
+						+ "\nAt night, mafia members can use the command \"!kill <player name>\" to kill a player of their choice. Only one player can be killed per night phase. "
+						+ "\nAfter night comes the accusation phase. In this phase, players can discuss who they believe the killer to be. Each player may accuse one other player through the command \"!accuse <player name>\". "
+						+ "To remove a past accusation, use the command \"!remove accusation\". This phase ends when a player has accumulated two accusations."
+						+ "\nAfter this, the accused player is put on trial. Each player can either \"!vote guilty\" or \"!vote innocent\". "
+						+ "If the majority of players vote guilty, then the accused is put to death, and the game returns to night phase. Otherwise, it returns to the accusation phase."
+						+ "\nOverall, the command \"!mafia player list\" can be used to see the currently alive players. Mafia wins if all innocents are killed, and innocents win if all mafia members are killed.");
 			}
 			
-			if(event.getMessageContent().equals("!mafia player list"))
+			else if(event.getMessageContent().startsWith("!begin mafia ") && !GAME_RUNNING)
 			{
-				String ps = "";
-				for(Player p: players)
-				{
-					ps = ps + p.getName().getDisplayName() + ", ";
-				}
-				event.getChannel().sendMessage("The alive players are " + ps);
-			}
-			
-			else if(GAME_STATE == 0) //join
-			{
-				if(event.getMessageContent().equals("!join mafia")) {joinGame(event);}
-			}
-			else
-			{
-				for(Player p: players)
-				{
-					if(p.getName().equals(event.getMessageAuthor()))
-					{
-						if(GAME_STATE == 1) //night
-						{
-							night(p, event);
-						}
-						
-						else if(GAME_STATE == 2) //accusatory period
-						{
-							accuse(event, p);
-						}
-						
-						else if(GAME_STATE == 3) //trial period
-						{
-							trial(event);
-						}
-						break;
-					}
+				NUM_PLAYERS = Integer.parseInt(event.getMessageContent().replace("!begin mafia", "").replace(" ", ""));
+				event.getChannel().sendMessage("A game of mafia has started! Waiting for " + NUM_PLAYERS + " players to join.");
 				
+				GAME_RUNNING = true;
+				GAME_STATE = 0;
+				
+				players = new ArrayList<Player>();
+				roles = new Stack<String>();
+				
+				num_guilty = 0;
+				num_votes = 0;
+				GAME_STATE = 0;
+				
+				fillRoles();
+				
+			}
+			
+			else if(GAME_RUNNING)
+			{
+				if(event.getMessageContent().equals("!stop mafia"))
+				{
+					GAME_RUNNING = false;
+					event.getChannel().sendMessage("The game has been cancelled!");
+				}
+				
+				else if(event.getMessageContent().equals("!mafia player list"))
+				{
+					String ps = "";
+					for(Player p: players)
+					{
+						ps = ps + p.getName().getDisplayName() + ", ";
+					}
+					event.getChannel().sendMessage("The alive players are " + ps);
+				}
+				
+				else if(GAME_STATE == 0) //join
+				{
+					if(event.getMessageContent().equals("!join mafia")) {joinGame(event);}
+				}
+				else
+				{
+					for(Player p: players)
+					{
+						
+						if(p.getName().equals(event.getMessageAuthor()))
+						{
+							if(GAME_STATE == 1) //night
+							{
+								night(p, event);
+							}
+							
+							else if(GAME_STATE == 2) //accusatory period
+							{
+								accuse(event, p);
+							}
+							
+							else if(GAME_STATE == 3) //trial period
+							{
+								trial(event);
+							}
+							break;
+						}
+					
+					}
 				}
 			}
 		}
@@ -110,7 +123,7 @@ public class Mafia extends CustomMessageCreateListener {
 	public void resetAccusations()
 	{
 		for(Player p: players) {
-			p.hasAccused = false;
+			p.removeAccusation();
 			p.setAccusations(0);
 			
 		}
@@ -151,9 +164,11 @@ public class Mafia extends CustomMessageCreateListener {
 					p.getName().asUser().get().sendMessage("You are a " + p.getRole() + ".");
 					if(p.getRole().equals("mafia"))
 					{
-						p.getName().asUser().get().sendMessage("The other mafia members are " + mafia_string + ". Create a channel if you wish. Use the command !kill <player> in the main channel to kill the player.");
+						p.getName().asUser().get().sendMessage("The other mafia members are " + mafia_string + ". You can use the command \"!kill <player name>\" in the main channel to kill <player name>. This can be done with or without talking to the other mafia members.");
 					}
 				}
+				
+				event.getChannel().sendMessage("The first night falls. Everyone goes to sleep, unwary of what is going to happen.");
 				
 			}
 			else if (players.size() == NUM_PLAYERS - 1) {event.getChannel().sendMessage("A player has joined the game! Waiting for " + (NUM_PLAYERS - players.size()) + " more player.");} 
@@ -174,11 +189,13 @@ public class Mafia extends CustomMessageCreateListener {
 					GAME_STATE = 2;
 					
 					resetAccusations();
-					players.remove(p1);
 					
 					if(checkWin(event) == 0) {
-						event.getChannel().sendMessage("Oh no! " + killed + " has been killed! Who should be accused?");
+						event.getChannel().sendMessage(rt.murderText(p1));
 					}
+					
+					players.remove(p1);
+					
 					break;
 				}
 			}
@@ -206,18 +223,18 @@ public class Mafia extends CustomMessageCreateListener {
 					{
 						GAME_STATE = 3;
 						ap = p1;
-						event.getChannel().sendMessage(p1.getName().getDisplayName() + " has been put on trial for murder. Please vote guilty or innocent.");
+						event.getChannel().sendMessage("After discussion, it appears that " + p1.getName().getDisplayName() + " looks the most suspicious. Against their will, and pleading the entire way, they are dragged to the courtroom.");
 					}
 				}
 			}
 		}
 		
-		if(event.getMessageContent().equals("!remove accusation") && p.hasAccused){p.removeAccusation();}
+		if(event.getMessageContent().equals("!remove accusation")){p.removeAccusation();}
 	}
 	
 	public void trial(MessageCreateEvent event)
 	{
-		if(event.getMessageContent().equals("!vote guilty")) {
+		if(event.getMessageContent().equals("!vote guilty") && !event.getMessageAuthor().equals(ap.getName())) {
 			num_guilty++;
 			num_votes++;
 			if(num_guilty >= players.size()/2)
@@ -225,7 +242,7 @@ public class Mafia extends CustomMessageCreateListener {
 				if(checkWin(event) == 0)
 				{
 					players.remove(ap);
-					event.getChannel().sendMessage(ap.getName().getDisplayName() + " has been convicted of murder! He was " + ap.getRole() + ". Night falls again.");
+					event.getChannel().sendMessage("In the end, " + ap.getName().getDisplayName() + " was found guilty and sentenced to death. You were all satisified. After their death new evidence cropped up that "  + ap.getName().getDisplayName() + " was " + ap.getRole() + ". Night falls again and everyone goes home, a little more wary than the night before.");
 					GAME_STATE = 1;
 				}
 			}
@@ -233,18 +250,20 @@ public class Mafia extends CustomMessageCreateListener {
 			else if(num_votes == players.size())
 			{
 				GAME_STATE = 2;
+				event.getChannel().sendMessage("In the end, " + ap.getName().getDisplayName() + " was found innocent and set free. Everyone looks for the next suspect.");
 				resetAccusations();
 			}
 			
 			
 		}
 		
-	if(event.getMessageContent().equals("!vote innocent")) {
+	if(event.getMessageContent().equals("!vote innocent") && !event.getMessageAuthor().equals(ap.getName())) {
 		num_votes++;
 		
 		if(num_votes == players.size())
 		{
 			GAME_STATE = 2;
+			event.getChannel().sendMessage("In the end, " + ap.getName().getDisplayName() + " was found innocent and set free. Everyone looks for the next suspect.");
 			resetAccusations();
 		}
 	}
@@ -261,8 +280,8 @@ public class Mafia extends CustomMessageCreateListener {
 			else if(p.getRole().equals("innocent")) {num_innocent++;}
 		}
 		
-		if(num_innocent == 0) {event.getChannel().sendMessage("Mafia has won!"); GAME_RUNNING = false; return -1;}
-		else if(num_mafia == 0) {event.getChannel().sendMessage("Innocents have won!"); GAME_RUNNING = false; return 1;}
+		if(num_innocent == 0) {event.getChannel().sendMessage("The last innocent person perishes, leaving only the mafia. Satisfied, they also depart from the town, seeking their next targets."); GAME_RUNNING = false; return -1;}
+		else if(num_mafia == 0) {event.getChannel().sendMessage("With the last mafia member killed, the survivors return to their home wearily. Hopefully this never happens again."); GAME_RUNNING = false; return 1;}
 		return 0;
 	}
 	
