@@ -14,6 +14,7 @@ public class RandomText {
 		cod.add("thrown into a well.");
 		cod.add("stabbed to death.");
 		cod.add("thrown off of a building.");
+		cod.add("taken.");
 	}
 	
 	public String murderText(Player p)

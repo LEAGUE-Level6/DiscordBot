@@ -4,9 +4,9 @@ import org.javacord.api.entity.message.MessageAuthor;
 
 public class Player {
 
-	MessageAuthor name;
+	private MessageAuthor name;
 	private int accusations;
-	public boolean hasAccused;
+	private boolean hasAccused;
 	private String accused;
 	private String role;
 	
@@ -28,6 +28,11 @@ public class Player {
 			accused = s;
 			hasAccused = true;
 		}
+	}
+	
+	public boolean hasAccused()
+	{
+		return hasAccused;
 	}
 	
 	public void removeAccusation()
