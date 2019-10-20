@@ -30,6 +30,7 @@ public class Bot  {
 		api.addMessageCreateListener(new ElmoMessageListener(channelName));
 		api.addMessageCreateListener(new FactMessageListener(channelName));
 		api.addMessageCreateListener(new Screamer(channelName));
+		api.addMessageCreateListener(new Hangman(channelName));
 
 		api.addMessageCreateListener(new leetMessageListener(channelName));
 
@@ -37,6 +38,10 @@ public class Bot  {
 
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
+		
+		api.addMessageCreateListener(new Frown(channelName));
+		api.addMessageCreateListener(new Marxist(channelName));
+		api.addMessageCreateListener(new Definitions(channelName));
 	}
 
 }
