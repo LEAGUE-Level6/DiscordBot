@@ -2,9 +2,11 @@ package org.jointheleague.modules;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -17,6 +19,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import net.aksingh.owmjapis.api.APIException;
+import sun.reflect.Reflection;
 
 public class CasinoGameListener extends CustomMessageCreateListener{
 
@@ -32,6 +35,8 @@ public class CasinoGameListener extends CustomMessageCreateListener{
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		String message = event.getMessageContent();
+		System.out.println(message);
+		if (event.getMessageAuthor().asUser().get().isBot()) return;
 		if (message.startsWith(BET_ALL_COMMAND)) {
 			handleBetItAll(event);
 		}
@@ -42,7 +47,9 @@ public class CasinoGameListener extends CustomMessageCreateListener{
 		else if (message.startsWith(HELP_COMMAND))
 		{
 			event.getChannel().sendMessage("The commands are:\n" + 
-					BET_ALL_COMMAND + " which bets all of your coins");
+					BET_ALL_COMMAND + ": that bets all of your coins\n" +
+					GET_COINS_COMMAND + ": that tells you how many coins you have\n" + 
+					BET_COMMAND + "#: that bets whatever number of coins you put instead of the #" );
 		}
 	}
 	
@@ -52,22 +59,36 @@ public class CasinoGameListener extends CustomMessageCreateListener{
 
 	private void handleBetItAll(MessageCreateEvent event)
 	{
-		long l = getCoins(event);
-		l = (new Random().nextInt(2)==0) ? 1 : l*2;
+		long coins = getCoins(event);
+		System.out.println(getCoins(event));
+		coins = (new Random().nextInt(2)==0) ? 1 : coins*2;
 		long user = event.getMessageAuthor().asUser().get().getId();
-		setCoins(user, l);
-		event.getChannel().sendMessage("You now have: " + l + " coin(s).");
+		setCoins(user, coins);
+		event.getChannel().sendMessage("You now have: " + coins + " coin(s).");
 	}
 	
 	private void setCoins(long id, long coins) {
 		Users users = getUsers();
+		boolean changed = false;
 		for (int i = 0; i < users.getUsers().size(); i++)
 		{
 			User currentUser = users.getUsers().get(i);
 			if (Long.parseLong(currentUser.getId()) == id)
 			{
-				users.getUsers().get(i).setCoins("" + coins);
+				User change = users.getUsers().get(i);
+				change.setCoins("" + coins);
+				users.getUsers().set(i, change);
+				changed = true;
 			}
+		}
+		if (changed == false)
+		{
+			User u = new User();
+			u.setId("" + id);
+			u.setCoins("" + coins);
+			List<User> lUsers = users.getUsers();
+			lUsers.add(u);
+			users.setUsers(lUsers);
 		}
 		Save(users);
 	}
@@ -115,10 +136,12 @@ public class CasinoGameListener extends CustomMessageCreateListener{
 		Gson gson = new GsonBuilder().create();
 		String str = gson.toJson(s);
 		try {
-			PrintWriter out = new PrintWriter(new File("userinfo.json"));
+			PrintWriter out = new PrintWriter(new FileWriter("src/main/resources/userinfo.json", false));
+			System.out.println(str);
 			out.print(str);
 			out.close();
-		} catch (FileNotFoundException e) {
+			System.out.println("saved");
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
