@@ -1,7 +1,9 @@
 package org.jointheleague.modules;
 
 import java.io.File;
-import java.net.URI;
+import java.net.URL;
+import java.nio.file.Paths;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
 import org.javacord.api.event.message.MessageCreateEvent;
@@ -15,28 +17,33 @@ public class LatexRender extends CustomMessageCreateListener {
 	@Override
 	public void handle(MessageCreateEvent event) {
 		if(event.getMessageContent().contains("!latex")) {
-			String s = event.getMessageContent();
-			String sFix = fix(s);
-			System.out.println(sFix);
-			URI u;
-			File f;
+			String s = event.getMessageContent().substring(7);
 			try {
-				u = new URI("https://latex.codecogs.com/gif.latex?" + sFix.substring(7));
-				f = new File(u);
-				event.getChannel().sendMessage(f);
+				URL u = new URL("https://latex.codecogs.com/png.latex?%5Cbg_white%20%5Clarge%20\\boxed{" + s + "}");
+				File file = Paths.get(u.toURI()).toFile();
+				event.getChannel().sendMessage(file);
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			//File f = new File("https://latex.codecogs.com/gif.latex?" + s.substring(7));
-			//event.getChannel().sendMessage("https://latex.codecogs.com/gif.download?aaa" + s.substring(7));
-			System.out.println("here");
+			event.getChannel().sendMessage("https://latex.codecogs.com/png.latex?%5Cbg_white%20%5Clarge%20\\boxed{" + s + "}");
 		}
 	}
-	
-	public String fix(String s) {
-		String s1 = s.replace("{", "%7B");
-		String s2 = s1.replace("\\", "%5C");
-		return s2.replace("}", "%7D");
+
+	public String fix(String s){
+		if(s.contains("\\")){
+			return s.replace("\\", "%5C");
+		}
+		if(s.contains("{")){
+			return s.replace("{", "%7B");
+		}
+		if(s.contains("}")){
+			return s.replace("}", "%7D");
+		}
+		return s;
 	}
 	
 }
