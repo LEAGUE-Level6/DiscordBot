@@ -74,7 +74,7 @@ public class CasinoGameListener extends CustomMessageCreateListener{
 		{
 			User currentUser = users.getUsers().get(i);
 			if (Long.parseLong(currentUser.getId()) == id)
-			{
+			{ 
 				User change = users.getUsers().get(i);
 				change.setCoins("" + coins);
 				users.getUsers().set(i, change);
