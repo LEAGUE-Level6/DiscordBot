@@ -84,7 +84,7 @@ public class CasinoGameListener extends CustomMessageCreateListener{
 	{
 		long coins = getCoins(event);
 		System.out.println(getCoins(event));
-		coins = (new Random().nextInt(2)==0)? coins*2 : 1;
+		coins = (new Random().nextInt(2)==0)? coins*3 : 1;
 		setCoins(coins, event);
 		event.getChannel().sendMessage("You now have " + coins + " coin(s).");
 	}
