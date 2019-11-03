@@ -28,8 +28,11 @@ public class CasinoGameListener extends CustomMessageCreateListener{
 	final String HELP_COMMAND = "!casino-help";
 	final String BET_COMMAND = "!bet ";
 	
+	Users users;
+	
 	public CasinoGameListener(String channelName) {
 		super(channelName);
+		users = getUsers();
 	}
 
 	@Override
@@ -40,6 +43,11 @@ public class CasinoGameListener extends CustomMessageCreateListener{
 		if (message.startsWith(BET_ALL_COMMAND)) {
 			handleBetItAll(event);
 		}
+		else if (message.startsWith(BET_COMMAND)
+				&& message.length() != BET_COMMAND.length())
+		{
+			handleBetCommand(event);
+		}
 		else if (message.startsWith(GET_COINS_COMMAND))
 		{
 			handleGetMyCoins(event);
@@ -47,12 +55,27 @@ public class CasinoGameListener extends CustomMessageCreateListener{
 		else if (message.startsWith(HELP_COMMAND))
 		{
 			event.getChannel().sendMessage("The commands are:\n" + 
-					BET_ALL_COMMAND + ": that bets all of your coins\n" +
+					BET_ALL_COMMAND + ": that bets all of your coins making you have either double the coins or resets you to 1 coin\n" +
 					GET_COINS_COMMAND + ": that tells you how many coins you have\n" + 
-					BET_COMMAND + "#: that bets whatever number of coins you put instead of the #" );
+					BET_COMMAND + "#: that bets whatever number of coins you put instead of the # and adds double that to your total, or subtracts that from your total");
 		}
 	}
 	
+	private void handleBetCommand(MessageCreateEvent event) {
+		String s = event.getMessageContent();
+		String stringToBet = s.split(" ")[1].replaceAll("[^0-9]", "");
+		long coinsToBet = Long.parseLong(stringToBet);
+		long coins = getCoins(event);
+		if (coins - coinsToBet >= 0)
+		{
+			coinsToBet=(new Random().nextInt(2)==0) ? coinsToBet : coinsToBet*-1;
+		}
+		coins+=coinsToBet;
+		coins=(coins==0) ? 1 : coins;
+		setCoins(coins,event);
+		event.getChannel().sendMessage("You now have " + coins + " coins(s).");
+	}
+
 	private void handleGetMyCoins(MessageCreateEvent event) {
 		event.getChannel().sendMessage("You have " + getCoins(event) + " coin(s).");		
 	}
@@ -61,78 +84,76 @@ public class CasinoGameListener extends CustomMessageCreateListener{
 	{
 		long coins = getCoins(event);
 		System.out.println(getCoins(event));
-		coins = (new Random().nextInt(2)==0) ? 1 : coins*2;
-		long user = event.getMessageAuthor().asUser().get().getId();
-		setCoins(user, coins);
-		event.getChannel().sendMessage("You now have: " + coins + " coin(s).");
+		coins = (new Random().nextInt(2)==0)? coins*2 : 1;
+		setCoins(coins, event);
+		event.getChannel().sendMessage("You now have " + coins + " coin(s).");
 	}
 	
-	private void setCoins(long id, long coins) {
-		Users users = getUsers();
-		boolean changed = false;
-		for (int i = 0; i < users.getUsers().size(); i++)
-		{
-			User currentUser = users.getUsers().get(i);
-			if (Long.parseLong(currentUser.getId()) == id)
-			{ 
-				User change = users.getUsers().get(i);
-				change.setCoins("" + coins);
-				users.getUsers().set(i, change);
-				changed = true;
-			}
-		}
-		if (changed == false)
-		{
-			User u = new User();
-			u.setId("" + id);
-			u.setCoins("" + coins);
-			List<User> lUsers = users.getUsers();
-			lUsers.add(u);
-			users.setUsers(lUsers);
-		}
-		Save(users);
-	}
-
-	private long getCoins(MessageCreateEvent event)
+	long getCoins(MessageCreateEvent event)
 	{
-		long user = event.getMessageAuthor().asUser().get().getId();
-		Users s = getUsers();
-		User currentUser = null;
-		for (int i = 0; i < s.getUsers().size(); i++)
+		List<User> lusers = users.getUsers();
+		long id = event.getMessageAuthor().asUser().get().getId();
+		
+		for (int i = 0; i < lusers.size(); i++)
 		{
-			if (Long.parseLong(s.getUsers().get(i).getId()) == user)
+			User currentUser = lusers.get(i);
+			if (Long.parseLong(currentUser.getId()) == id)
 			{
-				currentUser = s.getUsers().get(i);
+				System.out.println("user has: " + currentUser.getCoins());
+				return Long.parseLong(currentUser.getCoins());
 			}
 		}
-		if (currentUser == null)
+		setCoins(1, event);
+		return 1;
+	}
+	
+	void setCoins(long coins, MessageCreateEvent event)
+	{
+		List<User> lusers = users.getUsers();
+		long id = event.getMessageAuthor().asUser().get().getId();
+		
+		for (int i = 0; i < lusers.size(); i++)
 		{
-			User nu = new User();
-			nu.setId("" + user);
-			nu.setCoins("1");
-			s.getUsers().add(nu);
-			Save(s);
-			return 1;
+			if (Long.parseLong(lusers.get(i).getId()) == id)
+			{
+				User replacer = new User();
+				replacer.setId("" +  id);
+				replacer.setCoins("" + coins);
+				lusers.remove(i);
+				lusers.add(replacer);
+				
+				users.setUsers(lusers);
+				setUsers(users);
+				return;
+			}
 		}
-		return Long.parseLong(currentUser.getCoins());
+		//didn't find the user
+		User u = new User();
+		u.setCoins("" + coins);
+		u.setId("" + id);
+		
+		lusers.add(u);
+		users.setUsers(lusers);
+		setUsers(users);
 	}
 
 	
 	private Users getUsers() {
 		try (Reader reader = new InputStreamReader(
 				Utilities.class.getClassLoader().getResourceAsStream("userinfo.json"))) {
-			System.out.println("Loading users");
 			Gson gson = new GsonBuilder().create();
+			System.out.println("Loaded Users");
 			return gson.fromJson(reader, Users.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.err.println("Failed to load users");
+		System.err.println("Failed to load Users");
 		return null;
 	}
 	
-	private void Save(Users s)
+	private void setUsers(Users s)
 	{
+		System.out.println("set Users Called");
 		Gson gson = new GsonBuilder().create();
 		String str = gson.toJson(s);
 		try {
@@ -143,6 +164,7 @@ public class CasinoGameListener extends CustomMessageCreateListener{
 			System.out.println("saved");
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("error saving");
 		}
 	}
 	
