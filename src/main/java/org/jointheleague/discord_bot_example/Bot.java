@@ -29,6 +29,7 @@ public class Bot  {
 		api.addMessageCreateListener(new ComicMessageListener(channelName));
 		api.addMessageCreateListener(new ElmoMessageListener(channelName));
 		api.addMessageCreateListener(new FactMessageListener(channelName));
+		api.addMessageCreateListener(new MoreThan7LettersListener(channelName));
 		api.addMessageCreateListener(new Screamer(channelName));
 		api.addMessageCreateListener(new Hangman(channelName));
 
