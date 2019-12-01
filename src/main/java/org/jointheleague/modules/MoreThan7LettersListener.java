@@ -18,8 +18,6 @@ public class MoreThan7LettersListener extends CustomMessageCreateListener{
 		if (event.getMessageAuthor().asUser().get().isBot()){
 			return; //stops the bot from reading its own messages
 		}
-		//get all the words of their message.
-		String alphabet = "abcdefghijklmnopqrstuvwxyz";
 		String[] words = event.getMessageContent() //gets the message
 				.replaceAll("[^ a-zA-Z0-9]", "") //removes all punctuation
 				.replaceAll("  ", " ")//removes double spaces
