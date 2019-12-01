@@ -69,9 +69,9 @@ public class CasinoGameListener extends CustomMessageCreateListener{
 		if (coins - coinsToBet >= 0)
 		{
 			coinsToBet=(new Random().nextInt(2)==0) ? coinsToBet : coinsToBet*-1;
+			coins+=coinsToBet;
+			coins=(coins==0) ? 1 : coins;
 		}
-		coins+=coinsToBet;
-		coins=(coins==0) ? 1 : coins;
 		setCoins(coins,event);
 		event.getChannel().sendMessage("You now have " + coins + " coins(s).");
 	}
