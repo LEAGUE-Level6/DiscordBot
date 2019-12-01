@@ -20,7 +20,6 @@ public class MoreThan7LettersListener extends CustomMessageCreateListener{
 		}
 		String[] words = event.getMessageContent() //gets the message
 				.replaceAll("[^ a-zA-Z0-9]", "") //removes all punctuation
-				.replaceAll("  ", " ")//removes double spaces
 				.split(" ");
 		//gets longest word
 		String longestWord = getFirstLongWord(words); //if there is no word longer than 7 letters, it will return "."
