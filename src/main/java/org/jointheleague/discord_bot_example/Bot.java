@@ -1,23 +1,19 @@
 package org.jointheleague.discord_bot_example;
 
-import org.javacord.api.DiscordApi; 
+import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
-import org.jointheleague.modules.CalculatorMessageListener;
-import org.jointheleague.modules.CasinoGameListener;
-import org.jointheleague.modules.RandomNumber;
-import org.jointheleague.modules.Weather;
-import org.jointheleague.modules.DadJokes;
-import org.jointheleague.modules.ClockMessageListener;
-import org.jointheleague.modules.ComicMessageListener;
-import org.jointheleague.modules.ElmoMessageListener;
-import org.jointheleague.modules.FactMessageListener;
-import org.jointheleague.modules.FlagMessageListener;
-import org.jointheleague.modules.NewPollMessageListener;
-import org.jointheleague.modules.FashionAdvisor;
-import org.jointheleague.modules.leetMessageListener;
 
+import org.jointheleague.modules.*;
 
-public class Bot  {
+/**
+ * Launches all of the listeners for one channel.
+ * @author keithgroves and https://tinystripz.com
+ *
+ */
+public class Bot {
+
+	// The string to show the custom :vomiting_robot: emoji
+	public static String emoji = "<:vomiting_robot:642414033290657803>";
 
 	private String token;
 	private String channelName;
@@ -28,12 +24,16 @@ public class Bot  {
 		this.channelName = channelName;
 	}
 
-	public void connect() {
+	public void connect(boolean printInvite) {
+		// Why Keith? Couldn't you have commented what this does? Sigh...
 		api = new DiscordApiBuilder().setToken(token).login().join();
-		System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
-		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
-		
-		//add Listeners
+
+		// Print the URL to invite the bot
+		if (printInvite) {
+			System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
+		}
+
+		// Load all the bots
 		api.addMessageCreateListener(new RandomNumber(channelName));
 		api.addMessageCreateListener(new DadJokes(channelName));
 		api.addMessageCreateListener(new ClockMessageListener(channelName));
@@ -42,16 +42,10 @@ public class Bot  {
 		api.addMessageCreateListener(new ElmoMessageListener(channelName));
 		api.addMessageCreateListener(new FactMessageListener(channelName));
 		api.addMessageCreateListener(new CasinoGameListener(channelName));
-
 		api.addMessageCreateListener(new leetMessageListener(channelName));
-
 		api.addMessageCreateListener(new FlagMessageListener(channelName));
-
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
 	}
-
 }
-
-
