@@ -25,7 +25,8 @@ With specific user:
 - create a discord account
 - create a discord application and a discord bot on the discord developer site.
 - Clone this repository
-- add your config.json (this will 
+- import this project into eclipse as a maven project
+- edit the config.json to include your channel name and token.
 - run maven install on your project
 - run the bot (you should see a link output to the console.
 - send your link to your teacher. (your teacher will verify your bot)
