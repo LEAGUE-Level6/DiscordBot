@@ -14,9 +14,9 @@ import org.jointheleague.modules.CustomMessageCreateListener;
 
 import net.aksingh.owmjapis.api.APIException;
 
-public class Memes extends CustomMessageCreateListener {
+public class Reddit extends CustomMessageCreateListener {
 
-	public Memes(String channelName) {
+	public Reddit(String channelName) {
 		super(channelName);
 		// TODO Auto-generated constructor stub
 	}
@@ -24,18 +24,20 @@ public class Memes extends CustomMessageCreateListener {
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		// TODO Auto-generated method stub
-		if (event.getMessageContent().contains("!memes")) {
-			event.getChannel().sendMessage(getMeme());
+		if (event.getMessageContent().contains("!toppost ")) {
+			String sub = event.getMessageContent();
+			sub = sub.substring(9);
+			event.getChannel().sendMessage(getMeme(sub));
 		}
 	}
 
-	public String getMeme() { 
+	public String getMeme(String sub) { 
 	
 		String imgurl = "";
 		URL memesURL;
 		
 		try {
-			memesURL = new URL("https://www.reddit.com/r/memes/");
+			memesURL = new URL("https://www.reddit.com/r/"+sub+"/");
 			URLConnection con = memesURL.openConnection();
 			InputStream is = con.getInputStream();
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -44,8 +46,9 @@ public class Memes extends CustomMessageCreateListener {
 			while (s != null) {
 				
 				if (s.contains("<img alt=\"Post image\"")) { //find first meme
-					s=s.substring(s.indexOf("src=\"")+5);
-					imgurl=s.substring(0,s.indexOf("\""));
+					s=s.substring(s.indexOf("https"));
+					imgurl=s.substring(0,s.indexOf("style")-2);
+					imgurl=imgurl.replaceAll("amp;", "");
 					System.out.println(imgurl);
 					break;
 				}
