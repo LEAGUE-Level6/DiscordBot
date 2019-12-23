@@ -48,6 +48,7 @@ public class Bot  {
 		api.addMessageCreateListener(new FlagMessageListener(channelName));
 		api.addMessageCreateListener(new EightBall(channelName));
 		api.addMessageCreateListener(new Reddit(channelName));
+		api.addMessageCreateListener(new DeepFrier(channelName));
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
