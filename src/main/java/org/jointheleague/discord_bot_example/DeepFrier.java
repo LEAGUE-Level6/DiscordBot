@@ -53,11 +53,11 @@ public class DeepFrier extends CustomMessageCreateListener {
 					    g*=1f-((int)(distanceToCenter*10))/10f;
 					    	
 						Color color = new Color(r,g,b);
-						if(Math.random()<0.1)
+						if(Math.random()<0.07)
 							color = new Color(255,255,255);
-						else if (Math.random()<0.2) {
+						else if (Math.random()<0.14) {
 							color = new Color(255,255, 0);
-						} else if (Math.random()<0.3) {
+						} else if (Math.random()<0.21) {
 							color = new Color(255,0, 0);
 						}
 
