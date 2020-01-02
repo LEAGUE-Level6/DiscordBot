@@ -1,5 +1,6 @@
 package org.jointheleague.discord_bot_example;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -40,21 +41,32 @@ public class DeepFrier extends CustomMessageCreateListener {
 		        BufferedImage img = ImageIO.read(url);
 				for (int y = 0; y < img.getHeight(); y++) {
 					for (int x = 0; x < img.getWidth(); x++) {
-						int p = img.getRGB(x, y);
+						Color c = new Color(img.getRGB(x, y));
+						int r = c.getRed();
+						int g = c.getGreen();
+						int b = 0;
+						
+						double distanceToCenter = Math.hypot(x-(img.getWidth()/2), y-(img.getHeight()/2));
+					    distanceToCenter = 1/(1+Math.exp(-distanceToCenter/Math.hypot(x, y)));
+					    if (Math.abs(((int)(distanceToCenter*10))/10f-distanceToCenter)<0.02)
+					    	g*=1f-(((int)(distanceToCenter*10+Math.random()/20))/10f);
+					    g*=1f-((int)(distanceToCenter*10))/10f;
+					    	
+						Color color = new Color(r,g,b);
+						if(Math.random()<0.1)
+							color = new Color(255,255,255);
+						else if (Math.random()<0.2) {
+							color = new Color(255,255, 0);
+						} else if (Math.random()<0.3) {
+							color = new Color(255,0, 0);
+						}
 
-						int a = (p >> 24) & 0xff;
-						int r = (p >> 16) & 0xff;
-
-						// set new RGB
-						// keeping the r value same as in original
-						// image and setting g and b as 0.
-						p = (a << 24) | (r << 16) | (0 << 8) | 0;
-
-						img.setRGB(x, y, p);
+						img.setRGB(x, y, color.getRGB());
 					}
 				}
 				File file = new File("downloaded.jpg");
 		        ImageIO.write(img, "jpg", file);
+		        event.getMessage().getChannel().sendMessage(file);
 				
 
 			} catch (IOException e) {
