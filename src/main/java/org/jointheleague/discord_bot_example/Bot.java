@@ -1,6 +1,7 @@
 package org.jointheleague.discord_bot_example;
 
 import org.javacord.api.DiscordApi; 
+
 import org.javacord.api.DiscordApiBuilder;
 import org.jointheleague.modules.CalculatorMessageListener;
 import org.jointheleague.modules.CasinoGameListener;
@@ -15,6 +16,9 @@ import org.jointheleague.modules.FlagMessageListener;
 import org.jointheleague.modules.NewPollMessageListener;
 import org.jointheleague.modules.FashionAdvisor;
 import org.jointheleague.modules.leetMessageListener;
+
+import org.jointheleague.modules.*;
+
 
 
 public class Bot  {
@@ -50,6 +54,16 @@ public class Bot  {
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
+		
+		api.addMessageCreateListener(new QuitMessageListener(channelName));
+		api.addMessageCreateListener(new PingMessageListener(channelName));	
+		api.addMessageCreateListener(new CoinFlipMessageListener(channelName));
+		api.addMessageCreateListener(new PlayRPSMessageListener(channelName));
+		api.addMessageCreateListener(new KickMessageListener(channelName));
+		api.addMessageCreateListener(new AssignRoleMessageListener(channelName));
+		api.addMessageCreateListener(new NicknameListener(channelName));
+		api.addMessageCreateListener(new SolveQuadraticListener(channelName));
+		api.addMessageCreateListener(new RollDiceMessageListener(channelName));
 	}
 
 }
