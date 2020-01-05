@@ -1,6 +1,5 @@
-package org.jointheleague.discord_bot_example;
+package org.jointheleague.modules;
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.jointheleague.modules.CustomMessageCreateListener;
 
 import net.aksingh.owmjapis.api.APIException;
 

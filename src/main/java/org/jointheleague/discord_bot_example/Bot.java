@@ -5,8 +5,11 @@ import org.javacord.api.DiscordApiBuilder;
 import org.jointheleague.modules.CalculatorMessageListener;
 import org.jointheleague.modules.CasinoGameListener;
 import org.jointheleague.modules.RandomNumber;
+import org.jointheleague.modules.Reddit;
 import org.jointheleague.modules.Weather;
 import org.jointheleague.modules.DadJokes;
+import org.jointheleague.modules.DeepFrier;
+import org.jointheleague.modules.EightBall;
 import org.jointheleague.modules.ClockMessageListener;
 import org.jointheleague.modules.ComicMessageListener;
 import org.jointheleague.modules.ElmoMessageListener;
@@ -46,9 +49,11 @@ public class Bot  {
 		api.addMessageCreateListener(new leetMessageListener(channelName));
 
 		api.addMessageCreateListener(new FlagMessageListener(channelName));
+		
 		api.addMessageCreateListener(new EightBall(channelName));
 		api.addMessageCreateListener(new Reddit(channelName));
 		api.addMessageCreateListener(new DeepFrier(channelName));
+		
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));

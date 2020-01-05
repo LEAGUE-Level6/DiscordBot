@@ -1,4 +1,4 @@
-package org.jointheleague.discord_bot_example;
+package org.jointheleague.modules;
 
 import java.awt.Color;
 import java.awt.Image;
@@ -13,7 +13,6 @@ import javax.imageio.ImageIO;
 
 import org.javacord.api.entity.message.MessageAttachment;
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.jointheleague.modules.CustomMessageCreateListener;
 
 import net.aksingh.owmjapis.api.APIException;
 
@@ -23,12 +22,12 @@ public class DeepFrier extends CustomMessageCreateListener {
 		super(channelName);
 		// TODO Auto-generated constructor stub
 	}
-	//{
-    //"default": {
-	//      "channel": "raghav",
-	//      "token": ""    
-	//    }
-	//  }
+//	{
+//    "default": {
+//	      "channel": "raghav",
+//	      "token": ""    
+//	    }
+//	  }
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		// TODO Auto-generated method stub

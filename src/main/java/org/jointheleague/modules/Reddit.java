@@ -1,4 +1,4 @@
-package org.jointheleague.discord_bot_example;
+package org.jointheleague.modules;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,7 +10,6 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.jointheleague.modules.CustomMessageCreateListener;
 
 import net.aksingh.owmjapis.api.APIException;
 
