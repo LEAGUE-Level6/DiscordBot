@@ -64,6 +64,8 @@ public class Bot  {
 		api.addMessageCreateListener(new NicknameListener(channelName));
 		api.addMessageCreateListener(new SolveQuadraticListener(channelName));
 		api.addMessageCreateListener(new RollDiceMessageListener(channelName));
+		api.addMessageCreateListener(new HelpMessageListener(channelName));
+
 	}
 
 }
