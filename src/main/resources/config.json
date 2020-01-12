@@ -1,6 +1,7 @@
 {
   "default": {
-    "channel": "elena",
-    "token": "NjI3OTMxODg1NTQ4MzM5MjAy.XhIyfA.LvYQE5BRgW60Bv5k_mJbE9vejKA"    
+    "channel": "your-channel-name-here",
+    "token": "YOUR-API-TOKEN-HERE--check-the-readme-for-more-info"    
+
   }
 }
