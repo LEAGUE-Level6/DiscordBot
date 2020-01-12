@@ -25,6 +25,19 @@
 
 
 	<dependencies>
+	<dependency>
+    <groupId>com.wolfram</groupId>
+    <artifactId>alpha</artifactId>
+    <version>1.1</version>
+    <scope>system</scope>
+    <systemPath>${project.basedir}/libs/com/wolfram/alpha/WolframAlpha/1.1/WolframAlpha-1.1.jar</systemPath>
+
+</dependency>
+	<dependency>
+    <groupId>org.apache.httpcomponents</groupId>
+    <artifactId>httpclient</artifactId>
+    <version>4.5.10</version>
+	</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
