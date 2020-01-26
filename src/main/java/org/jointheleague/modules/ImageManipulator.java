@@ -19,57 +19,60 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 public class ImageManipulator extends CustomMessageCreateListener {
-	
-	URL url;
-boolean b = false;
-		BufferedImage imagee;
-		public ImageManipulator(String channelName) {
-			super(channelName);
-			
-		}
 
-		@Override
-		public void handle(MessageCreateEvent event) {
-			if (event.getMessageContent().startsWith("!image")) {
-				event.getChannel().sendMessage("Please insert the image you want me to manipulate.");
-				String urll = event.getMessageContent().substring(6);
-				try {
-					url = new URL(urll);
-					event.getChannel().sendMessage("Step 1 Complete");
-				} catch (MalformedURLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-					event.getChannel().sendMessage("Not an image!");
+	URL url;
+	boolean b = false;
+	BufferedImage imagee;
+
+	public ImageManipulator(String channelName) {
+		super(channelName);
+
+	}
+
+	@Override
+	public void handle(MessageCreateEvent event) {
+		if (event.getMessageContent().startsWith("!image")) {
+
+			String urll = event.getMessageContent().substring(6);
+			try {
+				url = new URL(urll);
+				event.getChannel().sendMessage("Step 1 Complete");
+			} catch (MalformedURLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				event.getChannel().sendMessage("Not an image!");
+			}
+
+			try {
+				Image image = ImageIO.read(url);
+				imagee = (BufferedImage) image;
+				event.getChannel().sendMessage("Finalizing");
+				System.out.println("Image height " + imagee.getHeight());
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				event.getChannel().sendMessage("Not an image!");
+			}
+			for (int z = 0; z < imagee.getHeight(); z += 3) {
+				for (int m = 0; m < imagee.getWidth(); m += 3) {
+					int chunkTotal = 0;
+
+					for (int i = z; i < z + 3; i++) {
+						for (int j = z; j < z + 3; j++) {
+							int red = (imagee.getRGB(i, j) >> 16) & 0xFF;
+							int green = (imagee.getRGB(i, j) >> 8) & 0xFF;
+							int blue = (imagee.getRGB(i, j)) & 0xFF;
+							System.out.println("Red " + red + "Green " + green + "Blue " + blue);
+							int averageP = (red + green + blue) / 3;
+							chunkTotal += averageP;
+						}
+					}
+					int chunkAvg = chunkTotal / 9;
+					event.getChannel().sendMessage(chunkAvg + "Chunk average");
 				}
-				
-				
-				try {
-					 Image image = ImageIO.read(url);
-					 imagee = (BufferedImage) image;
-					event.getChannel().sendMessage("Finalizing");
-					System.out.println("Image height " + imagee.getHeight());
-					
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					event.getChannel().sendMessage("Not an image!");
-				}
-				
-		for (int i = 0; i < imagee.getHeight(); i++) {
-		for (int j = 0; j < imagee.getWidth(); j++) {	
-			int red =   (imagee.getRGB(i, j) >> 16) & 0xFF;
-			int green = (imagee.getRGB(i, j) >>  8) & 0xFF;
-			int blue =  (imagee.getRGB(i, j)      ) & 0xFF;
-				System.out.println("Red " + red + "Green " + green+ "Blue " + blue);
-		}
-		}
-		//event.getChannel().sendMessage("Is this the image you want me to use?");
-		event.getChannel().sendMessage(urll);
-		
-		
+
 			}
 		}
-		
-		
-		
+	}
 }
