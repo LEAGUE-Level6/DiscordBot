@@ -5,13 +5,13 @@ import java.util.Random;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
-public class Hmmm implements MessageCreateListener {
+public class SimpleChat implements MessageCreateListener {
 
 	private static final String BEGIN = "hello hmmm";
 	private static final String END = "bye hmmm";
 	private boolean conversing = false;
 
-	public Hmmm(String channelName) {
+	public SimpleChat(String channelName) {
 		super();
 	}
 
@@ -45,9 +45,6 @@ public class Hmmm implements MessageCreateListener {
 				default:
 					event.getChannel().sendMessage("Something went wrong.");
 					break;
-//				case :
-//					event.getChannel().sendMessage("");
-//					break;
 				}
 			}
 		}
@@ -55,15 +52,6 @@ public class Hmmm implements MessageCreateListener {
 			conversing = true;
 			event.getChannel().sendMessage("Hello there " + event.getMessageAuthor().getDisplayName());
 		}
-//		if (event.getMessageContent().equals(BEGIN)) {
-//			while(!event.getMessageContent().equals(END))
-//			if(event.getMessageContent().contains("hello")||event.getMessageContent().contains("hi")) {
-//				event.getChannel().sendMessage("Hello there " + event.getMessageAuthor().getDisplayName());
-//			}
-////			else {
-////				event.getChannel().sendMessage("error");
-////			}
-//		}
 	}
 	
 }
