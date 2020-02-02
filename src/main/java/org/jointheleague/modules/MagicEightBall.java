@@ -10,6 +10,7 @@ public class MagicEightBall extends CustomMessageCreateListener {
 
 	ArrayList<String> answers;
 	Random rand = new Random();
+	final String command = "!8ball";
 	
 public MagicEightBall(String channelName) {
 		super(channelName);
@@ -40,10 +41,15 @@ public MagicEightBall(String channelName) {
 @Override
 public void handle(MessageCreateEvent event) throws APIException {
 	// TODO Auto-generated method stub
-	
-	if(event.getMessageContent().contains("!eightball")) {
+
+	if(event.getMessageContent().contains(command)) {
+	String question = event.getMessageContent().replace(command, "");
+	if(question.trim().equals("")) {
+	event.getChannel().sendMessage("Please enter a yes or no question after 8ball command.");
+	}else {
 	event.getChannel().sendMessage("Hmmm, let me think...");
 	event.getChannel().sendMessage(answers.get(rand.nextInt(answers.size())));
+	}
 	}
 	
 }
