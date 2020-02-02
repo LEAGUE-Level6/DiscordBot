@@ -1,5 +1,5 @@
 package org.jointheleague.modules;
 
-public class tabGetter {
+public class lyrics {
 
 }
