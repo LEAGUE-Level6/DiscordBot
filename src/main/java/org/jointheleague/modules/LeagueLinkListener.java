@@ -26,7 +26,8 @@ public class LeagueLinkListener extends CustomMessageCreateListener {
 				String lvl = LEVEL.replace("#", level);
 				if (message.length > 2 && message[2].equalsIgnoreCase("module") || message[2].equalsIgnoreCase("mod")) {
 					int modMax = modMaximums[Integer.parseInt(level + "")];
-					if (message.length > 3 && message[3].matches("[0-" + modMax + "]+$")) {
+					int requestedMod = Integer.parseInt(message[3]);
+					if (message.length > 3 && message[3].matches("[0-9]+$") && requestedMod <= modMax) {
 						String module = message[3];
 						String mod = MODULE.replace("#", module);
 
@@ -34,7 +35,7 @@ public class LeagueLinkListener extends CustomMessageCreateListener {
 							mod = mod.replace("modules/", "");
 						}
 						event.getChannel().sendMessage(lvl + mod);
-					} else if (message.length > 3 && message[3].matches("[" + (modMax+1) + "-9]+$")) {
+					} else if (message.length > 3 && message[3].matches("[0-9]+$")) {
 						event.getChannel().sendMessage("Level " + level + " only goes up to module " + modMax + "!");
 					} else {
 						event.getChannel().sendMessage("That's not a valid module number.");

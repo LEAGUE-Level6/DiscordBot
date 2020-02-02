@@ -28,3 +28,4 @@ target/
 
 # Config File
 **/resources/config.json
+src/main/resources/config.json
