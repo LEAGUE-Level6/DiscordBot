@@ -1,5 +1,6 @@
 package org.jointheleague.modules;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -54,25 +55,31 @@ public class ImageManipulator extends CustomMessageCreateListener {
 				e.printStackTrace();
 				event.getChannel().sendMessage("Not an image!");
 			}
-			for (int z = 0; z < imagee.getHeight(); z += 3) {
-				for (int m = 0; m < imagee.getWidth(); m += 3) {
-					int chunkTotal = 0;
+			checkChunks();
+		}
 
-					for (int i = z; i < z + 3; i++) {
-						for (int j = z; j < z + 3; j++) {
-							int red = (imagee.getRGB(i, j) >> 16) & 0xFF;
-							int green = (imagee.getRGB(i, j) >> 8) & 0xFF;
-							int blue = (imagee.getRGB(i, j)) & 0xFF;
-							System.out.println("Red " + red + "Green " + green + "Blue " + blue);
-							int averageP = (red + green + blue) / 3;
-							chunkTotal += averageP;
-						}
+	}
+	public void checkChunks() {
+		for (int z = 0; z < imagee.getHeight(); z += 3) {
+			for (int m = 0; m < imagee.getWidth(); m += 3) {
+				int chunkTotal = 0;
+
+				for (int i = z; i < z + 3; i++) {
+					for (int j = z; j < z + 3; j++) {
+						Color color = new Color(imagee.getRGB(i, j));
+						int red = color.getRed();
+						int green = color.getGreen();
+						int blue = color.getBlue();
+						//System.out.println("Red " + red + "Green " + green + "Blue " + blue);
+						//System.out.println(" Z " + z + " M " + m + " I " + i + " J " + j);
+						int averageP = (red + green + blue) / 3;
+						chunkTotal += averageP;
 					}
-					int chunkAvg = chunkTotal / 9;
-					event.getChannel().sendMessage(chunkAvg + "Chunk average");
 				}
-
+				int chunkAvg = chunkTotal / 9;
+				System.out.println("Chunk average " + chunkAvg);
 			}
+
 		}
 	}
 }
