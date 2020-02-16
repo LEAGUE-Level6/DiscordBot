@@ -177,7 +177,6 @@ public class HangmanListener extends CustomMessageCreateListener{
 					reader.readLine();
 				}
 				word = reader.readLine();
-				event.getChannel().sendMessage(word);
 
 				reader.close();
 				displayed = "";
