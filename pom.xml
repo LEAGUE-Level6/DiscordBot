@@ -27,10 +27,11 @@
 	<dependencies>
 	
 <dependency>
-    <groupId>com.jagrosh</groupId>
-    <artifactId>JLyrics</artifactId>
-    <version>VERSION</version>
+    <groupId>com.github.scribejava</groupId>
+    <artifactId>scribejava-apis</artifactId>
+    <version>6.9.0</version>
 </dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -79,13 +80,7 @@
     	</dependency>
 
 	</dependencies>
-<repositories>
-<repository>
-    <id>central</id>
-    <name>bintray</name>
-    <url>http://jcenter.bintray.com</url>
-</repository>
-</repositories>
+
 	<build>
 		<plugins>
 			<plugin>
