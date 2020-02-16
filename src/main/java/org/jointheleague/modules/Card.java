@@ -4,10 +4,12 @@ public class Card {
 
 	public int value;
 	public int suit;
+	public int declaredSuit;
 	
 	public Card(int v, int s) {
 		value = v;
 		suit = s;
+		declaredSuit = 0;
 	}
 	
 //	public String getStringValue() {
@@ -72,13 +74,32 @@ public class Card {
 			fin += "♧";
 			break;
 		case 3:
-			fin += "♥";
+			fin += "♡";
 			break;
 		case 4:
-			fin += "♦";
+			fin += "♢";
 			break;
+		}
+		
+		if(declaredSuit != 0) {
+			fin += "/";
+			switch(declaredSuit) {
+			case 1:
+				fin += "♤";
+				break;
+			case 2:
+				fin += "♧";
+				break;
+			case 3:
+				fin += "♡";
+				break;
+			case 4:
+				fin += "♢";
+				break;
+			}
 		}
 		
 		return fin;
 	}
+	//♠♣♥♦ ♤♧♡♢
 }
