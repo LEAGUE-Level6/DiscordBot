@@ -38,7 +38,9 @@ public class ImageManipulator extends CustomMessageCreateListener {
 
 	@Override
 	public void handle(MessageCreateEvent event) {
+		System.out.println("methpd is running");
 		if (event.getMessageContent().startsWith("!image")) {
+			System.out.println("methpd is runningasdfasdf");
 
 			String urll = event.getMessageContent().substring(6);
 			try {
@@ -67,6 +69,7 @@ public class ImageManipulator extends CustomMessageCreateListener {
 		}
 		File file = new File("downloaded.jpg");
         try {
+        	System.out.println("Final string" + sb.toString());
 			ImageIO.write(textToJPG(sb.toString()), "jpg", file);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -77,25 +80,28 @@ public class ImageManipulator extends CustomMessageCreateListener {
 
 	}
 	public void checkChunks() {
-		for (int z = 0; z < imagee.getHeight(); z += 3) {
-			for (int m = 0; m < imagee.getWidth(); m += 3) {
-				double chunkTotal = 0;
+		for (int z = 0; z < imagee.getHeight(); z++)  {
+			if (sb.length() != 0) {
+				sb.append("\n");
+			}
+			for (int m = 0; m < imagee.getWidth(); m++) {
+				//double chunkTotal = 0;
 
-				for (int i = z; i < z + 3; i++) {
-					for (int j = z; j < z + 3; j++) {
-						Color color = new Color(imagee.getRGB(i, j));
+				
+						Color color = new Color(imagee.getRGB(z, m));
 						double red = color.getRed() * 0.2989;
 						double green = color.getGreen() * 0.1140 ;
 						double blue = color.getBlue() * 0.5870;
 						System.out.println("Red " + red + "Green " + green + "Blue " + blue);
 						//System.out.println(" Z " + z + " M " + m + " I " + i + " J " + j);
-						double averageP = (red + green + blue) / 3;
-						chunkTotal += averageP;
-					}
-				}
-				double chunkAvg = chunkTotal / 9;
-				sb.append(returnStrPos(chunkAvg));
-				System.out.println("Chunk average " + chunkAvg);
+						double averageP = red + green + blue;
+						//chunkTotal += averageP;
+					
+				
+				//double chunkAvg = chunkTotal / 9;
+				sb.append(returnStrPos(averageP));
+				System.out.println(returnStrPos(averageP));
+				System.out.println("Chunk average " + averageP);
 				
 			}
 
@@ -135,7 +141,7 @@ public class ImageManipulator extends CustomMessageCreateListener {
 	         */
 	        BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
 	        Graphics2D g2d = img.createGraphics();
-	        Font font = new Font("Arial", Font.PLAIN, 48);
+	        Font font = new Font("Arial", Font.PLAIN, 40);
 	        g2d.setFont(font);
 	        FontMetrics fm = g2d.getFontMetrics();
 	        int width = fm.stringWidth(text);
