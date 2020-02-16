@@ -49,7 +49,8 @@ public class Bot  {
 
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
-		api.addMessageCreateListener(new NewPollMessageListener(channelName));
+		
+	api.addMessageCreateListener(new NewPollMessageListener(channelName));
 	}
 
 }
