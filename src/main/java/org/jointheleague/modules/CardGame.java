@@ -28,13 +28,17 @@ public class CardGame extends CustomMessageCreateListener {
 	private final String giveBot = ";giveBot";
 	private final String remove = ";remove";
 	private final String reveal = ";reveal";
-	private final String changeTop = ";changeTop"; //add code to this
+	private final String changeTop = ";changeTop"; 
+	private final String swap = ";swap";
+	private final String show = ";show";
 	
 	public CardGame(String channelName) {
 		super(channelName);
 	}
 
 	//finish testing code
+	//add rules
+	//add checks to playing eights and drawing
 	
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
@@ -76,28 +80,38 @@ public class CardGame extends CustomMessageCreateListener {
 				if(playCard(cardNum)) {
 					
 					//checks winners or pile reshuffling
-					int check = check();
-					if(check == 0) {
-						event.getChannel().sendMessage("Bot " + botTurn());
-						
-						event.getChannel().sendMessage(getBoard());
-						event.getChannel().sendMessage("Your turn.");
-					}
-					else if(check == 3) {
-						event.getChannel().sendMessage("Pile reshuffled");
-						
-						event.getChannel().sendMessage("Bot " + botTurn());
-						
-						event.getChannel().sendMessage(getBoard());
-						event.getChannel().sendMessage("Your turn.");
+					
+					if(check() == 1) {
+						event.getChannel().sendMessage("You won!");
+						event.getChannel().sendMessage("If you want to play again, enter **" + start + "**");
 					}
 					else {
-						if(check == 1)
-							event.getChannel().sendMessage("You won!");
-						else if(check == 2)
-							event.getChannel().sendMessage("Bot won.");
+						if(check() == 3) {
+							Card topCard = pile.get(pile.size()-1);
+							deck = shuffle(pile);
+							pile = new ArrayList<Card>();
+							pile.add(topCard);
+							
+							event.getChannel().sendMessage("Pile reshuffled.");
+						}
 						
-						event.getChannel().sendMessage("If you want to play again, enter " + start);
+						event.getChannel().sendMessage("Bot " + botTurn());
+						
+						if(check() == 2) {
+							event.getChannel().sendMessage("Bot won.");
+							event.getChannel().sendMessage("If you want to play again, enter **" + start + "**");
+						}
+						else {
+							if(check() == 3) {
+								deck = shuffle(pile);
+								pile = new ArrayList<Card>();
+								
+								event.getChannel().sendMessage("Pile reshuffled.");
+							}
+
+							event.getChannel().sendMessage(getBoard());
+							event.getChannel().sendMessage("Your turn.");
+						}
 					}
 				}
 				//error if that card is not playable
@@ -192,6 +206,7 @@ public class CardGame extends CustomMessageCreateListener {
 		else if(message.startsWith(rules)) {
 			//add rules
 		}
+/*=================================================================================*/
 		//test codes: give card to bot
 		else if(message.startsWith(giveBot)) {
 			message = message.substring(giveBot.length()+1);
@@ -223,6 +238,31 @@ public class CardGame extends CustomMessageCreateListener {
 			event.getChannel().sendMessage(handToString(botHand));
 			event.getChannel().sendMessage(getBoard());
 		}
+		//test codes: change top card
+		else if(message.startsWith(changeTop)) {
+			message = message.substring(changeTop.length()+1);
+			String[] card = message.split("/");
+			int value = Integer.parseInt(card[0]);
+			int suit = Integer.parseInt(card[1]);
+			pile.add(new Card(value, suit));
+			
+			event.getChannel().sendMessage(getBoard());
+		}
+		//test codes: switch pile and deck
+		else if(message.startsWith(swap)) {
+			ArrayList<Card> swap = pile;
+			pile = deck;
+			deck = swap;
+			
+			event.getChannel().sendMessage(getBoard());
+		}
+		//test codes: shows board, pile, and deck
+		else if(message.startsWith(show)) {
+			event.getChannel().sendMessage(getBoard());
+			event.getChannel().sendMessage("Deck: " + handToString(deck));
+			event.getChannel().sendMessage("Pile: " + handToString(pile));
+		}
+		/*=================================================================================*/
 	}
 
 	//makes new deck
@@ -297,8 +337,7 @@ public class CardGame extends CustomMessageCreateListener {
 		if(botHand.size() == 0) {
 			return 2;
 		}
-		if(deck.size() == 0) {
-			deck = shuffle(pile);
+		if(deck.size() == 1) {
 			return 3;
 		}
 		
@@ -311,17 +350,21 @@ public class CardGame extends CustomMessageCreateListener {
 		boolean played = false;
 		Card topCard = pile.get(pile.size()-1);
 		
-		if(playerHand.get(cardNum-1).suit == topCard.suit) {
-			pile.add(playerHand.remove(cardNum-1));
-			played = true;
+		if(topCard.value == 8 && topCard.declaredSuit != 0) {
+			if(playerHand.get(cardNum-1).suit == topCard.declaredSuit) {
+				pile.add(playerHand.remove(cardNum-1));
+				played = true;
+			}
 		}
-		else if(playerHand.get(cardNum-1).value == topCard.value) {
-			pile.add(playerHand.remove(cardNum-1));
-			played = true;
-		}
-		else if(playerHand.get(cardNum-1).suit == topCard.declaredSuit) {
-			pile.add(playerHand.remove(cardNum-1));
-			played = true;
+		else {
+			if(playerHand.get(cardNum-1).suit == topCard.suit) {
+				pile.add(playerHand.remove(cardNum-1));
+				played = true;
+			}
+			else if(playerHand.get(cardNum-1).value == topCard.value) {
+				pile.add(playerHand.remove(cardNum-1));
+				played = true;
+			}
 		}
 		return played;
 	}
@@ -332,13 +375,21 @@ public class CardGame extends CustomMessageCreateListener {
 		
 		//tries to play normal card
 		for(int i = 0; i < botHand.size(); i++) {
-			if(botHand.get(i).suit == topCard.suit || botHand.get(i).suit == topCard.declaredSuit) {
-				pile.add(botHand.remove(i));
-				return "played";
+			if(topCard.value == 8 && topCard.declaredSuit != 0) {
+				if(botHand.get(i).suit == topCard.declaredSuit) {
+					pile.add(botHand.remove(i));
+					return "played";
+				}
 			}
-			else if(botHand.get(i).value == topCard.value && botHand.get(i).value != 8) {
-				pile.add(botHand.remove(i));
-				return "played";
+			else {
+				if(botHand.get(i).suit == topCard.suit && botHand.get(i).value != 8) {
+					pile.add(botHand.remove(i));
+					return "played";
+				}
+				else if(botHand.get(i).value == topCard.value && botHand.get(i).value != 8) {
+					pile.add(botHand.remove(i));
+					return "played";
+				}
 			}
 		}
 		//tries to play eight
