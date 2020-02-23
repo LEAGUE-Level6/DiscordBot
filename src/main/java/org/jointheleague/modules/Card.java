@@ -12,6 +12,12 @@ public class Card {
 		declaredSuit = 0;
 	}
 	
+	public Card(int v, int s, int d) {
+		value = v;
+		suit = s;
+		declaredSuit = d;
+	}
+	
 //	public String getStringValue() {
 //		switch(value) {
 //		case 1:
@@ -44,6 +50,17 @@ public class Card {
 	
 	public String toString() {
 		String fin = "";
+		
+		switch(declaredSuit) {
+		case 1:
+			return "♤";
+		case 2:
+			return "♧";
+		case 3:
+			return "♡";
+		case 4:
+			return "♢";
+		}
 		
 		switch(value) {
 		case 1:
@@ -81,23 +98,23 @@ public class Card {
 			break;
 		}
 		
-		if(declaredSuit != 0) {
-			fin += "/";
-			switch(declaredSuit) {
-			case 1:
-				fin += "♤";
-				break;
-			case 2:
-				fin += "♧";
-				break;
-			case 3:
-				fin += "♡";
-				break;
-			case 4:
-				fin += "♢";
-				break;
-			}
-		}
+//		if(declaredSuit != 0) {
+//			fin += "/";
+//			switch(declaredSuit) {
+//			case 1:
+//				fin += "♤";
+//				break;
+//			case 2:
+//				fin += "♧";
+//				break;
+//			case 3:
+//				fin += "♡";
+//				break;
+//			case 4:
+//				fin += "♢";
+//				break;
+//			}
+//		}
 		
 		return fin;
 	}

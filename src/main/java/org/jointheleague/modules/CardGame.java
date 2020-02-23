@@ -11,7 +11,7 @@ import net.aksingh.owmjapis.api.APIException;
 
 public class CardGame extends CustomMessageCreateListener {
 	
-	private Random rand = new Random();
+	//private Random rand = new Random();
 	
 	private ArrayList<Card> deck;
 	private ArrayList<Card> playerHand;
@@ -32,14 +32,12 @@ public class CardGame extends CustomMessageCreateListener {
 	private final String changeTop = ";changeTop"; 
 	private final String swap = ";swap";
 	private final String show = ";show";
+	private final String clear = ";clear";
 	
 	public CardGame(String channelName) {
 		super(channelName);
 	}
-/*
- * finish testing code
- * add rules
-*/
+
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 
@@ -65,235 +63,68 @@ public class CardGame extends CustomMessageCreateListener {
 			
 			deal();
 			
-			event.getChannel().sendMessage(getBoard());
-			event.getChannel().sendMessage("Your turn.");
+			event.getChannel().sendMessage("_ _\n" + getBoard() + "\nYour turn.");
 		}
 		//play a card
 		else if(message.startsWith(play)) {
 			String remaining = message.substring(play.length()+1);
 			
-			//play a normal card (not eight)
-			if(remaining.matches("[0-9]+$")){
-				int cardNum = Integer.parseInt(remaining);
-				
-				//checks card is playable
-				if(playCard(cardNum)) {
-					
-					//check winner
-					if(hasWon(playerHand)) {
-						event.getChannel().sendMessage("You won!");
-						event.getChannel().sendMessage("If you want to play again, enter **" + start + "**");
-					}
-					else {
-						event.getChannel().sendMessage(checkReshuffle());
-						
-						event.getChannel().sendMessage("Bot " + botTurn());
-						
-						if(hasWon(botHand)) {
-							event.getChannel().sendMessage("Bot won.");
-							event.getChannel().sendMessage("If you want to play again, enter **" + start + "**");
-						}
-						else {
-							event.getChannel().sendMessage(checkReshuffle());
-							
-							event.getChannel().sendMessage(getBoard());
-							event.getChannel().sendMessage("Your turn.");
-						}
-					}
-				}
-				//error if that card is not playable
-				else{
-					event.getChannel().sendMessage("Sorry, invalid card. Try again.");
-					event.getChannel().sendMessage(getBoard());
-				}
-			}
-			//play an eight
-			else {
-				String[] wild = remaining.split(" ");
-				
-				//error on command
-				if(wild.length != 2) {
-					event.getChannel().sendMessage("Sorry, invalid command. Try again.");
-					event.getChannel().sendMessage(getBoard());
-				}
-				else {
-					//checks they entered a number
-					if(wild[0].matches("[0-9]+$")) {
-						//checks card is eight
-						if(playerHand.get(Integer.parseInt(wild[0])-1).value == 8) {
-							int cardNum = Integer.parseInt(wild[0]);
-							
-							int suit = 0;
-							if(wild[1].equalsIgnoreCase("Spades")) suit = 1;
-							else if(wild[1].equalsIgnoreCase("Clubs")) suit = 2;
-							else if(wild[1].equalsIgnoreCase("Hearts")) suit = 3;
-							else if(wild[1].equalsIgnoreCase("Diamonds")) suit = 4;
-							
-							//checks suit is valid 
-							if(suit == 0) {
-								event.getChannel().sendMessage("Sorry, invalid suit. Try again.");
-								event.getChannel().sendMessage(getBoard());
-							}
-							
-							//plays card
-							playerHand.get(cardNum-1).declaredSuit = suit;
-							pile.add(playerHand.remove(cardNum-1));
-							
-							event.getChannel().sendMessage("You played: " + pile.get(pile.size()-1));
-							
-							if(hasWon(playerHand)) {
-								event.getChannel().sendMessage("You won!");
-								event.getChannel().sendMessage("If you want to play again, enter **" + start + "**");
-							}
-							else {
-								event.getChannel().sendMessage(checkReshuffle());
-	
-								event.getChannel().sendMessage("Bot " + botTurn());
-
-								if(hasWon(botHand)) {
-									event.getChannel().sendMessage("Bot won.");
-									event.getChannel().sendMessage("If you want to play again, enter **" + start + "**");
-								}
-								else {
-									event.getChannel().sendMessage(checkReshuffle());
-									
-									event.getChannel().sendMessage(getBoard());
-									event.getChannel().sendMessage("Your turn.");
-								}
-							}
-						}
-						//error on command
-						else {
-							event.getChannel().sendMessage("Sorry, that's not an eight. Try again.");
-							event.getChannel().sendMessage(getBoard());
-						}
-					}
-					//error on command
-					else {
-						event.getChannel().sendMessage("Sorry, invalid card. Try again.");
-						event.getChannel().sendMessage(getBoard());
-					}
-				}
-			}
+			event.getChannel().sendMessage(play(remaining));
 		}
 		//draw card
 		else if(message.startsWith(draw)) {
-			//add checks
-			playerHand.add(pull());
-
-			event.getChannel().sendMessage("You drew " + playerHand.get(playerHand.size()-1));
-			
-			event.getChannel().sendMessage(checkReshuffle());
-			
-			event.getChannel().sendMessage("Bot " + botTurn());
-			
-			if(hasWon(botHand)) {
-				event.getChannel().sendMessage("Bot won.");
-				event.getChannel().sendMessage("If you want to play again, enter **" + start + "**");
-			}
-			else {
-				event.getChannel().sendMessage(checkReshuffle());
-			
-				event.getChannel().sendMessage(getBoard());
-				event.getChannel().sendMessage("Your turn.");
-			}
+			event.getChannel().sendMessage(draw());
 		}
 		//get help
 		else if(message.startsWith(help)) {
-			
 			event.getChannel().sendMessage(
 					"This is a game of Crazy Eights.\n" +
-					"If you need to know the rules, enter the command **" + rules + "**");
-			event.getChannel().sendMessage("_ _");
-			event.getChannel().sendMessage(
+					"If you need to know the rules, enter the command **" + rules + "**\n" +
+					"\n" +
 					"To play the game, use these commands:\n" +
 					"**" + start + "** to start the game\n" +
 					"**" + play + " #** to play the card at position # from your hand\n" +
-					"**" + draw + "** to draw a card");
-			event.getChannel().sendMessage("Note: When playing an eight, declare the suit after the # with a space (spades, hearts, ect.)." +
-					 " This will show up after a third slash.");
-			event.getChannel().sendMessage("_ _");
-			event.getChannel().sendMessage("While playing the game, you will use a game board such as this:\n" +
+					"**" + draw + "** to draw a card\n" +
+					"Note: When playing an eight, declare the suit after the # with a space (spades, hearts, ect.)." +
+					" This will show up after a third slash.\n" +
+					"\n" +
+					"While playing the game, you will use a game board such as this:\n" +
 					"Bot: 3 cards\n" +
-					"Top of pile: " + new Card(4,1) + "\n" +
-					"You: " + handToString(examples) + "\n");
+					"Top of pile: " + new Card(4, 1) + "\n" +
+					"You: " + handToString(examples) + "\n" +
+					"\n" +
+					"An example play could be **" + play + " 2** or **" + play + " 5 hearts** ending with:\n" +
+					"Top of pile: " + new Card(3, 1) + "\n" +
+					"or \n" +
+					"Top of pile: " + new Card(8, 4, 3) + "\n");
 			
 		}
 		//get rules
 		else if(message.startsWith(rules)) {
-			//add rules
-			event.getChannel().sendMessage();
-		}
-/*=================================================================================*/
-		else if(message.startsWith(testers)) {
 			event.getChannel().sendMessage(
-					"Testing commands:\n" +
-					"**" + give + "**: give player card\n" +
-					"**" + giveBot + "**: give bot card\n" +
-					"**" + remove + "**: remove card from bot hand\n" +
-					"**" + reveal + "**: show bot hand\n" +
-					"**" + changeTop + "**: change top of pile\n" +
-					"**" + swap + "**: swap deck and pile\n" +
-					"**" + show + "**: show all lists\n");
+					"This is a game of Crazy Eights.\n" + 
+					"If you need to know how to use the bot to play the game, enter the command **" + help + "**\n" + 
+					"\n" + 
+					"Each player will be dealt a hand of 5 cards.\n" + 
+					"The goal of the game is to play all of your cards.\n" + 
+					"In the middle of the game board is the pile.\n" + 
+					"You can play any card that matches suit or value of the top card of the pile.\n" +
+					"\n" + 
+					"8 cards are wild.\n" + 
+					"When played, the current player can declare any suit. The next player must play a card that matches only that suit.\n" + 
+					"\n" +  
+					"The board will look like this:\n" + 
+					"Bot: 3 cards\n" +
+					"Top of pile: " + new Card(4, 1) + "\n" +
+					"You: " + handToString(examples) + "\n" +
+					"\n" +
+					"In this example, you could play either the 3, 4, or 8.\n" );
 		}
-		//test codes: give card to bot
-		else if(message.startsWith(giveBot)) {
-			message = message.substring(giveBot.length()+1);
-			String[] card = message.split("/");
-			int value = Integer.parseInt(card[0]);
-			int suit = Integer.parseInt(card[1]);
-			botHand.add(new Card(value, suit));
-			
-			event.getChannel().sendMessage(handToString(botHand));
+		else if(message.startsWith(";") && event.getMessageAuthor().getDisplayName().equals("Certified Crazy Eights Tester")) {
+			event.getChannel().sendMessage(cheats(message));
 		}
-		//test codes: give card
-		else if(message.startsWith(give)) {
-			message = message.substring(give.length()+1);
-			String[] card = message.split("/");
-			int value = Integer.parseInt(card[0]);
-			int suit = Integer.parseInt(card[1]);
-			playerHand.add(new Card(value, suit));
-			
-			event.getChannel().sendMessage(getBoard());
-		}
-		//test codes: remove card from bot hand
-		else if(message.startsWith(remove)) {
-			message = message.substring(remove.length()+1);
-			botHand.remove(Integer.parseInt(message));
-			event.getChannel().sendMessage(handToString(botHand));
-		}
-		//test codes: reveal bot hand
-		else if(message.startsWith(reveal)) {
-			event.getChannel().sendMessage(handToString(botHand));
-			event.getChannel().sendMessage(getBoard());
-		}
-		//test codes: change top card
-		else if(message.startsWith(changeTop)) {
-			message = message.substring(changeTop.length()+1);
-			String[] card = message.split("/");
-			int value = Integer.parseInt(card[0]);
-			int suit = Integer.parseInt(card[1]);
-			pile.add(new Card(value, suit));
-			
-			event.getChannel().sendMessage(getBoard());
-		}
-		//test codes: switch pile and deck
-		else if(message.startsWith(swap)) {
-			ArrayList<Card> swap = pile;
-			pile = deck;
-			deck = swap;
-			
-			event.getChannel().sendMessage(getBoard());
-		}
-		//test codes: shows board, pile, and deck
-		else if(message.startsWith(show)) {
-			event.getChannel().sendMessage("Bot hand: " + handToString(botHand));
-			event.getChannel().sendMessage(getBoard());
-			event.getChannel().sendMessage("Deck: " + handToString(deck));
-			event.getChannel().sendMessage("Pile: " + handToString(pile));
-		}
-		/*=================================================================================*/
 	}
+		
 
 	//makes new deck
 	public void newDeck() {
@@ -306,6 +137,7 @@ public class CardGame extends CustomMessageCreateListener {
 	//shuffles given list
 	public ArrayList<Card> shuffle(ArrayList<Card> cards) {
 		ArrayList<Card> shuffled = new ArrayList<Card>();
+		Random rand = new Random();
 		int size = cards.size();
 		
 		for(int i = 0; i < size; i++) {
@@ -314,6 +146,151 @@ public class CardGame extends CustomMessageCreateListener {
 		}
 		
 		return shuffled;
+	}
+	
+	//all play logic
+	public String play(String message) {
+		String fin = "";
+		
+		//play a normal card (not eight)
+		if(message.matches("[0-9]+$")){
+			int cardNum = Integer.parseInt(message);
+			
+			//checks card is playable
+			if(playCard(cardNum)) {
+				
+				//check winner
+				if(hasWon(playerHand)) {
+					fin += "\n" + "You won!";
+					fin += "\n" + "If you want to play again, enter **" + start + "**";
+				}
+				else {
+					fin += "\n" +checkReshuffle();
+					
+					
+					fin += "\n" +"Bot " + botTurn();
+					
+					if(hasWon(botHand)) {
+						fin += "\n" +"Bot won.";
+						fin += "\n" +"If you want to play again, enter **" + start + "**";
+					}
+					else {
+						fin += "\n" +checkReshuffle();
+						
+						fin += "\n" +getBoard();
+						fin += "\n" +"Your turn.";
+					}
+				}
+			}
+			//error if that card is not playable
+			else{
+				fin += "\n" +"Sorry, invalid card. Try again.";
+				fin += "\n" +getBoard();
+			}
+		}
+		//play an eight
+		else {
+			String[] wild = message.split(" ");
+			
+			//error on command
+			if(wild.length != 2) {
+				fin += "\n" +"Sorry, invalid command. Try again.";
+				fin += "\n" +getBoard();
+			}
+			else {
+				//checks they entered a number
+				if(wild[0].matches("[0-9]+$")) {
+					//checks card is eight
+					if(Integer.parseInt(wild[0]) > 0 && Integer.parseInt(wild[0]) <= playerHand.size()) {
+						if(playerHand.get(Integer.parseInt(wild[0])-1).value == 8) {
+							int cardNum = Integer.parseInt(wild[0]);
+							
+							int suit = 0;
+							if(wild[1].equalsIgnoreCase("Spades")) suit = 1;
+							else if(wild[1].equalsIgnoreCase("Clubs")) suit = 2;
+							else if(wild[1].equalsIgnoreCase("Hearts")) suit = 3;
+							else if(wild[1].equalsIgnoreCase("Diamonds")) suit = 4;
+							
+							//checks suit is valid 
+							if(suit == 0) {
+								fin += "\n" +"Sorry, invalid suit. Try again.";
+								fin += "\n" +getBoard();
+							}
+							
+							//plays card
+							playerHand.get(cardNum-1).declaredSuit = suit;
+							pile.add(playerHand.remove(cardNum-1));
+							
+							fin += "\n" +"You played: " + pile.get(pile.size()-1);
+							
+							if(hasWon(playerHand)) {
+								fin += "\n" +"You won!";
+								fin += "\n" +"If you want to play again, enter **" + start + "**";
+							}
+							else {
+								fin += "\n" +checkReshuffle();
+	
+								fin += "\n" +"Bot " + botTurn();
+
+								if(hasWon(botHand)) {
+									fin += "\n" +"Bot won.";
+									fin += "\n" +"If you want to play again, enter **" + start + "**";
+								}
+								else {
+									fin += "\n" +checkReshuffle();
+									
+									fin += "\n" + getBoard();
+									fin += "\n" +"Your turn.";
+								}
+							}
+						}
+						//error on command
+						else {
+							fin += "\n" +"Sorry, that's not an eight. Try again.";
+							fin += "\n" +getBoard();
+						}
+					}
+					//error on position number
+					else {
+						fin += "\n" +"Sorry, invalid card. Try again.";
+						fin += "\n" +getBoard();
+					}
+				}
+				//error on command
+				else {
+					fin += "\n" +"Sorry, invalid card. Try again.";
+					fin += "\n" +getBoard();
+				}
+			}
+		}
+		
+		return fin;
+	}
+	
+	//all draw logic
+	public String draw() {
+		String fin = "";
+		
+		playerHand.add(pull());
+
+		fin += "\n" + "You drew " + playerHand.get(playerHand.size()-1);
+		
+		fin += "\n" + checkReshuffle();
+		
+		fin += "\n" + "Bot " + botTurn();
+		
+		if(hasWon(botHand)) {
+			fin += "\n" + "Bot won.";
+			fin += "\n" + "If you want to play again, enter **" + start + "**";
+		}
+		else {
+			fin += "\n" + checkReshuffle();
+		
+			fin += "\n" + getBoard();
+			fin += "\n" + "Your turn.";
+		}
+		
+		return fin;
 	}
 	
 	//deals necessary cards
@@ -342,13 +319,15 @@ public class CardGame extends CustomMessageCreateListener {
 	
 	//returns string version of hand
 	public String handToString(ArrayList<Card> hand) {
-		String fin = "";
+		String fin = "\t| ";
+		int i = 1;
 		
 		for(Card c : hand) {
-			fin += c + ", ";
+			fin += "**" + i + ":**   " + c + "\t| ";
+			i++;
 		}
 		
-		return fin.substring(0, fin.length()-2);
+		return fin;
 	}
 	
 	//returns string version of board
@@ -369,7 +348,7 @@ public class CardGame extends CustomMessageCreateListener {
 			return "Pile reshuffled.";
 		}
 		
-		return null;
+		return "";
 	}
 	
 	//check if given hand has won
@@ -450,5 +429,87 @@ public class CardGame extends CustomMessageCreateListener {
 		botHand.add(pull());
 		return "drew";
 		
+	}
+	
+	public String cheats(String message) {
+		String fin = "";
+		
+		if(message.startsWith(testers)) {
+			fin =
+					"Testing commands:\n" +
+					"**" + give + "**: give player card\n" +
+					"**" + giveBot + "**: give bot card\n" +
+					"**" + remove + "**: remove card from bot hand\n" +
+					"**" + reveal + "**: show bot hand\n" +
+					"**" + changeTop + "**: change top of pile\n" +
+					"**" + swap + "**: swap deck and pile\n" +
+					"**" + show + "**: show all lists\n" +
+					"**" + clear + "**: clear discord";
+		}
+		//test codes: give card to bot
+		else if(message.startsWith(giveBot)) {
+			message = message.substring(giveBot.length()+1);
+			String[] card = message.split("/");
+			int value = Integer.parseInt(card[0]);
+			int suit = Integer.parseInt(card[1]);
+			botHand.add(new Card(value, suit));
+			
+			fin = handToString(botHand);
+		}
+		//test codes: give card
+		else if(message.startsWith(give)) {
+			message = message.substring(give.length()+1);
+			String[] card = message.split("/");
+			int value = Integer.parseInt(card[0]);
+			int suit = Integer.parseInt(card[1]);
+			playerHand.add(new Card(value, suit));
+			
+			fin = getBoard();
+		}
+		//test codes: remove card from bot hand
+		else if(message.startsWith(remove)) {
+			message = message.substring(remove.length()+1);
+			botHand.remove(Integer.parseInt(message));
+			fin = handToString(botHand);
+		}
+		//test codes: reveal bot hand
+		else if(message.startsWith(reveal)) {
+			fin = handToString(botHand);
+			fin += "\n" + getBoard();
+		}
+		//test codes: change top card
+		else if(message.startsWith(changeTop)) {
+			message = message.substring(changeTop.length()+1);
+			String[] card = message.split("/");
+			int value = Integer.parseInt(card[0]);
+			int suit = Integer.parseInt(card[1]);
+			pile.add(new Card(value, suit));
+			
+			fin = getBoard();
+		}
+		//test codes: switch pile and deck
+		else if(message.startsWith(swap)) {
+			ArrayList<Card> swap = pile;
+			pile = deck;
+			deck = swap;
+			
+			fin = getBoard();
+		}
+		//test codes: shows board, pile, and deck
+		else if(message.startsWith(show)) {
+			fin = "Bot hand: " + handToString(botHand);
+			fin += "\n" + getBoard();
+			fin += "\n" + "Deck: " + handToString(deck);
+			fin += "\n" + "Pile: " + handToString(pile);
+		}
+		else if(message.startsWith(clear)) {
+			fin = "_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n"
+					+ "_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n"
+					+ "_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n"
+					+ "_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n"
+					+ "_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _";
+		}
+		
+		return fin;
 	}
 }
