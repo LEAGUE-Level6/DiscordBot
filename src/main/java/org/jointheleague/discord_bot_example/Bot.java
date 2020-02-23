@@ -7,6 +7,7 @@ import org.jointheleague.modules.CasinoGameListener;
 import org.jointheleague.modules.RandomNumber;
 import org.jointheleague.modules.Weather;
 import org.jointheleague.modules.DadJokes;
+import org.jointheleague.modules.Dictionary;
 import org.jointheleague.modules.ClockMessageListener;
 import org.jointheleague.modules.ComicMessageListener;
 import org.jointheleague.modules.ElmoMessageListener;
@@ -50,6 +51,9 @@ public class Bot  {
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
+		
+		api.addMessageCreateListener(new Dictionary(channelName));
+
 	}
 
 }
