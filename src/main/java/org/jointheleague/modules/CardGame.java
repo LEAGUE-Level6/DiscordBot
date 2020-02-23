@@ -24,6 +24,7 @@ public class CardGame extends CustomMessageCreateListener {
 	private final String help = "!help";
 	private final String rules = "!rules";
 	//test codes
+	private final String testers = ";cheats";
 	private final String give = ";give";
 	private final String giveBot = ";giveBot";
 	private final String remove = ";remove";
@@ -35,11 +36,10 @@ public class CardGame extends CustomMessageCreateListener {
 	public CardGame(String channelName) {
 		super(channelName);
 	}
-
-	//finish testing code
-	//add rules
-	//add checks to playing eights and drawing
-	
+/*
+ * finish testing code
+ * add rules
+*/
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 
@@ -79,36 +79,23 @@ public class CardGame extends CustomMessageCreateListener {
 				//checks card is playable
 				if(playCard(cardNum)) {
 					
-					//checks winners or pile reshuffling
-					
-					if(check() == 1) {
+					//check winner
+					if(hasWon(playerHand)) {
 						event.getChannel().sendMessage("You won!");
 						event.getChannel().sendMessage("If you want to play again, enter **" + start + "**");
 					}
 					else {
-						if(check() == 3) {
-							Card topCard = pile.get(pile.size()-1);
-							deck = shuffle(pile);
-							pile = new ArrayList<Card>();
-							pile.add(topCard);
-							
-							event.getChannel().sendMessage("Pile reshuffled.");
-						}
+						event.getChannel().sendMessage(checkReshuffle());
 						
 						event.getChannel().sendMessage("Bot " + botTurn());
 						
-						if(check() == 2) {
+						if(hasWon(botHand)) {
 							event.getChannel().sendMessage("Bot won.");
 							event.getChannel().sendMessage("If you want to play again, enter **" + start + "**");
 						}
 						else {
-							if(check() == 3) {
-								deck = shuffle(pile);
-								pile = new ArrayList<Card>();
-								
-								event.getChannel().sendMessage("Pile reshuffled.");
-							}
-
+							event.getChannel().sendMessage(checkReshuffle());
+							
 							event.getChannel().sendMessage(getBoard());
 							event.getChannel().sendMessage("Your turn.");
 						}
@@ -151,11 +138,29 @@ public class CardGame extends CustomMessageCreateListener {
 							//plays card
 							playerHand.get(cardNum-1).declaredSuit = suit;
 							pile.add(playerHand.remove(cardNum-1));
-
-							event.getChannel().sendMessage("Bot " + botTurn());
 							
-							event.getChannel().sendMessage(getBoard());
-							event.getChannel().sendMessage("Your turn.");
+							event.getChannel().sendMessage("You played: " + pile.get(pile.size()-1));
+							
+							if(hasWon(playerHand)) {
+								event.getChannel().sendMessage("You won!");
+								event.getChannel().sendMessage("If you want to play again, enter **" + start + "**");
+							}
+							else {
+								event.getChannel().sendMessage(checkReshuffle());
+	
+								event.getChannel().sendMessage("Bot " + botTurn());
+
+								if(hasWon(botHand)) {
+									event.getChannel().sendMessage("Bot won.");
+									event.getChannel().sendMessage("If you want to play again, enter **" + start + "**");
+								}
+								else {
+									event.getChannel().sendMessage(checkReshuffle());
+									
+									event.getChannel().sendMessage(getBoard());
+									event.getChannel().sendMessage("Your turn.");
+								}
+							}
 						}
 						//error on command
 						else {
@@ -175,11 +180,23 @@ public class CardGame extends CustomMessageCreateListener {
 		else if(message.startsWith(draw)) {
 			//add checks
 			playerHand.add(pull());
+
+			event.getChannel().sendMessage("You drew " + playerHand.get(playerHand.size()-1));
+			
+			event.getChannel().sendMessage(checkReshuffle());
 			
 			event.getChannel().sendMessage("Bot " + botTurn());
 			
-			event.getChannel().sendMessage(getBoard());
-			event.getChannel().sendMessage("Your turn.");
+			if(hasWon(botHand)) {
+				event.getChannel().sendMessage("Bot won.");
+				event.getChannel().sendMessage("If you want to play again, enter **" + start + "**");
+			}
+			else {
+				event.getChannel().sendMessage(checkReshuffle());
+			
+				event.getChannel().sendMessage(getBoard());
+				event.getChannel().sendMessage("Your turn.");
+			}
 		}
 		//get help
 		else if(message.startsWith(help)) {
@@ -205,8 +222,20 @@ public class CardGame extends CustomMessageCreateListener {
 		//get rules
 		else if(message.startsWith(rules)) {
 			//add rules
+			event.getChannel().sendMessage();
 		}
 /*=================================================================================*/
+		else if(message.startsWith(testers)) {
+			event.getChannel().sendMessage(
+					"Testing commands:\n" +
+					"**" + give + "**: give player card\n" +
+					"**" + giveBot + "**: give bot card\n" +
+					"**" + remove + "**: remove card from bot hand\n" +
+					"**" + reveal + "**: show bot hand\n" +
+					"**" + changeTop + "**: change top of pile\n" +
+					"**" + swap + "**: swap deck and pile\n" +
+					"**" + show + "**: show all lists\n");
+		}
 		//test codes: give card to bot
 		else if(message.startsWith(giveBot)) {
 			message = message.substring(giveBot.length()+1);
@@ -258,6 +287,7 @@ public class CardGame extends CustomMessageCreateListener {
 		}
 		//test codes: shows board, pile, and deck
 		else if(message.startsWith(show)) {
+			event.getChannel().sendMessage("Bot hand: " + handToString(botHand));
 			event.getChannel().sendMessage(getBoard());
 			event.getChannel().sendMessage("Deck: " + handToString(deck));
 			event.getChannel().sendMessage("Pile: " + handToString(pile));
@@ -274,7 +304,6 @@ public class CardGame extends CustomMessageCreateListener {
 	}
 	
 	//shuffles given list
-	
 	public ArrayList<Card> shuffle(ArrayList<Card> cards) {
 		ArrayList<Card> shuffled = new ArrayList<Card>();
 		int size = cards.size();
@@ -288,7 +317,6 @@ public class CardGame extends CustomMessageCreateListener {
 	}
 	
 	//deals necessary cards
-	
 	public void deal() {
 		playerHand.add(pull());
 		botHand.add(pull());
@@ -302,10 +330,12 @@ public class CardGame extends CustomMessageCreateListener {
 		botHand.add(pull());
 		
 		pile.add(pull());
+		while(pile.get(0).value == 8) 
+			pile.add(pull());
+		
 	}
 	
 	//takes top card of deck
-	
 	public Card pull() {
 		return deck.remove(0);
 	}
@@ -322,31 +352,35 @@ public class CardGame extends CustomMessageCreateListener {
 	}
 	
 	//returns string version of board
-	
 	public String getBoard() {
 		return	"Bot: " + botHand.size() + " cards\n" +
 				"Top of pile: " + pile.get(pile.size()-1) + "\n" +
 				"You: " + handToString(playerHand) + "\n";
 	}
 	
-	//checks for winners or reshuffling
-	public int check() {
-		if(playerHand.size() == 0) {
-			return 1;
-		}
-		if(botHand.size() == 0) {
-			return 2;
-		}
-		if(deck.size() == 1) {
-			return 3;
+	//check if pile needs reshuffling
+	public String checkReshuffle() {
+		if(deck.size() <= 1) {
+			Card topCard = pile.get(pile.size()-1);
+			deck = shuffle(pile);
+			pile = new ArrayList<Card>();
+			pile.add(topCard);
+			
+			return "Pile reshuffled.";
 		}
 		
-		return 0;
+		return null;
+	}
+	
+	//check if given hand has won
+	public boolean hasWon(ArrayList<Card> hand) {
+		return hand.size() == 0;
 	}
 	
 	//player plays card, returns true if successfully played
-	
 	public boolean playCard(int cardNum) {
+		if(cardNum < 1 || cardNum > playerHand.size()) return false;
+		
 		boolean played = false;
 		Card topCard = pile.get(pile.size()-1);
 		
@@ -400,13 +434,15 @@ public class CardGame extends CustomMessageCreateListener {
 				for(Card x : botHand) 
 					suitCount[x.suit] ++;
 				
+				suitCount[botHand.get(i).suit] --;
+				
 				for(int j = 1; j < 5; j++)
 					if(suitCount[j] > suitCount[j-1])
 						mostSuit = j;
 				
 				botHand.get(i).declaredSuit = mostSuit;
 				pile.add(botHand.remove(i));
-				return "played 8";
+				return "played an 8";
 			}
 		}
 		
