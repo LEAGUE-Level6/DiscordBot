@@ -5,6 +5,7 @@ import org.javacord.api.DiscordApiBuilder;
 import org.jointheleague.modules.CalculatorMessageListener;
 import org.jointheleague.modules.CasinoGameListener;
 import org.jointheleague.modules.RandomNumber;
+import org.jointheleague.modules.RoleBot;
 import org.jointheleague.modules.Weather;
 import org.jointheleague.modules.DadJokes;
 import org.jointheleague.modules.ClockMessageListener;
@@ -34,6 +35,8 @@ public class Bot  {
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 		
 		//add Listeners
+		
+		api.addMessageCreateListener(new RoleBot(channelName, api.getServerById("579719873865842718")));
 		api.addMessageCreateListener(new RandomNumber(channelName));
 		api.addMessageCreateListener(new DadJokes(channelName));
 		api.addMessageCreateListener(new ClockMessageListener(channelName));
@@ -50,6 +53,7 @@ public class Bot  {
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
+		
 	}
 
 }
