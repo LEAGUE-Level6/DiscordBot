@@ -22,7 +22,7 @@ public class UH_HUH extends CustomMessageCreateListener {
 			event.getChannel().sendMessage("Phew. That was long!");
 			onoff = false;
 		}
-		if(onoff) {
+		if(onoff && !event.getMessageAuthor().isYourself()) {
 			event.getChannel().sendMessage("Uh huh.");
 		}
 	}
