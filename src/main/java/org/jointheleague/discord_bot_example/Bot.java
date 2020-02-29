@@ -9,7 +9,9 @@ import org.jointheleague.modules.Weather;
 import org.jointheleague.modules.DadJokes;
 import org.jointheleague.modules.ClockMessageListener;
 import org.jointheleague.modules.ComicMessageListener;
+import org.jointheleague.modules.ComplimentListener;
 import org.jointheleague.modules.ElmoMessageListener;
+import org.jointheleague.modules.FEHStatListener;
 import org.jointheleague.modules.FactMessageListener;
 import org.jointheleague.modules.FlagMessageListener;
 import org.jointheleague.modules.NewPollMessageListener;
@@ -50,6 +52,9 @@ public class Bot  {
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
+		
+		api.addMessageCreateListener(new ComplimentListener(channelName));
+		api.addMessageCreateListener(new FEHStatListener(channelName));
 	}
 
 }
