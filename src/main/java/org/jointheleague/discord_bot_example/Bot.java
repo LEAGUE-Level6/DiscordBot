@@ -1,5 +1,7 @@
 package org.jointheleague.discord_bot_example;
 
+import java.io.IOException;
+
 import org.javacord.api.DiscordApi; 
 import org.javacord.api.DiscordApiBuilder;
 import org.jointheleague.modules.CalculatorMessageListener;
@@ -51,7 +53,12 @@ public class Bot  {
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
-		api.addMessageCreateListener(new IceBreakerListener(channelName));
+		try {
+			api.addMessageCreateListener(new IceBreakerListener(channelName));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 
 }
