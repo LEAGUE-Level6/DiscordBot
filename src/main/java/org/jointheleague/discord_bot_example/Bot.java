@@ -2,22 +2,7 @@ package org.jointheleague.discord_bot_example;
 
 import org.javacord.api.DiscordApi; 
 import org.javacord.api.DiscordApiBuilder;
-import org.jointheleague.modules.BEEP;
-import org.jointheleague.modules.CTAtimes;
-import org.jointheleague.modules.CalculatorMessageListener;
-import org.jointheleague.modules.CasinoGameListener;
-import org.jointheleague.modules.RandomNumber;
-import org.jointheleague.modules.UH_HUH;
-import org.jointheleague.modules.Weather;
-import org.jointheleague.modules.DadJokes;
-import org.jointheleague.modules.ClockMessageListener;
-import org.jointheleague.modules.ComicMessageListener;
-import org.jointheleague.modules.ElmoMessageListener;
-import org.jointheleague.modules.FactMessageListener;
-import org.jointheleague.modules.FlagMessageListener;
-import org.jointheleague.modules.NewPollMessageListener;
-import org.jointheleague.modules.FashionAdvisor;
-import org.jointheleague.modules.leetMessageListener;
+import org.jointheleague.modules.*;
 
 
 public class Bot  {
@@ -38,6 +23,7 @@ public class Bot  {
 		
 		//add Listeners
 		api.addMessageCreateListener(new UH_HUH(channelName));
+		api.addMessageCreateListener(new CTAtimes(channelName));
 		api.addMessageCreateListener(new BEEP(channelName));
 		api.addMessageCreateListener(new RandomNumber(channelName));
 		api.addMessageCreateListener(new DadJokes(channelName));
@@ -52,6 +38,8 @@ public class Bot  {
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
+		api.addMessageCreateListener(new FDLinks(channelName));
+		api.addMessageCreateListener(new JSONadventure(channelName));
 	}
 
 }

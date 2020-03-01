@@ -4,10 +4,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
 import org.javacord.api.event.message.MessageCreateEvent;
+import com.google.gson.*;
 
 public class CTAtimes extends CustomMessageCreateListener {
 
@@ -16,6 +14,7 @@ public class CTAtimes extends CustomMessageCreateListener {
 	private static final String HELP = "!ctahelp";
 	private static final String STATUS = "!ctastatus";
 	private static final String DETINFO = "!ctainfo";
+	Gson gson = new Gson();
 
 	public CTAtimes(String channelName) {
 		super(channelName);
@@ -29,13 +28,12 @@ public class CTAtimes extends CustomMessageCreateListener {
 			
 			if(cmd.equals("")) {
 				
-				Random r = new Random();
 				event.getChannel().sendMessage("CTATT BOT \n ERROR: Please enter a valid stop ID. Use !ctatt [stopid]. The stop ID can be found with the !ctahelp command.");
 				
 				
 			} else {
 				try {
-					URL urlForGetRequest = new URL("http://lapi.transitchicago.com/api/1.0/ttarrivals.aspx?key=e325bc1ce4ad4ce0a3ad0830739c4993&mapid=" + cmd + "&max=1&outputType=JSON");
+					URL urlForGetRequest = new URL("http://lapi.transitchicago.com/api/1.0/ttarrivals.aspx?key=e325bc1ce4ad4ce0a3ad0830739c4993&mapid=" + cmd + "&max=5&outputType=JSON");
 				    String readLine = null;
 				    HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
 				    conection.setRequestMethod("GET");
@@ -43,17 +41,16 @@ public class CTAtimes extends CustomMessageCreateListener {
 				    if (responseCode == HttpURLConnection.HTTP_OK) {
 				        BufferedReader in = new BufferedReader(
 				        new InputStreamReader(conection.getInputStream()));
-				        StringBuffer response = new StringBuffer();
-				        while ((readLine = in .readLine()) != null) {
-				            response.append(readLine);
-				        } in .close();
-				        System.out.println("JSON String Result " + response.toString());
+				        JsonParser parser = new JsonParser();
+						JsonElement fileData = parser.parse(in);
+				        event.getChannel().sendMessage("Next Arrivals:" + fileData);
 				    } else {
 						event.getChannel().sendMessage("We're sorry, we could not access the CTA API servers.");			    
 				    }
 				}
 				catch(Exception e) {
-					event.getChannel().sendMessage("We're sorry, a code error occured.");
+					event.getChannel().sendMessage("We're sorry, a code error occured. \n Here's the full info: \n " + e.getStackTrace().toString());
+					e.printStackTrace();
 				}
 			}
 			

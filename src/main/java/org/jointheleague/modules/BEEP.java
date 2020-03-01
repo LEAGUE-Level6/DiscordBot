@@ -9,6 +9,8 @@ public class BEEP extends CustomMessageCreateListener {
 
 	private static final String BEEP = "!beep";
 	private static final String ZEBRA = "!dance";
+	private static final String SPRINT = "!sprinter";
+	private static final String COAST = "!coaster";
 
 	public BEEP(String channelName) {
 		super(channelName);
@@ -21,6 +23,12 @@ public class BEEP extends CustomMessageCreateListener {
 		}
 		else if(event.getMessageContent().contains(ZEBRA)) {
 			event.getChannel().sendMessage("https://www.youtube.com/watch?v=-Z668Qc0P4Q");
+		}
+		else if(event.getMessageContent().contains(SPRINT)) {
+			event.getChannel().sendMessage("https://gonctd.com/wp-content/uploads/2020/01/SPRINTER.pdf");
+		}
+		else if(event.getMessageContent().contains(COAST)) {
+			event.getChannel().sendMessage("https://gonctd.com/wp-content/uploads/2020/01/COASTER-Schedule-Flyer-October-2019.pdf");
 		}
 	}
 	
