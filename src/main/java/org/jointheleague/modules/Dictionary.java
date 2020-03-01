@@ -1,8 +1,10 @@
 package org.jointheleague.modules;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
@@ -25,23 +27,27 @@ public class Dictionary extends CustomMessageCreateListener {
 	public void handle(MessageCreateEvent event) throws APIException {
 		if(event.getMessageContent().contains("!dictionary")) {
 			String word = event.getMessageContent().replaceAll(" ", "").replace("!dictionary","");
-			String add = "https://www.dictionaryapi.com/api/v3/references/collegiate/json/"+ word + "?key=d26d7e1d-65ea-4d57-8b7d-772327fcde01";
+			
 			try {
-				Gson g = new GsonBuilder().setLenient().create();
-				String json = new Scanner(new URL(add).openStream(), "UTF-8").toString();
-				JsonParser jp = new JsonParser();
-				System.out.println(jp.parse(json));
-				//JsonReader jr = Json.createReader(is);
-				//JsonObject jo = jr.readObject();
-				//jr.close();
-				//System.out.println("Def: " + jo.getString("def"));
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				URL add = new URL("https://www.dictionaryapi.com/api/v3/references/collegiate/json/"+ word + "?key=d26d7e1d-65ea-4d57-8b7d-772327fcde01");
+				InputStream is = add.openStream();
+				BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+				String file = "";
+				String read = br.readLine();
+				while(read != null) {
+					file += read;
+					read = br.readLine();
+				}
+				//shortdef":["a carnivorous mammal (Felis catus) long 
+				file = file.substring(file.indexOf("shortdef\"") + 12);
+				file = file.substring(0,file.indexOf("\""));
+				event.getChannel().sendMessage("Definition: " +file);
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 		}
 		
 	}
