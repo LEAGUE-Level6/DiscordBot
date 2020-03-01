@@ -20,10 +20,13 @@ ArrayList<Person> arr = new ArrayList<Person>();
 
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
+		//622894941667983404
 		if (event.getMessageContent().contains("*bet")) {
 			// -------------------------------------------------------
 			long cc = 0;
 			long luck = 0;
+			int save=0;
+			boolean found=false;
 			try {
 				BufferedReader r = new BufferedReader(new FileReader("src/main/resources/Untitled 1.txt"));
 				String str=r.readLine();
@@ -32,11 +35,20 @@ ArrayList<Person> arr = new ArrayList<Person>();
 					arr.add(new Person(Long.parseLong(str), Long.parseLong(r.readLine()), Long.parseLong(r.readLine())));
 					str=r.readLine();
 				}
-				for(Person p : arr) {
-					if(p.id==event.getMessageAuthor().getId()) {
-						cc = p.cc;
-						luck = p.luck;
+				for(int i = 0; i < arr.size(); i++) {
+					if(arr.get(i).id==event.getMessageAuthor().getId()) {
+						save=i;
+						cc = arr.get(i).cc;
+						luck = arr.get(i).luck;
+						found=true;
 					}
+				}
+				if(!found) {
+					event.getChannel().sendMessage("I've never seen your face before, take these coins and leave my family alone");
+					FileWriter temp = new FileWriter("src/main/resources/Untitled 1.txt", true);
+					temp.write(event.getMessageAuthor().getId()+"\n"+6969+"\n"+0+"\n");
+					temp.close();
+					return;
 				}
 				r.close();
 			} catch (FileNotFoundException e) {
@@ -80,10 +92,12 @@ ArrayList<Person> arr = new ArrayList<Person>();
 						if (luck > 0) {
 							luck--;
 						}
+						arr.get(save).set(cc);
+						arr.get(save).setL(luck);
 						for(Person p : arr) {
-							System.out.println("Hello");
 							fw.write(p.toString());
 						}
+						fw.close();
 
 					} else {
 						event.getChannel().sendMessage("Haha! I win uwu");
@@ -91,16 +105,21 @@ ArrayList<Person> arr = new ArrayList<Person>();
 						if (luck > 0) {
 							luck--;
 						}
+						arr.get(save).set(cc);
+						arr.get(save).setL(luck);
 						for(Person p : arr) {
-							System.out.println("HELLo");
 							fw.write(p.toString());
 						}
+						fw.close();
 					}
 				}else {
 					event.getChannel().sendMessage("Try again, but this time use ya brain");
+					arr.get(save).set(cc);
+					arr.get(save).setL(luck);
 					for(Person p : arr) {
 						fw.write(p.toString());
 					}
+					fw.close();
 				}
 			} catch (Exception e) {
 				event.getChannel().sendMessage("Try again, but this time use ya brain");
@@ -112,6 +131,7 @@ ArrayList<Person> arr = new ArrayList<Person>();
 	if (event.getMessageContent().equals("*bal")) {
 			long cc = 0;
 			long luck = 0;
+			boolean found=false;
 			try {
 				BufferedReader r = new BufferedReader(new FileReader("src/main/resources/Untitled 1.txt"));
 				String str=r.readLine();
@@ -124,7 +144,15 @@ ArrayList<Person> arr = new ArrayList<Person>();
 					if(p.id==event.getMessageAuthor().getId()) {
 						cc = p.cc;
 						luck = p.luck;
+						found=true;
 					}
+				}
+				if(!found) {
+					event.getChannel().sendMessage("I've never seen your face before, take these coins and leave my family alone");
+					FileWriter temp = new FileWriter("src/main/resources/Untitled 1.txt", true);
+					temp.write(event.getMessageAuthor().getId()+"\n"+6969+"\n"+0+"\n");
+					temp.close();
+					return;
 				}
 				r.close();
 			} catch (FileNotFoundException e) {
@@ -149,6 +177,7 @@ ArrayList<Person> arr = new ArrayList<Person>();
 			long cc = 0;
 			long luck = 0;
 			boolean found=false;
+			int save=0;
 			try {
 				BufferedReader r = new BufferedReader(new FileReader("src/main/resources/Untitled 1.txt"));
 				String str=r.readLine();
@@ -157,11 +186,21 @@ ArrayList<Person> arr = new ArrayList<Person>();
 					arr.add(new Person(Long.parseLong(str), Long.parseLong(r.readLine()), Long.parseLong(r.readLine())));
 					str=r.readLine();
 				}
-				for(Person p : arr) {
-					if(p.id==event.getMessageAuthor().getId()) {
-						cc = p.cc;
-						luck = p.luck;
+				
+				for(int i= 0; i < arr.size(); i++) {
+					if(arr.get(i).id==event.getMessageAuthor().getId()) {
+						save = i;
+						cc = arr.get(i).cc;
+						luck = arr.get(i).luck;
+						found=true;
 					}
+				}
+				if(!found) {
+					event.getChannel().sendMessage("I've never seen your face before, take these coins and leave my family alone");
+					FileWriter temp = new FileWriter("src/main/resources/Untitled 1.txt", true);
+					temp.write(event.getMessageAuthor().getId()+"\n"+6969+"\n"+0+"\n");
+					temp.close();
+					return;
 				}
 				r.close();
 			} catch (FileNotFoundException e) {
@@ -181,9 +220,12 @@ ArrayList<Person> arr = new ArrayList<Person>();
 				cc-=5000;
 				try {
 					FileWriter fw = new FileWriter("src/main/resources/Untitled 1.txt");
+					arr.get(save).set(cc);
+					arr.get(save).setL(luck);
 					for(Person p : arr) {
 						fw.write(p.toString());
 					}
+					fw.close();
 				}catch(IOException e) {
 					event.getChannel().sendMessage("Yikes, something mega wack");
 				}
