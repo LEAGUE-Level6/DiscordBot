@@ -16,7 +16,7 @@ import org.jointheleague.modules.FlagMessageListener;
 import org.jointheleague.modules.NewPollMessageListener;
 import org.jointheleague.modules.FashionAdvisor;
 import org.jointheleague.modules.leetMessageListener;
-import org.jointheleague.modules.lyrics;
+import org.jointheleague.modules.Song;
 
 
 public class Bot  {
@@ -47,7 +47,7 @@ public class Bot  {
 		api.addMessageCreateListener(new RandomWord(channelName));
 		api.addMessageCreateListener(new leetMessageListener(channelName));
 		api.addMessageCreateListener(new FlagMessageListener(channelName));
-		api.addMessageCreateListener(new lyrics(channelName));
+		api.addMessageCreateListener(new Song(channelName));
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));

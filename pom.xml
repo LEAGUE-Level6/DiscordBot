@@ -27,9 +27,9 @@
 	<dependencies>
 	
 <dependency>
-    <groupId>com.github.scribejava</groupId>
-    <artifactId>scribejava-apis</artifactId>
-    <version>6.9.0</version>
+  <groupId>se.michaelthelin.spotify</groupId>
+  <artifactId>spotify-web-api-java</artifactId>
+  <version>4.2.2</version>
 </dependency>
 
 		<dependency>
