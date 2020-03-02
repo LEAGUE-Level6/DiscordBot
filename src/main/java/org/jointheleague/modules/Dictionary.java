@@ -38,7 +38,6 @@ public class Dictionary extends CustomMessageCreateListener {
 					file += read;
 					read = br.readLine();
 				}
-				//shortdef":["a carnivorous mammal (Felis catus) long 
 				file = file.substring(file.indexOf("shortdef\"") + 12);
 				file = file.substring(0,file.indexOf("\""));
 				event.getChannel().sendMessage("Definition: " +file);
