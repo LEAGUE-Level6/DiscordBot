@@ -41,6 +41,7 @@ String special = ""; boolean watch = false;
 							arr.add(new Person(Long.parseLong(str), Long.parseLong(r.readLine()), Long.parseLong(r.readLine())));
 							str=r.readLine();
 						}
+						for(int i = 0; i < arr.size(); i++) {
 							if(arr.get(i).id==event.getMessageAuthor().getId()) {
 								save=i;
 								cc = arr.get(i).cc+1500;
