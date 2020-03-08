@@ -10,7 +10,6 @@ public class JSONadventure extends CustomMessageCreateListener {
 
 	private static final String START = "!adventure";
 	private static final String HELP = "!advhelp";
-	String suffix = "SHORT";
 	Gson gson = new Gson();
     BufferedReader in;
 
@@ -22,16 +21,19 @@ public class JSONadventure extends CustomMessageCreateListener {
 	public void handle(MessageCreateEvent event) {
 		if (event.getMessageContent().contains(START)) {
 						try {
-							in = new BufferedReader(new FileReader("adventure.json"));
+							in = new BufferedReader(new FileReader("src/main/java/org/jointheleague/modules/story.json"));
 						} catch (FileNotFoundException e) {
 							e.printStackTrace();
 						}
 				        JsonParser parser = new JsonParser();
 						JsonObject fileData = (JsonObject) parser.parse(in);
-				        event.getChannel().sendMessage(fileData.get("startprompt").toString().replace("\"", ""));
+				        event.getChannel().sendMessage("Welcome! " + fileData.get("text").getAsString().replace("\"", ""));
+				        event.getChannel().sendMessage("1: " + fileData.get("choicea").getAsString().replace("\"", ""));
+				        event.getChannel().sendMessage("2: " + fileData.get("choiceb").getAsString().replace("\"", ""));
+				        event.getChannel().sendMessage("3: " + fileData.get("choicec").getAsString().replace("\"", ""));
 				}
 		else if(event.getMessageContent().equals(HELP)) {
-			event.getChannel().sendMessage("The SBot's Dynamic Links feature lets you shorten links. Usage is !‎dynamiclink [url]. Currently no option is available to change the suffix or domain.");
+			event.getChannel().sendMessage("Type 1, 2, or 3 to choose!");
 		}
 	}
 

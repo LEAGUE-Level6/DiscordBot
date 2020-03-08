@@ -42,8 +42,9 @@ public class CTAtimes extends CustomMessageCreateListener {
 				        BufferedReader in = new BufferedReader(
 				        new InputStreamReader(conection.getInputStream()));
 				        JsonParser parser = new JsonParser();
-						JsonElement fileData = parser.parse(in);
-				        event.getChannel().sendMessage("Next Arrivals:" + fileData);
+						JsonObject fileData = (JsonObject) parser.parse(in);
+						JsonObject root = (JsonObject) fileData.get("ctatt");
+				        event.getChannel().sendMessage("Next Arrivals for " + root + ":");
 				    } else {
 						event.getChannel().sendMessage("We're sorry, we could not access the CTA API servers.");			    
 				    }

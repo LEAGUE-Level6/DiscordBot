@@ -56,7 +56,7 @@ public class FDLinks extends CustomMessageCreateListener {
 				        new InputStreamReader(connection.getInputStream()));
 				        JsonParser parser = new JsonParser();
 						JsonObject fileData = (JsonObject) parser.parse(in);
-				        event.getChannel().sendMessage("Short Link:" + fileData.get("shortLink").toString().replace("\"", ""));
+				        event.getChannel().sendMessage("Short Link: " + fileData.get("shortLink").toString().replace("\"", ""));
 				    } else {
 						event.getChannel().sendMessage("We're sorry, we could not access the FDL API servers.");			    
 				    }
