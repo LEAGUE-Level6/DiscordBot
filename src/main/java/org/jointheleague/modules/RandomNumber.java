@@ -17,7 +17,7 @@ public class RandomNumber extends CustomMessageCreateListener {
 	public void handle(MessageCreateEvent event) {
 		if (event.getMessageContent().contains(COMMAND)) {
 			
-			String cmd = event.getMessageContent().replaceAll(" ", "").replace("!random","");
+			String cmd = "";
 			
 			if(cmd.equals("")) {
 				
