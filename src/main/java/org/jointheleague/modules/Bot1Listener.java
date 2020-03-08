@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,6 +15,9 @@ import net.aksingh.owmjapis.api.APIException;
 
 public class Bot1Listener extends CustomMessageCreateListener {
 ArrayList<Person> arr = new ArrayList<Person>();
+long time = System.nanoTime();
+long id = 0;
+String special = ""; boolean watch = false;
 	public Bot1Listener(String channelName) {
 		super(channelName);
 	}
@@ -21,6 +25,56 @@ ArrayList<Person> arr = new ArrayList<Person>();
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		//622894941667983404
+		if(event.getMessageAuthor().getId()==id&&watch) {
+			if(System.nanoTime()-3000000000L<=time) {
+				if(event.getMessageContent().equals(special)) {
+					event.getChannel().sendMessage("You barely swim to the surface and survive. You get 1500 coins for your fruitless toil.");
+					try {
+						long cc = 0;
+						long luck = 0;
+						int save=0;
+						boolean found=false;
+						BufferedReader r = new BufferedReader(new FileReader("src/main/resources/Untitled 1.txt"));
+						String str=r.readLine();
+						arr.clear();
+						while(str!=null) {
+							arr.add(new Person(Long.parseLong(str), Long.parseLong(r.readLine()), Long.parseLong(r.readLine())));
+							str=r.readLine();
+						}
+							if(arr.get(i).id==event.getMessageAuthor().getId()) {
+								save=i;
+								cc = arr.get(i).cc+1500;
+								luck = arr.get(i).luck;
+								found=true;
+							}
+						}
+						if(!found) {
+							event.getChannel().sendMessage("I've never seen your face before, take these coins and leave my family alone");
+							FileWriter temp = new FileWriter("src/main/resources/Untitled 1.txt", true);
+							temp.write(event.getMessageAuthor().getId()+"\n"+6969+"\n"+0+"\n");
+							temp.close();
+							watch=false;
+							return;
+						}
+						r.close();
+						FileWriter fw = new FileWriter("src/main/resources/Untitled 1.txt", false);
+						arr.get(save).set(cc);
+						arr.get(save).setL(luck);
+						for(Person p : arr) {
+							fw.write(p.toString());
+						}
+						fw.close();
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}else {
+				event.getChannel().sendMessage("*Ỹ̸̬̞̮̻̻̪̖̼͍̝O̴̞͕̭̠͙̦̣͍͐̓̐̆̂̔̐̉̕͝U̶̡̳͇̗̘̰̻͌ ̸̛̟̱̼̲̩̪͚̔́̍̅̌̓̄͜͝D̸̤̲̍͑̉͆͜I̵̡͓̤̰̳̼̅̕Ē̶̫̜̩̲D̷̛͎̟̓͠*");
+			}
+			watch=false;
+		}
 		if (event.getMessageContent().contains("*bet")) {
 			// -------------------------------------------------------
 			long cc = 0;
@@ -66,7 +120,7 @@ ArrayList<Person> arr = new ArrayList<Person>();
 			try {
 				String[] m = event.getMessageContent().split(" ");
 				long am = Integer.parseInt(m[1]);
-				if (am <= cc) {
+				if (am <= cc&&am > 0) {
 					int second = 0;
 					Random r = new Random();
 					int first = r.nextInt(19) + 1;
@@ -173,6 +227,20 @@ ArrayList<Person> arr = new ArrayList<Person>();
 			event.getChannel().sendMessage("PRICE: 5000 CC");
 		}
 		
+		if(event.getMessageContent().contains("*work")) {
+			time = System.nanoTime();
+			id = event.getMessageAuthor().getId();
+			watch = true;
+			event.getChannel().sendMessage("You found a quirky gig to get money for holding your breath. All goes well until *AHHHHHH*cough*HHHH* SAVE YOUR LIFE AND TYPE THE FOLLOWING MESSAGE IN THE NEXT 3 SECONDS");
+			Random r = new Random();
+			int rand = r.nextInt(3);
+			switch(rand) {
+			case 0: event.getChannel().sendMessage("||DROWNING||"); special = "DROWNING";break;
+			case 1: event.getChannel().sendMessage("||HELP ME||"); special = "HELP ME";break;
+			case 2: event.getChannel().sendMessage("||CANNOT BREATHE||"); special = "CANNOT BREATHE";break;
+			}
+			
+		}
 		if (event.getMessageContent().contains("*buy")) {
 			long cc = 0;
 			long luck = 0;
