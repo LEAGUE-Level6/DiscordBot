@@ -17,6 +17,7 @@ public class IceBreakerListener extends CustomMessageCreateListener{
 	List<String> question;
 	ArrayList<String> verb;
 	ArrayList<String> noun;
+	ArrayList<String> adjective;
 	public IceBreakerListener(String channelName) throws IOException {
 		super(channelName);	
 		
@@ -40,12 +41,27 @@ public class IceBreakerListener extends CustomMessageCreateListener{
 		verb = new ArrayList<String>();
 		try {
 			BufferedReader br2 = new BufferedReader(new FileReader("src/main/java/org/jointheleague/modules/verbs"));
-			String x = br2.readLine();
-			while(x !=null){
-				noun.add(x);
-				x = br2.readLine();
+			String y = br2.readLine();
+			while(y !=null){
+				verb.add(y);
+				y = br2.readLine();
 			}
 			br2.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//create adjectives
+		
+		adjective = new ArrayList<String>();
+		try {
+			BufferedReader br3 = new BufferedReader(new FileReader("src/main/java/org/jointheleague/modules/adjectives"));
+			String y = br3.readLine();
+			while(y !=null){
+				adjective.add(y);
+				y = br3.readLine();
+			}
+			br3.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -56,11 +72,29 @@ public class IceBreakerListener extends CustomMessageCreateListener{
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		// TODO Auto-generated method stub
-		if (event.getMessageContent().startsWith("!icebreaker")) {
-			//String randomq = question.get(new Random.nextInt(question.size()));
-			//String randomnoun
-			//String randomverb
-			//event.getChannel().sendMessage()
+		
+			String message;
+			int sentenceStructure = new Random().nextInt(2);
+			String randomq = question.get(new Random().nextInt(question.size()));
+			String randomnoun = noun.get(new Random().nextInt(noun.size()));
+			String randomverb = verb.get(new Random().nextInt(verb.size()));
+			String randomadjective = adjective.get(new Random().nextInt(adjective.size()));
+			String randomarticle;
+			if (event.getMessageContent().startsWith("!icebreaker")) {
+			if(sentenceStructure == 0) {
+			message = randomq + " did the " + randomadjective + " " + randomnoun + " " + randomverb + "?";
+			}else {
+			message = "Did you " + randomverb + " the " + randomadjective + " " + randomnoun + "?";
+			}
+			event.getChannel().sendMessage(message);
+		}else if(event.getMessageContent().startsWith("!pickup")) {
+			if(randomadjective.charAt(0) == 'a' || randomadjective.charAt(0) == 'e'||randomadjective.charAt(0) == 'i'||randomadjective.charAt(0) == 'o'||randomadjective.charAt(0) == 'u') {
+				randomarticle = "an";
+			}else {
+				randomarticle = "a";
+			}
+			message = "Are you " + randomarticle + " " + randomadjective + " " + randomnoun + "? Because you make me " + randomverb + "!";
+			event.getChannel().sendMessage(message);
 		}
 	}
 
