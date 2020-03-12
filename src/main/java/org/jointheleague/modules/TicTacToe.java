@@ -1,3 +1,5 @@
+//Elijah Bowers 3/11/2020
+
 package org.jointheleague.modules;
 
 import java.awt.Point;
@@ -6,7 +8,7 @@ import java.util.Random;
 import org.javacord.api.event.message.MessageCreateEvent;
 
 public class TicTacToe extends CustomMessageCreateListener { 
-	
+
 	String[][] board = {{"   ", "   ", "   "},{"   ", "   ", "   "},{"   ", "   ", "   "}};
 	
 	int stage;
@@ -109,11 +111,11 @@ public class TicTacToe extends CustomMessageCreateListener {
 	private void dealIfGameOver(MessageCreateEvent event) {																				System.out.println("dealIfGameOver");
 		String s = getWinner();
 		if(!s.isBlank()) {
-			if(s.contains(player)) {
+			if(s.equals(player)) {
 				printBoard(event);//--boardAccess--
-				event.getChannel().sendMessage(s + " (the player) " + "WON!");
+				event.getChannel().sendMessage(s + " (the player) " + "WON!\nHis power level is over 9000!!!!");
 				endGame();
-			}else if(s.contains(computer)) {
+			}else if(s.equals(computer)) {
 				printBoard(event);//--boardAccess--
 				event.getChannel().sendMessage(s + " (the computer) " + "WON!");
 				endGame();
