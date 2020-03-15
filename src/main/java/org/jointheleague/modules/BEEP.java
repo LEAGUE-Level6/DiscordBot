@@ -30,6 +30,9 @@ public class BEEP extends CustomMessageCreateListener {
 		else if(event.getMessageContent().contains(COAST)) {
 			event.getChannel().sendMessage("https://gonctd.com/wp-content/uploads/2020/01/COASTER-Schedule-Flyer-October-2019.pdf");
 		}
+		else if(event.getMessageContent().contains("!info")) {
+			event.getChannel().sendMessage("Hi, I'm the Java SBot Version S001. My documentation can be found at http://bot.samuelsharp.com");
+		}
 	}
 	
 }
