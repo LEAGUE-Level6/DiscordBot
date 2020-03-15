@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -24,9 +23,9 @@ String special = ""; boolean watch = false;
 
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
-		//622894941667983404
+		//622894941667983404 //MIKE: 172174823420592129
 		if(event.getMessageAuthor().getId()==id&&watch) {
-			if(System.nanoTime()-3000000000L<=time) {
+			if(System.nanoTime()-5000000000L<=time) {
 				if(event.getMessageContent().equals(special)) {
 					event.getChannel().sendMessage("You barely swim to the surface and survive. You get 1500 coins for your fruitless toil.");
 					try {
@@ -70,6 +69,8 @@ String special = ""; boolean watch = false;
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
+				}else {
+					event.getChannel().sendMessage("*Ỹ̸̬̞̮̻̻̪̖̼͍̝O̴̞͕̭̠͙̦̣͍͐̓̐̆̂̔̐̉̕͝U̶̡̳͇̗̘̰̻͌ ̸̛̟̱̼̲̩̪͚̔́̍̅̌̓̄͜͝D̸̤̲̍͑̉͆͜I̵̡͓̤̰̳̼̅̕Ē̶̫̜̩̲D̷̛͎̟̓͠*");
 				}
 			}else {
 				event.getChannel().sendMessage("*Ỹ̸̬̞̮̻̻̪̖̼͍̝O̴̞͕̭̠͙̦̣͍͐̓̐̆̂̔̐̉̕͝U̶̡̳͇̗̘̰̻͌ ̸̛̟̱̼̲̩̪͚̔́̍̅̌̓̄͜͝D̸̤̲̍͑̉͆͜I̵̡͓̤̰̳̼̅̕Ē̶̫̜̩̲D̷̛͎̟̓͠*");
@@ -78,6 +79,10 @@ String special = ""; boolean watch = false;
 		}
 		if (event.getMessageContent().contains("*bet")) {
 			// -------------------------------------------------------
+			if(event.getMessageContent().equals("*bet")) {
+				event.getChannel().sendMessage("Try again, but this time use ya brain");
+				return;
+			}
 			long cc = 0;
 			long luck = 0;
 			int save=0;
@@ -232,7 +237,7 @@ String special = ""; boolean watch = false;
 			time = System.nanoTime();
 			id = event.getMessageAuthor().getId();
 			watch = true;
-			event.getChannel().sendMessage("You found a quirky gig to get money for holding your breath. All goes well until *AHHHHHH*cough*HHHH* SAVE YOUR LIFE AND TYPE THE FOLLOWING MESSAGE IN THE NEXT 3 SECONDS");
+			event.getChannel().sendMessage("You found a quirky gig to get money for holding your breath. All goes well until *AHHHHHH*cough*HHHH* SAVE YOUR LIFE AND TYPE THE FOLLOWING MESSAGE IN THE NEXT 5 SECONDS");
 			Random r = new Random();
 			int rand = r.nextInt(3);
 			switch(rand) {
