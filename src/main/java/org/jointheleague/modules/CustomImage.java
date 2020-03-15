@@ -20,10 +20,10 @@ public class CustomImage {
 	}
 	
 	public int getHeight() {
-		return pixles.length;
+		return pixles[0].length;
 	}
 	public int getWidth() {
-		return pixles[0].length;
+		return pixles.length;
 	}
 	
 }

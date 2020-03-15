@@ -50,6 +50,54 @@ public class CombineImagesListener extends CustomMessageCreateListener {
 					e.printStackTrace();
 				}
 			}
+			
+			ArrayList<int[][]> imagesPixles = new ArrayList();
+			for(int i = 0; i < images.length; i++) {
+				imagesPixles.add(new int[images[i].getWidth()][images[i].getHeight()]);
+				for(int j = 0; j < imagesPixles.get(i).length; j++) {
+					for(int k = 0; k < imagesPixles.get(i)[i].length; k++) {
+						imagesPixles.get(i)[j][k] = images[i].getRGB(j, k);
+					}
+				}
+			}
+			int maxWidth = 0;
+			int maxHeight = 0;
+			
+			for(int i = 0; i < images.length; i ++) {
+				if(images[i].getHeight() > maxHeight) {
+					maxHeight = images[i].getHeight();
+				}
+				if(images[i].getWidth() > maxWidth) {
+					maxWidth = images[i].getWidth();
+				}
+			}
+			
+			int[][] finalPixles2d = new int[maxWidth][maxHeight]; 
+			
+			for(int i = 0; i < images.length; i ++) {
+				for(int j = 0; j < imagesPixles.get(i).length; j++) {
+					for(int k = 0; k < imagesPixles.get(i)[i].length; k++) {
+						if(imagesPixles.get(i).length > j && imagesPixles.get(i)[j].length > k) {
+							if(i == 0) {
+								finalPixles2d[j][k] = imagesPixles.get(i)[j][k];
+
+							}
+							PixleHelper newPixle = new PixleHelper(imagesPixles.get(i)[j][k]);
+							PixleHelper oldPixle = new PixleHelper(finalPixles2d[j][k]);
+							PixleHelper usePixle = new PixleHelper((oldPixle.r * i + newPixle.r)/(i + 1), (oldPixle.g * i + newPixle.g)/(i + 1), (oldPixle.b * i + newPixle.b)/(i + 1));
+							finalPixles2d[j][k] =  usePixle.convertToInt();
+						}
+					}
+				}
+			}
+			int[] finalPixles = new int[finalPixles2d.length * finalPixles2d[0].length];
+			
+			for(int i = 0; i < finalPixles2d.length; i ++) {
+				for(int j = 0; j < finalPixles2d[0].length; j++) {
+					finalPixles[i * finalPixles2d[0].length + j] = finalPixles2d[i][j];
+				}
+			}
+			/*
 			CustomImage[] imagesCustom = new CustomImage[images.length];
 			
 			for(int i = 0; i < images.length; i++) {
@@ -86,8 +134,13 @@ public class CombineImagesListener extends CustomMessageCreateListener {
 				}
 			}
 			System.err.println(rgbPixles.length+ " " + maxWidth + " " + maxHeight);
+			*/
 			BufferedImage finalImageBuffered = new BufferedImage(maxWidth, maxHeight, BufferedImage.TYPE_INT_RGB);
-			finalImageBuffered.setRGB(0, 0, maxWidth, maxHeight, rgbPixles, 0, maxWidth);
+			for(int i = 0; i < maxWidth; i++) {
+				for(int j = 0; j < maxHeight; j++) {
+					finalImageBuffered.setRGB(i, j, finalPixles2d[i][j]);
+				}
+			}
 			
 			try {
 				
