@@ -19,23 +19,13 @@ public class Dhruv extends CustomMessageCreateListener {
 		if (event.getMessageContent().contains(COMMAND)) {
 			
 			String cmd = event.getMessageContent().replaceAll(" ", "").replace("!Dhruv","");
-			
-			if(cmd.equals("")) {
+			System.out.println(cmd);
+							
 				
-				Random r = new Random();
-				event.getChannel().sendMessage("Your random number is " + r.nextInt(1000));
-				
-				
-			} else {
-				
-				String rlow = cmd.substring(0, cmd.indexOf('-'));
-				String rhigh = cmd.replace(rlow + '-', "");
-				
-				event.getChannel().sendMessage("Your random number between " + rlow + " and " + rhigh + " is " + ThreadLocalRandom.current().nextInt(Integer.parseInt(rlow), Integer.parseInt(rhigh)));
-				
-			}
+		
 			
 		}
 	}
 	
+
 }

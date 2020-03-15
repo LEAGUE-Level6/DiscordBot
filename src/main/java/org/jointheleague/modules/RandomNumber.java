@@ -20,7 +20,6 @@ public class RandomNumber extends CustomMessageCreateListener {
 			String cmd = event.getMessageContent().replaceAll(" ", "").replace("!random","");
 			
 			if(cmd.equals("")) {
-				
 				Random r = new Random();
 				event.getChannel().sendMessage("Your random number is " + r.nextInt(1000));
 				
