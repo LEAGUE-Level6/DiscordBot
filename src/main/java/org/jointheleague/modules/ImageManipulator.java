@@ -59,6 +59,7 @@ public class ImageManipulator extends CustomMessageCreateListener {
 				Image image = ImageIO.read(url);
 				imagee = (BufferedImage) image;
 				event.getChannel().sendMessage("Finalizing");
+				
 				System.out.println("Image height " + imagee.getHeight());
 
 			} catch (IOException e) {
@@ -70,6 +71,7 @@ public class ImageManipulator extends CustomMessageCreateListener {
 			checkChunks();
 			
 		}
+		
 //		File file = new File("downloaded.jpg");
 //        try {
 //        	System.out.println("Final string" + sb.toString());
@@ -79,8 +81,6 @@ public class ImageManipulator extends CustomMessageCreateListener {
 //			e.printStackTrace();
 //		}
 		String content = sb.toString();
-        String path = "discordBotExample/src/org.jointheleague.modules";
-
         try {
 			PrintWriter out = new PrintWriter(new FileWriter("src/main/resources/image.json", false));
 			System.out.println(content);
@@ -91,9 +91,13 @@ public class ImageManipulator extends CustomMessageCreateListener {
 			e.printStackTrace();
 			System.out.println("error saving");
 		}
+        File file = new File("src/main/resources/image.json");
+        event.getChannel().sendMessage("Open this file to see your image.");
+        event.getChannel().sendMessage(file);
 	}
-		
-        //event.getMessage().getChannel().sendMessage(file);
+		File file = new File("src/main/resources/image.json");
+	
+        //event.getMessage().getChannel().sendMessage(out);
 
 
 	
