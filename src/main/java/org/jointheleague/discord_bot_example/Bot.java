@@ -5,7 +5,6 @@ import org.javacord.api.DiscordApiBuilder;
 import org.jointheleague.modules.CalculatorMessageListener;
 import org.jointheleague.modules.CasinoGameListener;
 import org.jointheleague.modules.RandomNumber;
-import org.jointheleague.modules.Spotify;
 import org.jointheleague.modules.Weather;
 import org.jointheleague.modules.DadJokes;
 import org.jointheleague.modules.ClockMessageListener;
@@ -13,6 +12,7 @@ import org.jointheleague.modules.ComicMessageListener;
 import org.jointheleague.modules.ElmoMessageListener;
 import org.jointheleague.modules.FactMessageListener;
 import org.jointheleague.modules.FlagMessageListener;
+import org.jointheleague.modules.MessageTranslator;
 import org.jointheleague.modules.NewPollMessageListener;
 import org.jointheleague.modules.FashionAdvisor;
 import org.jointheleague.modules.leetMessageListener;
@@ -52,7 +52,7 @@ public class Bot  {
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
 		
-		api.addMessageCreateListener(new Spotify(channelName));
+		api.addMessageCreateListener(new MessageTranslator(channelName));
 	}
 
 }
