@@ -19,12 +19,13 @@ public class Bot  {
 	public void connect() {
 		api = new DiscordApiBuilder().setToken(token).login().join();
 		System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
-		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("The bot has been connected! Have fun!"));
+		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Hello there! The bot has been connected, and you can now use any features of the bot. Always remember to prefix your commands with an exclamation mark (!)."));
 		
 		//add Listeners
 		api.addMessageCreateListener(new UH_HUH(channelName));
 		api.addMessageCreateListener(new Repeat(channelName));
 		api.addMessageCreateListener(new CTAtimes(channelName));
+		api.addMessageCreateListener(new WeeklyStupidity(channelName));
 		api.addMessageCreateListener(new BEEP(channelName));
 		api.addMessageCreateListener(new RandomNumber(channelName));
 		api.addMessageCreateListener(new DadJokes(channelName));
