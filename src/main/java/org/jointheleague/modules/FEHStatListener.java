@@ -10,8 +10,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.javacord.api.entity.message.MessageSet;
+import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 
 import net.aksingh.owmjapis.api.APIException;
@@ -50,6 +52,8 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		// TODO Auto-generated method stub
 		if (event.getMessageContent().contains("!fehstats")) {
 			heroNamesRaw.clear();
+			heroNamesNoColon.clear();
+			heroNamesColon.clear();
 			if (event.getMessageContent().length() == 9) {
 				event.getChannel().sendMessage("Please specify which unit to search for :)");
 			} else {
@@ -59,6 +63,8 @@ public class FEHStatListener extends CustomMessageCreateListener {
 				cleanNames();
 				if (i == 1) { //1 match
 					event.getChannel().sendMessage("There is " + i + " match for \"" + unitName + "\".");
+					findStats(unitName);
+					event.getChannel().sendMessage(statsS);
 				} else if (i == 0) { //no matches
 					event.getChannel().sendMessage("There are " + i + " matches for " + unitName + ". Sorry!");
 				} else { //more than 1 match
@@ -73,11 +79,59 @@ public class FEHStatListener extends CustomMessageCreateListener {
 						}
 					}
 					event.getChannel().sendMessage("Would you like to see stats for " + temp + "?");
-					event.getChannel().sendMessage(event.getMessageContent());
-					
 				}
 			}
 		}
+		//converting message
+		String message = event.getMessageContent();
+		char[] messageChars = message.toCharArray();
+		messageChars[0] = Character.toUpperCase(messageChars[0]);
+		int tempIndex = 0;
+		int index = 0;
+		ArrayList<Integer> indexes = new ArrayList<Integer>();
+		while (tempIndex != -1) {
+			tempIndex = message.indexOf(" ", index);
+			index = tempIndex + 1;
+			indexes.add(index);
+			messageChars[index] = Character.toUpperCase(messageChars[index]);
+		}
+		for (int i = 1; i < messageChars.length; i++) {
+			if (!indexes.contains(i)) {
+				messageChars[i] = Character.toLowerCase(messageChars[i]);
+			}
+		}
+		String finalizedMessage = "";
+		for (char c: messageChars) {
+			finalizedMessage = finalizedMessage + c;
+		}
+		if (!heroNamesNoColon.isEmpty() && (heroNamesNoColon.contains(finalizedMessage) || heroNamesColon.contains(finalizedMessage))) {
+			event.getChannel().sendMessage("congrats this works");
+		}
+	}
+	
+	public String fixCapitalization(String heroName) {
+		char[] name = heroName.toCharArray();
+		name[0] = Character.toUpperCase(name[0]);
+		if (heroName.contains(" ")) {
+			System.out.println("name contains a space!");
+			int spaceIndex = heroName.indexOf(" ");
+			name[spaceIndex+1] = Character.toUpperCase(name[spaceIndex+1]);
+			for (int i = 1; i < name.length; i++) {
+				if (i != (spaceIndex+1)) {
+					name[i] = Character.toLowerCase(name[i]);
+				}
+			}
+		} else {
+			for (int i = 1; i < name.length; i++) {
+				 name[i] = Character.toLowerCase(name[i]);
+			}
+		}
+		String unitName = "";
+		for (char c: name) {
+			unitName = unitName + c;
+		}
+		System.out.println("converted " + heroName + " to " + unitName);
+		return unitName;
 	}
 	
 	ArrayList<String> lines = new ArrayList<String>();
@@ -85,16 +139,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		int timesF = 0;
 		String str = "";
 		//make sure the capitalization is correct
-		char[] name = heroName.toCharArray();
-		name[0] = Character.toUpperCase(name[0]);
-		for (int i = 1; i < name.length; i++) {
-			 name[i] = Character.toLowerCase(name[i]);
-		}
-		String unitName = "";
-		for (char c: name) {
-			unitName = unitName + c;
-		}
-		System.out.println("converted " + heroName + " to " + unitName);
+		String unitName = fixCapitalization(heroName);
 		//get the one big table line
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("src/main/resources/FEHStats.txt"));
@@ -112,7 +157,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (str.contains(unitName)) {
+		if (str.contains(unitName) && !(unitName.contains(" "))) {
 			System.out.println("collected the string to search");
 			//find the number of unit names within the string
 			int index = 675; //uh, i counted?
@@ -123,6 +168,20 @@ public class FEHStatListener extends CustomMessageCreateListener {
 				if (tempIndex != -1 && (timesF % 12 == 3)) {
 					heroNamesRaw.add(str.substring(tempIndex, tempIndex+31));
 				}
+				timesF++;
+			}
+		} else if (str.contains(unitName) && (unitName.contains(" "))){
+			System.out.println("THERE IS A SPACE");
+			unitName += ":";
+			//find the number of unit names within the string, copy-pasted edition
+			int index = 675; //uh, i counted?
+			int tempIndex = 0;
+			while (tempIndex != -1) {
+				tempIndex = str.indexOf(unitName, index);
+				index = tempIndex + 1;
+				//if (tempIndex != -1 && (timesF % 5 == 4)) {
+					//heroNamesRaw.add(str.substring(tempIndex, tempIndex+31));
+				//}
 				timesF++;
 			}
 		} else {
@@ -152,19 +211,27 @@ public class FEHStatListener extends CustomMessageCreateListener {
 	String statsS = "";
 	
 	public void findStats(String heroName) {
-		int timesF = 0;
+		statsS = "";
+		String str = "";
+		int stringF = 0;
+		//i am a dummy and forgot to do this
+		char[] name = heroName.toCharArray();
+		name[0] = Character.toUpperCase(name[0]);
+		for (int i = 1; i < name.length; i++) {
+			 name[i] = Character.toLowerCase(name[i]);
+		}
+		String unitName = "";
+		for (char c: name) {
+			unitName = unitName + c;
+		}
+		//grab the line again
+		System.out.println("getting string");
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("src/main/resources/FEHStats.txt"));
-			String str = "";
 			while ((str = br.readLine()) != null) {
-				if (str.contains(heroName)) {
-					timesF++;
-				}
-				if (timesF == 3) {
-					if (str.contains("</td><td>")) {
-						statsS = str;
-						break;
-					}
+				if (str.contains(unitName)) {
+					lines.add(str);
+					break;
 				}
 			}
 			br.close();
@@ -175,7 +242,37 @@ public class FEHStatListener extends CustomMessageCreateListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		//finding the start of the </td><td>
+		System.out.println("starting to search");
+		int index = 675; //copied from above
+		int tempIndex = 0;
+		while (tempIndex != -1) {
+			tempIndex = str.indexOf(unitName, index);
+			index = tempIndex + 1;
+			stringF++;
+			if (stringF == 12) {
+				System.out.println("found 12 times :)");
+				break;
+			}
+		}
+		tempIndex = str.indexOf("/></td><td>", index);
+		System.out.println("index is " + tempIndex);
+		statsS = str.substring(tempIndex, tempIndex+74);
+		System.out.println("found it");
+		String tempString = "Here are the stats I found for " + heroNamesColon.get(0) + ":\n";
+		tempString += "HP: ";
+		tempString += statsS.substring(11, 13);
+		tempString += "\nAtk: ";
+		tempString += statsS.substring(22, 24);
+		tempString += "\nSpd: ";
+		tempString += statsS.substring(33, 35);
+		tempString += "\nDef: ";
+		tempString += statsS.substring(44, 46);
+		tempString += "\nRes: ";
+		tempString += statsS.substring(55, 57);
+		tempString += "\nTotal BST: ";
+		tempString += statsS.substring(66, 69);
+		statsS = tempString;
 	}
 
 }
