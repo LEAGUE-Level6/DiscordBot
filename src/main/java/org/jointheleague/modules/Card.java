@@ -2,18 +2,23 @@ package org.jointheleague.modules;
 
 public class Card {
 
+	public int displayValue;
 	public int value;
 	public int suit;
 	
 	public Card(int v, int s) {
-		value = v;
+		displayValue = v;
 		suit = s;
+		
+		if(v >= 11 && v <= 13) value = 10;
+		else if (v == 1) value = 0;
+		else value = v;
 	}
 	
 	public String toString() {
 		String fin = "";
 		
-		switch(value) {
+		switch(displayValue) {
 		case 1:
 			fin += "A";
 			break;
@@ -27,7 +32,7 @@ public class Card {
 			fin += "K";
 			break;
 		default:
-			fin += value;
+			fin += displayValue;
 			break;
 		}
 		
