@@ -1,5 +1,7 @@
 package org.jointheleague.modules;
 
+import java.io.IOException;
+
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
@@ -21,10 +23,13 @@ public abstract class CustomMessageCreateListener implements MessageCreateListen
 				} catch (APIException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
 			}
 		});
 	}
 
-	public abstract void handle(MessageCreateEvent event) throws APIException;
+	public abstract void handle(MessageCreateEvent event) throws APIException, IOException;
 }
