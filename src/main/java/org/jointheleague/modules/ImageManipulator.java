@@ -72,6 +72,7 @@ public class ImageManipulator extends CustomMessageCreateListener {
 			
 		}
 		
+		
 //		File file = new File("downloaded.jpg");
 //        try {
 //        	System.out.println("Final string" + sb.toString());
@@ -95,7 +96,7 @@ public class ImageManipulator extends CustomMessageCreateListener {
         event.getChannel().sendMessage("Open this file to see your image.");
         event.getChannel().sendMessage(file);
 	}
-		File file = new File("src/main/resources/image.json");
+		
 	
         //event.getMessage().getChannel().sendMessage(out);
 
