@@ -9,7 +9,7 @@ import org.javacord.api.listener.message.MessageCreateListener;
 
 import net.aksingh.owmjapis.api.APIException;
 
-public class CardGame extends CustomMessageCreateListener {
+public class CrazyEights extends CustomMessageCreateListener {
 	
 	//private Random rand = new Random();
 	
@@ -34,7 +34,7 @@ public class CardGame extends CustomMessageCreateListener {
 	private final String show = ";show";
 	private final String clear = ";clear";
 	
-	public CardGame(String channelName) {
+	public CrazyEights(String channelName) {
 		super(channelName);
 	}
 
