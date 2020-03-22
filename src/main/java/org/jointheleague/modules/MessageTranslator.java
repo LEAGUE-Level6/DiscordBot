@@ -20,7 +20,7 @@ import java.util.Map;
 import net.aksingh.owmjapis.api.APIException;
 
 public class MessageTranslator extends CustomMessageCreateListener {
-
+String word;
 	public MessageTranslator(String channelName) {
 		super(channelName);
 	}
@@ -29,13 +29,14 @@ public class MessageTranslator extends CustomMessageCreateListener {
 	public void handle(MessageCreateEvent event) throws APIException, IOException {
 		if (event.getMessageContent().contains("!translate")) {
 			String origin = event.getMessageContent();
-			String word = origin.replaceAll(" ", "").replace("!translate","");
-			
-			Map<String, String> langs = TranslateAPI.getLangs();
+			 word = origin.replaceAll(" ", "").replace("!translate","");
+
 			
 			event.getChannel().sendMessage("Here is the link to all the language codes: https://tech.yandex.com/translate/doc/dg/concepts/api-overview-docpage/");
+			event.getChannel().sendMessage("Find a code and type it below");
+
 			
-			event.getChannel().addMessageCreateListener(this);
+			
 			if(!event.getMessageContent().equals(origin)) {
 				String lang = event.getMessageContent();
 			
@@ -45,6 +46,10 @@ public class MessageTranslator extends CustomMessageCreateListener {
 			
 			
 			
+		}else{
+			String lang = event.getMessageContent().replaceAll(" ", "").replace("!lang", "");
+			String output = TranslateAPI.translate(word, "en", lang);
+			event.getChannel().sendMessage(output);
 		}
 	}
 }
@@ -64,41 +69,10 @@ public class MessageTranslator extends CustomMessageCreateListener {
 		return recieved;
 	}
 	
-	public static Map<String, String> getLangs() throws IOException {
-		String langs = request("https://translate.yandex.net/api/v1.5/tr.json/getLangs?key=" + API_KEY + "&ui=en");
-		langs = langs.substring(langs.indexOf("langs")+7);
-		langs = langs.substring(0, langs.length()-1);
-		
-		String[] splitLangs = langs.split(",");
-		
-		Map<String, String> languages = new HashMap<String, String>();
-		for (String s : splitLangs) {
-			String[] s2 = s.split(":");
-			
-			String key = s2[0].substring(1, s2[0].length()-1);
-			String value = s2[1].substring(1, s2[1].length()-1);
-			
-			languages.put(key, value);
-		}
-		return languages;
-	}
 	
 	public static String translate(String text, String sourceLang, String targetLang) throws IOException {
 		String response = request("https://translate.yandex.net/api/v1.5/tr.json/translate?key=" + API_KEY + "&text=" + text + "&lang=" + sourceLang + "-" + targetLang);
 		return response.substring(response.indexOf("text")+8, response.length()-3);
 	}
 	
-	public static String detectLanguage(String text) throws IOException {
-		String response = request("https://translate.yandex.net/api/v1.5/tr.json/detect?key=" + API_KEY + "&text=" + text);
-		return response.substring(response.indexOf("lang")+7, response.length()-2);
-	}
-	
-	public static String getKey(Map<String, String> map, String value) {
-		for (String key : map.keySet()) {
-			if (map.get(key).equalsIgnoreCase(value)) {
-				return key;
-			}
-		}
-		return null;
-	}
 }
