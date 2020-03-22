@@ -12,6 +12,7 @@ public class factorCalc extends CustomMessageCreateListener{
 	private static final String COMMAND2 = "!factor";
 	int n = 0;
 	int factor = 0;
+
 String number = "";
 	public factorCalc(String channelName) {
 		super(channelName);
@@ -32,11 +33,13 @@ String number = "";
 		     for(int i = 1; i <= n; i++) {
 		    	 
 		            if (n % i == 0) {
-		               factor = i;		          
-		               }
+		            	
+		               factor = i;		  
+		               
+		 
 		event.getChannel().sendMessage("Factors are: "+factor);
 		}}
 		
-	}
+		}}
 
 }
