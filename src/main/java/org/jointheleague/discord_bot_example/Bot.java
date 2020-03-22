@@ -22,6 +22,8 @@ public class Bot  {
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Hello there! The bot has been connected, and you can now use any features of the bot. Always remember to prefix your commands with an exclamation mark (!)."));
 		
 		//add Listeners
+		api.addMessageCreateListener(new ProfanityChecker(channelName));
+		api.addMessageCreateListener(new LAtimes(channelName));
 		api.addMessageCreateListener(new UH_HUH(channelName));
 		api.addMessageCreateListener(new Repeat(channelName));
 		api.addMessageCreateListener(new CTAtimes(channelName));
