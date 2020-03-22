@@ -4,63 +4,14 @@ public class Card {
 
 	public int value;
 	public int suit;
-	public int declaredSuit;
 	
 	public Card(int v, int s) {
 		value = v;
 		suit = s;
-		declaredSuit = 0;
 	}
-	
-	public Card(int v, int s, int d) {
-		value = v;
-		suit = s;
-		declaredSuit = d;
-	}
-	
-//	public String getStringValue() {
-//		switch(value) {
-//		case 1:
-//			return "A";
-//		case 11:
-//			return "J";
-//		case 12:
-//			return "Q";
-//		case 13: 
-//			return "K";
-//		}
-//		
-//		return value + "";
-//	}
-//	
-//	public String getStringSuit() {
-//		switch(suit) {
-//		case 1:
-//			return "Spades";
-//		case 2:
-//			return "Clubs";
-//		case 3:
-//			return "Hearts";
-//		case 4:
-//			return "Diamonds";
-//		}
-//		
-//		return "No suit";
-//	}
 	
 	public String toString() {
 		String fin = "";
-		
-		switch(declaredSuit) {
-		case 1:
-			return "♤";
-		case 2:
-			return "♧";
-		case 3:
-			return "♡";
-		case 4:
-			return "♢";
-		}
 		
 		switch(value) {
 		case 1:
@@ -97,24 +48,6 @@ public class Card {
 			fin += "♢";
 			break;
 		}
-		
-//		if(declaredSuit != 0) {
-//			fin += "/";
-//			switch(declaredSuit) {
-//			case 1:
-//				fin += "♤";
-//				break;
-//			case 2:
-//				fin += "♧";
-//				break;
-//			case 3:
-//				fin += "♡";
-//				break;
-//			case 4:
-//				fin += "♢";
-//				break;
-//			}
-//		}
 		
 		return fin;
 	}
