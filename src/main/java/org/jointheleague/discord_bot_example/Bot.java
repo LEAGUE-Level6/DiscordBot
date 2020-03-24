@@ -21,8 +21,9 @@ public class Bot  {
 		System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Hello there! The bot has been connected, and you can now use any features of the bot. Always remember to prefix your commands with an exclamation mark (!)."));
 		
-		//add Listeners
+		//Add Listeners
 		api.addMessageCreateListener(new ProfanityChecker(channelName));
+		api.addMessageCreateListener(new UInames(channelName));
 		api.addMessageCreateListener(new LAtimes(channelName));
 		api.addMessageCreateListener(new UH_HUH(channelName));
 		api.addMessageCreateListener(new Repeat(channelName));
@@ -43,7 +44,6 @@ public class Bot  {
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
 		api.addMessageCreateListener(new FDLinks(channelName));
-		api.addMessageCreateListener(new JSONadventure(channelName));
 	}
 
 }
