@@ -1,8 +1,5 @@
 package org.jointheleague.modules;
-
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-
 import org.javacord.api.event.message.MessageCreateEvent;
 
 public class BEEP extends CustomMessageCreateListener {

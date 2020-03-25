@@ -44,6 +44,8 @@ public class Bot  {
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
 		api.addMessageCreateListener(new FDLinks(channelName));
+		api.addMessageCreateListener(new GithubRepos(channelName));
+		
 	}
 
 }
