@@ -1,5 +1,9 @@
 package org.jointheleague.modules;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.Random;
+
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
@@ -21,6 +25,10 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 		int pointTotal = 10;
 		event.getChannel().sendMessage("Welcome to Advanced Hangman! Here is how you play: \n 1) You will be presented with a random cliche phrase and given the same amount of boxes as the letters in each word.");
 		event.getChannel().sendMessage("2) Here are your commands: \n '!start'-starts a new game \n '!help'-shows all commands for reference \n '!uncover-use to uncover a letter; enter guesses in format (Word#,Letter#) \n '!guess'-use to make a guess");
+		event.getChannel().sendMessage("Here is your phrase:");
+		//int r = new Random().nextInt();
+		//BufferedReader br = new BufferedReader(new FileReader("src/main/java/org/jointheleague/modules/cliches"));
+		//br.readLine()
 		}
 	}
 
