@@ -1,11 +1,22 @@
 package org.jointheleague.modules;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.javacord.api.event.message.MessageCreateEvent;
+
+import com.google.gson.Gson;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 
 public class PictureOf extends CustomMessageCreateListener {
 
-	private static final String COMMAND = "!vowelString";
-
+	private static final String COMMAND = "!PictureOf";
+	Gson gson = new Gson();
 	public PictureOf(String channelName) {
 		super(channelName);
 	}
@@ -23,17 +34,54 @@ public class PictureOf extends CustomMessageCreateListener {
 				
 				
 			} else {
-				String newString = "";
-				for (int i = 0; i < cmd.length(); i++) {
-					if(cmd.charAt(i)=='a'||cmd.charAt(i)=='e'||cmd.charAt(i)=='i'||cmd.charAt(i)=='o'||cmd.charAt(i)=='u') {
-						newString+=cmd.charAt(i);
-					}
+				PictureOf picture = new PictureOf(channelName);
+				try {
+					picture.getUser(cmd);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				event.getChannel().sendMessage("The string with only vowels is: "+ newString);
 				
 			}
 			
 		}
 	}
+		
+		 void getUser(String cmd) throws IOException {
+
+		        //The URL for the endpoint we want to access
+		        String requestURL = "https://api.unsplash.com/search/photos?query=" + cmd;
+
+		        //Setup request
+		        URL url = new URL(requestURL);
+		        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+		        //We want to GET the resource
+		        con.setRequestMethod("GET");
+
+		        //Read the response
+		        JsonReader repoReader = Json.createReader(con.getInputStream());
+		        JsonObject userJSON = ((JsonObject) repoReader.read());
+
+		        //Disconnect
+		        con.disconnect();
+
+		        //turn user to POJO
+		        User user = gson.fromJson(userJSON.toString(), User.class);
+
+		        //Proof that it works
+//		        System.out.println("userJSON: " + userJSON);
+//		        System.out.println("GET USER NAME FROM POJO: " + user.getName());
+//		        System.out.println("GET USER CITY FROM POJO: " + user.getAddress().getCity());
+
+		    }
+		
+	
 	
 }
+
+
+	class Results {
+		
+		
+	}

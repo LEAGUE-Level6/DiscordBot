@@ -32,8 +32,9 @@ public class Bot  {
 		api.addMessageCreateListener(new CasinoGameListener(channelName));
 		api.addMessageCreateListener(new Ryland(channelName));
 		api.addMessageCreateListener(new leetMessageListener(channelName));
-		api.addMessageCreateListener(new PictureOf(channelName));
+		api.addMessageCreateListener(new ConnectFour(channelName));
 		api.addMessageCreateListener(new FlagMessageListener(channelName));
+		api.addMessageCreateListener(new PictureOf(channelName));
 
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
