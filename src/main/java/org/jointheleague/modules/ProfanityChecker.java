@@ -30,8 +30,7 @@ public class ProfanityChecker extends CustomMessageCreateListener {
 						JsonParser parser = new JsonParser();
 						JsonArray data = parser.parse(in).getAsJsonArray();
 						for(int i = 0; i<data.size(); i++) {
-							if(event.getMessageContent().contains(data.get(i).getAsString())) {
-								event.getMessage().edit("[PROFANITY]");
+							if(event.getMessageContent().contains(data.get(i).getAsString()) && !event.getMessageAuthor().isYourself()) {
 								event.getChannel().sendMessage("Hey " + event.getMessageAuthor().getDisplayName() + "! Don't send profane messages! You and your filthy " + event.getMessageAuthor().getDiscriminatedName().split("#")[1] + " Discord Tag are ruining this server!");
 							}
 						}
