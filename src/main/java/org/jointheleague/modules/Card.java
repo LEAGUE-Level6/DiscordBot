@@ -11,7 +11,6 @@ public class Card {
 		suit = s;
 		
 		if(v >= 11 && v <= 13) value = 10;
-		else if (v == 1) value = 0;
 		else value = v;
 	}
 	
