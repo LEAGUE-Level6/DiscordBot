@@ -8,8 +8,10 @@ import net.aksingh.owmjapis.api.APIException;
 
 public class PEMDASListener extends CustomMessageCreateListener{
 	
-	public static final String MATH_COMMAND = "!PEMDAS";
+	public static final String MATH_COMMAND = "!solve";
 	public static final String[] ops = {"+","-","*","/","^","%"};
+	public static boolean haveAnswer = false;
+	public static double lastAnswer = 0;
 
 	public PEMDASListener(String channelName) {
 		super(channelName);
@@ -28,15 +30,39 @@ public class PEMDASListener extends CustomMessageCreateListener{
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		// TODO Auto-generated method stub
+		if(!event.getMessageAuthor().getIdAsString().equals("683742358726377566")) {
 		String s = event.getMessageContent();
-		String begin = s.substring(0,7);
-		if(begin.equals(MATH_COMMAND)) {
-			String equation = s.substring(8);
-			System.out.println(solve(convert(equation)));
+		if(s.length()>=7) {
+			String begin = s.substring(0,7);
+				if(begin.equals(MATH_COMMAND)) {
+					String equation = s.substring(8);
+					//System.out.println(solve(convert(equation)));
+					double answer = solve(convert(equation));
+					if(answer%1!=0) {
+						event.getChannel().sendMessage(""+answer);
+					}else {
+						event.getChannel().sendMessage(""+(int)answer);
+					}
+					lastAnswer = answer;
+				}
+			}if(s.substring(s.length()-1).equals("=")||s.substring(s.length()-1).equals("= ")) {
+				String equation = s.substring(0,s.length()-1);
+				//System.out.println(solve(convert(equation)));
+				double answer = solve(convert(equation));
+				if(answer%1!=0) {
+					event.getChannel().sendMessage(""+answer);
+				}else {
+					event.getChannel().sendMessage(""+(int)answer);
+				}
+				lastAnswer = answer;
+			}
 		}
 	}
 	
 	public double solve(EquationHolder equation) {
+		if(equation.nums.size()==1) {
+			return equation.nums.get(0);
+		}
 		int topIndex = 0;
 		int topPriority = 0;
 		for(int i = 0;i<equation.nums.size()-1;i++) {
@@ -56,6 +82,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 			return num.get(0);
 		}
 		return solve(new EquationHolder(num,operation));
+		
 	}
 	
 	public EquationHolder convert(String s) {
@@ -63,22 +90,40 @@ public class PEMDASListener extends CustomMessageCreateListener{
 		ArrayList<String> operations = new ArrayList<String>();
 		ArrayList<int[]> parentheses = new ArrayList<int[]>();
 		String temp = "";
+		int startP = -1;
+		int endP = -1;
+		boolean foundP = false;
 		int pCount = 0;
 		for(int i = 0;i<s.length();i++) {
 			String sub = s.substring(i,i+1);
 			if(isOperation(sub)) {
 				if(!temp.equals("")) {
+					if(temp.contains("Ans")) {
+						nums.add(lastAnswer);
+					}else {
 					nums.add(Double.parseDouble(temp));
+					}
 					temp = "";
 				}
 				operations.add(sub);
-			}/*else if(sub.equals("(")) {
-				parentheses.add(new int[] {i,i});
-			}else if(sub.equals(")")) {
-				pCount--;
-			}*/else {
+			}else if(sub.equals("(")&&!foundP) {
+				startP = i;
+				System.out.println("Found (");
+			}else if(sub.equals(")")&&!foundP) {
+				System.out.println("Found )");
+				endP = i;
+				foundP = true;
+			}else if(sub.equals("(")||sub.equals(")")){
+				
+			}else {
 				temp += sub;
 			}
+		}
+		if(foundP) {
+			String parenString = s.substring(startP+1,endP);
+			String simplified = s.substring(0,startP)+solve(convert(parenString))+s.substring(endP+1);
+			System.out.println("simplified: "+simplified);
+			return convert(simplified);
 		}
 		nums.add(Double.parseDouble(temp));
 		printOut(nums, operations);
