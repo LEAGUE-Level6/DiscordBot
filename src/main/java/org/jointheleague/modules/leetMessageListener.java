@@ -13,6 +13,8 @@ public class leetMessageListener extends CustomMessageCreateListener
 	}
 	@Override
 	public void handle(MessageCreateEvent event) {
+		
+		
 		if (event.getMessageContent().startsWith("!leet")) {
 		String s = event.getMessageContent();
 		String str = "";
@@ -76,6 +78,8 @@ public class leetMessageListener extends CustomMessageCreateListener
 				
 			
 		}
+		
+		
 		
 	}
 	
