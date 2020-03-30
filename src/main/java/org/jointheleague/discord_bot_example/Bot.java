@@ -15,6 +15,7 @@ import org.jointheleague.modules.FlagMessageListener;
 import org.jointheleague.modules.NewPollMessageListener;
 import org.jointheleague.modules.FashionAdvisor;
 import org.jointheleague.modules.leetMessageListener;
+import org.jointheleague.modules.spotifyExample.SpotifyExampleListener;
 
 
 public class Bot  {
@@ -50,6 +51,7 @@ public class Bot  {
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
+		api.addMessageCreateListener(new SpotifyExampleListener(channelName));
 	}
 
 }

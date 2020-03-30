@@ -2,67 +2,115 @@ package org.jointheleague.modules.spotifyExample;
 
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.exceptions.SpotifyWebApiException;
+import com.wrapper.spotify.model_objects.miscellaneous.AudioAnalysis;
+import com.wrapper.spotify.model_objects.special.SearchResult;
+import com.wrapper.spotify.model_objects.specification.AlbumSimplified;
 import com.wrapper.spotify.model_objects.specification.Artist;
 import com.wrapper.spotify.model_objects.specification.Paging;
+import com.wrapper.spotify.model_objects.specification.Track;
+import com.wrapper.spotify.requests.data.artists.GetArtistsAlbumsRequest;
+import com.wrapper.spotify.requests.data.player.StartResumeUsersPlaybackRequest;
+import com.wrapper.spotify.requests.data.search.SearchItemRequest;
 import com.wrapper.spotify.requests.data.search.simplified.SearchArtistsRequest;
+import com.wrapper.spotify.requests.data.search.simplified.SearchTracksRequest;
+import com.wrapper.spotify.requests.data.tracks.GetAudioAnalysisForTrackRequest;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
 public class SearchArtistsExample {
-  private static final String accessToken = "BQC-059r05aa1KzgBvRWpKLgOf-oyBSM-nZZneHua5n4q9c5SgvjG00WDL2zM3yGgy-5m88czidxpMNHky8";
-  private static String q = "Imagine Dragons";
+	private static String accessToken;
+	private static String q;
+	private static SearchArtistsRequest searchArtistsRequest;
+	private static SpotifyApi spotifyApi;
+	private static String id;
+	private static GetArtistsAlbumsRequest getArtistsAlbumsRequest;
+	private static SearchTracksRequest searchTracksRequest;
+	private static GetAudioAnalysisForTrackRequest getAudioAnalysisForTrackRequest;
+	private static StartResumeUsersPlaybackRequest startResumeUsersPlaybackRequest;
 
-  private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
-          .setAccessToken(accessToken)
-          .build();
-  private static final SearchArtistsRequest searchArtistsRequest = spotifyApi.searchArtists(q)
-//          .market(CountryCode.SE)
-//          .limit(10)
-//          .offset(0)
-          .build();
+	public SearchArtistsExample(String artist, String token) {
+		q = artist;
+		accessToken = token;
+		spotifyApi = new SpotifyApi.Builder().setAccessToken(accessToken).build();
+		searchArtistsRequest = spotifyApi.searchArtists(q).build();
+		searchTracksRequest = spotifyApi.searchTracks(q).build();
+		getAudioAnalysisForTrackRequest = spotifyApi.getAudioAnalysisForTrack(q).build();
+		startResumeUsersPlaybackRequest = spotifyApi.startResumeUsersPlayback().build();
+		
+	}
 
-  public static void setSearch(String name) {
-	  q = name;
-	  
-  }
-  public static void searchArtists_Sync() {
-    try {
-      final Paging<Artist> artistPaging = searchArtistsRequest.execute();
+	public static void setSearch(String name) {
+		q = name;
 
-      System.out.println("Total: " + artistPaging.getTotal());
-    } catch (IOException | SpotifyWebApiException e) {
-      System.out.println("Error: " + e.getMessage());
-    }
-  }
+	}
 
-  public static void searchArtists_Async() {
-    try {
-      final CompletableFuture<Paging<Artist>> pagingFuture = searchArtistsRequest.executeAsync();
+	public static void searchArtists_Sync() {
+		try {
+			final Paging<Artist> artistPaging = searchArtistsRequest.execute();
 
-      // Thread free to do other tasks...
+			System.out.println("Total: " + artistPaging.getTotal());
+		} catch (IOException | SpotifyWebApiException e) {
+			System.out.println("Error: " + e.getMessage());
+		}
+	}
 
-      // Example Only. Never block in production code.
-      final Paging<Artist> artistPaging = pagingFuture.join();
-      System.out.println("artist id is "+artistPaging.getItems()[0].getId());
-      for(Artist a : artistPaging.getItems()) {
-    	  System.out.println(a.getName());
-      }
-      //System.out.println("This is "+ artistPaging.getItems());
-      System.out.println("Popularity "+artistPaging.getItems()[0].getPopularity());
-      
-      for(String genre: artistPaging.getItems()[0].getGenres())
-    	 System.out.println(genre); 
-    	  
-    	  
-      System.out.println("Genres "+artistPaging.getItems()[0].getGenres());
-      System.out.println("Total: " + artistPaging.getTotal());
-    } catch (CompletionException e) {
-      System.out.println("Error: " + e.getCause().getMessage());
-    } catch (CancellationException e) {
-      System.out.println("Async operation cancelled.");
-    }
-  }
+	public static String searchArtists_Async() {
+		try {
+			String result = "";
+
+			final CompletableFuture<Paging<Artist>> pagingFuture_ARTISTS = searchArtistsRequest.executeAsync();
+			final CompletableFuture<Paging<Track>> pagingFuture_TRACKS = searchTracksRequest.executeAsync();
+			final CompletableFuture<AudioAnalysis> audioAnalysisFuture = getAudioAnalysisForTrackRequest.executeAsync();
+			//final CompletableFuture<String> stringFuture = startResumeUsersPlaybackRequest.executeAsync();
+
+			final Paging<Artist> artistPaging = pagingFuture_ARTISTS.join();
+			final Paging<Track> trackPaging = pagingFuture_TRACKS.join();
+			//final AudioAnalysis audioAnalysis = audioAnalysisFuture.join();
+			//final String string = stringFuture.join();
+			
+			//System.out.println("what is this : " + string);
+
+			id = artistPaging.getItems()[0].getId();
+			getArtistsAlbumsRequest = spotifyApi.getArtistsAlbums(id).build();
+
+			//final Paging<AlbumSimplified> albumSimplifiedPaging = getArtistsAlbumsRequest.execute();
+
+			result += "Artist: " + q + "\nSong: " + trackPaging.getItems()[0].getName();
+			//System.out.println(audioAnalysis.getTrack().builder());
+			
+
+			/*
+			 * System.out.println("album: " +
+			 * albumSimplifiedPaging.getItems()[0].getName());
+			 * System.out.println("artist id is " + id); System.out.println("track: " +
+			 * trackPaging.getItems()[0].getName()); for (Artist a :
+			 * artistPaging.getItems()) { System.out.println(a.getName()); }
+			 * System.out.println("Popularity " +
+			 * artistPaging.getItems()[0].getPopularity());
+			 * 
+			 * for (String genre : artistPaging.getItems()[0].getGenres())
+			 * System.out.println(genre);
+			 * 
+			 * System.out.println("Genres " + artistPaging.getItems()[0].getGenres());
+			 * System.out.println("Total: " + artistPaging.getTotal());
+			 */
+			return result;
+		} catch (CompletionException e) {
+			System.out.println("Error: " + e.getCause().getMessage());
+		} catch (CancellationException e) {
+			System.out.println("Async operation cancelled.");
+		} /*catch (SpotifyWebApiException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		return null;
+	}
+
 }
