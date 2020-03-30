@@ -22,8 +22,8 @@ public class RandomNumber extends CustomMessageCreateListener {
 			if(cmd.equals("")) {
 				
 				Random r = new Random();
-				//event.getChannel().sendMessage("Your random number is " + r.nextInt(1000));
-				event.getChannel().sendMessage("test");
+				event.getChannel().sendMessage("Your random number is " + r.nextInt(1000));
+				//event.getChannel().sendMessage("test");
 				
 			} else {
 				
