@@ -7,7 +7,7 @@ import org.jointheleague.modules.CalculatorMessageListener;
 import org.jointheleague.modules.CasinoGameListener;
 import org.jointheleague.modules.RandomNumber;
 import org.jointheleague.modules.Weather;
-
+import org.jointheleague.modules.RockPaperScissors;
 import org.jointheleague.modules.DadJokes;
 import org.jointheleague.modules.ClockMessageListener;
 import org.jointheleague.modules.ComicMessageListener;
@@ -48,6 +48,8 @@ public class Bot  {
 		api.addMessageCreateListener(new leetMessageListener(channelName));
 
 		api.addMessageCreateListener(new FlagMessageListener(channelName));
+		
+		api.addMessageCreateListener(new RockPaperScissors(channelName));
 
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
