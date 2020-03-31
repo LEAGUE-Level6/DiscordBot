@@ -10,7 +10,7 @@ public class RockPaperScissors extends CustomMessageCreateListener {
 
 	private static final String rock = "!rock";
 	private static final String paper = "!paper";
-	private static final String scissor = "!scissor";
+	private static final String scissor = "!scissors";
 
 	private static final String start = "!start";
 
@@ -21,49 +21,44 @@ public class RockPaperScissors extends CustomMessageCreateListener {
 	@Override
 	public void handle(MessageCreateEvent event) {
 
+		String compChoice = "";
+		int computer = (int) (Math.random() * 3);
+
+		if (computer == 0) {
+			compChoice = "rock";
+		} else if (computer == 1) {
+			compChoice = "paper";
+		} else {
+			compChoice = "scissor";
+		}
+		
 		if (event.getMessageContent().equals(rpsCommand)) {
 			event.getChannel().sendMessage(
-					"Let's play rock paper scissors!\n-For scissors enter ** !scissors **- \n-For rock enter ** !rock **- \n-For paper enter ** !paper **- \n-Type ** !start ** to start the game-");
+					"Let's play rock paper scissors!\n-For scissors enter ** !scissors **- \n-For rock enter ** !rock **- \n-For paper enter ** !paper **-");
 
-		} else if (event.getMessageContent().equals(start)) {
+		} 
+		if (compChoice.equals("rock") && event.getMessageContent().equals(rock)) {
+			event.getChannel().sendMessage("! Draw Game !");
 
-			String compChoice = "";
-			int computer = (int) (Math.random() * 3);
+		}
+		if (compChoice.equals("rock") && event.getMessageContent().equals(scissor)) {
+			event.getChannel().sendMessage("! I win <<Rock Beaks Scissors>> !");
 
-			if (computer == 0) {
-				compChoice = "rock";
-			} else if (computer == 1) {
-				compChoice = "paper";
-			} else {
-				compChoice = "scissor";
-			}
-			
-			event.getChannel().sendMessage("Enter your weapon");
-
-			if (event.getMessageContent().equals(rock) && compChoice.equals("rock")) {
-				event.getChannel().sendMessage("!Draw Game!");
-
-			} 
-			else if (compChoice.equals("rock") && event.getMessageContent().equals(scissor)) {
-				event.getChannel().sendMessage("!I win <<Rock Beaks Scissors>>!");
-
-			} 
-			else if (compChoice.equals("paper") && event.getMessageContent().equals(rock)) {
-				event.getChannel().sendMessage("!I win <<Paper Covers Rock>>!");
-			} 
-			else if (compChoice.equals("scissor") && event.getMessageContent().equals(paper)) {
-				event.getChannel().sendMessage("!I win <<Scissors Cuts Paper>>!");
-			} 
-			else if (compChoice.equals("scissor") && event.getMessageContent().equals(rock)) {
-				event.getChannel().sendMessage("!You win <<Rock Beaks Scissors>>!");
-			} 
-			else if (compChoice.equals("rock") && event.getMessageContent().equals(paper)) {
-				event.getChannel().sendMessage("!You win <<Paper Covers Rock>>!");
-			} 
-			else if (compChoice.equals("paper") && event.getMessageContent().equals(scissor)) {
-				event.getChannel().sendMessage("!You win <<Scissors Cuts Paper>>!");
-			}
-
+		}
+		if (compChoice.equals("paper") && event.getMessageContent().equals(rock)) {
+			event.getChannel().sendMessage("! I win <<Paper Covers Rock>> !");
+		}
+		if (compChoice.equals("scissor") && event.getMessageContent().equals(paper)) {
+			event.getChannel().sendMessage("! I win <<Scissors Cuts Paper>> !");
+		}
+		if (compChoice.equals("scissor") && event.getMessageContent().equals(rock)) {
+			event.getChannel().sendMessage("! You win <<Rock Beaks Scissors>> !");
+		}
+		if (compChoice.equals("rock") && event.getMessageContent().equals(paper)) {
+			event.getChannel().sendMessage("! You win <<Paper Covers Rock>> !");
+		}
+		if (compChoice.equals("paper") && event.getMessageContent().equals(scissor)) {
+			event.getChannel().sendMessage("! You win <<Scissors Cuts Paper>> !");
 		}
 
 	}
