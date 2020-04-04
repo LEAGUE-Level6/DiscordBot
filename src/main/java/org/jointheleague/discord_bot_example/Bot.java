@@ -6,12 +6,13 @@ import org.jointheleague.modules.CalculatorMessageListener;
 import org.jointheleague.modules.CasinoGameListener;
 import org.jointheleague.modules.RandomNumber;
 import org.jointheleague.modules.Weather;
-import org.jointheleague.modules.DadJokes;
+//import org.jointheleague.modules.DadJokes;
 import org.jointheleague.modules.ClockMessageListener;
 import org.jointheleague.modules.ComicMessageListener;
 import org.jointheleague.modules.ElmoMessageListener;
 import org.jointheleague.modules.FactMessageListener;
 import org.jointheleague.modules.FlagMessageListener;
+import org.jointheleague.modules.ImageManipulator;
 import org.jointheleague.modules.NewPollMessageListener;
 import org.jointheleague.modules.FashionAdvisor;
 import org.jointheleague.modules.leetMessageListener;
@@ -35,14 +36,14 @@ public class Bot  {
 		
 		//add Listeners
 		api.addMessageCreateListener(new RandomNumber(channelName));
-		api.addMessageCreateListener(new DadJokes(channelName));
+		//api.addMessageCreateListener(new DadJokes(channelName));
 		api.addMessageCreateListener(new ClockMessageListener(channelName));
 		api.addMessageCreateListener(new CalculatorMessageListener(channelName));
 		api.addMessageCreateListener(new ComicMessageListener(channelName));
 		api.addMessageCreateListener(new ElmoMessageListener(channelName));
 		api.addMessageCreateListener(new FactMessageListener(channelName));
 		api.addMessageCreateListener(new CasinoGameListener(channelName));
-
+api.addMessageCreateListener(new ImageManipulator(channelName));
 		api.addMessageCreateListener(new leetMessageListener(channelName));
 
 		api.addMessageCreateListener(new FlagMessageListener(channelName));
