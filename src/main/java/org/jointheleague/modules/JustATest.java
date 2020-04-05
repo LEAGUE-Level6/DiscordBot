@@ -9,24 +9,25 @@ public class JustATest extends CustomMessageCreateListener{
 		super(channelName);
 	}
 
-	private static final String gameCommand = "!matrixStuff";
+	private static final String gameCommand = "!game";
 
 	public void handle(MessageCreateEvent event) {
 		int rows = 5;
 		int cols = 5;
 		int[][] board = new int[rows][cols];
+		String matrix = "";
 		if (event.getMessageContent().equals(gameCommand)) {
 			for (int row = 0; row < rows; row++) {
 				for (int col = 0; col < cols; col++) {
-					board[row][col] = 0;
+					board[row][col] = row;
 				}
 			}
 			
 			for (int row = 0; row < rows; row++) {
 				for (int col = 0; col < cols; col++) {
-					event.getChannel().sendMessage(board[rows][col] + " ");
+					matrix += board[rows][col] + "	";
 				}
-				event.getChannel().sendMessage("");
+				matrix += "\n";
 			}
 		} 
 		
