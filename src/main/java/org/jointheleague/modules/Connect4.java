@@ -32,13 +32,13 @@ public class Connect4 extends CustomMessageCreateListener {
 			// play a turn
 			while (winner == false && turn <= 42) {
 				boolean validPlay;
-				String inputPlay;
+				String inputPlay = "";
 				int play;
 				do {
 					event.getChannel().sendMessage(display(grid));
 					event.getChannel().sendMessage("Player: " + player + " Enter a column: ");
 
-					inputPlay = event.getMessageContent();
+					inputPlay += event.getMessageContent();
 					play = Integer.parseInt(inputPlay);
 
 					event.getChannel().sendMessage(play + "");
@@ -51,8 +51,8 @@ public class Connect4 extends CustomMessageCreateListener {
 						break;
 					}
 				}
-				event.getChannel().sendMessage(display(grid));
 			}
+			event.getChannel().sendMessage(display(grid));
 		}
 	}
 
@@ -77,7 +77,7 @@ public class Connect4 extends CustomMessageCreateListener {
 		}
 
 		// checking to see if column is full
-		if (board[0][column] != " ") {
+		if (board[0][column] != "0") {
 			return false;
 		}
 
