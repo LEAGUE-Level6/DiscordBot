@@ -49,7 +49,7 @@ public class UInames extends CustomMessageCreateListener {
 					event.getChannel().sendMessage(bday);
 
 				} else {
-					event.getChannel().sendMessage("Oops! You are being rate limited!");
+					event.getChannel().sendMessage("(!) IMPORTANT: Thom, the dev behind UInames, has had his hosting account suspended. If you'd like to host your own copy of UIname, the code can be found at github.com/thm/uinames, and the response can be accessed via Discord using the AnyAPI feature of this bot.");
 				}
 			} catch (Exception e) {
 				event.getChannel().sendMessage("We're sorry, a code error occured. \n Here's the full info: \n "

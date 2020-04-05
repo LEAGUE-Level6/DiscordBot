@@ -27,11 +27,15 @@ public class Bot  {
 		//Add Listeners
 		api.addMessageCreateListener(new ProfanityChecker(channelName));
 		api.addMessageCreateListener(new UInames(channelName));
+		api.addMessageCreateListener(new TfLtimes(channelName));
+		api.addMessageCreateListener(new ChangeUsername(channelName));
+		api.addMessageCreateListener(new ChangeStatus(channelName));
 		api.addMessageCreateListener(new LAtimes(channelName));
 		api.addMessageCreateListener(new UH_HUH(channelName));
 		api.addMessageCreateListener(new Repeat(channelName));
 		api.addMessageCreateListener(new CTAtimes(channelName));
 		api.addMessageCreateListener(new WeeklyStupidity(channelName));
+		api.addMessageCreateListener(new AnyAPI(channelName));
 		api.addMessageCreateListener(new BEEP(channelName));
 		api.addMessageCreateListener(new RandomNumber(channelName));
 		api.addMessageCreateListener(new DadJokes(channelName));
