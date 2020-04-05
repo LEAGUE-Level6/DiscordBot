@@ -15,6 +15,7 @@ public class SpotifyExampleListener extends CustomMessageCreateListener {
 	public void handle(MessageCreateEvent event) throws APIException {
 		// TODO Auto-generated method stub
 		if (event.getMessageContent().startsWith("!spotify")) {
+			//event.getChannel().sendMessage("connected");
 			String a = event.getMessageContent().replaceFirst(" ", "").replace("!spotify","");
 			ClientCredentialsExample example = new ClientCredentialsExample();
 			String token = example.clientCredentials_Sync();

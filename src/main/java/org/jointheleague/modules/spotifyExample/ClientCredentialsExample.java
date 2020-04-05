@@ -11,8 +11,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
 public class ClientCredentialsExample {
-	  private static final String clientId = "";
-	  private static final String clientSecret = "";
+	  private static final String clientId = "7c82b6bf155b45ebb129c671f2dab2ef";
+	  private static final String clientSecret = "e8ad6d89f55542b48f5458ac5f641131";
   private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
           .setClientId(clientId)
           .setClientSecret(clientSecret)

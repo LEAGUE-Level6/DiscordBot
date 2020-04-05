@@ -65,15 +65,12 @@ public class SearchArtistsExample {
 			final CompletableFuture<Paging<Artist>> pagingFuture_ARTISTS = searchArtistsRequest.executeAsync();
 			final CompletableFuture<Paging<Track>> pagingFuture_TRACKS = searchTracksRequest.executeAsync();
 			final CompletableFuture<AudioAnalysis> audioAnalysisFuture = getAudioAnalysisForTrackRequest.executeAsync();
-			//final CompletableFuture<String> stringFuture = startResumeUsersPlaybackRequest.executeAsync();
+			//final CompletablxeFuture<String> stringFuture = startResumeUsersPlaybackRequest.executeAsync();
 
 			final Paging<Artist> artistPaging = pagingFuture_ARTISTS.join();
 			final Paging<Track> trackPaging = pagingFuture_TRACKS.join();
-			//final AudioAnalysis audioAnalysis = audioAnalysisFuture.join();
-			//final String string = stringFuture.join();
+			final AudioAnalysis audioAnalysis = audioAnalysisFuture.join();
 			
-			//System.out.println("what is this : " + string);
-
 			id = artistPaging.getItems()[0].getId();
 			getArtistsAlbumsRequest = spotifyApi.getArtistsAlbums(id).build();
 
