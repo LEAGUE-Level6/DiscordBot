@@ -18,11 +18,11 @@ public class CrazyEights extends CustomMessageCreateListener {
 	private ArrayList<Card> botHand;
 	private ArrayList<Card> pile;
 	
-	private final String start = "!start";
+	private final String start = "c8!start";
 	private final String play = "!play";
 	private final String draw = "!draw";
-	private final String help = "!help";
-	private final String rules = "!rules";
+	private final String help = "c8!help";
+	private final String rules = "c8!rules";
 	//test codes
 	private final String testers = ";cheats";
 	private final String give = ";give";
@@ -33,6 +33,8 @@ public class CrazyEights extends CustomMessageCreateListener {
 	private final String swap = ";swap";
 	private final String show = ";show";
 	private final String clear = ";clear";
+	
+	public boolean playingCrazyEights = false;
 	
 	public CrazyEights(String channelName) {
 		super(channelName);
@@ -52,6 +54,7 @@ public class CrazyEights extends CustomMessageCreateListener {
 		
 		//start or restart the game
 		if(message.startsWith(start)) {
+			playingCrazyEights = true;
 			event.getChannel().sendMessage("Shuffling decks...");
 			
 			newDeck();
@@ -66,13 +69,13 @@ public class CrazyEights extends CustomMessageCreateListener {
 			event.getChannel().sendMessage("_ _\n" + getBoard() + "\nYour turn.");
 		}
 		//play a card
-		else if(message.startsWith(play)) {
+		else if(message.startsWith(play) && playingCrazyEights) {
 			String remaining = message.substring(play.length()+1);
 			
 			event.getChannel().sendMessage(play(remaining));
 		}
 		//draw card
-		else if(message.startsWith(draw)) {
+		else if(message.startsWith(draw) && playingCrazyEights) {
 			event.getChannel().sendMessage(draw());
 		}
 		//get help
@@ -353,7 +356,11 @@ public class CrazyEights extends CustomMessageCreateListener {
 	
 	//check if given hand has won
 	public boolean hasWon(ArrayList<Card> hand) {
-		return hand.size() == 0;
+		if(hand.size() == 0) {
+			playingCrazyEights = false;
+			return true;
+		}
+		return false;
 	}
 	
 	//player plays card, returns true if successfully played
