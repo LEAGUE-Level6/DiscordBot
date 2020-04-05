@@ -23,15 +23,7 @@ public class CrazyEights extends CustomMessageCreateListener {
 	private final String draw = "!draw";
 	private final String help = "c8!help";
 	private final String rules = "c8!rules";
-	//test codes
-	private final String testers = ";cheats";
-	private final String give = ";give";
-	private final String giveBot = ";giveBot";
-	private final String remove = ";remove";
-	private final String reveal = ";reveal";
-	private final String changeTop = ";changeTop"; 
-	private final String swap = ";swap";
-	private final String show = ";show";
+	
 	private final String clear = ";clear";
 	
 	public boolean playingCrazyEights = false;
@@ -89,7 +81,7 @@ public class CrazyEights extends CustomMessageCreateListener {
 					"**" + play + " #** to play the card at position # from your hand\n" +
 					"**" + draw + "** to draw a card\n" +
 					"Note: When playing an eight, declare the suit after the # with a space (spades, hearts, ect.)." +
-					" This will show up after a third slash.\n" +
+					" It will only display the suit.\n" +
 					"\n" +
 					"While playing the game, you will use a game board such as this:\n" +
 					"Bot: 3 cards\n" +
@@ -123,8 +115,14 @@ public class CrazyEights extends CustomMessageCreateListener {
 					"\n" +
 					"In this example, you could play either the 3, 4, or 8.\n" );
 		}
-		else if(message.startsWith(";") && event.getMessageAuthor().getDisplayName().equals("Certified Crazy Eights Tester")) {
-			event.getChannel().sendMessage(cheats(message));
+		else if(message.startsWith(clear)) {
+			event.getChannel().sendMessage(
+						"_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n"
+						+ "_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n"
+						+ "_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n"
+						+ "_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n"
+						+ "_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _"
+			);
 		}
 	}
 		
@@ -205,7 +203,7 @@ public class CrazyEights extends CustomMessageCreateListener {
 				if(wild[0].matches("[0-9]+$")) {
 					//checks card is eight
 					if(Integer.parseInt(wild[0]) > 0 && Integer.parseInt(wild[0]) <= playerHand.size()) {
-						if(playerHand.get(Integer.parseInt(wild[0])-1).value == 8) {
+						if(playerHand.get(Integer.parseInt(wild[0])-1).displayValue == 8) {
 							int cardNum = Integer.parseInt(wild[0]);
 							
 							int suit = 0;
@@ -310,7 +308,7 @@ public class CrazyEights extends CustomMessageCreateListener {
 		botHand.add(pull());
 		
 		pile.add(pull());
-		while(pile.get(0).value == 8) 
+		while(pile.get(0).displayValue == 8) 
 			pile.add(pull());
 		
 	}
@@ -370,7 +368,7 @@ public class CrazyEights extends CustomMessageCreateListener {
 		boolean played = false;
 		Card topCard = pile.get(pile.size()-1);
 		
-		if(topCard.value == 8 && topCard.declaredSuit != 0) {
+		if(topCard.displayValue == 8 && topCard.declaredSuit != 0) {
 			if(playerHand.get(cardNum-1).suit == topCard.declaredSuit) {
 				pile.add(playerHand.remove(cardNum-1));
 				played = true;
@@ -381,7 +379,7 @@ public class CrazyEights extends CustomMessageCreateListener {
 				pile.add(playerHand.remove(cardNum-1));
 				played = true;
 			}
-			else if(playerHand.get(cardNum-1).value == topCard.value) {
+			else if(playerHand.get(cardNum-1).displayValue == topCard.displayValue) {
 				pile.add(playerHand.remove(cardNum-1));
 				played = true;
 			}
@@ -395,18 +393,18 @@ public class CrazyEights extends CustomMessageCreateListener {
 		
 		//tries to play normal card
 		for(int i = 0; i < botHand.size(); i++) {
-			if(topCard.value == 8 && topCard.declaredSuit != 0) {
+			if(topCard.displayValue == 8 && topCard.declaredSuit != 0) {
 				if(botHand.get(i).suit == topCard.declaredSuit) {
 					pile.add(botHand.remove(i));
 					return "played";
 				}
 			}
 			else {
-				if(botHand.get(i).suit == topCard.suit && botHand.get(i).value != 8) {
+				if(botHand.get(i).suit == topCard.suit && botHand.get(i).displayValue != 8) {
 					pile.add(botHand.remove(i));
 					return "played";
 				}
-				else if(botHand.get(i).value == topCard.value && botHand.get(i).value != 8) {
+				else if(botHand.get(i).displayValue == topCard.displayValue && botHand.get(i).displayValue != 8) {
 					pile.add(botHand.remove(i));
 					return "played";
 				}
@@ -414,7 +412,7 @@ public class CrazyEights extends CustomMessageCreateListener {
 		}
 		//tries to play eight
 		for(int i = 0; i < botHand.size(); i++) {
-			if(botHand.get(i).value == 8) {
+			if(botHand.get(i).displayValue == 8) {
 				int[] suitCount = new int[5];
 				int mostSuit = 0;
 				for(Card x : botHand) 
@@ -436,87 +434,5 @@ public class CrazyEights extends CustomMessageCreateListener {
 		botHand.add(pull());
 		return "drew";
 		
-	}
-	
-	public String cheats(String message) {
-		String fin = "";
-		
-		if(message.startsWith(testers)) {
-			fin =
-					"Testing commands:\n" +
-					"**" + give + "**: give player card\n" +
-					"**" + giveBot + "**: give bot card\n" +
-					"**" + remove + "**: remove card from bot hand\n" +
-					"**" + reveal + "**: show bot hand\n" +
-					"**" + changeTop + "**: change top of pile\n" +
-					"**" + swap + "**: swap deck and pile\n" +
-					"**" + show + "**: show all lists\n" +
-					"**" + clear + "**: clear discord";
-		}
-		//test codes: give card to bot
-		else if(message.startsWith(giveBot)) {
-			message = message.substring(giveBot.length()+1);
-			String[] card = message.split("/");
-			int value = Integer.parseInt(card[0]);
-			int suit = Integer.parseInt(card[1]);
-			botHand.add(new Card(value, suit));
-			
-			fin = handToString(botHand);
-		}
-		//test codes: give card
-		else if(message.startsWith(give)) {
-			message = message.substring(give.length()+1);
-			String[] card = message.split("/");
-			int value = Integer.parseInt(card[0]);
-			int suit = Integer.parseInt(card[1]);
-			playerHand.add(new Card(value, suit));
-			
-			fin = getBoard();
-		}
-		//test codes: remove card from bot hand
-		else if(message.startsWith(remove)) {
-			message = message.substring(remove.length()+1);
-			botHand.remove(Integer.parseInt(message));
-			fin = handToString(botHand);
-		}
-		//test codes: reveal bot hand
-		else if(message.startsWith(reveal)) {
-			fin = handToString(botHand);
-			fin += "\n" + getBoard();
-		}
-		//test codes: change top card
-		else if(message.startsWith(changeTop)) {
-			message = message.substring(changeTop.length()+1);
-			String[] card = message.split("/");
-			int value = Integer.parseInt(card[0]);
-			int suit = Integer.parseInt(card[1]);
-			pile.add(new Card(value, suit));
-			
-			fin = getBoard();
-		}
-		//test codes: switch pile and deck
-		else if(message.startsWith(swap)) {
-			ArrayList<Card> swap = pile;
-			pile = deck;
-			deck = swap;
-			
-			fin = getBoard();
-		}
-		//test codes: shows board, pile, and deck
-		else if(message.startsWith(show)) {
-			fin = "Bot hand: " + handToString(botHand);
-			fin += "\n" + getBoard();
-			fin += "\n" + "Deck: " + handToString(deck);
-			fin += "\n" + "Pile: " + handToString(pile);
-		}
-		else if(message.startsWith(clear)) {
-			fin = "_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n"
-					+ "_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n"
-					+ "_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n"
-					+ "_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n"
-					+ "_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _\n_ _";
-		}
-		
-		return fin;
 	}
 }
