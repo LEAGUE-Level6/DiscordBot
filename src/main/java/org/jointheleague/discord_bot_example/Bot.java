@@ -3,7 +3,7 @@ package org.jointheleague.discord_bot_example;
 import org.javacord.api.DiscordApi; 
 import org.javacord.api.DiscordApiBuilder;
 import org.jointheleague.modules.CalculatorMessageListener;
-import org.jointheleague.modules.CardGame;
+import org.jointheleague.modules.CrazyEights;
 import org.jointheleague.modules.CasinoGameListener;
 import org.jointheleague.modules.RandomNumber;
 import org.jointheleague.modules.Weather;
@@ -51,7 +51,7 @@ public class Bot  {
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
-		api.addMessageCreateListener(new CardGame(channelName));
+		api.addMessageCreateListener(new CrazyEights(channelName));
 	}
 
 }
