@@ -19,8 +19,8 @@ public class GuessingRandomNumber extends CustomMessageCreateListener {
 		if (event.getMessageContent().startsWith(COMMAND)) {
 			if(event.getMessageContent().equals(COMMAND)) {
 				Random r = new Random();
-				rand = r.nextInt(1000000);
-				event.getChannel().sendMessage("A random number bewteen 1-1000000 has been generated");
+				rand = r.nextInt(100);
+				event.getChannel().sendMessage("A random number bewteen 1-100 has been generated");
 				event.getChannel().sendMessage("Make guess by typing !Guess <your guess>");
 			}
 			int guess = Integer.parseInt(event.getMessageContent().substring(7));
