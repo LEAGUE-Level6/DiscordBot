@@ -39,7 +39,12 @@ public class RockPaperScissors extends CustomMessageCreateListener {
 		} 
 		if (compChoice.equals("rock") && event.getMessageContent().equals(rock)) {
 			event.getChannel().sendMessage("! Draw Game !");
-
+		}
+		if (compChoice.equals("paper") && event.getMessageContent().equals(paper)) {
+			event.getChannel().sendMessage("! Draw Game !");
+		}
+		if (compChoice.equals("scissor") && event.getMessageContent().equals(scissor)) {
+			event.getChannel().sendMessage("! Draw Game !");
 		}
 		if (compChoice.equals("rock") && event.getMessageContent().equals(scissor)) {
 			event.getChannel().sendMessage("! I win <<Rock Beaks Scissors>> !");

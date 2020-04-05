@@ -9,7 +9,7 @@ public class JustATest extends CustomMessageCreateListener{
 		super(channelName);
 	}
 
-	private static final String gameCommand = "!game";
+	private static final String gameCommand = "!matrixStuff";
 
 	public void handle(MessageCreateEvent event) {
 		int rows = 5;
