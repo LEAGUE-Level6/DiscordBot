@@ -3,8 +3,7 @@ package org.jointheleague.modules;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
+
 
 import org.javacord.api.event.message.MessageCreateEvent;
 
@@ -12,6 +11,9 @@ import com.google.gson.Gson;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+
+import org.jointheleague.modules.pojo.*;
+
 
 public class PictureOf extends CustomMessageCreateListener {
 
@@ -50,7 +52,9 @@ public class PictureOf extends CustomMessageCreateListener {
 		 void getUser(String cmd) throws IOException {
 
 		        //The URL for the endpoint we want to access
-		        String requestURL = "https://api.unsplash.com/search/photos?query=" + cmd;
+			 
+			 	String requestURL = "https://jsonplaceholder.typicode.com/users/1";
+		       // String requestURL = "https://api.unsplash.com/search/photos?query=" + cmd;
 
 		        //Setup request
 		        URL url = new URL(requestURL);
@@ -67,14 +71,16 @@ public class PictureOf extends CustomMessageCreateListener {
 		        con.disconnect();
 
 		        //turn user to POJO
-		        User user = gson.fromJson(userJSON.toString(), User.class);
+		        UserTest user = gson.fromJson(userJSON.toString(), UserTest.class);
 
 		        //Proof that it works
-//		        System.out.println("userJSON: " + userJSON);
-//		        System.out.println("GET USER NAME FROM POJO: " + user.getName());
-//		        System.out.println("GET USER CITY FROM POJO: " + user.getAddress().getCity());
+		        System.out.println("userJSON: " + userJSON);
+		        System.out.println("GET USER NAME FROM POJO: " + user.getName());
+		        System.out.println("GET USER CITY FROM POJO: " + user.getAddress().getCity());
 
 		    }
+		 
+		 //was 1.1.4 and 5.0
 		
 	
 	
