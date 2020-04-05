@@ -15,12 +15,13 @@ public class Blackjack extends CustomMessageCreateListener {
 	private ArrayList<Card> playerHand;
 	private ArrayList<Card> botHand;
 	
-	private final String start = "!start";
+	private final String start = "bj!start";
 	private final String hit = "!hit";
 	private final String stand = "!stand";
-	private final String help = "!help";
-	private final String rules = "!rules";
+	private final String help = "bj!help";
+	private final String rules = "bj!rules";
 	
+	public boolean playingBlackjack = false;
 	private boolean playerStanding = false;
 	private boolean botStanding = false;
 	
@@ -39,6 +40,7 @@ public class Blackjack extends CustomMessageCreateListener {
 		
 		//start or restart the game
 		if(message.startsWith(start)) {
+			playingBlackjack = true;
 			event.getChannel().sendMessage("Shuffling decks...");
 			
 			newDeck();
@@ -53,14 +55,17 @@ public class Blackjack extends CustomMessageCreateListener {
 			
 			if(handValue(playerHand) == 11 && hasAce(playerHand) && handValue(botHand) == 11 && hasAce(botHand)) {
 				event.getChannel().sendMessage(getBoard() + "\nBoth you and the bot have naturals. You tie. To play again, enter **" + start + "**");
+				playingBlackjack = false;
 				return;
 			}
 			else if(handValue(playerHand) == 11 && hasAce(playerHand)) {
 				event.getChannel().sendMessage(getBoard() + "\nYou have a natural! You win! To play again, enter **" + start + "**");
+				playingBlackjack = false;
 				return;
 			}
 			else if(handValue(botHand) == 11 && hasAce(botHand)) { 
 				event.getChannel().sendMessage(getBoard() + "\nThe bot has a natural. You lose. To play again, enter **" + start + "**");
+				playingBlackjack = false;
 				return;
 			}
 			
@@ -74,11 +79,11 @@ public class Blackjack extends CustomMessageCreateListener {
 			event.getChannel().sendMessage(getValueBoard());
 		}
 		//hit
-		else if(message.startsWith(hit)) {
+		else if(message.startsWith(hit) && playingBlackjack) {
 			event.getChannel().sendMessage(hit());
 		}
 		//stand
-		else if(message.startsWith(stand)) {
+		else if(message.startsWith(stand) && playingBlackjack) {
 			event.getChannel().sendMessage(stand());
 		}
 		//get help
@@ -313,6 +318,8 @@ public class Blackjack extends CustomMessageCreateListener {
 			else if(handValue(playerHand) < handValue(botHand)) fin += "Bot was closer to 21. You lose! To play again, enter **" + start + "**";
 			else if(handValue(playerHand) == handValue(botHand)) fin += "You both had the same total. Tie. To play again, enter **" + start + "**";
 		}
+		
+		if(!fin.equals("")) playingBlackjack = false;
 		
 		return fin;
 	}
