@@ -5,6 +5,7 @@ public class Card {
 	public int displayValue;
 	public int value;
 	public int suit;
+	public int declaredSuit;
 	
 	public Card(int v, int s) {
 		displayValue = v;
@@ -12,10 +13,32 @@ public class Card {
 		
 		if(v >= 11 && v <= 13) value = 10;
 		else value = v;
+
+		declaredSuit = 0;
+	}
+	
+	public Card(int v, int s, int d) {
+		value = v;
+		suit = s;
+		declaredSuit = d;
 	}
 	
 	public String toString() {
 		String fin = "";
+		
+
+		
+
+		switch(declaredSuit) {
+		case 1:
+			return "♤";
+		case 2:
+			return "♧";
+		case 3:
+			return "♡";
+		case 4:
+			return "♢";
+		}
 		
 		switch(displayValue) {
 		case 1:
