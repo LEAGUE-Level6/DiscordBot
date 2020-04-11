@@ -63,12 +63,14 @@ public class FEHStatListener extends CustomMessageCreateListener {
 			foundInColon = false;
 			foundInNoColon = false;
 			if (event.getMessageContent().length() == 9) {
-				event.getChannel().sendMessage("Please specify which unit to search for :)");
-			} else if (event.getMessageContent().length() > 21) {
+				event.getChannel().sendMessage("(。ヘ°) Please specify which unit to search for!");
+			/*} else if (event.getMessageContent().length() > 21) {
 				String unitName = event.getMessageContent().substring(10);
-				event.getChannel().sendMessage("There is " + 1 + " match for \"" + unitName + "\".");
+				int i = howMany(unitName);
+				cleanNames();
+				event.getChannel().sendMessage("There is " + i + " match(es) for "+ unitName + "\".");
 				findStats(unitName);
-				event.getChannel().sendMessage(statsS);
+				event.getChannel().sendMessage(statsS);*/
 			} else {
 				String unitName = event.getMessageContent().substring(10);
 				unitName = unitName.toLowerCase();
@@ -80,7 +82,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 					event.getChannel().sendMessage(statsS);
 					timesSpecified++;
 				} else if (i == 0) { // no matches
-					event.getChannel().sendMessage("There are " + i + " matches for " + unitName + ". Sorry!");
+					event.getChannel().sendMessage("There are " + i + " matches for \"" + unitName + "\". Maybe they'll be added to FEH someday!");
 				} else { // more than 1 match
 					event.getChannel().sendMessage("There are " + i + " matches for \"" + unitName + "\".");
 					String temp = "";
@@ -200,7 +202,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("src/main/resources/FEHStats.txt"));
 			while ((str = br.readLine()) != null) {
-				if (str.contains(unitName)) {
+				if (str.contains("Alfonse: Prince of Askr")) {
 					lines.add(str);
 					break;
 				}
@@ -237,25 +239,29 @@ public class FEHStatListener extends CustomMessageCreateListener {
 					timesF++;
 				}
 			}
+			System.out.println("finished searching");
+			return timesF / 12;
 		} else if (str.contains(unitName) && (unitName.contains(" "))) {
 			System.out.println("THERE IS A SPACE");
-			unitName += ":";
+			if(unitName.indexOf(" ") == unitName.lastIndexOf(" ")) {
+				unitName += ":";
+			}
 			// find the number of unit names within the string, copy-pasted edition
 			int index = 675; // uh, i counted?
 			int tempIndex = 0;
 			while (tempIndex != -1) {
 				tempIndex = str.indexOf(unitName, index);
 				index = tempIndex + 1;
-				// if (tempIndex != -1 && (timesF % 5 == 4)) {
-				// heroNamesRaw.add(str.substring(tempIndex, tempIndex+31));
-				// }
+				if (tempIndex != -1 && (timesF % 3 == 2)) {
+					heroNamesRaw.add(str.substring(tempIndex, tempIndex + 31));
+				}
 				timesF++;
 			}
+			System.out.println("finished searching");
+			return timesF / 3;
 		} else {
 			return 0;
 		}
-		System.out.println("finished searching");
-		return timesF / 12;
 	}
 
 	public void cleanNames() {
@@ -266,11 +272,19 @@ public class FEHStatListener extends CustomMessageCreateListener {
 			if (s.contains("Fa")) {
 				int face = s.lastIndexOf("Fa");
 				s = s.substring(0, face - 1);
+			} else if (s.contains("<")) {
+				int bracket = s.indexOf("<");
+				s = s.substring(0, bracket);
 			}
 			heroNamesNoColon.add(s);
 			// insert colon
-			int colonInsert = s.indexOf(" ");
-			s = s.substring(0, colonInsert) + ":" + s.substring(colonInsert);
+			int spacePlace = s.indexOf(" ");
+			int colonPlace = s.indexOf(":");
+			int colonInsert = 0;
+			if (spacePlace > colonPlace) { //if space is after colon: if there isn't a space in unit name
+				colonInsert = spacePlace;
+				s = s.substring(0, colonInsert) + ":" + s.substring(colonInsert);
+			}
 			heroNamesColon.add(s);
 		}
 	}
@@ -281,22 +295,14 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		statsS = "";
 		String str = "";
 		int stringF = 0;
-		// i am a dummy and forgot to do this
-		char[] name = heroName.toCharArray();
-		name[0] = Character.toUpperCase(name[0]);
-		for (int i = 1; i < name.length; i++) {
-			name[i] = Character.toLowerCase(name[i]);
-		}
-		String unitName = "";
-		for (char c : name) {
-			unitName = unitName + c;
-		}
+		String unitName = fixCapitalization(heroName);
+		System.out.println(unitName + "-------------------------------------------------------------");
 		// grab the line again
 		System.out.println("getting string");
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("src/main/resources/FEHStats.txt"));
 			while ((str = br.readLine()) != null) {
-				if (str.contains(unitName)) {
+				if (str.contains("Alfonse: Prince of Askr")) {
 					lines.add(str);
 					break;
 				}
@@ -313,13 +319,26 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		System.out.println("starting to search");
 		int index = 675; // copied from above
 		int tempIndex = 0;
-		while (tempIndex != -1) {
-			tempIndex = str.indexOf(unitName, index);
-			index = tempIndex + 1;
-			stringF++;
-			if (stringF == 12) {
-				System.out.println("found 12 times :)");
-				break;
+		if (unitName.contains(" ")) {
+			while (tempIndex != -1) {
+				String tempName = unitName += ":";
+				tempIndex = str.indexOf(tempName, index);
+				index = tempIndex + 1;
+				stringF++;
+				if (stringF == 1) {
+					System.out.println("found it :)");
+					break;
+				}
+			}
+		} else {
+			while (tempIndex != -1) {
+				tempIndex = str.indexOf(unitName, index);
+				index = tempIndex + 1;
+				stringF++;
+				if (stringF == 12) {
+					System.out.println("found 12 times :)");
+					break;
+				}
 			}
 		}
 		tempIndex = str.indexOf("/></td><td>", index);
@@ -345,6 +364,9 @@ public class FEHStatListener extends CustomMessageCreateListener {
 
 	public void findSpecificStats(String heroName) {
 		String unitName = heroNamesColon.get(indexFound);
+		if (heroName.contains(" ")) {
+			unitName = heroNamesColon.get(0);
+		}
 		statsS = "";
 		String str = "";
 		int stringF = 0;
@@ -372,9 +394,6 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		int tempIndex = 0;
 		if (unitName.contains("Gunnthra")) {
 			String hmmTemp = unitName.replace(":", "");
-			System.out.println(str.indexOf("Gunnthra Voice of Dreams"));
-			System.out.println(hmmTemp);
-			System.out.println(str.indexOf(hmmTemp));
 			tempIndex = str.indexOf(hmmTemp, index);
 			index = tempIndex + 1;
 			System.out.println("Index is " + index);
