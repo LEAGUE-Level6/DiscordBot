@@ -21,7 +21,6 @@ public class Bot  {
 		System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Hello there! The bot has been connected, and you can now use any features of the bot."));
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Always remember to prefix your commands with an exclamation mark (!)."));
-		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("(!) IMPORTANT: The SBot V1 (Legacy) is being retired. As of March 28th, 2020, all requests will be routed to V2, and V1 history will become read-only. On April 6th, 2020, the SBot V1 (Legacy) will be deleted from Discord and all messages will be deleted. Please save any important requests, and delete any bot commands to avoid looking like a fool when V1 messages disappear on April 6th."));
 		
 		
 		//Add Listeners
