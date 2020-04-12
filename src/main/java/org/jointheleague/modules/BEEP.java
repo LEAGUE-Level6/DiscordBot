@@ -27,9 +27,6 @@ public class BEEP extends CustomMessageCreateListener {
 		else if(event.getMessageContent().contains(COAST)) {
 			event.getChannel().sendMessage("https://gonctd.com/wp-content/uploads/2020/01/COASTER-Schedule-Flyer-October-2019.pdf");
 		}
-		else if(event.getMessageContent().contains("!info")) {
-			event.getChannel().sendMessage("Hi, I'm the Java SBot Version S001. My documentation can be found at http://bot.samuelsharp.com");
-		}
 		else if(event.getMessageContent().contains("<@!678409379502096444>")) {
 			event.getChannel().sendMessage("RRRRRRRR");
 			event.getChannel().sendMessage("BOT DOES NOT LIKE BEING MENTIONED, " + event.getMessageAuthor().getDisplayName() + "! You and your filthy #" + event.getMessageAuthor().getDiscriminatedName().split("#")[1] + " DiscordTag are ruining my reputation!");
