@@ -26,9 +26,9 @@ public class Bot  {
 		
 		//Add Listeners
 		api.addMessageCreateListener(new ProfanityChecker(channelName));
+		api.addMessageCreateListener(new ComDatabase(channelName));
 		api.addMessageCreateListener(new UInames(channelName));
 		api.addMessageCreateListener(new TfLtimes(channelName));
-		api.addMessageCreateListener(new ChangeUsername(channelName));
 		api.addMessageCreateListener(new ChangeStatus(channelName));
 		api.addMessageCreateListener(new LAtimes(channelName));
 		api.addMessageCreateListener(new UH_HUH(channelName));

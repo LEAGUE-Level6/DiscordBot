@@ -29,13 +29,13 @@ public class TfLtimes extends CustomMessageCreateListener {
 				
 			} else {
 				try {
-					event.getApi().updateUsername("SBot By Samuel");
+					event.getApi().updateUsername("Geoff");
 					URL urlForGetRequest = new URL("http://api.tfl.gov.uk/StopPoint/" + cmd + "/arrivals");
-				    HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
+				    System.out.println(urlForGetRequest);
+					HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
 				    conection.setRequestMethod("GET");
 				    int responseCode = conection.getResponseCode();
 				    event.getChannel().sendMessage("TfL Servers Returned Response Code: " + responseCode);
-				    event.getApi().updateUsername("SBot By Samuel");
 				    if (responseCode == HttpURLConnection.HTTP_OK) {
 				        BufferedReader in = new BufferedReader(
 				        new InputStreamReader(conection.getInputStream()));
@@ -53,7 +53,7 @@ public class TfLtimes extends CustomMessageCreateListener {
 					event.getChannel().sendMessage("TfL BOT: Please make sure that stopid is valid. Remember, this only works for trains, not buses.");
 					e.printStackTrace();
 				}
-				
+			    event.getApi().updateUsername("SBot By Samuel");
 			}
 			
 		}
