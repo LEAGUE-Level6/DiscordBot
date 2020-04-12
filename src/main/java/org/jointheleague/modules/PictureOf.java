@@ -62,6 +62,8 @@ public class PictureOf extends CustomMessageCreateListener {
 
 		        //We want to GET the resource
 		        con.setRequestMethod("GET");
+		     //   con.setRequestProperty("Authorization", COPY AND PASTE FROM UNSPLASH -> THE TOKEN);
+
 
 		        //Read the response
 		        JsonReader repoReader = Json.createReader(con.getInputStream());
@@ -80,8 +82,6 @@ public class PictureOf extends CustomMessageCreateListener {
 
 		    }
 		 
-		 //was 1.1.4 and 5.0
-		
 	
 	
 }
