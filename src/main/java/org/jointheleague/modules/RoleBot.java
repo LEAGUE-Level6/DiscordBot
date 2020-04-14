@@ -23,7 +23,7 @@ public class RoleBot extends CustomMessageCreateListener {
 	private static final String ROLE_PREFIX = "color_";
 	private final Map<String ,Role> roles;
 	private final Server server;
-	RoleBuilder rB;
+	private final RoleBuilder rB;
 	
 	
 	
