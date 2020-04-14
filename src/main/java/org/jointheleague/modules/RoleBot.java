@@ -37,8 +37,9 @@ public class RoleBot extends CustomMessageCreateListener {
 	
 	public void refreshRoles() {
 		for(Role r : server.getRoles()) {
-			if(r.getName().startsWith(ROLE_PREFIX)) {
-				roles.put(r.getName().replaceAll(ROLE_PREFIX, ""), r);
+			String rolename = r.getName();
+			if(rolename.startsWith(ROLE_PREFIX)) {
+				roles.put(rolename.replaceAll(ROLE_PREFIX, ""), r);
 			}
 		}
 	}
@@ -55,10 +56,8 @@ public class RoleBot extends CustomMessageCreateListener {
 				stringBuilder.append("use **!role set [Role Name]** to set a role, and **!role remove [Role Name]** to remove a role\n");				
 				stringBuilder.append("The current editable roles are: \n");
 				stringBuilder.append("```\n");
-				for(Role r : server.getRoles()) {
-					if(r.getName().startsWith(ROLE_PREFIX)) {
-						stringBuilder.append(r.getName().replaceAll(ROLE_PREFIX, "")+"\n");
-					}
+				for(String r : roles.keySet()) {
+					stringBuilder.append(r + "\n");
 				}
 				stringBuilder.append("```");
 				channel.sendMessage(stringBuilder.toString());
@@ -132,7 +131,8 @@ public class RoleBot extends CustomMessageCreateListener {
 		System.out.println(server);
 		List<Role> roles = user.getRoles(server);
 		for (Role r : roles) {
-			if(r.getName().startsWith(ROLE_PREFIX)) {
+			String rolename = r.getName();
+			if(rolename.startsWith(ROLE_PREFIX)) {
 				user.removeRole(r);
 			}
 		}
