@@ -23,7 +23,7 @@ public class MomBot extends CustomMessageCreateListener {
 				event.getChannel().sendMessage("No");
 			}	
 		}
-		if(m.toLowerCase().contains("dad")) {
+		else if(m.toLowerCase().contains("dad")) {
 			if((m.toLowerCase().contains("can i")||m.toLowerCase().contains("may i")) && !event.getMessageAuthor().isYourself()){
 				event.getChannel().sendMessage("Go ask your mother");
 			}
