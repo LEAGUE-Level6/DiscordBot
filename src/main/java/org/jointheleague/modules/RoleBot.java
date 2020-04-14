@@ -48,7 +48,6 @@ public class RoleBot extends CustomMessageCreateListener {
 		TextChannel channel = event.getChannel();
 		String input = event.getMessageContent();
 		User user = event.getMessageAuthor().asUser().get();
-		Server server = event.getServer().get();
 		StringBuilder stringBuilder = new StringBuilder();
 		if (input.startsWith("!role")) {
 			if (input.equals("!role")) {
