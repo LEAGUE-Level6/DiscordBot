@@ -2,6 +2,7 @@ package org.jointheleague.discord_bot_example;
 
 import org.javacord.api.DiscordApi; 
 import org.javacord.api.DiscordApiBuilder;
+import org.jointheleague.modules.HangMan;
 import org.jointheleague.modules.CalculatorMessageListener;
 import org.jointheleague.modules.CasinoGameListener;
 import org.jointheleague.modules.RandomNumber;
@@ -12,6 +13,7 @@ import org.jointheleague.modules.ComicMessageListener;
 import org.jointheleague.modules.ElmoMessageListener;
 import org.jointheleague.modules.FactMessageListener;
 import org.jointheleague.modules.FlagMessageListener;
+import org.jointheleague.modules.HangMan;
 import org.jointheleague.modules.NewPollMessageListener;
 import org.jointheleague.modules.FashionAdvisor;
 import org.jointheleague.modules.leetMessageListener;
@@ -34,6 +36,7 @@ public class Bot  {
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 		
 		//add Listeners
+		api.addMessageCreateListener(new HangMan(channelName));
 		api.addMessageCreateListener(new RandomNumber(channelName));
 		api.addMessageCreateListener(new DadJokes(channelName));
 		api.addMessageCreateListener(new ClockMessageListener(channelName));
