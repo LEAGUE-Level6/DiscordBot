@@ -17,6 +17,9 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 	String guessLetter = "!guessl";
 	String guessPhrase = "!guessp";
 	String startCommand = "!start";
+	String phrase = "";
+	String begspaces = "";
+	int pointTotal = 10;
 
 	public AdvancedHangmanListener(String channelName) {
 		super(channelName);
@@ -25,10 +28,9 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
-		String phrase = "";
-		String begspaces = "";
+	
 		if (event.getMessageContent().startsWith(startCommand)) {
-			int pointTotal = 10;
+			pointTotal = 10;
 			event.getChannel().sendMessage(
 					"Welcome to Advanced Hangman! Here is how you play: \n 1) You will be presented with a random cliche phrase and given the same amount of boxes as the letters in each word.");
 			event.getChannel().sendMessage(
@@ -48,9 +50,12 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 				BufferedReader br2 = new BufferedReader(
 						new FileReader("src/main/java/org/jointheleague/modules/cliches"));
 				int R = new Random().nextInt(numLines);
+				event.getChannel().sendMessage(R + "");
 				for (int i = 0; i < R; i++) {
 					phrase = br2.readLine();
 				}
+					event.getChannel().sendMessage(phrase);
+				
 				
 				for (int i = 0; i < phrase.length(); i++) {
 					if (phrase.charAt(i) == ' ') {
@@ -72,28 +77,38 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 					"Here are your commands: \n '!start'-starts a new game \n '!help'-shows all commands for reference \n '!uncover-use to uncover a letter; enter guesses in format (Word#,Letter#) \n '!guessl'-guess a letter \n '!guessp' -guess a phrase");
 		}
 		if(event.getMessageContent().startsWith("!uncover")) {
+			int numLetters = 0;
 			String uncoverletter = "";
-			String newbegspaces = begspaces;
 			int word = Integer.parseInt(event.getMessageContent().substring(9,10));
-			event.getChannel().sendMessage(word + "");
 			int letter = Integer.parseInt(event.getMessageContent().substring(11,12));
-			event.getChannel().sendMessage(letter + "");
-			System.out.println(phrase);
-			event.getChannel().sendMessage(phrase);
 			int currentword = 1;
 			for(int i = 0; i<phrase.length();i++) {
-				event.getChannel().sendMessage(phrase);
+				numLetters++;
 				if(phrase.charAt(i)==' ') {
 					currentword++;
-					if(currentword == word) {
-						event.getChannel().sendMessage(currentword + "");
-						uncoverletter = phrase.substring(i+letter,i+letter+1);
+				}
+				if(currentword == word) {
+						if(word == 1) {
+							numLetters = letter;
+							if(letter == 1) {
+							uncoverletter = phrase.substring(i,i+1);
+							numLetters = 1;
+							}
+						}else {
+							uncoverletter = phrase.substring(i+letter,i+letter+1);
+							numLetters = numLetters + letter;
+						}
 						event.getChannel().sendMessage(uncoverletter);
 						break;
-					}
 				}
+				
 			}
-			event.getChannel().sendMessage(uncoverletter);
+			event.getChannel().sendMessage(numLetters + "");
+			pointTotal = pointTotal-1;
+			event.getChannel().sendMessage("Your points: " + pointTotal);
+			for(int i = 0; i<begspaces.length(); i++) {
+				
+			}
 		}
 	}
 
