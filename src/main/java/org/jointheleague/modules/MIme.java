@@ -7,6 +7,7 @@ import org.javacord.api.event.message.MessageCreateEvent;
 public class MIme extends CustomMessageCreateListener{
 	
 	Random r = new Random();
+	final static boolean stopAnoyingPeople = false; // if you want to stop set to false
 	
 	public MIme(String channelName) {
 		super(channelName);
@@ -14,9 +15,8 @@ public class MIme extends CustomMessageCreateListener{
 	
 	@Override
 	public void handle(MessageCreateEvent event) {
-		if(!event.getMessageAuthor().isYourself()) {
+		if(!event.getMessageAuthor().isYourself() || stopAnoyingPeople) {
 			String s = event.getMessageContent();
-			
 			for(int i = 0; i < s.length(); i++) {
 				int j = r.nextInt(3);
 				if(j == 0) {
