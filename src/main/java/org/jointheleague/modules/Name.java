@@ -19,33 +19,7 @@ public class Name extends CustomMessageCreateListener {
 
 	@Override
 	public void handle(MessageCreateEvent event) {
-		if (event.getMessageContent().contains(COMMAND)) {
-			String cmd = event.getMessageContent().replaceAll(" ", "").replace("!Name","");
-			try {
-				readFromWeb("https://www.behindthename.com/random/random.php?number=1&sets=1&gender=both&surname=&all=yes", event);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
-		}
+		 
 	}
-	 public static void readFromWeb(String webURL, MessageCreateEvent event) throws IOException {
-	        URL url = new URL(webURL);
-	        InputStream is =  (InputStream) url.openStream();
-	        try( BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
-	            String line;
-	            while ((line = br.readLine()) != null) {
-	            	event.getChannel().sendMessage(line);
-	            }
-	        }
-	        catch (MalformedURLException e) {
-	            e.printStackTrace();
-	            throw new MalformedURLException("URL is malformed!!");
-	        }
-	        catch (IOException e) {
-	            e.printStackTrace();
-	            throw new IOException();
-	        }
-}
+	
 }
