@@ -12,6 +12,13 @@ public class Connect4 extends CustomMessageCreateListener {
 	}
 
 	private static final String gameCommand = "!game";
+	private static final String zero = "0";
+	private static final String one = "1";
+	private static final String two = "2";
+	private static final String three = "3";
+	private static final String four = "4";
+	private static final String five = "5";
+	private static final String six = "six";
 
 	public void handle(MessageCreateEvent event) {
 		if (event.getMessageContent().equals(gameCommand)) {
@@ -33,13 +40,31 @@ public class Connect4 extends CustomMessageCreateListener {
 			while (winner == false && turn <= 42) {
 				boolean validPlay;
 				String inputPlay = "";
-				int play;
+				int play = 0;
 				do {
 					event.getChannel().sendMessage(display(grid));
 					event.getChannel().sendMessage("Player: " + player + " Enter a column: ");
-
-					inputPlay += event.getMessageContent();
-					play = Integer.parseInt(inputPlay);
+					if(event.getMessageContent().equals(zero)) {
+						play = 0;
+					}
+					else if(event.getMessageContent().equals(one)) {
+						play = 1;
+					}
+					else if(event.getMessageContent().equals(two)) {
+						play = 2;
+					}
+					else if(event.getMessageContent().equals(three)) {
+						play = 3;
+					}
+					else if(event.getMessageContent().equals(four)) {
+						play = 4;
+					}
+					else if(event.getMessageContent().equals(five)) {
+						play = 5;
+					}
+					else if(event.getMessageContent().equals(six)) {
+						play = 6;
+					}
 
 					event.getChannel().sendMessage(play + "");
 					validPlay = validate(play, grid);
