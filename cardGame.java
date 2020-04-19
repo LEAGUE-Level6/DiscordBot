@@ -49,32 +49,36 @@ String currentCard;
 	            deck1.addAll(cardDeck.subList(0, 25));              //26 cards for p1       
 	            deck2.addAll(cardDeck.subList(26, cardDeck.size()));//26 cards for p2
 	            for (int i =0; i < deck1.size(); i++) {
+	            	if(i!= i+1) {
 event.getChannel().sendMessage("Your cards are: " + deck1.get(i)+" "+i);
 				}
-	          
+	            }
 	     }
 	            	else if(event.getMessageContent().contains(COMMAND3))    {
 	   
 	         	             //each player place one card face up
-	            			  String s = event.getMessageContent().trim().substring(9, event.getMessageContent().length());
+	            			  String s = event.getMessageContent().trim().substring(8, event.getMessageContent().length());
 	            			  int t = Integer.parseInt(s);
 	            			  WarSetUp p1Card = deck1.get(t);
 	            			  
 	         	            	WarSetUp p2Card = deck2.pop();
 	         	            
-	           event.getChannel().sendMessage(   ("Player 1 plays card is " + p1Card.toString()));
+	           event.getChannel().sendMessage(("Player 1 plays card is " + p1Card.toString()));
 	           event.getChannel().sendMessage(("Player 2 plays card is " + p2Card.toString()));
 	               deck1.remove(deck1.get(t));
 	                if(p1Card.getCard() > p2Card.getCard()){//if player 1 win 
 	                    deck1.addLast(p1Card);  //higher rank wins both cards and 
 	                    deck1.addLast(p2Card);  //places them at the bottom of his deck.
 	                    event.getChannel().sendMessage(("PLayer 1 wins the round"));
+	                    event.getChannel().sendMessage("choose a new card");
 	                }
 	     
 	                else if(p1Card.getCard() < p2Card.getCard()){//if player 2 win 
 	                    deck2.addLast(p1Card);   
 	                    deck2.addLast(p2Card);  
 	                    event.getChannel().sendMessage(("PLayer 2 wins the round"));
+	                    event.getChannel().sendMessage("choose a new card");
+
 	                }//end else if
 	                
 	                else { //war happens when both cards' rank matched
@@ -110,6 +114,10 @@ event.getChannel().sendMessage("Your cards are: " + deck1.get(i)+" "+i);
 	                            deck2.addAll(war1); 
 	                            deck2.addAll(war2);
 	                            event.getChannel().sendMessage(("Player 2 wins the war round"));
+	                           
+	                       
+
+								}
 	                        }                     
 	                    }
 	                    
@@ -124,10 +132,7 @@ event.getChannel().sendMessage("Your cards are: " + deck1.get(i)+" "+i);
 	                }
 	            }
 	   
-    }
-	     
-
-
+    
  
 }
 
