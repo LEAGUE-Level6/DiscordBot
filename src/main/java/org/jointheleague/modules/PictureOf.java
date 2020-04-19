@@ -16,7 +16,7 @@ import org.jointheleague.modules.pojo.*;
 
 
 public class PictureOf extends CustomMessageCreateListener {
-
+	private UserTest user;
 	private static final String COMMAND = "!PictureOf";
 	Gson gson = new Gson();
 	public PictureOf(String channelName) {
@@ -53,8 +53,8 @@ public class PictureOf extends CustomMessageCreateListener {
 
 		        //The URL for the endpoint we want to access
 			 
-			 	String requestURL = "https://jsonplaceholder.typicode.com/users/1";
-		       // String requestURL = "https://api.unsplash.com/search/photos?query=" + cmd;
+			 	//String requestURL = "https://jsonplaceholder.typicode.com/users/1";
+		       String requestURL = "https://api.unsplash.com/search/photos?query=" + cmd;
 
 		        //Setup request
 		        URL url = new URL(requestURL);
@@ -62,7 +62,7 @@ public class PictureOf extends CustomMessageCreateListener {
 
 		        //We want to GET the resource
 		        con.setRequestMethod("GET");
-		     //   con.setRequestProperty("Authorization", COPY AND PASTE FROM UNSPLASH -> THE TOKEN);
+		        con.setRequestProperty("Authorization", "Client-ID CcRHw6zPYau7eLeEaoJD7iB1LN7x4FznKKnj70xfmN4");
 
 
 		        //Read the response
@@ -73,12 +73,14 @@ public class PictureOf extends CustomMessageCreateListener {
 		        con.disconnect();
 
 		        //turn user to POJO
-		        UserTest user = gson.fromJson(userJSON.toString(), UserTest.class);
+		        user = gson.fromJson(userJSON.toString(), UserTest.class);
 
 		        //Proof that it works
 		        System.out.println("userJSON: " + userJSON);
+		        user.getAddress();
 		        System.out.println("GET USER NAME FROM POJO: " + user.getName());
 		        System.out.println("GET USER CITY FROM POJO: " + user.getAddress().getCity());
+		        System.out.println("GET URL FROM POJO: " + user.getWebsite());
 
 		    }
 		 
