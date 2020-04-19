@@ -1,5 +1,6 @@
 package org.jointheleague.modules;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -8,6 +9,8 @@ import java.net.URL;
 import org.javacord.api.event.message.MessageCreateEvent;
 
 import com.google.gson.Gson;
+
+import javax.imageio.ImageIO;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
@@ -84,12 +87,27 @@ public class PictureOf extends CustomMessageCreateListener {
 
 		    }
 		 
+		 void downloadImage(MessageCreateEvent event) {
+			 
+			 BufferedImage image =null;
+			 
+			 try{
+				 
+		            URL url =new URL("");
+		            // read the url
+		           image = ImageIO.read(url);
+		 
+		           event.getChannel()
+		 
+		        }catch(IOException e){
+		            e.printStackTrace();
+		        }
+			 
+			 
+			 
+		 }
+		 
+		 
 	
 	
 }
-
-
-	class Results {
-		
-		
-	}
