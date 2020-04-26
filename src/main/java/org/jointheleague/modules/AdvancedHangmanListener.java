@@ -93,10 +93,13 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 							if(letter == 1) {
 							uncoverletter = phrase.substring(i,i+1);
 							numLetters = 1;
+							}else {
+							uncoverletter = phrase.substring(i+letter-1,i+letter);
 							}
 						}else {
 							uncoverletter = phrase.substring(i+letter,i+letter+1);
 							numLetters = numLetters + letter;
+							
 						}
 						event.getChannel().sendMessage(uncoverletter);
 						break;
@@ -106,10 +109,27 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 			event.getChannel().sendMessage(numLetters + "");
 			pointTotal = pointTotal-1;
 			event.getChannel().sendMessage("Your points: " + pointTotal);
-			for(int i = 0; i<begspaces.length(); i++) {
-				
+			int cl = 0;
+			String newString = "";
+			for(int i = 0; i<begspaces.length()-2; i++) {
+				if(i%2 == 1) {
+				cl++;
+					if(cl==numLetters) {
+					newString = newString + uncoverletter + " ";
+					}else {
+					newString = newString + (begspaces.substring(i,i+2));	
+					}
+			//	}else {
+				//	if(i==0) {
+						
+				//	}else {
+						
+				//	}
+				}
 			}
+			event.getChannel().sendMessage(newString);
+			begspaces = newString;
+		
 		}
-	}
 
-}
+	}}
