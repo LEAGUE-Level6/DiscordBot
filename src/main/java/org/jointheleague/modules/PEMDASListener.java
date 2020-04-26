@@ -12,6 +12,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 	public static final String MATH_COMMAND = "!solve ";
 	public static final String[] ops = {"+","-","*","/","^","%","d"};
 	public static boolean haveAnswer = false;
+	public static double saveAnswer = 0;
 	public static double lastAnswer = 0;
 	public static boolean correctSyntax = true;
 	public static boolean explain = false;
@@ -20,6 +21,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 	public PEMDASListener(String channelName) {
 		super(channelName);
 		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public class EquationHolder{
@@ -35,6 +37,10 @@ public class PEMDASListener extends CustomMessageCreateListener{
 
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
+		saveAnswer = lastAnswer;
+		haveAnswer = false;
+		correctSyntax = true;
+		explain = false;
 		publicEvent = event;
 		// TODO Auto-generated method stub
 		if(!event.getMessageAuthor().getIdAsString().equals("683742358726377566")) {
@@ -48,42 +54,48 @@ public class PEMDASListener extends CustomMessageCreateListener{
 					//System.out.println(solve(convert(equation)));
 					explain = true;
 					double answer = solve(convert(equation));
+					lastAnswer = answer;
 					if(answer%1!=0) {
 						outputAnswer(event,""+answer);
 					}else {
 						outputAnswer(event,""+(int)answer);
 					}
-					lastAnswer = answer;
+					
 					explain = false;
 				}
 		}if(s.substring(s.length()-1).equals("=")||s.substring(s.length()-1).equals("= ")) {
 			String equation = s.substring(0,s.length()-1);
 			//System.out.println(solve(convert(equation)));
 			double answer = solve(convert(equation));
+			lastAnswer = answer;
 			if(answer%1!=0) {
 				outputAnswer(event,""+answer);
 			}else {
 				outputAnswer(event,""+(int)answer);
 			}
-			lastAnswer = answer;
+			
 		}else {
 			String equation = s;
 			//System.out.println(solve(convert(equation)));
 			double answer = solve(convert(equation));
+			lastAnswer = answer;
 			if(answer%1!=0) {
 				outputAnswer(event,""+answer);
 			}else {
 				outputAnswer(event,""+(int)answer);
 			}
-			lastAnswer = answer;
+			
 			
 		}
+		System.out.println("lastanswer: "+lastAnswer);
 		}
 	}
 	
 	public void outputAnswer(MessageCreateEvent e, String s) {
 		if(correctSyntax) {
 			e.getChannel().sendMessage(s);
+		}else {
+			lastAnswer = saveAnswer;
 		}
 	}
 		
@@ -95,6 +107,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 	
 	public EquationHolder convert(String s){
 		System.out.println("Convert:");
+		System.out.println("Last answer: "+lastAnswer);
 		ArrayList<Double> nums = new ArrayList<Double>();
 		ArrayList<String> operations = new ArrayList<String>();
 		ArrayList<Boolean> isNegative = new ArrayList<Boolean>();
@@ -127,23 +140,32 @@ public class PEMDASListener extends CustomMessageCreateListener{
 				}else if(isOperation(sub)) {
 				
 					if(!temp.equals("")) {
-						if(temp.contains("Ans")) {
-							if(lastAnswer<0) {
-								nums.add(-1*lastAnswer);
-								isNegative.add(true);
+						if(temp.toLowerCase().contains("ans")) {
+							if(temp.contains("-")) {
+								if(lastAnswer>0) {
+									nums.add(lastAnswer);
+									isNegative.add(true);
+								}else {
+								nums.add(lastAnswer);
+								isNegative.add(false);
+								}
 							}else {
-							nums.add(lastAnswer);
-							isNegative.add(false);
+								if(lastAnswer<0) {
+									nums.add(-1*lastAnswer);
+									isNegative.add(true);
+								}else {
+								nums.add(lastAnswer);
+								isNegative.add(false);
+								}
 							}
 						}else {
-							if(lastAnswer<0) {
-								nums.add(-1*Double.parseDouble(temp));
+							if(Double.parseDouble(temp)<0) {
+								nums.add(Math.abs(Double.parseDouble(temp)));
 								isNegative.add(true);
 							}else {
 								nums.add(Double.parseDouble(temp));
 								isNegative.add(false);
 							}
-							
 						}
 						lastType = 0;
 						temp = "";
@@ -186,10 +208,30 @@ public class PEMDASListener extends CustomMessageCreateListener{
 				}
 				
 			}
+			if(temp.toLowerCase().contains("ans")) {
+				if(temp.contains("-")) {
+					if(lastAnswer>0) {
+						nums.add(lastAnswer);
+						isNegative.add(true);
+					}else {
+					nums.add(lastAnswer);
+					isNegative.add(false);
+					}
+				}else {
+					if(lastAnswer<0) {
+						nums.add(-1*lastAnswer);
+						isNegative.add(true);
+					}else {
+					nums.add(lastAnswer);
+					isNegative.add(false);
+					}
+				}
+				
+			}else {
 			
-			nums.add(Double.parseDouble(temp));
+			nums.add(Math.abs(Double.parseDouble(temp)));
 			isNegative.add(Double.parseDouble(temp)<0);
-			
+			}
 			System.out.println(s);
 			//System.out.println(equationToString(new EquationHolder(nums,operations,isNegative)));
 			System.out.println("ABS: Begin at "+startA+" end at "+endA);
@@ -213,7 +255,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 			}
 			
 			return new EquationHolder(nums,operations,isNegative);
-		}catch(NumberFormatException e) {
+		}catch(NumberFormatException | StringIndexOutOfBoundsException e) {
 			System.out.println("incorrect");
 			correctSyntax = false;
 			return new EquationHolder(null,null,null);
@@ -224,7 +266,12 @@ public class PEMDASListener extends CustomMessageCreateListener{
 		try {
 			outputExplain(equationToString(equation));
 			if(equation.nums.size()==1) {
-				if(equation.operations.size()==1&&equation.isNegative.get(0).equals(true)) {
+				System.out.println("size == 1");
+				System.out.println("op size = "+equation.operations.size());
+				System.out.println("num = "+equation.nums.get(0));
+				System.out.println("is negative: "+equation.isNegative.get(0));
+				if(equation.operations.size()==0&&equation.isNegative.get(0).equals(true)) {
+					System.out.println(-1*equation.nums.get(0));
 					return -1*equation.nums.get(0);
 				}
 				return equation.nums.get(0);
@@ -254,7 +301,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 				System.out.println("setting b to +");
 			}
 			double newCalc = calcSimple(a,b, equation.operations.get(topIndex));
-			System.out.println(newCalc<0);
+			System.out.println("newcalc"+newCalc);
 			ArrayList<Double> num = equation.nums;
 			ArrayList<String> operation = equation.operations;
 			ArrayList<Boolean> isNegative = equation.isNegative;
@@ -265,9 +312,6 @@ public class PEMDASListener extends CustomMessageCreateListener{
 			num.remove(topIndex+1);
 			isNegative.remove(topIndex+1);
 			operation.remove(topIndex);
-//			if(num.size()<=1) {
-//				return num.get(0);
-//			}
 			
 			return solve(new EquationHolder(num,operation,isNegative));
 		}catch(NullPointerException e) {
