@@ -1,10 +1,13 @@
 package org.jointheleague.modules;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
+import java.util.Random;
 
 import org.javacord.api.event.message.MessageCreateEvent;
 
@@ -22,9 +25,16 @@ public class PictureOf extends CustomMessageCreateListener {
 	private UserTest user;
 	private static final String COMMAND = "!PictureOf";
 	Gson gson = new Gson();
+	boolean begun = false;
+	String answer = "";
+	final int startingLives = 10;
+	int livesRemaining = startingLives;
+	String url = "";
+	String test = "";
 	public PictureOf(String channelName) {
 		super(channelName);
 	}
+	//event.getMessageAuthor().getName()
 
 	@Override
 	public void handle(MessageCreateEvent event) {
@@ -37,22 +47,88 @@ public class PictureOf extends CustomMessageCreateListener {
 				
 				event.getChannel().sendMessage("Please put a string after the command!");
 				
-				
-			} else {
+			
+			}else if (cmd.equalsIgnoreCase("begin") && begun == false) {
 				PictureOf picture = new PictureOf(channelName);
 				try {
-					picture.getUser(cmd);
+					
+					
+					
+					
+					
+					try {
+						BufferedReader br = new BufferedReader(new FileReader("src/main/java/org/jointheleague/modules/Dictionary"));
+						
+						String line = br.readLine();
+						
+						Random r = new Random();
+						int randy = r.nextInt(1000);
+						for (int i = 0; i < randy; i++) {
+							
+							if(i == randy-1) {
+								test = line;
+							}
+							line = br.readLine();
+						
+						}
+						System.out.println("The word is: "+ test);
+						br.close();
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					url = picture.getUser(test);
+					System.out.println("ACTUAL URL: "+ url);
+					event.getChannel().sendMessage(url);
+					answer = test;
+					begun = true;
+					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
+			}else if(begun==true) {
+				
+				if(cmd.equalsIgnoreCase(answer)) {
+					begun = false;
+					event.getChannel().sendMessage("YOU WON!");
+					event.getChannel().sendMessage("You ended with " + livesRemaining + " lives!");
+					url = "";
+					livesRemaining = startingLives;
+				}else {
+					livesRemaining--;
+					event.getChannel().sendMessage("Whoops! That wasn't the right answer! \n you now have "+ livesRemaining + " lives!");
+					if(livesRemaining==0) {
+						event.getChannel().sendMessage("You lost!");
+						begun = false;
+						url ="";
+						livesRemaining = startingLives;
+					}
+				}
+				
+			}else {
+				event.getChannel().sendMessage("To Start the Game, please enter: Begin \n To Make a Guess, simply type: PictureOf *Guess*");
 			}
+			
+			
 			
 		}
 	}
 		
-		 void getUser(String cmd) throws IOException {
+		 String getUser(String cmd) throws IOException {
 
 		        //The URL for the endpoint we want to access
 			 
@@ -79,35 +155,44 @@ public class PictureOf extends CustomMessageCreateListener {
 		        user = gson.fromJson(userJSON.toString(), UserTest.class);
 
 		        //Proof that it works
-		        System.out.println("userJSON: " + userJSON);
-		        user.getAddress();
-		        System.out.println("GET USER NAME FROM POJO: " + user.getName());
-		        System.out.println("GET USER CITY FROM POJO: " + user.getAddress().getCity());
-		        System.out.println("GET URL FROM POJO: " + user.getWebsite());
+//		        System.out.println("userJSON: " + userJSON);
+//		        user.getAddress();
+//		        System.out.println("GET USER NAME FROM POJO: " + user.getName());
+//		        System.out.println("GET USER CITY FROM POJO: " + user.getAddress().getCity());
+//		        System.out.println("GET URL FROM POJO: " + user.getWebsite());
 
+		        
+		  //      System.out.println(user.getWebsite());
+		        
+		        
+		        
+//		        for (int i = 0; i < user.toString().length(); i++) {
+//					System.out.println(i);
+//				}
+		        boolean found = false;
+		        String tempURL ="";
+		    	  for (int i = userJSON.toString().indexOf("https"); i < userJSON.toString().indexOf("https")+1000; i++) {
+		    	  
+		    		if(userJSON.toString().charAt(i)=='"') {
+		    			
+		    		  found = true;
+		    		  
+		    	  }else if(found==false) {
+						tempURL+=userJSON.toString().charAt(i);
+					}
+					}
+		    	  
+		    	  return tempURL;
+						
+			}
+		        
+		        
+		        
 		    }
 		 
-		 void downloadImage(MessageCreateEvent event) {
-			 
-			 BufferedImage image =null;
-			 
-			 try{
-				 
-		            URL url =new URL("");
-		            // read the url
-		           image = ImageIO.read(url);
-		 
-		           event.getChannel()
-		 
-		        }catch(IOException e){
-		            e.printStackTrace();
-		        }
-			 
-			 
-			 
-		 }
+		
 		 
 		 
 	
 	
-}
+
