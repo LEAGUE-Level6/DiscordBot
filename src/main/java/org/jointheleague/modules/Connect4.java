@@ -70,19 +70,14 @@ public class Connect4 extends CustomMessageCreateListener {
 		if (numEntered == true && validPlay == true) {
 			for (int row = grid.length - 1; row >= 0; row--) {
 				if (grid[row][play] == "⚪\t") {
-					grid[row][play] = player+="\t";
+					grid[row][play] = player += "\t";
 					break;
 				}
 			}
 			event.getChannel().sendMessage(display(grid));
+		} else if (numEntered == true && validPlay == false) {
+			event.getChannel().sendMessage("Please enter a valid play");
 		}
-		
-
-		// play a turn
-
-//					System.out.println(play);
-//					event.getChannel().sendMessage(play + "");
-//					validPlay = validate(play, grid);	
 
 	}
 

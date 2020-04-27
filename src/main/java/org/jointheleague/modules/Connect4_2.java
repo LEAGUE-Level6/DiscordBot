@@ -16,7 +16,7 @@ public class Connect4_2 extends CustomMessageCreateListener {
 	private static final String three = "3";
 	private static final String four = "4";
 	private static final String five = "5";
-	private static final String six = "six";
+	private static final String six = "6";
 
 	public void handle(MessageCreateEvent event) {
 		if (event.getMessageContent().equals(gameCommand)) {
