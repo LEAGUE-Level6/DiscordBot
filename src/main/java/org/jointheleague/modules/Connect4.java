@@ -84,7 +84,6 @@ public class Connect4 extends CustomMessageCreateListener {
 			turn++;
 			event.getChannel().sendMessage(display(grid));
 			event.getChannel().sendMessage("Player:\t" + (turn % 2) + "\tenter a column: ");
-			event.getChannel().sendMessage("Turn: " + turn);
 		} else if (numEntered == true && validPlay == false) {
 			event.getChannel().sendMessage("Please enter a valid play");
 		}
