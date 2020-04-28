@@ -1,6 +1,7 @@
 package org.jointheleague.modules;
 
 import java.io.File;
+
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
@@ -19,7 +20,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import net.aksingh.owmjapis.api.APIException;
-import sun.reflect.Reflection;
 
 public class CasinoGameListener extends CustomMessageCreateListener{
 
