@@ -64,10 +64,10 @@ public class FEHStatListener extends CustomMessageCreateListener {
 			foundInColon = false;
 			foundInNoColon = false;
 			specialName = false;
-			if (event.getMessageContent().length() == 9) { //just says "!fehstats"
+			if (event.getMessageContent().length() == 9) { // just says "!fehstats"
 				event.getChannel().sendMessage(
 						"(。ヘ°) Please specify which unit to search for! \nType \"!fehstats help\" if you need help on how to use this listener.");
-			} else if (event.getMessageContent().equalsIgnoreCase("!fehstats help")) { //fehstats help
+			} else if (event.getMessageContent().equalsIgnoreCase("!fehstats help")) { // !fehstats help
 				event.getChannel().sendMessage(
 						"After typing \"!fehstats\", type the name of the unit that you want to find stats for! \nIf there are multiple versions of the unit, I'll give you a list and ask for which one you want.");
 			} else if (event.getMessageContent().length() > 23) { // search by full title. rip lute and flame emperor
@@ -90,7 +90,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 			} else if (event.getMessageContent().length() > 12) { // search by unit name only
 				String unitName = event.getMessageContent().substring(10).trim();
 				unitName = unitName.toLowerCase();
-				int i = howMany(unitName);
+				int i = howManyTemp(unitName);
 				cleanNames();
 				if (i == 1) { // 1 match
 					event.getChannel().sendMessage("There is " + i + " match for \"" + unitName + "\".");
@@ -119,7 +119,8 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		String message = event.getMessageContent();
 		checkArrays(message);
 		// checking here
-		if (!heroNamesNoColon.isEmpty() && (foundInNoColon || foundInColon) && timesSpecified == 0 && (!(event.getMessageAuthor().asUser().get().isBot()) && !(event.getMessageAuthor().isYourself()))) {
+		if (!heroNamesNoColon.isEmpty() && (foundInNoColon || foundInColon) && timesSpecified == 0
+				&& (!(event.getMessageAuthor().asUser().get().isBot()) && !(event.getMessageAuthor().isYourself()))) {
 			timesSpecified = 0;
 			findSpecificStats(finalizedMessage);
 			event.getChannel().sendMessage(statsS);
@@ -128,6 +129,16 @@ public class FEHStatListener extends CustomMessageCreateListener {
 	}
 
 	public void checkArrays(String message) {
+		System.out.println(
+				"sending heroNamesNoColon----------------------------------------------------------------------");
+		for (String s : heroNamesNoColon) {
+			System.out.println(s);
+		}
+		System.out.println(
+				"sending heroNamesColon----------------------------------------------------------------------");
+		for (String s : heroNamesColon) {
+			System.out.println(s);
+		}
 		finalizedMessage = "";
 		// converting message
 		char[] messageChars = message.toCharArray();
@@ -153,16 +164,14 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		// if specified name is sent
 		System.out.println("checking arrays...");
 		for (String s : heroNamesNoColon) {
-			String sTemp = fixSpecialCapitalization(s);
-			System.out.println(sTemp);
+			String sTemp = fixCapitalization(s);
 			if (sTemp.equals(finalizedMessage)) {
 				foundInNoColon = true;
 				indexFound = heroNamesNoColon.indexOf(s);
 			}
 		}
 		for (String s : heroNamesColon) {
-			String sTemp = fixSpecialCapitalization(s);
-			System.out.println(sTemp);
+			String sTemp = fixCapitalization(s);
 			if (sTemp.equals(finalizedMessage)) {
 				foundInColon = true;
 				indexFound = heroNamesColon.indexOf(s);
@@ -170,70 +179,92 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		}
 	}
 
-	public String fixCapitalization(String heroName) { //singling out words edition. work on this so you don't need two methods!!!
+	public String fixCapitalization(String heroName) { // singling out words edition
 		System.out.println("fixing capitalization...");
 		char[] name = heroName.toCharArray();
 		String unitName = "";
 		name[0] = Character.toUpperCase(name[0]);
 		if (heroName.contains(" ")) {
-			//fixing those middle words
-			String heroNameTemp = heroName.substring(heroName.indexOf(" ")+1, heroName.lastIndexOf(" "));
-			String inbetweenWords = heroNameTemp.substring(heroNameTemp.indexOf(" ")+1);
-			String heroName5 = heroName.replace(inbetweenWords, "5");
-			name = heroName5.toCharArray();
-			String[] inbetweenWordsArray = inbetweenWords.split(" ");
-			System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-			for (int i = 0; i < inbetweenWordsArray.length; i++) {
-				if(inbetweenWordsArray[i].length() > 4) {
-					char[] charas = inbetweenWordsArray[i].toCharArray();
-					charas[0] = Character.toUpperCase(charas[0]);
-					String sTemp = "";
-					for (char c: charas) {
-						sTemp += c;
-					}
-					inbetweenWordsArray[i] = sTemp;
-				}
-				System.out.println(inbetweenWordsArray[i]);
-			}
-			inbetweenWords = "";
-			for (String s: inbetweenWordsArray) {
-				inbetweenWords += s;
-			}
-			
-			System.out.println(heroName + " contains a space!");
-			//fixing capitalization on spaces
-			name[0] = Character.toUpperCase(name[0]);
 			int tempIndex = 0;
 			int index = 0;
 			ArrayList<Integer> indices = new ArrayList<Integer>();
-			while (tempIndex != -1) {
-				tempIndex = heroName5.indexOf(" ", index);
-				index = tempIndex + 1;
-				indices.add(index);
-				name[index] = Character.toUpperCase(name[index]);
-			}
-			
-			for (int i = 1; i < name.length; i++) {
-				if (!indices.contains(i)) {
-					name[i] = Character.toLowerCase(name[i]);
+			if (heroName.indexOf(" ") != heroName.lastIndexOf(" ")) { //if there is more than 1 word after the colon
+				// fixing those middle words
+				String heroNameTemp = heroName.substring(heroName.indexOf(" ") + 1, heroName.lastIndexOf(" "));
+				String inbetweenWords = heroNameTemp.substring(heroNameTemp.indexOf(" ") + 1);
+				String heroName5 = heroName.replace(inbetweenWords, "5");
+				name = heroName5.toCharArray();
+				String[] inbetweenWordsArray = inbetweenWords.split(" ");
+				System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+				for (int i = 0; i < inbetweenWordsArray.length; i++) {
+					if (inbetweenWordsArray[i].length() > 3) {
+						char[] charas = inbetweenWordsArray[i].toCharArray();
+						charas[0] = Character.toUpperCase(charas[0]);
+						String sTemp = "";
+						for (char c : charas) {
+							sTemp += c;
+						}
+						inbetweenWordsArray[i] = sTemp;
+					}
+				}
+				inbetweenWords = "";
+				for (String s : inbetweenWordsArray) {
+					inbetweenWords += s;
+					inbetweenWords += " ";
+				}
+				inbetweenWords = inbetweenWords.substring(0, (inbetweenWords.length() - 1));
+				
+				// fixing capitalization on spaces
+				name[0] = Character.toUpperCase(name[0]);
+				while (tempIndex != -1) {
+					tempIndex = heroName5.indexOf(" ", index);
+					index = tempIndex + 1;
+					indices.add(index);
+					name[index] = Character.toUpperCase(name[index]);
+				}
+				for (int i = 1; i < name.length; i++) {
+					if (!indices.contains(i)) {
+						name[i] = Character.toLowerCase(name[i]);
+					}
+				}
+				String unitName5 = "";
+				for (char c : name) {
+					unitName5 = unitName5 + c;
+				}
+				unitName = unitName5.replace("5", inbetweenWords);
+			} else { //if there is not more than 1 word after the colon
+				name[0] = Character.toUpperCase(name[0]);
+				while (tempIndex != -1) {
+					tempIndex = heroName.indexOf(" ", index);
+					index = tempIndex + 1;
+					indices.add(index);
+					name[index] = Character.toUpperCase(name[index]);
+				}
+				for (int i = 1; i < name.length; i++) {
+					if (!indices.contains(i)) {
+						name[i] = Character.toLowerCase(name[i]);
+					}
+				}
+				for (char c : name) {
+					unitName += c;
 				}
 			}
-			//fixing capitalization on hyphens
+			// fixing capitalization on hyphens
+			char[] unitNameChars = unitName.toCharArray();
 			tempIndex = 0;
 			index = 0;
-			indices = new ArrayList<Integer>();
+			indices.clear();
 			while (tempIndex != -1) {
-				tempIndex = heroName5.indexOf("-", index);
+				tempIndex = unitName.indexOf("-", index);
 				index = tempIndex + 1;
 				indices.add(index);
-				name[index] = Character.toUpperCase(name[index]);
+				unitNameChars[index] = Character.toUpperCase(unitNameChars[index]);
 			}
-			String unitName5 = "";
-			for (char c : name) {
-				unitName5 = unitName5 + c;
+			unitName = "";
+			for (char c : unitNameChars) {
+				unitName += c;
 			}
-			unitName = unitName5.replace("5", inbetweenWords);
-		} else { //if there is no space
+		} else { // if there is no space
 			for (int i = 1; i < name.length; i++) {
 				name[i] = Character.toLowerCase(name[i]);
 			}
@@ -241,6 +272,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 				unitName = unitName + c;
 			}
 		}
+		System.out.println("finished fixing capitalization: " + unitName);
 		return unitName;
 	}
 
@@ -273,7 +305,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 			// find the number of unit names within the string
 			int index = 675; // uh, i counted?
 			int tempIndex = 0;
-			if (unitName.equals("Gunnthra")) {
+			if (unitName.equals("Gunnthra")) { //gunnthra is an exception because in the code her name is either Gunnthrá or Gunnthr%C3%A1
 				while (tempIndex != -1) {
 					tempIndex = str.indexOf("Gunnthr", index);
 					index = tempIndex + 1;
@@ -335,7 +367,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 				s = s.substring(0, bracket);
 			} else if (s.contains("Fa")) {
 				int begone = s.lastIndexOf("Fa");
-				s = s.substring(0, begone-1);
+				s = s.substring(0, begone - 1);
 			}
 			if (!specialName) {
 				heroNamesColon.add(s);
@@ -343,7 +375,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 			// remove colon
 			s = s.replace(":", "");
 			heroNamesNoColon.add(s);
-			//add colon
+			// add colon
 			if (specialName && !s.contains(":")) {
 				int spacePlace = s.indexOf(" ");
 				s = s.substring(0, spacePlace) + ":" + s.substring(spacePlace);
@@ -354,7 +386,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 
 	String statsS = "";
 
-	public void findStats(String heroName) { //finding stats from name search only
+	public void findStats(String heroName) { // finding stats from name search only
 		System.out.println("finding stats...");
 		statsS = "";
 		String str = "";
@@ -403,10 +435,9 @@ public class FEHStatListener extends CustomMessageCreateListener {
 			}
 		}
 		tempIndex = str.indexOf("/></td><td>", index);
-		System.out.println("index is " + tempIndex + ". searching for stats...");
+		System.out.println("index is " + tempIndex + ". searching for stats..."); //the cursed index number is 2592. that means it's not found
 		statsS = str.substring(tempIndex, tempIndex + 74);
-		System.out.println("found it");
-		String tempString = "Here are the stats I found for \"" + heroNamesColon.get(0) + "\":\n";
+		String tempString = "Here are the stats I found for \"" + fixCapitalization(heroNamesColon.get(0)) + "\":\n";
 		tempString += "HP: ";
 		tempString += statsS.substring(11, 13);
 		tempString += "\nAtk: ";
@@ -423,11 +454,11 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		statsS = tempString;
 	}
 
-	public void findSpecificStats(String heroName) { //finding stats from name and title
+	public void findSpecificStats(String heroName) { // finding stats from name and title
 		System.out.println("finding specialized stats...");
 		String unitName = heroNamesColon.get(indexFound);
 		if (specialName) {
-			unitName = heroNamesColon.get(0);
+			unitName = heroNamesNoColon.get(0);
 		}
 		statsS = "";
 		String str = "";
@@ -452,7 +483,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		// finding the start of the </td><td>
 		int index = 675; // copied from above
 		int tempIndex = 0;
-		if (unitName.contains("Gunnthra")) {
+		if (unitName.contains("Gunnthra")) { //gunnthra is an exception because in the code her name is either Gunnthrá or Gunnthr%C3%A1
 			String hmmTemp = unitName.replace(":", "");
 			tempIndex = str.indexOf(hmmTemp, index);
 			index = tempIndex + 1;
@@ -464,6 +495,16 @@ public class FEHStatListener extends CustomMessageCreateListener {
 				stringF++;
 				if (stringF == 3) {
 					System.out.println("found 3 times :)");
+					break;
+				}
+			}
+		} else {
+			while (tempIndex != -1) {
+				tempIndex = str.indexOf(unitName, index);
+				index = tempIndex + 1;
+				stringF++;
+				if (stringF == 1) {
+					System.out.println("found it :)");
 					break;
 				}
 			}
@@ -528,44 +569,74 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		return timesF;
 	}
 	
-	public String fixSpecialCapitalization(String heroName) { // when it would be disadvantageous to just take out the middle words
-		System.out.println("fixing special capitalization...");
-		char[] name = heroName.toCharArray();
-		name[0] = Character.toUpperCase(name[0]);
-		if (heroName.contains(" ")) {
-			System.out.println(heroName + " contains a space!");
-			//fixing capitalization on spaces
-			name[0] = Character.toUpperCase(name[0]);
-			int tempIndex = 0;
-			int index = 0;
-			ArrayList<Integer> indices = new ArrayList<Integer>();
-			while (tempIndex != -1) {
-				tempIndex = heroName.indexOf(" ", index);
-				index = tempIndex + 1;
-				indices.add(index);
-				name[index] = Character.toUpperCase(name[index]);
-			}
-			
-			for (int i = 1; i < name.length; i++) {
-				if (!indices.contains(i)) {
-					name[i] = Character.toLowerCase(name[i]);
+	//-------------------------------------------------------------under construction!------------------------------------------------------------------------
+	
+	public int howManyTemp(String heroName) {
+		System.out.println("counting heroes...");
+		int timesF = 0;
+		String str = "";
+		// get the one big table line
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("src/main/resources/FEHStats.txt"));
+			while ((str = br.readLine()) != null) {
+				if (str.contains("Alfonse: Prince of Askr")) {
+					lines.add(str);
+					break;
 				}
 			}
-			//fixing capitalization on hyphens
-			tempIndex = 0;
-			index = 0;
-			indices = new ArrayList<Integer>();
-			while (tempIndex != -1) {
-				tempIndex = heroName.indexOf("-", index);
-				index = tempIndex + 1;
-				indices.add(index);
-				name[index] = Character.toUpperCase(name[index]);
+			br.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		str = str.toLowerCase();
+		int index = 675; // thanks google docs
+		int tempIndex = 0;
+		if (str.contains(heroName) && !(heroName.contains(" "))) {
+			if (heroName.equalsIgnoreCase("gunnthra")) { //gunnthra is an exception because in the code her name is either Gunnthrá or Gunnthr%C3%A1
+				while (tempIndex != -1) {
+					tempIndex = str.indexOf("gunnthr", index);
+					index = tempIndex + 1;
+					if (tempIndex != -1 && (timesF % 12 == 3)) {
+						heroNamesRaw.add(str.substring(tempIndex, tempIndex + 31));
+					}
+					timesF++;
+				}
+				System.out.println("finished searching");
+				return timesF / 12;
+			} else {
+				heroName += ": ";
+				while (tempIndex != -1) {
+					tempIndex = str.indexOf(heroName, index);
+					index = tempIndex + 1;
+					if (tempIndex != -1 && (timesF % 3 == 1)) {
+						heroNamesRaw.add(str.substring(tempIndex, tempIndex + 31));
+					}
+					timesF++;
+				}
+				System.out.println("finished searching");
+				return timesF / 3;
 			}
+		}	else if (str.contains(heroName) && (heroName.contains(" "))) {
+			if (heroName.indexOf(" ") == heroName.lastIndexOf(" ")) {
+				heroName += ":";
+			}
+			while (tempIndex != -1) {
+				tempIndex = str.indexOf(heroName, index);
+				index = tempIndex + 1;
+				if (tempIndex != -1 && (timesF % 3 == 2)) {
+					heroNamesRaw.add(str.substring(tempIndex, tempIndex + 31));
+				}
+				timesF++;
+			}
+			System.out.println("finished searching");
+			return timesF / 3;
+		} else {
+			System.out.println("found none :(");
+			return 0;
 		}
-		String unitName = "";
-		for (char c : name) {
-			unitName = unitName + c;
-		}
-		return unitName;
 	}
 }
