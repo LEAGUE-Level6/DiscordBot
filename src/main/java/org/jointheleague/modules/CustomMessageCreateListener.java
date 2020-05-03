@@ -22,7 +22,7 @@ public abstract class CustomMessageCreateListener implements MessageCreateListen
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-			}
+			} 
 		});
 	}
 

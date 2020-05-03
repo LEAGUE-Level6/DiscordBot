@@ -1,31 +1,31 @@
 package org.jointheleague.modules;
-	import java.io.IOException;
-	import org.javacord.api.event.message.MessageCreateEvent;
-	import okhttp3.OkHttpClient;
-	import okhttp3.Request;
-	import okhttp3.Response;
-	import okhttp3.ResponseBody;
 
+import java.io.IOException;
+import org.javacord.api.event.message.MessageCreateEvent;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
-
-	public class DateMonth extends CustomMessageCreateListener{
-		private static final String COMMAND = "!Date";
+public class DateFact extends CustomMessageCreateListener{
 	
-	public DateMonth(String channelName) {
+	private static final String COMMAND = "!Date";
+
+	public DateFact(String channelName) {
 		super(channelName);
 	}
-	int month;
-	int date;
+	int month = 0;
+	int date = 0;
 	public void handle(MessageCreateEvent event) {
 		if (event.getMessageContent().startsWith(COMMAND)) {
-			if(event.getMessageContent().equals(COMMAND)) {
+			if(event.getMessageContent().equals(COMMAND)){
 				event.getChannel().sendMessage("Enter a month (Jan-1, Feb 2..");
-				month = Integer.parseInt(event.getMessageContent());
+				month = Integer.parseInt(event.getMessageContent().toString());
 				event.getChannel().sendMessage("Enter a day of the month");
-				date = Integer.parseInt(event.getMessageContent());
+				date = Integer.parseInt(event.getMessageContent().toString());
 			}
 			OkHttpClient client = new OkHttpClient();
-			String url = "https://numbersapi.p.rapidapi.com/" +month + "/"+date+"/date?fragment=true&json=true";
+			String url = "https://numbersapi.p.rapidapi.com/" +month+ "/"+date+"/date?fragment=true&json=true";
 			Request request = new Request.Builder()
 					.url(url)
 					.get()
@@ -37,7 +37,7 @@ package org.jointheleague.modules;
 				Response response = client.newCall(request).execute();
 				System.out.println(response.headers().get("Content-Type"));
 				try (ResponseBody responseBody = response.body()) {
-					System.out.println(responseBody.string());
+					event.getChannel().sendMessage((responseBody.string()));
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
