@@ -3,6 +3,7 @@
 
 package org.jointheleague.modules;
 
+import java.awt.List;
 import java.awt.Point;
 import java.util.ArrayList;
 
@@ -336,7 +337,7 @@ public class TicTacToe extends CustomMessageCreateListener {
 		private Board board;
 
 		private int playerOn;
-		private int depth = -10;
+		final static private int depth = -10;
 
 		Game(int boardWidth, Player[] players) {
 			playerOn = 0;
@@ -348,7 +349,7 @@ public class TicTacToe extends CustomMessageCreateListener {
 			if(players[playerOn].isComputer) {
 				return DoNextTurn(-1, -1);
 			}
-			return ""+display();
+			return "" + display();
 		}
 
 		public String DoNextTurn(int x, int y) {
@@ -429,58 +430,78 @@ public class TicTacToe extends CustomMessageCreateListener {
 
 		public String doMove(int x, int y, Board b, String[] allPlayers, int posInList, int depth) {
 			if (x == -1 || y == -1 || this.isComputer) {
-				DoBestMove(b, allPlayers, posInList, depth);
+				doBestMove(b, allPlayers, posInList, depth, Integer.MIN_VALUE, Integer.MAX_VALUE);
 			} else {
 				b.setPos(x, y, character);
 			}
 			return b.display() + "Player " + this.character + " went";
 		}
 
-		private void DoBestMove(Board b, String[] allPlayers, int posInList, int depth) {
+		private void doBestMove(Board b, String[] allPlayers, int posInList, int depth, int alpha, int beta) {
+			System.out.println("doBestMove at depth: " + depth);
+			Point p = new Point (0,0);
+			Point bestMove = p;
+			Point start = p;
 			int bestScore = Integer.MIN_VALUE;
-			Point bestMove = new Point(0, 0);
-			for (int i = 0; i < b.width; i++) {
-				for (int j = 0; j < b.width; j++) {
+			System.out.println("begining: " + start.x + ", " + start.y);
+			outerloop:
+			for (int i = start.x; i < b.width; i++) {
+				for (int j = start.y; j < b.width; j++) {
 					if (b.getAtPos(i, j).isBlank()) {
 						b.setPos(i, j, character);
-						int score = minimax(b, allPlayers, increment(posInList, allPlayers.length), depth, Integer.MIN_VALUE, Integer.MAX_VALUE);
+						int score = minimax(b, allPlayers, increment(posInList, allPlayers.length), depth + 1, alpha, beta);
 						b.resetPos(i, j);
 						if (score > bestScore) {
 							bestScore = score;
 							bestMove.setLocation(i, j);
+							System.out.println("\n --  newBestMove: " + bestMove.getX() + ", " + bestMove.getY() + " score: " + score);
+							alpha = score;
+			                if(beta <= alpha) {
+			                	break outerloop;
+			                }
 						}
 					}
 				}
 			}
+			System.out.println("End of doBestMove: " + bestMove.getX() + ", " + bestMove.getY());
 			b.setPos(bestMove.x, bestMove.y, character);
 		}
-		
 		private int minimax(Board b, String[] allPlayers, int posInList, int depth, int alpha, int beta) {
+			System.out.println("  --  minimax at depth: " + depth);
 			String s = b.checkWinner();	
 			if (!s.isBlank()) {
 				if (s.equals(this.character)) {
+					System.out.print("  --  --  won");
+					System.out.println(b.display());
 			    	return Integer.MAX_VALUE;
 			    }
 			    if(s.equalsIgnoreCase("tie")){
+			    	System.out.print("  --  --  tied");
+			    	System.out.println(b.display());
 			    	return 0;
 			    }
+			    System.out.print("  --  --  lost");
+			    System.out.println(b.display());
 			    return Integer.MIN_VALUE;
 			}
 			if(depth >= 0){
+				System.out.print("  --  -- end of depth");
+				System.out.println(b.display());
 				return 1;
 			}
 			if(allPlayers[posInList].equals(this.character)){
 				int bestScore = Integer.MIN_VALUE;
+				outerloop:
 			    for(int i = 0; i < b.width; i++){
 			    	for(int j = 0; j < b.width; j++){
 			        	if(b.getAtPos(i, j).isBlank()){
 			                b.setPos(i,j, this.character);
-			                int score = minimax(b, allPlayers, increment(posInList, allPlayers.length), depth++, alpha, beta);
+			                int score = minimax(b, allPlayers, increment(posInList, allPlayers.length), depth + 1, alpha, beta);
 			                b.resetPos(i,j);
 			                bestScore = Math.max(score, bestScore);
 			                alpha = Math.max(alpha, score);
 			                if(beta <= alpha) {
-			                	break;
+			                	break outerloop;
 			                }
 			            }
 			        }
@@ -488,16 +509,17 @@ public class TicTacToe extends CustomMessageCreateListener {
 			    return bestScore;
 			}
 			int worstScore = Integer.MAX_VALUE;
+			outerloop:
 			for(int i = 0; i < b.width; i++){
 				for(int j = 0; j < b.width; j++){
 			    	if(b.getAtPos(i,j).isBlank()){
 			        	b.setPos(i,j, allPlayers[posInList]);
-			        	int score = minimax(b, allPlayers, increment(posInList, allPlayers.length), depth++, alpha, beta);
+			        	int score = minimax(b, allPlayers, increment(posInList, allPlayers.length), depth + 1, alpha, beta);
 			            b.resetPos(i,j);
 			            worstScore = Math.min(score, worstScore);
 			            beta = Math.min(beta, score);
 		                if(beta <= alpha) {
-		                	break;
+		                 	break outerloop;
 		                }
 			        }
 			    }
@@ -589,6 +611,17 @@ public class TicTacToe extends CustomMessageCreateListener {
 				}
 			}
 			return "";
+		}
+		
+		public Point getFirstEmpty() {
+			for(int i = 0; i < width; i++) {
+				for(int j = 0; j < width; j++) {
+					if(board[i][j].isBlank()) {
+						return new Point(i, j);
+					}
+				}
+			}
+			return null;
 		}
 	}
 }
