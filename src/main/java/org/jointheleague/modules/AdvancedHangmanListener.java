@@ -111,25 +111,23 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 			event.getChannel().sendMessage("Your points: " + pointTotal);
 			int cl = 0;
 			String newString = "";
-			for(int i = 0; i<begspaces.length()-2; i++) {
-				if(i%2 == 1) {
+			for(int i = 0; i<begspaces.length()-1; i++) {
+				if(i%2 == 1 || i == 0) {
 				cl++;
 					if(cl==numLetters) {
 					newString = newString + uncoverletter + " ";
-					}else {
-					newString = newString + (begspaces.substring(i,i+2));	
+					}else{
+						if(i == 1) {
+							newString = newString + (begspaces.substring(i+1,i+2));
+						}else {
+							newString = newString + (begspaces.substring(i,i+2));	
+						}
 					}
-			//	}else {
-				//	if(i==0) {
-						
-				//	}else {
-						
-				//	}
 				}
 			}
-			event.getChannel().sendMessage(newString);
+			event.getChannel().sendMessage("`" + newString + "`");
 			begspaces = newString;
 		
-		}
+		
 
-	}}
+	}}}
