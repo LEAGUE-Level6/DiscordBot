@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Random;
+import java.util.Timer;
 
 import org.javacord.api.event.message.MessageCreateEvent;
 
@@ -21,9 +22,9 @@ import javax.json.JsonReader;
 import org.jointheleague.modules.pojo.*;
 
 
-public class PictureOf extends CustomMessageCreateListener {
+public class AnimalTimer extends CustomMessageCreateListener {
 	private UserTest user;
-	private static final String COMMAND = "!PictureOf";
+	private static final String COMMAND = "!AnimalTimer";
 	Gson gson = new Gson();
 	boolean begun = false;
 	String answer = "";
@@ -31,11 +32,18 @@ public class PictureOf extends CustomMessageCreateListener {
 	int livesRemaining = startingLives;
 	String url = "";
 	String test = "";
-	public PictureOf(String channelName) {
+	int Time = 10;
+	boolean timeUp = false;
+	Thread t1;
+	Thread t2;
+	boolean won = false;
+	boolean lose = false;
+	public AnimalTimer(String channelName) {
 		super(channelName);
 	}
 	//event.getMessageAuthor().getName()
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void handle(MessageCreateEvent event) {
 		if (event.getMessageContent().contains(COMMAND)) {
@@ -49,7 +57,7 @@ public class PictureOf extends CustomMessageCreateListener {
 				
 			
 			}else if (cmd.equalsIgnoreCase("begin") && begun == false) {
-				PictureOf picture = new PictureOf(channelName);
+				AnimalTimer picture = new AnimalTimer(channelName);
 				try {
 					
 					
@@ -57,12 +65,12 @@ public class PictureOf extends CustomMessageCreateListener {
 					
 					
 					try {
-						BufferedReader br = new BufferedReader(new FileReader("src/main/java/org/jointheleague/modules/Dictionary"));
+						BufferedReader br = new BufferedReader(new FileReader("src/main/java/org/jointheleague/modules/Dictionary2"));
 						
 						String line = br.readLine();
 						
 						Random r = new Random();
-						int randy = r.nextInt(20);
+						int randy = r.nextInt(14);
 						for (int i = 0; i < randy; i++) {
 							
 							if(i == randy-1) {
@@ -95,32 +103,68 @@ public class PictureOf extends CustomMessageCreateListener {
 					answer = test;
 					begun = true;
 					
+		
+					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
 			}else if(begun==true) {
-				
-				if(cmd.equalsIgnoreCase(answer)) {
-					begun = false;
-					event.getChannel().sendMessage("YOU WON!");
-					event.getChannel().sendMessage("You ended with " + livesRemaining + " lives!");
-					url = "";
-					livesRemaining = startingLives;
-				}else {
-					livesRemaining--;
-					event.getChannel().sendMessage("Whoops! That wasn't the right answer! \n you now have "+ livesRemaining + " lives!");
-					if(livesRemaining==0) {
-						event.getChannel().sendMessage("You lost!");
-						begun = false;
-						url ="";
-						livesRemaining = startingLives;
+
+				t1 = new Thread(() ->  {
+					
+					event.getChannel().sendMessage(Time +"");
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
+					
+					if(Time == 0) {
+						timeUp = true;
+					}
+		
+					Time--;
+					
+				});
+			t2 = new Thread(() ->  {
+				event.getChannel().sendMessage("You have 10 seconds to guess the animal: ");
+				
+				while(won==false && lose==false) {
+				if(cmd.equalsIgnoreCase(answer)) {
+					won = true;
+				}else if(timeUp == true) {
+				lose = true;
+			}
+				
 				}
+			});
+		
+		for (int i = 0; i < 10; i++) {
+			t1.start();
+			t2.start();
+		}	
+			if(won == true) {
+				begun = false;
+				event.getChannel().sendMessage("YOU WON!");
+				url = "";
+				won = false;
+				t1.stop();
+				t2.stop();
+			}else if(lose == true) {
+				event.getChannel().sendMessage("You lost!");
+				begun = false;
+				url ="";
+				timeUp = false;
+				t1.stop();
+				t2.stop();
+			}
+				
 				
 			}else {
-				event.getChannel().sendMessage("To Start the Game, please enter: Begin \n To Make a Guess, simply type: PictureOf *Guess*");
+				event.getChannel().sendMessage("To Start the Game, please enter: Begin \n To Make a Guess, simply type: AnimalTimer *Guess*");
 			}
 			
 			
@@ -195,4 +239,3 @@ public class PictureOf extends CustomMessageCreateListener {
 		 
 	
 	
-

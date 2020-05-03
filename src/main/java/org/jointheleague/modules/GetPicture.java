@@ -1,3 +1,5 @@
+
+
 package org.jointheleague.modules;
 
 import java.awt.image.BufferedImage;
@@ -21,9 +23,9 @@ import javax.json.JsonReader;
 import org.jointheleague.modules.pojo.*;
 
 
-public class PictureOf extends CustomMessageCreateListener {
+public class GetPicture extends CustomMessageCreateListener {
 	private UserTest user;
-	private static final String COMMAND = "!PictureOf";
+	private static final String COMMAND = "!GetPicture";
 	Gson gson = new Gson();
 	boolean begun = false;
 	String answer = "";
@@ -31,7 +33,7 @@ public class PictureOf extends CustomMessageCreateListener {
 	int livesRemaining = startingLives;
 	String url = "";
 	String test = "";
-	public PictureOf(String channelName) {
+	public GetPicture(String channelName) {
 		super(channelName);
 	}
 	//event.getMessageAuthor().getName()
@@ -48,48 +50,11 @@ public class PictureOf extends CustomMessageCreateListener {
 				event.getChannel().sendMessage("Please put a string after the command!");
 				
 			
-			}else if (cmd.equalsIgnoreCase("begin") && begun == false) {
-				PictureOf picture = new PictureOf(channelName);
+			}else {
+				GetPicture picture = new GetPicture(channelName);
 				try {
 					
-					
-					
-					
-					
-					try {
-						BufferedReader br = new BufferedReader(new FileReader("src/main/java/org/jointheleague/modules/Dictionary"));
-						
-						String line = br.readLine();
-						
-						Random r = new Random();
-						int randy = r.nextInt(20);
-						for (int i = 0; i < randy; i++) {
-							
-							if(i == randy-1) {
-								test = line;
-							}
-							line = br.readLine();
-						
-						}
-						System.out.println("The word is: "+ test);
-						br.close();
-					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					url = picture.getUser(test);
+					url = picture.getUser(cmd);
 					System.out.println("ACTUAL URL: "+ url);
 					event.getChannel().sendMessage(url);
 					answer = test;
@@ -100,32 +65,11 @@ public class PictureOf extends CustomMessageCreateListener {
 					e.printStackTrace();
 				}
 				
-			}else if(begun==true) {
-				
-				if(cmd.equalsIgnoreCase(answer)) {
-					begun = false;
-					event.getChannel().sendMessage("YOU WON!");
-					event.getChannel().sendMessage("You ended with " + livesRemaining + " lives!");
-					url = "";
-					livesRemaining = startingLives;
-				}else {
-					livesRemaining--;
-					event.getChannel().sendMessage("Whoops! That wasn't the right answer! \n you now have "+ livesRemaining + " lives!");
-					if(livesRemaining==0) {
-						event.getChannel().sendMessage("You lost!");
-						begun = false;
-						url ="";
-						livesRemaining = startingLives;
-					}
-				}
-				
-			}else {
-				event.getChannel().sendMessage("To Start the Game, please enter: Begin \n To Make a Guess, simply type: PictureOf *Guess*");
-			}
 			
 			
 			
-		}
+			
+			}}
 	}
 		
 		 String getUser(String cmd) throws IOException {

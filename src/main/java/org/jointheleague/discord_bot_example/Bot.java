@@ -35,6 +35,8 @@ public class Bot  {
 		api.addMessageCreateListener(new ConnectFour(channelName));
 		api.addMessageCreateListener(new FlagMessageListener(channelName));
 		api.addMessageCreateListener(new PictureOf(channelName));
+		api.addMessageCreateListener(new GetPicture(channelName));
+		api.addMessageCreateListener(new AnimalTimer(channelName));
 
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
