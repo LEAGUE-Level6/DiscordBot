@@ -11,6 +11,7 @@ public class Connect4 extends CustomMessageCreateListener {
 
 	String[][] grid = new String[6][7];
 	int turn = 0;
+	boolean winner = false;
 
 	private static final String gameCommand = "!game";
 	private static final String zero = "0";
@@ -24,7 +25,6 @@ public class Connect4 extends CustomMessageCreateListener {
 	public void handle(MessageCreateEvent event) {
 		int play = 0;
 		boolean validPlay = false;
-		boolean winner = false;
 		boolean numEntered = false;
 		String player = "🔴";
 
@@ -42,33 +42,40 @@ public class Connect4 extends CustomMessageCreateListener {
 			play = 0;
 			numEntered = true;
 			validPlay = validate(play, grid);
+
 		} else if (event.getMessageContent().equals(one)) {
 			play = 1;
 			numEntered = true;
 			validPlay = validate(play, grid);
+
 		} else if (event.getMessageContent().equals(two)) {
 			play = 2;
 			numEntered = true;
 			validPlay = validate(play, grid);
+
 		} else if (event.getMessageContent().equals(three)) {
 			play = 3;
 			numEntered = true;
 			validPlay = validate(play, grid);
+
 		} else if (event.getMessageContent().equals(four)) {
 			play = 4;
 			numEntered = true;
 			validPlay = validate(play, grid);
+
 		} else if (event.getMessageContent().equals(five)) {
 			play = 5;
 			numEntered = true;
 			validPlay = validate(play, grid);
+
 		} else if (event.getMessageContent().equals(six)) {
 			play = 6;
 			numEntered = true;
 			validPlay = validate(play, grid);
 		}
+		System.out.println(isWinner(player, grid) + "");
 		if (numEntered == true && validPlay == true) {
-
+			winner = isWinner(player, grid);
 			if (turn % 2 == 0) {
 				player = "🔵";
 			} else if (turn % 2 == 1) {
@@ -86,8 +93,17 @@ public class Connect4 extends CustomMessageCreateListener {
 			event.getChannel().sendMessage("Player:\t" + (turn % 2) + "\tenter a column: ");
 		} else if (numEntered == true && validPlay == false) {
 			event.getChannel().sendMessage("Please enter a valid play");
-		}
 
+		}
+		if (winner) {
+			if (player == "🔵") {
+				event.getChannel().sendMessage("Blue Won");
+			} else if (player == "🔴") {
+				event.getChannel().sendMessage("Red Won");
+			} else {
+				event.getChannel().sendMessage("Tie Game");
+			}
+		}
 	}
 
 	public static String display(String[][] grid) {
