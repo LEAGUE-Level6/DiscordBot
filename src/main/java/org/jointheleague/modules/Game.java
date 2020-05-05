@@ -1,9 +1,14 @@
 package org.jointheleague.modules;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Random;
 
 import org.javacord.api.event.message.MessageCreateEvent;
@@ -66,13 +71,50 @@ public class Game {
 			guessed.append(c).append(" ");
 		}
 		if(lettersLeft <= 0) {
-			event.getChannel().sendMessage("```\nYou won! \nThe word was  " + word + "```"); 
+			event.getChannel().sendMessage("```\nYou won! \nThe word was:  " + word + "```"); 
 			score = 100*guessesLeft/(guessesTotal);
+			saveScore(event);
 			return false;
 		}
 		
 		else event.getChannel().sendMessage("```\nYour wrong guesses:\n" + wrongGuesses + "\n\n\n" + guessed + "\n\nGuesses Left:  " + guessesLeft + "```");
 		return true;
+	}
+	
+	public ArrayList<PlayerScore> currentScores() {
+		ArrayList<PlayerScore> scores = new ArrayList<PlayerScore>();
+		try(BufferedReader scoreReader = new BufferedReader(new FileReader(new File("scoreList")));) {
+		String[] userScoreList = scoreReader.readLine().split(";");
+		for (String str : userScoreList) {
+			if(!str.equals("")) {
+				String[] currentScore = str.split(",");
+				scores.add(new PlayerScore(Float.parseFloat(currentScore[1]), currentScore[0]));
+			}
+		}
+		
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return scores;
+	}
+	
+	public void saveScore(MessageCreateEvent event) {
+		ArrayList<PlayerScore> scoreList = currentScores();
+		
+		PlayerScore finalScore = new PlayerScore(score, event.getMessageAuthor().getName());
+		scoreList.add(finalScore);
+		Collections.sort(scoreList);
+		try(BufferedWriter scoreWriter = new BufferedWriter(new FileWriter(new File("scoreList")))) {
+			for (int i = 0; i < 10; i++) {
+				scoreWriter.write(scoreList.get(i).toString());
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public void start(MessageCreateEvent event) {
