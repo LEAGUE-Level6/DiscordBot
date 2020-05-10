@@ -1,6 +1,7 @@
 package org.jointheleague.modules;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import org.javacord.api.event.message.MessageCreateEvent;
@@ -8,8 +9,6 @@ import org.javacord.api.event.message.MessageCreateEvent;
 import net.aksingh.owmjapis.api.APIException;
 
 public class PEMDASListener extends CustomMessageCreateListener{
-	
-	public static final String MATH_COMMAND = "!solve ";
 	public static final String[] ops = {"+","-","*","/","^","%","d"};
 	public static boolean haveAnswer = false;
 	public static double saveAnswer = 0;
@@ -17,6 +16,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 	public static boolean correctSyntax = true;
 	public static boolean explain = false;
 	public static MessageCreateEvent publicEvent;
+	HashMap<String,Double> codeToNum = new HashMap<String,Double>();
 
 	public PEMDASListener(String channelName) {
 		super(channelName);
@@ -28,6 +28,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 		public ArrayList<Double> nums;
 		public ArrayList<String> operations;
 		public ArrayList<Boolean> isNegative;
+		
 		EquationHolder(ArrayList<Double> num,ArrayList<String> operation, ArrayList<Boolean> isNegative){
 			nums = num;
 			operations = operation;
@@ -37,6 +38,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
+		codeToNum = new HashMap<String,Double>();
 		saveAnswer = lastAnswer;
 		haveAnswer = false;
 		correctSyntax = true;
@@ -45,25 +47,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 		// TODO Auto-generated method stub
 		if(!event.getMessageAuthor().getIdAsString().equals("683742358726377566")) {
 		String s = event.getMessageContent();
-		if(s.length()>=7) {
-			
-			String begin = s.substring(0,7);
-			//System.out.println(s.substring(7));
-				if(begin.equals(MATH_COMMAND)) {
-					String equation = s.substring(7);
-					//System.out.println(solve(convert(equation)));
-					explain = true;
-					double answer = solve(convert(equation));
-					lastAnswer = answer;
-					if(answer%1!=0) {
-						outputAnswer(event,""+answer);
-					}else {
-						outputAnswer(event,""+(int)answer);
-					}
-					
-					explain = false;
-				}
-		}if(s.substring(s.length()-1).equals("=")||s.substring(s.length()-1).equals("= ")) {
+		if(s.substring(s.length()-1).equals("=")||s.substring(s.length()-1).equals("= ")) {
 			String equation = s.substring(0,s.length()-1);
 			//System.out.println(solve(convert(equation)));
 			double answer = solve(convert(equation));
@@ -76,7 +60,6 @@ public class PEMDASListener extends CustomMessageCreateListener{
 			
 		}else {
 			String equation = s;
-			//System.out.println(solve(convert(equation)));
 			double answer = solve(convert(equation));
 			lastAnswer = answer;
 			if(answer%1!=0) {
@@ -84,11 +67,16 @@ public class PEMDASListener extends CustomMessageCreateListener{
 			}else {
 				outputAnswer(event,""+(int)answer);
 			}
-			
+		}
+		}
+	}
+	
+	public String fix(String s) {
+		String out = "";
+		for(int i = 0;i<s.length();i++) {
 			
 		}
-		System.out.println("lastanswer: "+lastAnswer);
-		}
+		return out;
 	}
 	
 	public void outputAnswer(MessageCreateEvent e, String s) {
@@ -98,13 +86,16 @@ public class PEMDASListener extends CustomMessageCreateListener{
 			lastAnswer = saveAnswer;
 		}
 	}
-		
-	public void outputExplain(String s) {
-		if(explain) {
-			publicEvent.getChannel().sendMessage(s);
-		}	
-	}
 	
+	public String createCode(double num) {
+		String code = "a";
+		while(codeToNum.containsKey(code)) {
+			code +="a";
+			System.out.println("coding: "+code);
+		}
+		codeToNum.put(code, num);
+		return code;
+	}
 	public EquationHolder convert(String s){
 		System.out.println("Convert:");
 		System.out.println("Last answer: "+lastAnswer);
@@ -132,6 +123,9 @@ public class PEMDASListener extends CustomMessageCreateListener{
 				}
 			}
 			s = out;
+			if("-".equals(s.substring(0, 1))){
+				s = "0"+s;
+			}
 			for(int i = 0;i<s.length();i++) {
 				//System.out.println(lastType);
 				String sub = s.substring(i,i+1);
@@ -142,30 +136,46 @@ public class PEMDASListener extends CustomMessageCreateListener{
 					if(!temp.equals("")) {
 						if(temp.toLowerCase().contains("ans")) {
 							if(temp.contains("-")) {
-								if(lastAnswer>0) {
-									nums.add(lastAnswer);
-									isNegative.add(true);
-								}else {
-								nums.add(lastAnswer);
-								isNegative.add(false);
-								}
+								nums.add(Math.abs(lastAnswer));
+								isNegative.add(lastAnswer>0);
+//								if(lastAnswer>0) {
+//									nums.add(lastAnswer);
+//									isNegative.add(true);
+//								}else {
+//								nums.add(lastAnswer);
+//								isNegative.add(false);
+//								}
 							}else {
-								if(lastAnswer<0) {
-									nums.add(-1*lastAnswer);
-									isNegative.add(true);
-								}else {
-								nums.add(lastAnswer);
-								isNegative.add(false);
-								}
+								nums.add(Math.abs(lastAnswer));
+								isNegative.add(lastAnswer<0);
+//								if(lastAnswer<0) {
+//									nums.add(-1*lastAnswer);
+//									isNegative.add(true);
+//								}else {
+//								nums.add(lastAnswer);
+//								isNegative.add(false);
+//								}
 							}
-						}else {
-							if(Double.parseDouble(temp)<0) {
-								nums.add(Math.abs(Double.parseDouble(temp)));
-								isNegative.add(true);
+						}else if(codeToNum.containsKey(temp)){
+							if(temp.contains("-")) {
+								double num = codeToNum.get(temp.substring(1));
+								nums.add(Math.abs(num));
+								isNegative.add(num>0);
 							}else {
-								nums.add(Double.parseDouble(temp));
-								isNegative.add(false);
+								double num = codeToNum.get(temp);
+								nums.add(Math.abs(num));
+								isNegative.add(num<0);
 							}
+						}else{
+							nums.add(Math.abs(Double.parseDouble(temp)));
+							isNegative.add(Double.parseDouble(temp)<0);
+//							if(Double.parseDouble(temp)<0) {
+//								nums.add(Math.abs(Double.parseDouble(temp)));
+//								isNegative.add(true);
+//							}else {
+//								nums.add(Double.parseDouble(temp));
+//								isNegative.add(false);
+//							}
 						}
 						lastType = 0;
 						temp = "";
@@ -176,29 +186,25 @@ public class PEMDASListener extends CustomMessageCreateListener{
 					operations.add(sub);
 					lastType = 1;
 					negativeOperation = false;
-				}else if(sub.equals("(")&&!foundP) {
-					startP = i;
-					lastType = 2;
-					negativeOperation = false;
-				}else if(sub.equals(")")&&!foundP) {
-					endP = i;
-					lastType = 2;
-					foundP = true;
-					negativeOperation = true;
-				}else if(sub.equals("(")||sub.equals(")")){
-					
+				}else if(sub.equals("(")||sub.equals(")")) {
+					if(sub.equals("(")&&!foundP) {
+						startP = i;
+						lastType = 2;
+						negativeOperation = false;
+					}else if(sub.equals(")")&&!foundP) {
+						endP = i;
+						lastType = 2;
+						foundP = true;
+						negativeOperation = true;
+					}
 				}else if(sub.equals("|")){
-					//System.out.println("LastType: "+lastType);
-					//System.out.println("i: "+i);
 					if((lastType == 1||lastType == -1)&&!foundA) {
 						startA = i;
 						foundBeginA = true;
-						//System.out.println("begin at "+i);
 						negativeOperation = false;
 					}else if((lastType == 0||i==s.length()-1)&&!foundA&&foundBeginA) {
 						endA = i;
 						foundA = true;
-						//System.out.println("end at "+i);
 						negativeOperation = true;
 					}
 				}else {	
@@ -206,50 +212,59 @@ public class PEMDASListener extends CustomMessageCreateListener{
 					temp += sub;
 					negativeOperation = true;
 				}
-				
+				System.out.println("temp: "+temp);
 			}
 			if(temp.toLowerCase().contains("ans")) {
 				if(temp.contains("-")) {
-					if(lastAnswer>0) {
-						nums.add(lastAnswer);
-						isNegative.add(true);
-					}else {
-					nums.add(lastAnswer);
-					isNegative.add(false);
-					}
+					nums.add(Math.abs(lastAnswer));
+					isNegative.add(lastAnswer>0);
+//					if(lastAnswer>0) {
+//						nums.add(lastAnswer);
+//						isNegative.add(true);
+//					}else {
+//					nums.add(lastAnswer);
+//					isNegative.add(false);
+//					}
 				}else {
-					if(lastAnswer<0) {
-						nums.add(-1*lastAnswer);
-						isNegative.add(true);
-					}else {
-					nums.add(lastAnswer);
-					isNegative.add(false);
-					}
+					nums.add(Math.abs(lastAnswer));
+					isNegative.add(lastAnswer<0);
+//					if(lastAnswer<0) {
+//						nums.add(-1*lastAnswer);
+//						isNegative.add(true);
+//					}else {
+//					nums.add(lastAnswer);
+//					isNegative.add(false);
+//					}
 				}
 				
+			}else if(codeToNum.containsKey(temp)){
+				if(temp.contains("-")) {
+					double num = codeToNum.get(temp.substring(1));
+					nums.add(Math.abs(num));
+					isNegative.add(num>0);
+				}else {
+					double num = codeToNum.get(temp);
+					nums.add(Math.abs(num));
+					isNegative.add(num<0);
+				}
 			}else {
-			
 			nums.add(Math.abs(Double.parseDouble(temp)));
 			isNegative.add(Double.parseDouble(temp)<0);
 			}
-			System.out.println(s);
-			//System.out.println(equationToString(new EquationHolder(nums,operations,isNegative)));
-			System.out.println("ABS: Begin at "+startA+" end at "+endA);
-			System.out.println("PAREN: Begin at "+startP+" end at "+endP);
-			for(int i = 0;i<nums.size();i++) {
-				System.out.print(isNegative.get(i)+" ");
-				System.out.print(nums.get(i)+"  ");
-			}
-			System.out.println("");
-			System.out.println(s);
+//			System.out.println(s);
+//			
+//			for(int i = 0;i<nums.size();i++) {
+//				System.out.print(isNegative.get(i)+" ");
+//				System.out.print(nums.get(i)+"  ");
+//			}
+//			System.out.println("");
 			
 			if(foundP) {
 				String parenString = s.substring(startP+1,endP);
-				String simplified = s.substring(0,startP)+solve(convert(parenString))+s.substring(endP+1);
+				String simplified = s.substring(0,startP)+createCode(solve(convert(parenString)))+s.substring(endP+1);
 				return convert(simplified);
 			}else if(foundA) {
 				String absString = s.substring(startA+1,endA);
-				
 				String simplified = s.substring(0,startA)+Math.abs(solve(convert(absString)))+s.substring(endA+1);
 				return convert(simplified);
 			}
@@ -264,7 +279,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 	
 	public double solve(EquationHolder equation) {
 		try {
-			outputExplain(equationToString(equation));
+			
 			if(equation.nums.size()==1) {
 				System.out.println("size == 1");
 				System.out.println("op size = "+equation.operations.size());
@@ -301,7 +316,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 				System.out.println("setting b to +");
 			}
 			double newCalc = calcSimple(a,b, equation.operations.get(topIndex));
-			System.out.println("newcalc"+newCalc);
+			
 			ArrayList<Double> num = equation.nums;
 			ArrayList<String> operation = equation.operations;
 			ArrayList<Boolean> isNegative = equation.isNegative;
@@ -375,7 +390,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 				out+= e.nums.get(i);
 			}
 		}
-		return out + " =";
+		return out;
 	}
 	
 	public boolean isOperation(String s) {
