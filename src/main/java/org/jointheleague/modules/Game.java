@@ -51,7 +51,7 @@ public class Game {
 				wrongGuesses.add(guess);
 				guessesLeft-=1;
 				if(guessesLeft <= 0) {
-					event.getChannel().sendMessage("```\nYou ran out of guesses!  :(\n\nThe game has ended```");
+					event.getChannel().sendMessage("```\nYou ran out of guesses!  :(\n\nThe game has ended. The word was:  " + word + "```");
 					return false;
 				}
 			}
@@ -81,10 +81,19 @@ public class Game {
 		return true;
 	}
 	
-	public ArrayList<PlayerScore> currentScores() {
+	public static ArrayList<PlayerScore> currentScores() {
 		ArrayList<PlayerScore> scores = new ArrayList<PlayerScore>();
-		try(BufferedReader scoreReader = new BufferedReader(new FileReader(new File("scoreList")));) {
-		String[] userScoreList = scoreReader.readLine().split(";");
+		File scoreFile = new File("scoreList");
+		if(!scoreFile.exists()) {
+			return scores;
+		}
+		
+		try(BufferedReader scoreReader = new BufferedReader(new FileReader(scoreFile));) {
+		String scoreData = scoreReader.readLine();	
+		if(scoreData==null) {
+			return scores;
+		}
+		String[] userScoreList = scoreData.split(";");
 		for (String str : userScoreList) {
 			if(!str.equals("")) {
 				String[] currentScore = str.split(",");
@@ -106,7 +115,7 @@ public class Game {
 		scoreList.add(finalScore);
 		Collections.sort(scoreList);
 		try(BufferedWriter scoreWriter = new BufferedWriter(new FileWriter(new File("scoreList")))) {
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < scoreList.size() && i < 10; i++) {
 				scoreWriter.write(scoreList.get(i).toString());
 			}
 			

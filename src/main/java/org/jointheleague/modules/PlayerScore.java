@@ -22,4 +22,11 @@ public class PlayerScore implements Comparable{
 		return (player+","+score+";");
 	}
 	
+	public String getLeaderBoardDisplay() {
+		
+		
+		
+		return (player+",  "+score);
+	}
+	
 }
