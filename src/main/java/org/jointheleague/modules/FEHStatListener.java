@@ -26,6 +26,8 @@ public class FEHStatListener extends CustomMessageCreateListener {
 	ArrayList<String> heroNamesNoColon = new ArrayList<String>();
 	ArrayList<String> heroNamesColon = new ArrayList<String>();
 	
+	//Líf, Gunnthrá, Lon'qu, L'arachel, and Hríd are special snowflakes aren't they
+	
 	public FEHStatListener(String channelName) { // thank you http://zetcode.com/java/readwebpage/
 		super(channelName);
 		try {
@@ -66,7 +68,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 			} else if (event.getMessageContent().equalsIgnoreCase("!fehstats help")) { // !fehstats help
 				event.getChannel().sendMessage(
 						"After typing \"!fehstats\", type the name of the unit that you want to find stats for! \nIf there are multiple versions of the unit, I'll give you a list and ask for which one you want.");
-			} else if (event.getMessageContent().length() > 23) { // search by full title. rip lute and flame emperor
+			} else if (event.getMessageContent().length() > 23) { // search by full title. sorry lute.
 				String unitName = event.getMessageContent().substring(10).trim();
 				String unitNameTemp = unitName;
 				unitName = unitName.replace("'", "");
@@ -75,7 +77,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 					indexFound = 0;
 					specialName = true;
 					cleanNames();
-					event.getChannel().sendMessage("There is " + i + " match for \"" + unitNameTemp + "\".");
+					event.getChannel().sendMessage("I found " + i + " match for \"" + unitNameTemp + "\".");
 					findSpecificStats(unitName);
 					event.getChannel().sendMessage(statsS);
 					timesSpecified++;
@@ -88,14 +90,14 @@ public class FEHStatListener extends CustomMessageCreateListener {
 				int i = howMany(unitName);
 				cleanNames();
 				if (i == 1) { // 1 match
-					event.getChannel().sendMessage("There is " + i + " match for \"" + unitName + "\".");
+					event.getChannel().sendMessage("I found " + i + " match for \"" + unitName + "\".");
 					findStats(unitName);
 					event.getChannel().sendMessage(statsS);
 					timesSpecified++;
 				} else if (i == 0) { // no matches
 					event.getChannel().sendMessage("(´−｀) ﾝｰ I couldn't find any matches for that name. Maybe they'll be added to FEH someday!");
 				} else { // more than 1 match
-					event.getChannel().sendMessage("There are " + i + " matches for \"" + unitName + "\".");
+					event.getChannel().sendMessage("I found " + i + " matches for \"" + unitName + "\".");
 					String temp = "";
 					for (int j = 0; j < heroNamesColon.size(); j++) {
 						temp += heroNamesColon.get(j);
@@ -218,8 +220,8 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		str = strRaw.toLowerCase();
 		int index = 675; // thanks google docs
 		int tempIndex = 0;
-		if (str.contains(heroName) && !(heroName.contains(" "))) {
-			if (heroName.equalsIgnoreCase("gunnthra")) { // gunnthra is an exception because in the code her name is either Gunnthrá or Gunnthr%C3%A1
+		if (str.contains(heroName) && !(heroName.contains(" "))) { //no space
+			if (heroName.equalsIgnoreCase("gunnthra")) { // Gunnthr%C3%A1, L%C3%ADf, and Hr%C3%ADd are exceptions, unfortunately
 				while (tempIndex != -1) {
 					tempIndex = str.indexOf("gunnthr", index);
 					index = tempIndex + 1;
@@ -230,6 +232,39 @@ public class FEHStatListener extends CustomMessageCreateListener {
 				}
 				System.out.println("finished searching");
 				return timesF / 12;
+			} else if (heroName.equalsIgnoreCase("hrid")){
+				while (tempIndex != -1) {
+					tempIndex = str.indexOf("hrid", index);
+					index = tempIndex + 1;
+					if (tempIndex != -1 && (timesF % 7 == 3)) {
+						heroNamesRaw.add(strRaw.substring(tempIndex, tempIndex + 31));
+					}
+					timesF++;
+				}
+				System.out.println("finished searching");
+				return timesF / 7;
+			} else if (heroName.equalsIgnoreCase("lif")){
+				while (tempIndex != -1) {
+					tempIndex = str.indexOf("líf", index);
+					index = tempIndex + 1;
+					if (tempIndex != -1 && (timesF % 3 == 2)) {
+						heroNamesRaw.add(strRaw.substring(tempIndex, tempIndex + 31));
+					}
+					timesF++;
+				}
+				System.out.println("finished searching");
+				return timesF / 3;
+			} else if (heroName.contains("'")) { //LON'QU WHY
+				while (tempIndex != -1) {
+					tempIndex = str.indexOf(heroName, index);
+					index = tempIndex + 1;
+					if (tempIndex != -1) {
+						heroNamesRaw.add(strRaw.substring(tempIndex, tempIndex + 31));
+						timesF++;
+					}
+				}
+				System.out.println("finished searching");
+				return timesF;
 			} else {
 				heroName += ": ";
 				while (tempIndex != -1) {
@@ -243,7 +278,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 				System.out.println("finished searching");
 				return timesF / 3;
 			}
-		} else if (str.contains(heroName) && (heroName.contains(" "))) {
+		} else if (str.contains(heroName) && (heroName.contains(" "))) { //yes space
 			if (heroName.indexOf(" ") == heroName.lastIndexOf(" ")) {
 				heroName += ":";
 			}
@@ -282,8 +317,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 				int bracket = s.indexOf("<");
 				s = s.substring(0, bracket);
 			} 
-			if (!specialName && !(s.contains("Gunnthra"))) {
-				System.out.println(s);
+			if (!specialName && !(s.contains("Gunnthra") || s.contains("Hrid"))) { // Gunnthr%C3%A1 and Hr%C3%ADd are exceptions...
 				heroNamesColon.add(s);
 			}
 			// remove colon
@@ -291,7 +325,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 			System.out.println(s);
 			heroNamesNoColon.add(s);
 			// add colon
-			if ((specialName || s.contains("Gunnthra")) && !s.contains(":")) {
+			if ((specialName || s.contains("Gunnthra") || s.contains("Hrid")) && !s.contains(":")) {
 				int spacePlace = s.indexOf(" ");
 				s = s.substring(0, spacePlace) + ":" + s.substring(spacePlace);
 				heroNamesColon.add(s);
@@ -326,10 +360,20 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		// finding the start of the </td><td>
 		int index = 675; // copied from above
 		int tempIndex = 0;
-		if (unitName.contains(" ")) {
+		if (unitName.contains(" ") || unitName.contains("'")) {
 			while (tempIndex != -1) {
-				String tempName = unitName += ":";
+				String tempName = unitName.concat(":");
 				tempIndex = str.indexOf(tempName, index);
+				index = tempIndex + 1;
+				stringF++;
+				if (stringF == 1) {
+					System.out.println("found it :)");
+					break;
+				}
+			}
+		} else if (unitName.contains("Lif")) { //why is feh like this. why must you put accents on letters.
+			while (tempIndex != -1) {
+				tempIndex = str.indexOf("Líf:", index);
 				index = tempIndex + 1;
 				stringF++;
 				if (stringF == 1) {
@@ -397,12 +441,12 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		// finding the start of the </td><td>
 		int index = 675; // copied from above
 		int tempIndex = 0;
-		if (unitName.contains("Gunnthra")) { // gunnthra is an exception because in the code her name is either Gunnthrá or Gunnthr%C3%A1
+		if (unitName.contains("Gunnthra") || unitName.contains("Hrid")) { // Gunnthr%C3%A1 and Hr%C3%ADd are exceptions...
 			String hmmTemp = unitName.replace(":", "");
 			tempIndex = str.indexOf(hmmTemp, index);
 			index = tempIndex + 1;
 			System.out.println("Index is " + index);
-		} else if (unitName.contains(":")) {
+		} else if(unitName.contains(":") && !unitName.contains("'")) {
 			while (tempIndex != -1) {
 				tempIndex = str.indexOf(unitName, index);
 				index = tempIndex + 1;
