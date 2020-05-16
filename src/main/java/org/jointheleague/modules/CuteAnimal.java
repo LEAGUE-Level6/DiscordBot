@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Random;
-import java.util.Timer;
 
 import org.javacord.api.event.message.MessageCreateEvent;
 
@@ -22,9 +21,9 @@ import javax.json.JsonReader;
 import org.jointheleague.modules.pojo.*;
 
 
-public class AnimalTimer extends CustomMessageCreateListener {
+public class CuteAnimal extends CustomMessageCreateListener {
 	private UserTest user;
-	private static final String COMMAND = "!AnimalTimer";
+	private static final String COMMAND = "!CuteAnimal";
 	Gson gson = new Gson();
 	boolean begun = false;
 	String answer = "";
@@ -32,144 +31,66 @@ public class AnimalTimer extends CustomMessageCreateListener {
 	int livesRemaining = startingLives;
 	String url = "";
 	String test = "";
-	int Time = 10;
-	boolean timeUp = false;
-	Thread t1;
-	Thread t2;
-	boolean won = false;
-	boolean lose = false;
-	public AnimalTimer(String channelName) {
+	public CuteAnimal(String channelName) {
 		super(channelName);
 	}
 	//event.getMessageAuthor().getName()
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void handle(MessageCreateEvent event) {
 		if (event.getMessageContent().contains(COMMAND)) {
-			
-			String cmd = event.getMessageContent().replaceAll(" ", "").replace(COMMAND,"");
-			
-			if(cmd.equals("")) {
+
+			CuteAnimal picture = new CuteAnimal(channelName);
+			try {
 				
-				
-				event.getChannel().sendMessage("Please put a string after the command!");
-				
-			
-			}else if (cmd.equalsIgnoreCase("begin") && begun == false) {
-				AnimalTimer picture = new AnimalTimer(channelName);
+
 				try {
+					BufferedReader br = new BufferedReader(new FileReader("src/main/java/org/jointheleague/modules/Dictionary2"));
 					
+					String line = br.readLine();
 					
-					
-					
-					
-					try {
-						BufferedReader br = new BufferedReader(new FileReader("src/main/java/org/jointheleague/modules/Dictionary2"));
+					Random r = new Random();
+					int randy = r.nextInt(20);
+					for (int i = 0; i < randy; i++) {
 						
-						String line = br.readLine();
-						
-						Random r = new Random();
-						int randy = r.nextInt(14);
-						for (int i = 0; i < randy; i++) {
-							
-							if(i == randy-1) {
-								test = line;
-							}
-							line = br.readLine();
-						
+						if(i == randy) {
+							test = line;
 						}
-						System.out.println("The word is: "+ test);
-						br.close();
-					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						line = br.readLine();
+					
 					}
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					url = picture.getUser(test);
-					System.out.println("ACTUAL URL: "+ url);
-					event.getChannel().sendMessage(url);
-					answer = test;
-					begun = true;
-					
-		
-					
+					System.out.println("The word is: "+ test);
+					br.close();
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
-			}else if(begun==true) {
-
-				t1 = new Thread(() ->  {
-					
-					event.getChannel().sendMessage(Time +"");
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					if(Time == 0) {
-						timeUp = true;
-					}
+				
+				
+				
+				
+				
+				
+				
+				
+				url = picture.getUser(test);
+				System.out.println("ACTUAL URL: "+ url);
+				event.getChannel().sendMessage(url);
+				answer = test;					
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		
-					Time--;
-					
-				});
-			t2 = new Thread(() ->  {
-				event.getChannel().sendMessage("You have 10 seconds to guess the animal: ");
-				
-				while(won==false && lose==false) {
-				if(cmd.equalsIgnoreCase(answer)) {
-					won = true;
-				}else if(timeUp == true) {
-				lose = true;
-			}
-				
-				}
-			});
 		
-		for (int i = 0; i < 10; i++) {
-			t1.start();
-			t2.start();
-		}	
-			if(won == true) {
-				begun = false;
-				event.getChannel().sendMessage("YOU WON!");
-				url = "";
-				won = false;
-				t1.stop();
-				t2.stop();
-			}else if(lose == true) {
-				event.getChannel().sendMessage("You lost!");
-				begun = false;
-				url ="";
-				timeUp = false;
-				t1.stop();
-				t2.stop();
-			}
 				
-				
-			}else {
-				event.getChannel().sendMessage("To Start the Game, please enter: Begin \n To Make a Guess, simply type: AnimalTimer *Guess*");
+			
 			}
-			
-			
-			
-		}
 	}
 		
 		 String getUser(String cmd) throws IOException {
@@ -238,4 +159,6 @@ public class AnimalTimer extends CustomMessageCreateListener {
 		 
 		 
 	
+	
+
 	
