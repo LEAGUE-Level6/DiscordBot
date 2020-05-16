@@ -29,7 +29,8 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 	
-		if (event.getMessageContent().startsWith(startCommand)) {
+		if (event.getMessageContent().toLowerCase().startsWith(startCommand)){
+			begspaces = "";
 			pointTotal = 10;
 			event.getChannel().sendMessage(
 					"Welcome to Advanced Hangman! Here is how you play: \n 1) You will be presented with a random cliche phrase and given the same amount of underscores as the letters in each word.");
@@ -50,11 +51,9 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 				BufferedReader br2 = new BufferedReader(
 						new FileReader("src/main/java/org/jointheleague/modules/cliches"));
 				int R = new Random().nextInt(numLines);
-				event.getChannel().sendMessage(R + "");
 				for (int i = 0; i < R; i++) {
 					phrase = br2.readLine();
 				}
-					event.getChannel().sendMessage(phrase);
 				
 				
 				for (int i = 0; i < phrase.length(); i++) {
@@ -72,13 +71,14 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 			}
 
 		}
-		if(event.getMessageContent().startsWith("!help")){
+		if(event.getMessageContent().toLowerCase().startsWith(helpCommand)){
 			event.getChannel().sendMessage(
 					"Here are your commands: \n '!start'-starts a new game \n '!help'-shows all commands for reference \n '!uncover-use to uncover a letter; enter guesses in format Word#,Letter# \n '!guessl'-guess a letter; enter guesses in format Word#,Letter#,guess \n '!guessp' -guess a phrase");
 		}
-		if(event.getMessageContent().startsWith("!uncover")) {
+		if(event.getMessageContent().toLowerCase().startsWith(uncoverCommand)) {
 			int numLetters = 0;
 			String uncoverletter = "";
+			try {
 			int word = Integer.parseInt(event.getMessageContent().substring(9,10));
 			int letter = Integer.parseInt(event.getMessageContent().substring(11,12));
 			int currentword = 1;
@@ -106,7 +106,6 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 				}
 				
 			}
-			event.getChannel().sendMessage(numLetters + "");
 			pointTotal = pointTotal-1;
 			event.getChannel().sendMessage("Your points: " + pointTotal);
 			int cl = 0;
@@ -127,11 +126,14 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 			}
 			event.getChannel().sendMessage("`" + newString + "`");
 			begspaces = newString;
-		
+			}catch(Exception e) {
+				event.getChannel().sendMessage("Remember to enter your commands in the format: !uncover word#,letter# (it's really not that difficult to remember so please try)");
+			}
 		
 
 	}
-	if(event.getMessageContent().startsWith("!guessl")) {
+	if(event.getMessageContent().toLowerCase().startsWith(guessLetter)) {
+		try {
 		int word = Integer.parseInt(event.getMessageContent().substring(8,9));
 		int letter = Integer.parseInt(event.getMessageContent().substring(10,11));
 		String guessletter = event.getMessageContent().substring(12,13);
@@ -157,12 +159,11 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 						numLetters = numLetters + letter;
 						
 					}
-					event.getChannel().sendMessage(uncoverletter);
 					break;
 			}
 			
 		}
-		if(uncoverletter.equals(guessletter)){
+		if(uncoverletter.equals(guessletter)){	
 			pointTotal = pointTotal + 2;
 			event.getChannel().sendMessage("You guessed a letter! Congratulations! You have proved that you have the intellectual capabilities of a 5 year old!");
 			event.getChannel().sendMessage("Your points: " + pointTotal);
@@ -191,11 +192,17 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 			event.getChannel().sendMessage("Your points: " + pointTotal);
 			event.getChannel().sendMessage("`" + begspaces + "`");
 		}
-		
+	}catch(Exception e) {
+		event.getChannel().sendMessage("Remember to enter your commands in the format: !uncover word#,letter# (it's really not that difficult to remember so please try)");
 	}
-	if(event.getMessageContent().startsWith("!guessp")) {
-		String guessmessage = event.getMessageContent().substring(7,event.getMessageContent().length());
-		event.getChannel().sendMessage(guessmessage);
+
+
+}
+		
+	
+	if(event.getMessageContent().toLowerCase().startsWith(guessPhrase)) {
+		try {
+		String guessmessage = event.getMessageContent().substring(8,event.getMessageContent().length());
 		boolean failed = false;
 		if(guessmessage.length()!= phrase.length()) {
 			event.getChannel().sendMessage("Ok seriously dude. You just failed. Good luck coming back from that!");
@@ -213,14 +220,16 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 					failed = true;
 					break;
 				}
-			}
+			}}
 			if(failed ==false) {
 				event.getChannel().sendMessage("Wow. Great job. You got it.");
 				pointTotal = pointTotal + 10;
 				event.getChannel().sendMessage("You ended with " + pointTotal + " points.");
 			}
-		}
+		
+	}catch(Exception e) {
+	event.getChannel().sendMessage("PLEASE ACTUALLY TYPE IN A VALID PHRASE!!! STOP BEING DIFFICULT!!!")	;
 	}
 	
+	}}}
 	
-	}}
