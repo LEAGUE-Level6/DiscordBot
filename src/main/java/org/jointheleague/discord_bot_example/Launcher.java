@@ -16,7 +16,7 @@ public class Launcher {
 		new Launcher().launch(args);
 	}
  
-	public void launch(String[] args) {
+	public void launch(String[] args) { 
 		Map<String, BotInfo> map = Utilities.loadBotsFromJson();
 		for (String name : args) {
 			BotInfo n = map.get(name); 

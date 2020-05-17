@@ -12,7 +12,7 @@ public class RandomNumber extends CustomMessageCreateListener {
 	public RandomNumber(String channelName) {
 		super(channelName);
 	}
-
+ 
 	@Override
 	public void handle(MessageCreateEvent event) {
 		if (event.getMessageContent().contains(COMMAND)) {

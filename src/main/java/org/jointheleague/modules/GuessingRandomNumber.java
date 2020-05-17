@@ -30,7 +30,7 @@ public class GuessingRandomNumber extends CustomMessageCreateListener {
 			}
 			else if (guess < rand) {
 				event.getChannel().sendMessage("too low");
-				counter++;
+				counter++; 
 			}
 			else {
 				counter++;

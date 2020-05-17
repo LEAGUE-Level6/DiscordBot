@@ -15,7 +15,7 @@ public class DateFact extends CustomMessageCreateListener{
 
 	public DateFact(String channelName) {
 		super(channelName);
-	}
+	} 
 	int month = 0;
 	int date = 0;
 	public void handle(MessageCreateEvent event) {
