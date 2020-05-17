@@ -96,8 +96,17 @@ public class PEMDASListener extends CustomMessageCreateListener{
 		codeToNum.put(code, num);
 		return code;
 	}
+	
+	public int factorial(int i) {
+		int out = 1;
+		for(i=i;i>1;i--) {
+			out*=i;
+		}
+		return out;
+	}
+	
 	public EquationHolder convert(String s){
-		System.out.println("Convert:");
+		System.out.println("Convert:"+s);
 		System.out.println("Last answer: "+lastAnswer);
 		ArrayList<Double> nums = new ArrayList<Double>();
 		ArrayList<String> operations = new ArrayList<String>();
@@ -128,54 +137,75 @@ public class PEMDASListener extends CustomMessageCreateListener{
 			}
 			for(int i = 0;i<s.length();i++) {
 				//System.out.println(lastType);
+				System.out.println("temp: "+temp);
+				
 				String sub = s.substring(i,i+1);
 				if(sub.equals("-")&&!negativeOperation) {
 					temp = "-";
 				}else if(isOperation(sub)) {
 				
 					if(!temp.equals("")) {
+						System.out.println("trying: "+temp);
 						if(temp.toLowerCase().contains("ans")) {
 							if(temp.contains("-")) {
-								nums.add(Math.abs(lastAnswer));
+								if(temp.substring(temp.length()-1).equals("!")) {
+									nums.add((double) factorial((int)Math.abs(lastAnswer)));
+								}else {
+									nums.add(Math.abs(lastAnswer));
+								}
 								isNegative.add(lastAnswer>0);
-//								if(lastAnswer>0) {
-//									nums.add(lastAnswer);
-//									isNegative.add(true);
-//								}else {
-//								nums.add(lastAnswer);
-//								isNegative.add(false);
-//								}
 							}else {
-								nums.add(Math.abs(lastAnswer));
+								if(temp.substring(temp.length()-1).equals("!")) {
+									nums.add((double) factorial((int)Math.abs(lastAnswer)));
+								}else {
+									nums.add(Math.abs(lastAnswer));
+								}
 								isNegative.add(lastAnswer<0);
-//								if(lastAnswer<0) {
-//									nums.add(-1*lastAnswer);
-//									isNegative.add(true);
-//								}else {
-//								nums.add(lastAnswer);
-//								isNegative.add(false);
-//								}
 							}
-						}else if(codeToNum.containsKey(temp)){
-							if(temp.contains("-")) {
-								double num = codeToNum.get(temp.substring(1));
-								nums.add(Math.abs(num));
-								isNegative.add(num>0);
+						}else if(codeToNum.containsKey(temp) || codeToNum.containsKey(temp.substring(0,temp.length()-1))){
+							double num;
+							if(temp.substring(temp.length()-1).equals("!")) {
+								num = codeToNum.get(temp.substring(0,temp.length()-1));
+								nums.add((double)factorial((int)Math.abs(num)));
 							}else {
-								double num = codeToNum.get(temp);
-								nums.add(Math.abs(num));
-								isNegative.add(num<0);
+							num = codeToNum.get(temp);
+							nums.add(Math.abs(num));
+							}
+							isNegative.add(num<0);
+//							
+						}else if(temp.length()>1&&(codeToNum.containsKey(temp.substring(1)) || codeToNum.containsKey(temp.substring(1,temp.length()-1)))){
+							System.out.println("Found code");
+							
+							if(temp.contains("-")) {
+								if(temp.substring(temp.length()-1).equals("!")) {
+									double num = codeToNum.get(temp.substring(1,temp.length()-1));
+									nums.add((double)factorial((int)Math.abs(num)));
+									isNegative.add(num>0);
+								}else {
+									double num = codeToNum.get(temp.substring(1));
+									nums.add(Math.abs(num));
+									isNegative.add(num>0);
+								}
+							}else {
+								if(temp.substring(temp.length()-1).equals("!")) {
+									double num = codeToNum.get(temp.substring(0,temp.length()-1));
+									nums.add((double)factorial((int)Math.abs(num)));
+									isNegative.add(num<0);
+								}else {	
+									double num = codeToNum.get(temp);
+									nums.add(Math.abs(num));
+									isNegative.add(num<0);
+								}
 							}
 						}else{
-							nums.add(Math.abs(Double.parseDouble(temp)));
-							isNegative.add(Double.parseDouble(temp)<0);
-//							if(Double.parseDouble(temp)<0) {
-//								nums.add(Math.abs(Double.parseDouble(temp)));
-//								isNegative.add(true);
-//							}else {
-//								nums.add(Double.parseDouble(temp));
-//								isNegative.add(false);
-//							}
+							System.out.println(("normal"));
+							if(temp.substring(temp.length()-1).equals("!")) {
+								nums.add(Math.abs((double)factorial((int)Double.parseDouble(temp.substring(0,temp.length()-1)))));
+								isNegative.add(Double.parseDouble(temp.substring(0,temp.length()-1))<0);
+							}else {	
+								nums.add(Math.abs(Double.parseDouble(temp)));
+								isNegative.add(Double.parseDouble(temp)<0);
+							}
 						}
 						lastType = 0;
 						temp = "";
@@ -208,48 +238,78 @@ public class PEMDASListener extends CustomMessageCreateListener{
 						negativeOperation = true;
 					}
 				}else {	
+					if(sub.equals("!")){
+						s = s.substring(0,i)+"*1"+s.substring(i);
+						
+					}
 					lastType = 0;
 					temp += sub;
 					negativeOperation = true;
 				}
-				System.out.println("temp: "+temp);
+				
 			}
+			//after loop
+			System.out.println("trying: "+temp);
 			if(temp.toLowerCase().contains("ans")) {
 				if(temp.contains("-")) {
-					nums.add(Math.abs(lastAnswer));
+					if(temp.substring(temp.length()-1).equals("!")) {
+						nums.add((double) factorial((int)Math.abs(lastAnswer)));
+					}else {
+						nums.add(Math.abs(lastAnswer));
+					}
 					isNegative.add(lastAnswer>0);
-//					if(lastAnswer>0) {
-//						nums.add(lastAnswer);
-//						isNegative.add(true);
-//					}else {
-//					nums.add(lastAnswer);
-//					isNegative.add(false);
-//					}
 				}else {
-					nums.add(Math.abs(lastAnswer));
+					if(temp.substring(temp.length()-1).equals("!")) {
+						nums.add((double) factorial((int)Math.abs(lastAnswer)));
+					}else {
+						nums.add(Math.abs(lastAnswer));
+					}
 					isNegative.add(lastAnswer<0);
-//					if(lastAnswer<0) {
-//						nums.add(-1*lastAnswer);
-//						isNegative.add(true);
-//					}else {
-//					nums.add(lastAnswer);
-//					isNegative.add(false);
-//					}
 				}
-				
-			}else if(codeToNum.containsKey(temp)){
-				if(temp.contains("-")) {
-					double num = codeToNum.get(temp.substring(1));
-					nums.add(Math.abs(num));
-					isNegative.add(num>0);
+			}else if(codeToNum.containsKey(temp) || codeToNum.containsKey(temp.substring(0,temp.length()-1))){
+				double num;
+				if(temp.substring(temp.length()-1).equals("!")) {
+					num = codeToNum.get(temp.substring(0,temp.length()-1));
+					nums.add((double)factorial((int)Math.abs(num)));
 				}else {
-					double num = codeToNum.get(temp);
-					nums.add(Math.abs(num));
-					isNegative.add(num<0);
+				num = codeToNum.get(temp);
+				nums.add(Math.abs(num));
 				}
-			}else {
-			nums.add(Math.abs(Double.parseDouble(temp)));
-			isNegative.add(Double.parseDouble(temp)<0);
+				isNegative.add(num<0);
+//				
+			}else if(temp.length()>1&&(codeToNum.containsKey(temp.substring(1)) || codeToNum.containsKey(temp.substring(1,temp.length()-1)))){
+				System.out.println("Found code");
+				
+				if(temp.contains("-")) {
+					if(temp.substring(temp.length()-1).equals("!")) {
+						double num = codeToNum.get(temp.substring(1,temp.length()-1));
+						nums.add((double)factorial((int)Math.abs(num)));
+						isNegative.add(num>0);
+					}else {
+						double num = codeToNum.get(temp.substring(1));
+						nums.add(Math.abs(num));
+						isNegative.add(num>0);
+					}
+				}else {
+					if(temp.substring(temp.length()-1).equals("!")) {
+						double num = codeToNum.get(temp.substring(0,temp.length()-1));
+						nums.add((double)factorial((int)Math.abs(num)));
+						isNegative.add(num<0);
+					}else {	
+						double num = codeToNum.get(temp);
+						nums.add(Math.abs(num));
+						isNegative.add(num<0);
+					}
+				}
+			}else{
+				System.out.println(("normal"));
+				if(temp.substring(temp.length()-1).equals("!")) {
+					nums.add(Math.abs((double)factorial((int)Double.parseDouble(temp.substring(0,temp.length()-1)))));
+					isNegative.add(Double.parseDouble(temp.substring(0,temp.length()-1))<0);
+				}else {	
+					nums.add(Math.abs(Double.parseDouble(temp)));
+					isNegative.add(Double.parseDouble(temp)<0);
+				}
 			}
 //			System.out.println(s);
 //			
