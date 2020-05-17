@@ -79,24 +79,36 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 			int numLetters = 0;
 			String uncoverletter = "";
 			try {
-			int word = Integer.parseInt(event.getMessageContent().substring(9,10));
-			int letter = Integer.parseInt(event.getMessageContent().substring(11,12));
+			int word = Integer.parseInt(event.getMessageContent().substring(9,event.getMessageContent().indexOf(',')));
+			int letter = Integer.parseInt(event.getMessageContent().substring(event.getMessageContent().indexOf(',')+1,event.getMessageContent().length()));
 			int currentword = 1;
+			boolean foundword = false;
 			for(int i = 0; i<phrase.length();i++) {
 				numLetters++;
 				if(phrase.charAt(i)==' ') {
 					currentword++;
 				}
+				if(word <=0 || letter<=0) {
+					throw new IndexOutOfBoundsException();
+				}
 				if(currentword == word) {
+					foundword = true;
 						if(word == 1) {
 							numLetters = letter;
 							if(letter == 1) {
+
 							uncoverletter = phrase.substring(i,i+1);
 							numLetters = 1;
 							}else {
+							if(phrase.substring(i+letter-1,i+letter).contains(" ")) {
+									throw new IndexOutOfBoundsException();
+							}
 							uncoverletter = phrase.substring(i+letter-1,i+letter);
 							}
 						}else {
+							if(phrase.substring(i+letter,i+letter+1).contains(" ")) {
+								throw new IndexOutOfBoundsException();
+						}
 							uncoverletter = phrase.substring(i+letter,i+letter+1);
 							numLetters = numLetters + letter;
 							
@@ -105,6 +117,9 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 						break;
 				}
 				
+			}
+			if(foundword == false) {
+				throw new IndexOutOfBoundsException();
 			}
 			pointTotal = pointTotal-1;
 			event.getChannel().sendMessage("Your points: " + pointTotal);
@@ -126,6 +141,8 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 			}
 			event.getChannel().sendMessage("`" + newString + "`");
 			begspaces = newString;
+			}catch(IndexOutOfBoundsException x) {
+				event.getChannel().sendMessage("It seems that you have entered an invalid index in a futile attempt to be funny. You're not funny.");
 			}catch(Exception e) {
 				event.getChannel().sendMessage("Remember to enter your commands in the format: !uncover word#,letter# (it's really not that difficult to remember so please try)");
 			}
@@ -134,35 +151,52 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 	}
 	if(event.getMessageContent().toLowerCase().startsWith(guessLetter)) {
 		try {
-		int word = Integer.parseInt(event.getMessageContent().substring(8,9));
-		int letter = Integer.parseInt(event.getMessageContent().substring(10,11));
-		String guessletter = event.getMessageContent().substring(12,13);
+		int word = Integer.parseInt(event.getMessageContent().substring(8,event.getMessageContent().indexOf(",")));
+		int letter = Integer.parseInt(event.getMessageContent().substring(event.getMessageContent().indexOf(",")+1,event.getMessageContent().lastIndexOf(",")));
+		String guessletter = event.getMessageContent().substring(event.getMessageContent().lastIndexOf(",")+1,event.getMessageContent().length());
 		String uncoverletter = "";
 		int currentword = 1;
 		int numLetters = 0;
+		boolean foundword = false;
 		for(int i = 0; i<phrase.length();i++) {
 			numLetters++;
 			if(phrase.charAt(i)==' ') {
 				currentword++;
 			}
+			if(word <=0 || letter<=0) {
+				throw new IndexOutOfBoundsException();
+			}
 			if(currentword == word) {
+				foundword = true;
 					if(word == 1) {
 						numLetters = letter;
 						if(letter == 1) {
+
 						uncoverletter = phrase.substring(i,i+1);
 						numLetters = 1;
 						}else {
+						if(phrase.substring(i+letter-1,i+letter).contains(" ")) {
+								throw new IndexOutOfBoundsException();
+						}
 						uncoverletter = phrase.substring(i+letter-1,i+letter);
 						}
 					}else {
+						if(phrase.substring(i+letter,i+letter+1).contains(" ")) {
+							throw new IndexOutOfBoundsException();
+					}
 						uncoverletter = phrase.substring(i+letter,i+letter+1);
 						numLetters = numLetters + letter;
 						
 					}
+					event.getChannel().sendMessage(uncoverletter);
 					break;
 			}
 			
 		}
+		if(foundword == false) {
+			throw new IndexOutOfBoundsException();
+		}
+		
 		if(uncoverletter.equals(guessletter)){	
 			pointTotal = pointTotal + 2;
 			event.getChannel().sendMessage("You guessed a letter! Congratulations! You have proved that you have the intellectual capabilities of a 5 year old!");
@@ -192,6 +226,8 @@ public class AdvancedHangmanListener extends CustomMessageCreateListener {
 			event.getChannel().sendMessage("Your points: " + pointTotal);
 			event.getChannel().sendMessage("`" + begspaces + "`");
 		}
+	}catch(IndexOutOfBoundsException x) {
+		event.getChannel().sendMessage("It seems that you have entered an invalid index in a futile attempt to be funny. You're not funny.");	
 	}catch(Exception e) {
 		event.getChannel().sendMessage("Remember to enter your commands in the format: !uncover word#,letter# (it's really not that difficult to remember so please try)");
 	}
