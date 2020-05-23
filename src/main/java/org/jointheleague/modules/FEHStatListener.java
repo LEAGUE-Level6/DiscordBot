@@ -26,7 +26,8 @@ public class FEHStatListener extends CustomMessageCreateListener {
 	ArrayList<String> heroNamesNoColon = new ArrayList<String>();
 	ArrayList<String> heroNamesColon = new ArrayList<String>();
 	
-	//Líf, Gunnthrá, Lon'qu, L'arachel, and Hríd are special snowflakes aren't they
+	//Líf, Gunnthrá, Lon'qu, L'arachel, and Hríd are special snowflakes
+	//https://www.youtube.com/watch?v=k6lRHPpBMiQ
 	
 	public FEHStatListener(String channelName) { // thank you http://zetcode.com/java/readwebpage/
 		super(channelName);
@@ -67,7 +68,9 @@ public class FEHStatListener extends CustomMessageCreateListener {
 						"(。ヘ°) Please specify which unit to search for! \nType \"!fehstats help\" if you need help on how to use this listener.");
 			} else if (event.getMessageContent().equalsIgnoreCase("!fehstats help")) { // !fehstats help
 				event.getChannel().sendMessage(
-						"After typing \"!fehstats\", type the name of the unit that you want to find stats for! \nIf there are multiple versions of the unit, I'll give you a list and ask for which one you want.");
+						"After typing \"!fehstats\", type the name of the unit that you want to find stats for! "
+						+ "\nYou can type either their name or their whole title."
+						+ "\nIf there are multiple versions of the unit, I'll give you a list and ask for which one you want.");
 			} else if (event.getMessageContent().length() > 23) { // search by full title. sorry lute.
 				String unitName = event.getMessageContent().substring(10).trim();
 				String unitNameTemp = unitName;
@@ -107,13 +110,13 @@ public class FEHStatListener extends CustomMessageCreateListener {
 							temp += ", or ";
 						}
 					}
-					event.getChannel().sendMessage("Would you like to see stats for " + temp + "? Please reply with their full title.");
+					event.getChannel().sendMessage("Would you like to see stats for " + temp + "? Please reply with their full title, including any non-colon punctuation.");
 				}
 			}
 		}
 		String message = event.getMessageContent();
 		checkArrays(message);
-		// checking here
+		// checking for specific units here
 		if (!heroNamesNoColon.isEmpty() && (foundInNoColon || foundInColon) && timesSpecified == 0
 				&& (!(event.getMessageAuthor().asUser().get().isBot()) && !(event.getMessageAuthor().isYourself()))) {
 			timesSpecified = 0;
@@ -143,7 +146,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		}
 	}
 
-	public String fixCapitalization(String heroName) { //just normal fixing capitalization.....
+	public String fixCapitalization(String heroName) { //fixing capitalization.....
 		System.out.println("fixing capitalization...");
 		char[] name = heroName.toCharArray();
 		String unitName = "";
@@ -195,7 +198,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 	}
 
 	ArrayList<String> lines = new ArrayList<String>();
-	public int howMany(String heroName) {
+	public int howMany(String heroName) { //looking for how many versions of a unit there are
 		System.out.println("counting heroes...");
 		int timesF = 0;
 		String strRaw = "";
@@ -254,7 +257,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 				}
 				System.out.println("finished searching");
 				return timesF / 3;
-			} else if (heroName.contains("'")) { //LON'QU WHY
+			} else if (heroName.contains("'")) { //I'm looking at you Lon'qu
 				while (tempIndex != -1) {
 					tempIndex = str.indexOf(heroName, index);
 					index = tempIndex + 1;
@@ -278,7 +281,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 				System.out.println("finished searching");
 				return timesF / 3;
 			}
-		} else if (str.contains(heroName) && (heroName.contains(" "))) { //yes space
+		} else if (str.contains(heroName) && (heroName.contains(" "))) { //if there is a space in the name (flame emperor, black knight, etc)
 			if (heroName.indexOf(" ") == heroName.lastIndexOf(" ")) {
 				heroName += ":";
 			}
@@ -298,12 +301,13 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		}
 	}
 	
-	public void cleanNames() {
+	public void cleanNames() { //cleaning up weird things in names
 		System.out.println("cleaning names...");
 		for (int i = 0; i < heroNamesRaw.size(); i++) {
 			String s = heroNamesRaw.get(i);
 			s = s.replace("_", " ");
 			s = s.replace("&#39;", "'");
+			
 			// remove ending
 			if (s.contains("Fa")) {
 				int begone = s.lastIndexOf("Fa");
@@ -317,7 +321,8 @@ public class FEHStatListener extends CustomMessageCreateListener {
 				int bracket = s.indexOf("<");
 				s = s.substring(0, bracket);
 			} 
-			if (!specialName && !(s.contains("Gunnthra") || s.contains("Hrid"))) { // Gunnthr%C3%A1 and Hr%C3%ADd are exceptions...
+			s = s.replace("&quot;", "\"");
+			if (!specialName && !(s.contains("Gunnthra") || s.contains("Hrid") || s.contains("Lif"))) { // Gunnthr%C3%A1 and Hr%C3%ADd strike again...
 				heroNamesColon.add(s);
 			}
 			// remove colon
@@ -371,7 +376,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 					break;
 				}
 			}
-		} else if (unitName.contains("Lif")) { //why is feh like this. why must you put accents on letters.
+		} else if (unitName.contains("Lif")) { //>:(
 			while (tempIndex != -1) {
 				tempIndex = str.indexOf("Líf:", index);
 				index = tempIndex + 1;
@@ -412,12 +417,13 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		statsS = tempString;
 	}
 
-	public void findSpecificStats(String heroName) { // finding stats from name and title
+	public void findSpecificStats(String heroName) { //finding stats from name and title
 		System.out.println("finding specialized stats...");
 		String unitName = heroNamesColon.get(indexFound);
 		if (specialName) {
 			unitName = heroNamesNoColon.get(0);
 		}
+		System.out.println(unitName);
 		statsS = "";
 		String str = "";
 		int stringF = 0;
@@ -441,12 +447,12 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		// finding the start of the </td><td>
 		int index = 675; // copied from above
 		int tempIndex = 0;
-		if (unitName.contains("Gunnthra") || unitName.contains("Hrid")) { // Gunnthr%C3%A1 and Hr%C3%ADd are exceptions...
+		if (unitName.contains("Gunnthra") || unitName.contains("Hrid") || unitName.contains("Lif")) { // Gunnthr%C3%A1 and Hr%C3%ADd strike again...
 			String hmmTemp = unitName.replace(":", "");
 			tempIndex = str.indexOf(hmmTemp, index);
 			index = tempIndex + 1;
 			System.out.println("Index is " + index);
-		} else if(unitName.contains(":") && !unitName.contains("'")) {
+		} else if(unitName.contains(":") && !unitName.contains("'") && !unitName.contains("\"")) {
 			while (tempIndex != -1) {
 				tempIndex = str.indexOf(unitName, index);
 				index = tempIndex + 1;
@@ -458,6 +464,13 @@ public class FEHStatListener extends CustomMessageCreateListener {
 			}
 		} else {
 			while (tempIndex != -1) {
+				if (unitName.contains("\"")){
+					unitName = unitName.replace("\"", "");
+				}
+				if (unitName.contains(":")) {
+					unitName = unitName.replace(":", "");
+				}
+				System.out.println(unitName);
 				tempIndex = str.indexOf(unitName, index);
 				index = tempIndex + 1;
 				stringF++;
@@ -493,6 +506,7 @@ public class FEHStatListener extends CustomMessageCreateListener {
 		String strRaw = "";
 		String str = "";
 		heroName = heroName.replace(":", "");
+		heroName = heroName.replace("\"", "");
 		// make sure the capitalization is correct
 		String unitName = heroName.toLowerCase();
 		// get the one big table line
