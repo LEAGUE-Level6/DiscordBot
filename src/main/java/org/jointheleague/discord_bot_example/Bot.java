@@ -5,7 +5,9 @@ import org.javacord.api.DiscordApiBuilder;
 import org.jointheleague.modules.CalculatorMessageListener;
 import org.jointheleague.modules.CasinoGameListener;
 import org.jointheleague.modules.RandomNumber;
+import org.jointheleague.modules.RandomWord;
 import org.jointheleague.modules.Weather;
+import org.jointheleague.modules.cardGame;
 import org.jointheleague.modules.DadJokes;
 import org.jointheleague.modules.ClockMessageListener;
 import org.jointheleague.modules.ComicMessageListener;
@@ -16,6 +18,7 @@ import org.jointheleague.modules.MomBot;
 import org.jointheleague.modules.NewPollMessageListener;
 import org.jointheleague.modules.FashionAdvisor;
 import org.jointheleague.modules.leetMessageListener;
+import org.jointheleague.modules.factorCalc;
 
 
 public class Bot  {
@@ -44,14 +47,14 @@ public class Bot  {
 		api.addMessageCreateListener(new ElmoMessageListener(channelName));
 		api.addMessageCreateListener(new FactMessageListener(channelName));
 		api.addMessageCreateListener(new CasinoGameListener(channelName));
-
+		api.addMessageCreateListener(new RandomWord(channelName));
 		api.addMessageCreateListener(new leetMessageListener(channelName));
-
 		api.addMessageCreateListener(new FlagMessageListener(channelName));
-
+		api.addMessageCreateListener(new factorCalc(channelName));
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
+		api.addMessageCreateListener(new cardGame(channelName));
 	}
 
 }

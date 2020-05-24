@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import org.javacord.api.event.message.MessageCreateEvent;
 
 public class CalculatorMessageListener extends CustomMessageCreateListener {
-
+private static final String COMMAND = "!lyrics";
 	public CalculatorMessageListener(String channelName) {
 		super(channelName);
 	}
