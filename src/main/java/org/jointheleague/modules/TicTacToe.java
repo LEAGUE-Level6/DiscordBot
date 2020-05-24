@@ -15,11 +15,13 @@ public class TicTacToe extends CustomMessageCreateListener{
 	final String MiddleLeft = "!MiddleLeft";
 	final String MiddleMiddle = "!MiddleMiddle";
 	final String MiddleRight = "!MiddleRight";
-	final String LeftLeft = "!LeftLeft";
-	final String LeftMiddle = "LeftMiddle";
-	final String LeftRight = "LeftRight";
+	final String BottomLeft = "!BottomLeft";
+	final String BottomMiddle = "BottomMiddle";
+	final String BottomRight = "BottomRight";
 	
 	ArrayList<String>commands = new ArrayList<String>();
+	ArrayList<String>user = new ArrayList<String>();
+	ArrayList<String>CPU = new ArrayList<String>();
 
 	public TicTacToe(String channelName) {
 		super(channelName);
@@ -33,9 +35,9 @@ public class TicTacToe extends CustomMessageCreateListener{
 		commands.add(MiddleLeft);
 		commands.add(MiddleMiddle);
 		commands.add(MiddleRight);
-		commands.add(LeftLeft);
-		commands.add(LeftMiddle);
-		commands.add(LeftRight);
+		commands.add(BottomLeft);
+		commands.add(BottomMiddle);
+		commands.add(BottomRight);
 		
 		// TODO Auto-generated method stub
 		if (event.getMessageContent().startsWith(COMMAND)) {
@@ -43,23 +45,62 @@ public class TicTacToe extends CustomMessageCreateListener{
 				if(i%2 == 0) {
 				event.getChannel().sendMessage("Choose where you want to place the X");
 				String location = event.getMessageContent();
-				for (int j = 0; j < commands.size(); j++) {
-					if(location == commands.get(j)) {
-						commands.remove(j);
-						break;
+				try {
+					Thread.sleep(15000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				user.add(location);
+				commands.remove(location);
+					}
+				else if(i%2 == 1) {
+					Random r = new Random();
+					int a = r.nextInt(commands.size());
+					for (int j = 0; j < commands.size(); j++) {
+						if(a==j) {
+							CPU.add(commands.get(j));
+							event.getChannel().sendMessage("CPU places O at"+ commands.get(j));
+							commands.remove(j);
+						}
 					}
 				}
-				}
-				if(i%2 == 1) {
-					Random r = new Random();
-					r.nextInt(commands.size());
-					commands.remove(r);
-				}
-				if(i>=4) {
-					
-				}
-				
-				
+					if(CPU.contains(TopLeft) && CPU.contains(TopMiddle) && CPU.contains(TopRight)) {
+						event.getChannel().sendMessage("You lose");
+					}
+					else if(user.contains(TopLeft) && user.contains(TopMiddle) && user.contains(TopRight)) {
+						event.getChannel().sendMessage("You win");
+					}
+					else if(CPU.contains(MiddleLeft) && CPU.contains(MiddleMiddle) && CPU.contains(MiddleRight)) {
+						event.getChannel().sendMessage("You lose");
+					}
+					else if(user.contains(MiddleLeft) && user.contains(MiddleMiddle) && user.contains(MiddleRight)) {
+						event.getChannel().sendMessage("You win");
+					}
+					else if(CPU.contains(BottomLeft) && CPU.contains(BottomMiddle) && CPU.contains(BottomRight)) {
+						event.getChannel().sendMessage("You lose");
+					}
+					else if(user.contains(BottomLeft) && user.contains(BottomMiddle) && user.contains(BottomRight)) {
+						event.getChannel().sendMessage("You win");
+					}
+					else if(CPU.contains(TopLeft) && CPU.contains(MiddleLeft) && CPU.contains(BottomLeft)) {
+						event.getChannel().sendMessage("You lose");
+					}
+					else if(user.contains(TopLeft) && user.contains(MiddleLeft) && user.contains(BottomLeft)) {
+						event.getChannel().sendMessage("You win");
+					}
+					else if(CPU.contains(TopMiddle) && CPU.contains(MiddleMiddle) && CPU.contains(BottomMiddle)) {
+						event.getChannel().sendMessage("You lose");
+					}
+					else if(user.contains(TopMiddle) && user.contains(MiddleMiddle) && user.contains(BottomMiddle)) {
+						event.getChannel().sendMessage("You win");
+					}
+					else if(CPU.contains(TopRight) && CPU.contains(MiddleRight) && CPU.contains(BottomRight)) {
+						event.getChannel().sendMessage("You lose");
+					}
+					else if(user.contains(TopRight) && user.contains(MiddleRight) && user.contains(BottomRight)) {
+						event.getChannel().sendMessage("You lose");
+					}
 			}
 			
 		}
