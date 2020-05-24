@@ -86,7 +86,7 @@ public class NewPollMessageListener extends CustomMessageCreateListener {
 	 */
 	static String[] parseParameters(String command, String fullMessage) {
 		
-		EmbedBuilder invalidParameters = new EmbedBuilder().setTitle("Invalid Parameters").setDescription("Make sure that you only use quotations when surrounding multi-word parameters.").setColor(Color.RED);
+		//EmbedBuilder invalidParameters = new EmbedBuilder().setTitle("Invalid Parameters").setDescription("Make sure that you only use quotations when surrounding multi-word parameters.").setColor(Color.RED);
 		
 		//Splits the parameters by spaces
 		String[] rawParams = fullMessage.substring(command.length()).trim().split(" ");
