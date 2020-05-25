@@ -27,7 +27,7 @@ public class Bot  {
 	DiscordApi api;
 
 	public Bot(String token, String channelName) { 
-		this.token = token;
+		this.token = token; 
 		this.channelName = channelName;
 	}
 
