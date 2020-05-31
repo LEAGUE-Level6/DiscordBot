@@ -16,8 +16,8 @@ public class TicTacToe extends CustomMessageCreateListener{
 	final String MiddleMiddle = "!MiddleMiddle";
 	final String MiddleRight = "!MiddleRight";
 	final String BottomLeft = "!BottomLeft";
-	final String BottomMiddle = "BottomMiddle";
-	final String BottomRight = "BottomRight";
+	final String BottomMiddle = "!BottomMiddle";
+	final String BottomRight = "!BottomRight";
 
 	ArrayList<String>commands = new ArrayList<String>();
 	ArrayList<String>user = new ArrayList<String>();
@@ -56,10 +56,14 @@ public class TicTacToe extends CustomMessageCreateListener{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			String location = event.getMessage().getContent().toString();
-			System.out.println(location + " hi");
+			String location = event.getMessageContent().toString();
+			System.out.println(location + "location");
 			user.add(location);
-			commands.remove(location);
+			for (int i = 0; i < commands.size(); i++) {
+				if(commands.get(i).equals(location)) {
+					commands.remove(i);
+				}
+			}
 		}
 		else if(counter%2 == 1) {
 			Random r = new Random();
@@ -71,44 +75,51 @@ public class TicTacToe extends CustomMessageCreateListener{
 					commands.remove(j);
 				}
 			}
-		}
+		}		
 		counter++;
-		if(CPU.contains(TopLeft) && CPU.contains(TopMiddle) && CPU.contains(TopRight)) {
+		for (int i = 0; i < CPU.size(); i++) {
+			for (int j = 0; j < user.size(); j++) {
+		if(CPU.get(i).equals(TopLeft) && CPU.get(i).equals(TopMiddle) && CPU.get(i).equals(TopRight)) {
 			event.getChannel().sendMessage("You lose");
 		}
-		else if(user.contains(TopLeft) && user.contains(TopMiddle) && user.contains(TopRight)) {
+		else if(user.get(j).equals(TopLeft) && user.get(j).equals(TopMiddle) && user.get(j).equals(TopRight)) {
+			System.out.println("You win");
 			event.getChannel().sendMessage("You win");
 		}
-		else if(CPU.contains(MiddleLeft) && CPU.contains(MiddleMiddle) && CPU.contains(MiddleRight)) {
+		else if(CPU.get(i).equals(MiddleLeft) && CPU.get(i).equals(MiddleMiddle) && CPU.get(i).equals(MiddleRight)) {
 			event.getChannel().sendMessage("You lose");
 		}
-		else if(user.contains(MiddleLeft) && user.contains(MiddleMiddle) && user.contains(MiddleRight)) {
+		else if(user.get(j).equals(MiddleLeft) && user.get(j).equals(MiddleMiddle) && user.get(j).equals(MiddleRight)) {
 			event.getChannel().sendMessage("You win");
 		}
-		else if(CPU.contains(BottomLeft) && CPU.contains(BottomMiddle) && CPU.contains(BottomRight)) {
+		else if(CPU.get(i).equals(BottomLeft) && CPU.get(i).equals(BottomMiddle) && CPU.get(i).equals(BottomRight)) {
 			event.getChannel().sendMessage("You lose");
 		}
-		else if(user.contains(BottomLeft) && user.contains(BottomMiddle) && user.contains(BottomRight)) {
+		else if(user.get(j).equals(BottomLeft) && user.get(j).equals(BottomMiddle) && user.get(j).equals(BottomRight)) {
 			event.getChannel().sendMessage("You win");
 		}
-		else if(CPU.contains(TopLeft) && CPU.contains(MiddleLeft) && CPU.contains(BottomLeft)) {
+		else if(CPU.get(i).equals(TopLeft) && CPU.get(i).equals(MiddleLeft) && CPU.get(i).equals(BottomLeft)) {
 			event.getChannel().sendMessage("You lose");
 		}
-		else if(user.contains(TopLeft) && user.contains(MiddleLeft) && user.contains(BottomLeft)) {
+		else if(user.get(j).equals(TopLeft) && user.get(j).equals(MiddleLeft) && user.get(j).equals(BottomLeft)) {
+			System.out.println("You win");
 			event.getChannel().sendMessage("You win");
 		}
-		else if(CPU.contains(TopMiddle) && CPU.contains(MiddleMiddle) && CPU.contains(BottomMiddle)) {
+		else if(CPU.get(i).equals(TopMiddle) && CPU.get(i).equals(MiddleMiddle) && CPU.get(i).equals(BottomMiddle)) {
 			event.getChannel().sendMessage("You lose");
 		}
-		else if(user.contains(TopMiddle) && user.contains(MiddleMiddle) && user.contains(BottomMiddle)) {
+		else if(user.get(j).equals(TopMiddle) && user.get(j).equals(MiddleMiddle) && user.get(j).equals(BottomMiddle)) {
 			event.getChannel().sendMessage("You win");
 		}
-		else if(CPU.contains(TopRight) && CPU.contains(MiddleRight) && CPU.contains(BottomRight)) {
+		else if(CPU.get(i).equals(TopRight) && CPU.get(i).equals(MiddleRight) && CPU.get(i).equals(BottomRight)) {
 			event.getChannel().sendMessage("You lose");
 		}
-		else if(user.contains(TopRight) && user.contains(MiddleRight) && user.contains(BottomRight)) {
+		else if(user.get(j).equals(TopRight) && user.get(j).equals(MiddleRight) && user.get(j).equals(BottomRight)) {
 			event.getChannel().sendMessage("You lose");
 		}
+		
+	}
+}
 		}
 	}
 }
