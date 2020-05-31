@@ -15,7 +15,7 @@ public class DadJokes extends CustomMessageCreateListener {
 
 	@Override
 	public void handle(MessageCreateEvent event) {
-		String a = event.getMessageContent();
+		//String a = event.getMessageContent();
 		
 		String s = a.toLowerCase();
 		if (s.contains(c1) && !event.getMessageAuthor().isYourself()) {
