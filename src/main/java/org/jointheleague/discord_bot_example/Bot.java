@@ -17,6 +17,7 @@ import org.jointheleague.modules.NewPollMessageListener;
 import org.jointheleague.modules.FashionAdvisor;
 import org.jointheleague.modules.leetMessageListener;
 
+import org.jointheleague.modules.*;
 
 public class Bot  {
 
@@ -35,6 +36,7 @@ public class Bot  {
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 		
 		//add Listeners
+		api.addMessageCreateListener(new MomBot(channelName));
 		api.addMessageCreateListener(new RandomNumber(channelName));
 		api.addMessageCreateListener(new DadJokes(channelName));
 		api.addMessageCreateListener(new ClockMessageListener(channelName));
@@ -43,15 +45,23 @@ public class Bot  {
 		api.addMessageCreateListener(new ElmoMessageListener(channelName));
 		api.addMessageCreateListener(new FactMessageListener(channelName));
 		api.addMessageCreateListener(new CasinoGameListener(channelName));
-
+		api.addMessageCreateListener(new Ryland(channelName));
+		api.addMessageCreateListener(new RockPaperScissorsListener(channelName));
 		api.addMessageCreateListener(new leetMessageListener(channelName));
-
+		api.addMessageCreateListener(new ConnectFour(channelName));
 		api.addMessageCreateListener(new FlagMessageListener(channelName));
+		api.addMessageCreateListener(new PictureOf(channelName));
+		api.addMessageCreateListener(new GetPicture(channelName));
+		api.addMessageCreateListener(new CuteAnimal(channelName));
 
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
 		api.addMessageCreateListener(new game2048Listener(channelName));
+		api.addMessageCreateListener(new ComplimentListener(channelName));
+		api.addMessageCreateListener(new FEHStatListener(channelName));
+		api.addMessageCreateListener(new CrazyEights(channelName));
+		api.addMessageCreateListener(new Blackjack(channelName));
 	}
 
 }
