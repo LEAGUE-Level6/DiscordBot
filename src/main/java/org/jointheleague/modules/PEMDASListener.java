@@ -3,6 +3,7 @@ package org.jointheleague.modules;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 import org.javacord.api.event.message.MessageCreateEvent;
 
@@ -16,6 +17,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 	public static boolean correctSyntax = true;
 	public static double factorialSave = -1;
 	public static boolean explain = false;
+	public static long botId = -1;
 	public static MessageCreateEvent publicEvent;
 	HashMap<String,Double> codeToNum = new HashMap<String,Double>();
 
@@ -45,28 +47,28 @@ public class PEMDASListener extends CustomMessageCreateListener{
 		correctSyntax = true;
 		explain = false;
 		publicEvent = event;
-		if(!event.getMessageAuthor().getIdAsString().equals("683742358726377566")) {
-		String s = event.getMessageContent();
-		if(s.substring(s.length()-1).equals("=")||s.substring(s.length()-1).equals("= ")) {
-			String equation = s.substring(0,s.length()-1);
-			double answer = solve(convert(equation));
-			lastAnswer = answer;
-			if(answer%1!=0) {
-				outputAnswer(event,""+answer);
+		if(!event.getMessageAuthor().getIdAsString().equals(""+botId)) {
+			String s = event.getMessageContent();
+			if(s.substring(s.length()-1).equals("=")||s.substring(s.length()-1).equals("= ")) {
+				String equation = s.substring(0,s.length()-1);
+				double answer = solve(convert(equation));
+				lastAnswer = answer;
+				if(answer%1!=0) {
+					outputAnswer(event,""+answer);
+				}else {
+					outputAnswer(event,""+(int)answer);
+				}
+				
 			}else {
-				outputAnswer(event,""+(int)answer);
+				String equation = s;
+				double answer = solve(convert(equation));
+				lastAnswer = answer;
+				if(answer%1!=0) {
+					outputAnswer(event,""+answer);
+				}else {
+					outputAnswer(event,""+(int)answer);
+				}
 			}
-			
-		}else {
-			String equation = s;
-			double answer = solve(convert(equation));
-			lastAnswer = answer;
-			if(answer%1!=0) {
-				outputAnswer(event,""+answer);
-			}else {
-				outputAnswer(event,""+(int)answer);
-			}
-		}
 		}
 	}
 	
@@ -80,7 +82,15 @@ public class PEMDASListener extends CustomMessageCreateListener{
 	
 	public void outputAnswer(MessageCreateEvent e, String s) {
 		if(correctSyntax) {
-			e.getChannel().sendMessage(s);
+			try {
+				botId = e.getChannel().sendMessage(s).get().getAuthor().getId();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (ExecutionException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}else {
 			lastAnswer = saveAnswer;
 		}
