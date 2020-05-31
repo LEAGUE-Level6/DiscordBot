@@ -19,7 +19,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import net.aksingh.owmjapis.api.APIException;
-
+//stop adding this stupid line back
 
 public class CasinoGameListener extends CustomMessageCreateListener{
 
