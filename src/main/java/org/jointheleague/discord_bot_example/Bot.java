@@ -10,10 +10,12 @@ public class Bot  {
 	private String token;
 	private String channelName;
 	DiscordApi api;
+	_HelpListener helpListener;
 
 	public Bot(String token, String channelName) {
 		this.token = token;
 		this.channelName = channelName;
+		helpListener = new _HelpListener(channelName);
 	}
 
 	public void connect() {
@@ -22,8 +24,14 @@ public class Bot  {
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 		
 		//add Listeners
+		
+		RandomNumber randomNumber = new RandomNumber(channelName);
+		api.addMessageCreateListener(randomNumber);
+		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
+		
+		
+		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
-		api.addMessageCreateListener(new RandomNumber(channelName));
 		api.addMessageCreateListener(new DadJokes(channelName));
 		api.addMessageCreateListener(new ClockMessageListener(channelName));
 		api.addMessageCreateListener(new CalculatorMessageListener(channelName));
@@ -39,18 +47,14 @@ public class Bot  {
 		api.addMessageCreateListener(new PictureOf(channelName));
 		api.addMessageCreateListener(new GetPicture(channelName));
 		api.addMessageCreateListener(new CuteAnimal(channelName));
-
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
-<<<<<<< HEAD
 		api.addMessageCreateListener(new MinesweeperListener(channelName));
-=======
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
 		api.addMessageCreateListener(new ComplimentListener(channelName));
 		api.addMessageCreateListener(new FEHStatListener(channelName));
 		api.addMessageCreateListener(new CrazyEights(channelName));
 		api.addMessageCreateListener(new Blackjack(channelName));
->>>>>>> development
 	}
 
 }

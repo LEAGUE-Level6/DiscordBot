@@ -127,18 +127,7 @@ public class CrazyEights extends CustomMessageCreateListener {
 			
 			event.getChannel().sendMessage(rules);
 		}
-		//general help for the whole bot
-		else if(message.equalsIgnoreCase(genHelp)) {
-			EmbedBuilder genHelpEmbed = new EmbedBuilder();
-			
-			genHelpEmbed.setColor(Color.GREEN);
-			genHelpEmbed.setTitle("Bot help");
-			genHelpEmbed.setDescription("This bot can play 2 different games. Each has its own set of commands and rules. "
-					+ "To play crazy eights, enter **" + CrazyEights.start + "**. To play blackjack, enter **" + Blackjack.start + "**. "
-					+ "When you start a game, it will give you the commands to get to each individual set of rules/commands.");
-			
-			event.getChannel().sendMessage(genHelpEmbed);
-		}
+
 		
 		
 		if(playingCrazyEightsEmbed) {
