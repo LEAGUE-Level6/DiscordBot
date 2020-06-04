@@ -4,6 +4,7 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.jointheleague.modules.*;
 
+
 public class Bot  {
 
 	private String token;
@@ -48,15 +49,12 @@ public class Bot  {
 		api.addMessageCreateListener(new CuteAnimal(channelName));
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
+		api.addMessageCreateListener(new MinesweeperListener(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
 		api.addMessageCreateListener(new ComplimentListener(channelName));
 		api.addMessageCreateListener(new FEHStatListener(channelName));
 		api.addMessageCreateListener(new CrazyEights(channelName));
 		api.addMessageCreateListener(new Blackjack(channelName));
-		
-		//add help embeds
-		 
-		
 	}
 
 }
