@@ -32,6 +32,28 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+    <groupId>org.json</groupId>
+    <artifactId>json</artifactId>
+    <version>20190722</version>
+</dependency>
+<dependency>
+    <groupId>javax.json</groupId>
+    <artifactId>javax.json-api</artifactId>
+    <version>1.1</version>
+</dependency>
+
+<dependency>
+    <groupId>org.glassfish</groupId>
+    <artifactId>javax.json</artifactId>
+    <version>1.1</version>
+</dependency>
+		
+		<dependency>
+   		 	<groupId>javax.json</groupId>
+   			 <artifactId>javax.json-api</artifactId>
+  			 <version>1.1.4</version>
+			</dependency>
+		<dependency>
 			<groupId>org.javacord</groupId>
 			<artifactId>javacord</artifactId>
 			<version>3.0.3</version>
@@ -41,7 +63,6 @@
   			<groupId>com.googlecode.json-simple</groupId>
   			<artifactId>json-simple</artifactId>
   			<version>1.1.1</version>
-		</dependency>
 		</dependency>
 		<dependency>
 			<groupId>net.aksingh</groupId>
