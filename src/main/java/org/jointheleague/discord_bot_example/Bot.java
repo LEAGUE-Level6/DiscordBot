@@ -27,7 +27,7 @@ public class Bot  {
 	}
 
 	public void connect(boolean printInvite) {
-		// Why Keith? Couldn't you have commented what this does? Sigh...
+		
 		api = new DiscordApiBuilder().setToken(token).login().join();
 
 		// Print the URL to invite the bot
