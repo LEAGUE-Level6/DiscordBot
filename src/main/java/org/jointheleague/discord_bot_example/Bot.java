@@ -2,7 +2,6 @@ package org.jointheleague.discord_bot_example;
 
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
-
 import org.jointheleague.modules.*;
 
 /**
