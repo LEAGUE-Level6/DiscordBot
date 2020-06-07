@@ -1,5 +1,8 @@
 package org.jointheleague.discord_bot_example;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 /**
  * A class to store the list of channels and API token from the `config.json`
  * file.
@@ -8,7 +11,6 @@ package org.jointheleague.discord_bot_example;
  *
  */
 public class BotInfo {
-
 	private String[] channels;
 	private String token;
 
