@@ -47,6 +47,9 @@ public class Bot  {
 		api.addMessageCreateListener(new CrazyEights(channelName));
 		api.addMessageCreateListener(new Blackjack(channelName));
 		api.addMessageCreateListener(new RandomCase(channelName));
+		api.addMessageCreateListener(new SetProfilePic(channelName));
+		api.addMessageCreateListener(new ToGif(channelName));
+
 
 	}
 
