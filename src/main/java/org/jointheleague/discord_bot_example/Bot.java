@@ -46,6 +46,13 @@ public class Bot  {
 		api.addMessageCreateListener(randomNumber);
 		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
 		
+		RockPaperScissorsListener rockPaperScissors = new RockPaperScissorsListener(channelName);
+		api.addMessageCreateListener(rockPaperScissors);
+		helpListener.addHelpEmbed(rockPaperScissors.getHelpEmbed());
+		
+		PEMDASListener pemdasListener = new PEMDASListener(channelName);
+		api.addMessageCreateListener(pemdasListener);
+		helpListener.addHelpEmbed(pemdasListener.getHelpEmbed());
 		
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
@@ -56,9 +63,7 @@ public class Bot  {
 		api.addMessageCreateListener(new ElmoMessageListener(channelName));
 		api.addMessageCreateListener(new FactMessageListener(channelName));
 		api.addMessageCreateListener(new CasinoGameListener(channelName));
-		api.addMessageCreateListener(new PEMDASListener(channelName));
 		api.addMessageCreateListener(new Ryland(channelName));
-		api.addMessageCreateListener(new RockPaperScissorsListener(channelName));
 		api.addMessageCreateListener(new leetMessageListener(channelName));
 		api.addMessageCreateListener(new ConnectFour(channelName));
 		api.addMessageCreateListener(new FlagMessageListener(channelName));

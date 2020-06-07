@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.jointheleague.modules.pojo.HelpEmbed;
 
 import net.aksingh.owmjapis.api.APIException;
 
@@ -41,7 +42,7 @@ public class RockPaperScissorsListener extends CustomMessageCreateListener{
 		super(channelName);
 		// TODO Auto-generated constructor stub
 		//data = new File("src/main/resources/RPSdata.txt");
-		
+		helpEmbed = new HelpEmbed("!playRPS", "Starts a game of Rock Paper Scissors against a computer that chooses randomly");
 			
 	}
 
@@ -55,7 +56,7 @@ public class RockPaperScissorsListener extends CustomMessageCreateListener{
 			if(in.startsWith(BEGIN_COMMAND)) {
 				playing = true;
 				event.getChannel().sendMessage("Playing Rock Paper Scissors");
-				event.getChannel().sendMessage("Enter !rock, !paper, or !scissors to play");
+				event.getChannel().sendMessage("Enter !rock, !paper, or !scissors to play. !stopRPS to stop playing");
 				//event.getChannel().sendMessage("For Example:");
 			}else if(in.startsWith(END_COMMAND)){
 				playing = false;

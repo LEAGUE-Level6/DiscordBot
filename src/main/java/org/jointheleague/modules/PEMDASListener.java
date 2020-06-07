@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.jointheleague.modules.pojo.HelpEmbed;
 
 import net.aksingh.owmjapis.api.APIException;
 
@@ -23,6 +24,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 
 	public PEMDASListener(String channelName) {
 		super(channelName);
+		helpEmbed = new HelpEmbed("<expression> =","simplifies the expression into a single decimal number");
 	}
 	
 	//Holds the numbers and operations in the equation in a format for solve() to understand
