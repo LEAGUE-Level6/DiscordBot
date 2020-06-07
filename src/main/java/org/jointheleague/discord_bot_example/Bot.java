@@ -69,5 +69,7 @@ public class Bot  {
 		api.addMessageCreateListener(new FEHStatListener(channelName));
 		api.addMessageCreateListener(new CrazyEights(channelName));
 		api.addMessageCreateListener(new Blackjack(channelName));
+		api.addMessageCreateListener(new RandomCase(channelName));
+
 	}
 }
