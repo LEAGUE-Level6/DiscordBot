@@ -4,6 +4,7 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 
 
+
 import org.jointheleague.modules.*;
 
 
@@ -75,7 +76,6 @@ public class Bot  {
 		api.addMessageCreateListener(new CrazyEights(channelName));
 		api.addMessageCreateListener(new Blackjack(channelName));
 		api.addMessageCreateListener(new RandomCase(channelName));
-
-
+		api.addMessageCreateListener(new HeadlineListener(channelName));
 	}
 }
