@@ -1,6 +1,4 @@
 {
-  "default": {
-    "channel": "dylan",
-    "token": "NjY2MDY1NjE3Mzg4MDQ0MzAz.XknGHg.gILIB_8c-xk7b-Is-iOKGoSNlcA"    
-  }
+    "channels": ["channelName"],
+    "token": "token"
 }
