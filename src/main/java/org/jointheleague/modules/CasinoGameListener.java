@@ -21,6 +21,7 @@ import com.google.gson.reflect.TypeToken;
 import net.aksingh.owmjapis.api.APIException;
 //stop adding this stupid line back
 
+
 public class CasinoGameListener extends CustomMessageCreateListener{
 
 	final String BET_ALL_COMMAND = "!bet-it-all";

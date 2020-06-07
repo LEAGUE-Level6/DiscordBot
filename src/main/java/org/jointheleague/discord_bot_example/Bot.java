@@ -2,7 +2,9 @@ package org.jointheleague.discord_bot_example;
 
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
+
 import org.jointheleague.modules.*;
+
 
 /**
  * Launches all of the listeners for one channel.
@@ -53,6 +55,7 @@ public class Bot  {
 		api.addMessageCreateListener(new ElmoMessageListener(channelName));
 		api.addMessageCreateListener(new FactMessageListener(channelName));
 		api.addMessageCreateListener(new CasinoGameListener(channelName));
+		api.addMessageCreateListener(new PEMDASListener(channelName));
 		api.addMessageCreateListener(new Ryland(channelName));
 		api.addMessageCreateListener(new RockPaperScissorsListener(channelName));
 		api.addMessageCreateListener(new leetMessageListener(channelName));
