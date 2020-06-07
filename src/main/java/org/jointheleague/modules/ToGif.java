@@ -20,6 +20,7 @@ import javax.imageio.ImageWriter;
 import javax.imageio.stream.FileImageOutputStream;
 import org.javacord.api.entity.message.MessageAttachment;
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.jointheleague.modules.pojo.HelpEmbed;
 
 public class ToGif extends CustomMessageCreateListener {
 
@@ -38,6 +39,8 @@ public class ToGif extends CustomMessageCreateListener {
 
 	public ToGif(String channelName) {
 		super(channelName);
+		helpEmbed = new HelpEmbed(COMMAND_AddGifImg, "!AddGifImg adds a frame to the final gif !ToGif compiles the gif and sends it back, the default delay time between each frame is 250 milliseconds this can be changed by calling the command with !ToGif (delay in millis)     Note: to use this, press upload image, and set the comment to the command");
+
 	}
 
 	@Override

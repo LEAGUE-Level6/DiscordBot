@@ -7,6 +7,7 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.jointheleague.modules.pojo.HelpEmbed;
 
 public class SetProfilePic extends CustomMessageCreateListener {
 
@@ -14,6 +15,8 @@ public class SetProfilePic extends CustomMessageCreateListener {
 
 	public SetProfilePic(String channelName) {
 		super(channelName);
+		helpEmbed = new HelpEmbed(COMMAND, "Use this command when you upload a file, and it will set the bots profile picture.        Note: to use this, press upload image, and set the comment to the command");
+
 	}
 
 	@Override
