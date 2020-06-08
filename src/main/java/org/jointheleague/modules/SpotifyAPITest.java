@@ -15,7 +15,7 @@ import net.aksingh.owmjapis.api.APIException;
 
 public class SpotifyAPITest extends CustomMessageCreateListener {
 
-	private static final String accessToken = "BQAJhAem_4snlhZuXhV1W2-XkOmtGBsyQEOGGJhXwrCHA2ibEwQrzayLr6ZIj0YWl_NIFv7w9Ef-vkpBGqptPjFv6E5o07-VwCUZQr5LceS_FdEGvZZ5MJr8A7fIrQbz1d3ovvPdXGqe07OfdqbQBYRcimRQxOqnluZlWqM";
+	private static final String accessToken = "";
 	private static final String id = " 5zT1JLIj9E57p3e1rFm9Uq";
 
 	private static final SpotifyApi spotifyApi = new SpotifyApi.Builder().setAccessToken(accessToken).build();
