@@ -2,6 +2,8 @@ package org.jointheleague.discord_bot_example;
 
 import java.util.Map;
 
+import org.apache.log4j.BasicConfigurator;
+
 /**
  * 
  * 
@@ -10,6 +12,7 @@ import java.util.Map;
  */
 public class Launcher {
 	public static void main(String[] args) {
+		BasicConfigurator.configure();
 		if (args.length == 0) {
 			args = new String[] { "default" };
 		}

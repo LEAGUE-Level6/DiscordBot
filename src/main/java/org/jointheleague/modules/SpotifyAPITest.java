@@ -1,45 +1,60 @@
 package org.jointheleague.modules;
 
-import com.wrapper.spotify.SpotifyApi;
-import com.wrapper.spotify.exceptions.SpotifyWebApiException;
-import com.wrapper.spotify.model_objects.specification.Album;
-import com.wrapper.spotify.requests.data.albums.GetAlbumRequest;
-
-import net.aksingh.owmjapis.api.APIException;
-
-import org.apache.hc.core5.http.ParseException;
-import org.javacord.api.event.message.MessageCreateEvent;
-
-import java.io.IOException;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
+import org.javacord.api.event.message.MessageCreateEvent;
+
+import com.wrapper.spotify.SpotifyApi;
+import com.wrapper.spotify.model_objects.specification.Album;
+import com.wrapper.spotify.model_objects.specification.Artist;
+import com.wrapper.spotify.requests.data.albums.GetAlbumRequest;
+
+import net.aksingh.owmjapis.api.APIException;
+
 public class SpotifyAPITest extends CustomMessageCreateListener {
 
-	private static final String accessToken = "taHZ2SdB-bPA3FsK3D7ZN5npZS47cMy-IEySVEGttOhXmqaVAIo0ESvTCLjLBifhHOHOIuhFUKPW1WMDP7w6dj3MAZdWT8CLI2MkZaXbYLTeoDvXesf2eeiLYPBGdx8tIwQJKgV8XdnzH_DONk";
-	private static final String id = "23c080d3220244ba98f1d97067708ced";
+	private static final String accessToken = "BQAJhAem_4snlhZuXhV1W2-XkOmtGBsyQEOGGJhXwrCHA2ibEwQrzayLr6ZIj0YWl_NIFv7w9Ef-vkpBGqptPjFv6E5o07-VwCUZQr5LceS_FdEGvZZ5MJr8A7fIrQbz1d3ovvPdXGqe07OfdqbQBYRcimRQxOqnluZlWqM";
+	private static final String id = " 5zT1JLIj9E57p3e1rFm9Uq";
 
 	private static final SpotifyApi spotifyApi = new SpotifyApi.Builder().setAccessToken(accessToken).build();
 	private static final GetAlbumRequest getAlbumRequest = spotifyApi.getAlbum(id).build();
 
+	private static final String spotifyCmnd = "!spotify";
+
 	public SpotifyAPITest(String channelName) {
 		super(channelName);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void handle(MessageCreateEvent event) throws APIException {
-		// For all requests an access token is needed
+	public void handle(MessageCreateEvent event){
+		
+		// TODO Auto-generated method stub
+		if (event.getMessageContent().equals(spotifyCmnd)) {
+			event.getChannel().sendMessage("Enter a album name");
+			getAlbum_Sync();
+			getAlbum_Async();
+		
+		}
 
 	}
 
 	public static void getAlbum_Sync() {
 		try {
-			final Album album = getAlbumRequest.execute();
+			final CompletableFuture<Album> albumFuture = getAlbumRequest.executeAsync();
 
+			// Thread free to do other tasks...
+		
+			// Example Only. Never block in production code.
+			final Album album = albumFuture.join();
+			
 			System.out.println("Name: " + album.getName());
-		} catch (IOException | SpotifyWebApiException | ParseException e) {
-			System.out.println("Error: " + e.getMessage());
+		} catch (CompletionException e) {
+			System.out.println("Error: " + e.getCause().getMessage());
+		} catch (CancellationException e) {
+			System.out.println("Async operation cancelled.");
 		}
 	}
 
@@ -58,10 +73,6 @@ public class SpotifyAPITest extends CustomMessageCreateListener {
 		} catch (CancellationException e) {
 			System.out.println("Async operation cancelled.");
 		}
-	}
 
-	public static void main(String[] args) {
-		getAlbum_Sync();
-		getAlbum_Async();
 	}
 }
