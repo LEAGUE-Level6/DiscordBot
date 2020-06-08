@@ -55,8 +55,6 @@ public class Bot  {
 		RandomCase randomCase = new RandomCase(channelName);
 		api.addMessageCreateListener(randomCase);
 		helpListener.addHelpEmbed(randomCase.getHelpEmbed());
-
-		
 		
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
@@ -86,10 +84,6 @@ public class Bot  {
 		api.addMessageCreateListener(new FEHStatListener(channelName));
 		api.addMessageCreateListener(new CrazyEights(channelName));
 		api.addMessageCreateListener(new Blackjack(channelName));
-		
-
-
-
 
 	}
 }
