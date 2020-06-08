@@ -44,6 +44,17 @@ public class Bot  {
 		api.addMessageCreateListener(randomNumber);
 		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
 		
+		SetProfilePic setPFP = new SetProfilePic(channelName);
+		api.addMessageCreateListener(setPFP);
+		helpListener.addHelpEmbed(setPFP.getHelpEmbed());
+
+		ToGif toGif = new ToGif(channelName);
+		api.addMessageCreateListener(toGif);
+		helpListener.addHelpEmbed(toGif.getHelpEmbed());
+		
+		RandomCase randomCase = new RandomCase(channelName);
+		api.addMessageCreateListener(randomCase);
+		helpListener.addHelpEmbed(randomCase.getHelpEmbed());
 		
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
@@ -73,6 +84,6 @@ public class Bot  {
 		api.addMessageCreateListener(new FEHStatListener(channelName));
 		api.addMessageCreateListener(new CrazyEights(channelName));
 		api.addMessageCreateListener(new Blackjack(channelName));
-		api.addMessageCreateListener(new RandomCase(channelName));
+
 	}
 }
