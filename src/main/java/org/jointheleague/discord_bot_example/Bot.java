@@ -1,11 +1,14 @@
 package org.jointheleague.discord_bot_example;
 
-import org.javacord.api.DiscordApi; 
+import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
+import org.javacord.api.entity.activity.ActivityType;
+import org.javacord.api.entity.user.UserStatus;
 import org.jointheleague.modules.CalculatorMessageListener;
 import org.jointheleague.modules.CasinoGameListener;
 import org.jointheleague.modules.RandomNumber;
 import org.jointheleague.modules.SimpleEmbedBuilder;
+import org.jointheleague.modules.TicketSystem;
 import org.jointheleague.modules.Weather;
 import org.jointheleague.modules.DadJokes;
 import org.jointheleague.modules.ClockMessageListener;
@@ -18,8 +21,7 @@ import org.jointheleague.modules.NewPollMessageListener;
 import org.jointheleague.modules.FashionAdvisor;
 import org.jointheleague.modules.leetMessageListener;
 
-
-public class Bot  {
+public class Bot {
 
 	private String token;
 	private String channelName;
@@ -33,7 +35,7 @@ public class Bot  {
 	public void connect() {
 		api = new DiscordApiBuilder().setToken(token).login().join();
 		System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
-		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
+		//api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 		
 		//add Listeners
 		api.addMessageCreateListener(new MomBot(channelName));
@@ -53,8 +55,31 @@ public class Bot  {
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
+		api.addReactionAddListener(new TicketSystem());
+		boolean loop = true;
+		while(loop) {
+			api.updateActivity(ActivityType.WATCHING,"Level 6 Bot Chat");
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			api.updateActivity(ActivityType.LISTENING,"-embedbuilder help");
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			api.updateActivity(ActivityType.PLAYING,"with LeagueBot");
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 }
-
-
