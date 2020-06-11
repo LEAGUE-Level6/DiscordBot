@@ -2,34 +2,32 @@ package org.jointheleague.discord_bot_example;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 /**
- * Pojo for Json
- * @author keithgroves
+ * A class to store the list of channels and API token from the `config.json`
+ * file.
+ * 
+ * @author keithgroves and https://tinystripz.com
  *
  */
 public class BotInfo {
+	private String[] channels;
+	private String token;
 
-@SerializedName("channel")
-@Expose
-private String channel;
-@SerializedName("token")
-@Expose
-private String token;
+	public String[] getChannels() {
+		return channels;
+	}
 
-public String getChannel() {
-return channel;
-}
+	public void setChannels(String[] channels) {
+		this.channels = channels;
+	}
 
-public void setChannel(String channel) {
-this.channel = channel;
-}
+	public String getToken() {
+		return token;
+	}
 
-public String getToken() {
-return token;
-}
-
-public void setToken(String token) {
-this.token = token;
-}
+	public void setToken(String token) {
+		this.token = token;
+	}
 
 }
