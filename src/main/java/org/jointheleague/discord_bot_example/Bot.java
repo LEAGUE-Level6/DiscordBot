@@ -56,6 +56,10 @@ public class Bot  {
 		api.addMessageCreateListener(randomCase);
 		helpListener.addHelpEmbed(randomCase.getHelpEmbed());
 		
+		Reverse reverse = new Reverse(channelName);
+		api.addMessageCreateListener(reverse);
+		helpListener.addHelpEmbed(reverse.getHelpEmbed());
+		
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
 		api.addMessageCreateListener(new DadJokes(channelName));
@@ -84,6 +88,6 @@ public class Bot  {
 		api.addMessageCreateListener(new FEHStatListener(channelName));
 		api.addMessageCreateListener(new CrazyEights(channelName));
 		api.addMessageCreateListener(new Blackjack(channelName));
-
+		
 	}
 }
