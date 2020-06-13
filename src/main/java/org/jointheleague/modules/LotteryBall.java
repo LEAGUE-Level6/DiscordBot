@@ -1,7 +1,10 @@
 package org.jointheleague.modules;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
 
 import org.javacord.api.event.message.MessageCreateEvent;
@@ -9,7 +12,8 @@ import net.aksingh.owmjapis.api.APIException;
 
 public class LotteryBall extends CustomMessageCreateListener {
 
-	int tokens = 5;
+	int tokens;
+	int highScore;
 	int[] numbers;
 	int betAmount = 0;
 	Random rand;
@@ -24,27 +28,38 @@ public class LotteryBall extends CustomMessageCreateListener {
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		if (event.getMessageContent().equalsIgnoreCase("!nball")) {
-			tokens = 5;
+			loadData();
+			if (tokens == 0) {
+				tokens = 5;
+				saveData();
+			}
 			actualZero = false;
 			betAmount = 0;
 			event.getChannel().sendMessage("Let's play a round of Nephry Ball! ╰( ･ ᗜ ･ )╯");
-			event.getChannel().sendMessage("To start, I'll give you 5 tokens.");
+			event.getChannel().sendMessage("If you haven't played before, I'll give you 5 tokens to start.");
 			event.getChannel().sendMessage(
 					"You'll pick five different numbers from 1 to 35 to bet on. Then I'll choose five out of the 35 too!");
-			event.getChannel()
-					.sendMessage("For each ball that you pick that is also one that I picked, your bet will double!");
-			event.getChannel().sendMessage("But if you don't pick one that I picked, you'll lose your tokens!");
+			event.getChannel().sendMessage(
+					"For each ball that you pick that is also one that I picked, your bet will double, but if you don't pick a ball that I picked, you'll lose your tokens!");
 			event.getChannel()
 					.sendMessage("If you're ready to play, type \"!nball pick\" and type your choices afterwards!"
 							+ "\nPlease separate your numbers with commas, so I can read them. Thanks! (◍•ᴗ•◍)");
+			event.getChannel().sendMessage("You can type \"!nball tokens\" at any time to see your token count.");
 		} else if (event.getMessageContent().equalsIgnoreCase("!nball tokens")) {
+			loadData();
 			event.getChannel().sendMessage("( ﾟ▽ﾟ)/ You have " + tokens + " tokens!");
+			event.getChannel().sendMessage("Seems like the high score is " + highScore + " tokens.");
+		} else if (event.getMessageContent().equalsIgnoreCase("!nball reset")) { 
+			event.getChannel().sendMessage("Ok, resetting save...");
+			reset();
+			event.getChannel().sendMessage("All clear!");
 		} else if (tokens <= 0 && actualZero) {
 			event.getChannel().sendMessage("Oh no! You ran out of tokens.");
 			event.getChannel()
 					.sendMessage("If you want to play again, just type \"!nball\" again and the game will reset!");
 			actualZero = false;
 		} else if (event.getMessageContent().startsWith("!nball pick")) {
+			loadData();
 			betAmount = 0;
 			if (tokens <= 0) {
 				event.getChannel().sendMessage(
@@ -174,22 +189,78 @@ public class LotteryBall extends CustomMessageCreateListener {
 				} else {
 					if (matching == 5) {
 						event.getChannel().sendMessage("（＊〇□〇）Whoa! We picked the same exact numbers!");
-					} else if (matching == 1) {
-						event.getChannel().sendMessage("(۶•̀ᴗ•́)۶ Cool! We have " + matching + " number in common!");
 					} else {
-						event.getChannel().sendMessage("(۶•̀ᴗ•́)۶ Cool! We have " + matching + " numbers in common!");
+						event.getChannel().sendMessage("(۶•̀ᴗ•́)۶ Cool! We have " + matching + " number(s) in common!");
 					}
 					tokens += betAmount * (2 * matching);
 				}
 				event.getChannel().sendMessage("You have " + tokens + " token(s) now!");
 				if (tokens == 0) {
 					actualZero = true;
+				} else if (tokens >= 1000) {
+					event.getChannel().sendMessage("Wow, that's a lot of tokens! Have a virtual cookie.");
 				} else {
 					event.getChannel()
 							.sendMessage("If you want to play again, just pick new numbers with \"!nball pick\"!");
 				}
+				saveData();
 			}
+		}
+	}
 
+	public void loadData() {
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("src/main/resources/LotteryBallSave.txt"));
+			String saveData = br.readLine();
+			String saveData2 = br.readLine();
+			int saveDataNum = Integer.parseInt(saveData);
+			int highScoreNum = Integer.parseInt(saveData2);
+			tokens = saveDataNum;
+			highScore = highScoreNum;
+			br.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NumberFormatException e) {
+			tokens = 5;
+		} catch (StringIndexOutOfBoundsException e) {
+			tokens = 5;
+		}
+
+	}
+
+	public void saveData() {
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("src/main/resources/LotteryBallSave.txt"));
+			String saveData = br.readLine();
+			String saveData2 = br.readLine();
+			int highScoreNum = Integer.parseInt(saveData2);
+			br.close();
+			FileWriter fw = new FileWriter("src/main/resources/LotteryBallSave.txt");
+			if (tokens > highScoreNum) {
+				fw.write(tokens + "\n" + tokens);
+			} else {
+				fw.write(tokens + "\n" + highScoreNum);
+			}
+			fw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void reset() {
+		FileWriter fw;
+		try {
+			fw = new FileWriter("src/main/resources/LotteryBallSave.txt");
+			fw.write(tokens + "\n5");
+			fw.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
