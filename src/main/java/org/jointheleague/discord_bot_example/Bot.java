@@ -48,6 +48,10 @@ public class Bot  {
 		api.addMessageCreateListener(randomNumber);
 		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
 		
+		CrazyEights crazyEights = new CrazyEights(channelName);
+		api.addMessageCreateListener(crazyEights);
+		helpListener.addHelpEmbed(crazyEights.getHelpEmbed());
+		
 		SetProfilePic setPFP = new SetProfilePic(channelName);
 		api.addMessageCreateListener(setPFP);
 		helpListener.addHelpEmbed(setPFP.getHelpEmbed());
@@ -94,7 +98,6 @@ public class Bot  {
 
 		api.addMessageCreateListener(new ComplimentListener(channelName));
 		api.addMessageCreateListener(new FEHStatListener(channelName));
-		api.addMessageCreateListener(new CrazyEights(channelName));
 		api.addMessageCreateListener(new Blackjack(channelName));
 
 

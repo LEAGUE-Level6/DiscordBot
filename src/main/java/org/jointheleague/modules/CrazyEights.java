@@ -11,6 +11,7 @@ import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
+import org.jointheleague.modules.pojo.HelpEmbed;
 
 import net.aksingh.owmjapis.api.APIException;
 
@@ -18,16 +19,18 @@ public class CrazyEights extends CustomMessageCreateListener {
 	
 	public CrazyEights(String channelName) {
 		super(channelName);
+		helpEmbed = new HelpEmbed("Card Game Help", 
+				"This bot can play 2 different games. Each has its own set of commands and rules. "
+				+ "To play crazy eights, enter **" + CrazyEights.start + "**. To play blackjack, enter **" + Blackjack.start + "**. "
+				+ "When you start a game, it will give you the commands to get to each individual set of rules/commands.");
 	}
-
-	//private Random rand = new Random();
-	public static final String genHelp = "!help";
 	
 	private ArrayList<Card> deck;
+	private ArrayList<Card> pile;
 	private ArrayList<Card> playerHand;
 	private ArrayList<Card> botHand;
-	private ArrayList<Card> pile;
 	
+	//commands
 	public static final String start = "ce!start";
 	private final String play = "!play";
 	private final String draw = "!draw";
@@ -38,14 +41,14 @@ public class CrazyEights extends CustomMessageCreateListener {
 	private final String rules = "ce!rules";
 	private final String give = ";give";
 	
+	//saved message that will be deleted
 	private Message botMessage;
 	
-	public boolean playingCrazyEightsEmbed = false;
+	//game status booleans
+	public boolean playingCrazyEights = false;
 	private boolean justEnded = false;
 	
 	private EmbedBuilder board = new EmbedBuilder();
-	
-	ArrayList<Card> examples = new ArrayList<Card>();
 
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException  {
@@ -53,6 +56,7 @@ public class CrazyEights extends CustomMessageCreateListener {
 		String message = event.getMessageContent();
 		clearBoard();
 		
+		//if this is the message sent directly after the end of the last game
 		if(justEnded) {
 			//allows quick play again
 			if(message.equalsIgnoreCase(again)) {
@@ -130,7 +134,7 @@ public class CrazyEights extends CustomMessageCreateListener {
 
 		
 		
-		if(playingCrazyEightsEmbed) {
+		if(playingCrazyEights) {
 			
 			//play a card
 			if(message.toLowerCase().startsWith(play)) {
@@ -158,7 +162,7 @@ public class CrazyEights extends CustomMessageCreateListener {
 			}
 			//end the game
 			else if(message.equalsIgnoreCase(end)) {
-				playingCrazyEightsEmbed = false;
+				playingCrazyEights = false;
 				board.setTitle("GAME TERMINATED");
 				
 				event.getChannel().deleteMessages(botMessage);
@@ -205,8 +209,10 @@ public class CrazyEights extends CustomMessageCreateListener {
 		return shuffled;
 	}
 	
+	//all play logic
 	public void play(String message) {
 		
+		//turns the message into all aspects of a card
 		String[] rawCard = message.split(" ");
 		Card card;
 		
@@ -216,6 +222,7 @@ public class CrazyEights extends CustomMessageCreateListener {
 		int value = 0;
 		int suit = 0;
 		
+		//gets value
 		if(valueString.matches("[0-9]+$")) {
 			int v = Integer.parseInt(valueString);
 			
@@ -255,6 +262,7 @@ public class CrazyEights extends CustomMessageCreateListener {
 			}
 		}
 		
+		//gets suit
 		switch(suitString.toLowerCase()) {
 		case "spades":
 			suit = 1;
@@ -274,13 +282,18 @@ public class CrazyEights extends CustomMessageCreateListener {
 			return;
 		}
 		
+		//play a non eight card
 		if(rawCard.length == 2) {
+			//make sure they don't accidentally play an not wild 8
 			if(value == 8) {
 				board.setTitle("You forgot to declare a suit. Try again.");
 				setBoard();
 				return;
 			}
+			
+			//make the card to play from the information gotten from message
 			card = new Card(value, suit);
+			
 			if(playCard(card)) {
 				//check winner
 				if(hasWon(playerHand)) {
@@ -316,13 +329,16 @@ public class CrazyEights extends CustomMessageCreateListener {
 				setBoard();
 			}
 		}
+		//play an eight
 		else if(rawCard.length == 3) {
+			//make sure they card is an eight
 			if(value != 8) {
 				board.setTitle("Sorry, you can only declare suits on eights. Try again.");
 				setBoard();
 				return;
 			}
 			
+			//extract declared suit
 			String dSuitString = rawCard[2];
 			int dSuit = 0;
 			
@@ -345,6 +361,7 @@ public class CrazyEights extends CustomMessageCreateListener {
 				return;
 			}
 			
+			//make card from message information
 			card = new Card(value, suit, dSuit); 
 			
 			if(playCard(card)) {
@@ -398,7 +415,6 @@ public class CrazyEights extends CustomMessageCreateListener {
 			board.addField("_ _", "Pile reshuffled.");
 		
 		board.setDescription("Bot " + botTurn());
-		//board.addField("_ _", );
 		
 		if(hasWon(botHand)) {
 			clearBoard();
@@ -415,9 +431,9 @@ public class CrazyEights extends CustomMessageCreateListener {
 		}
 	}
 	
-	//deals necessary cards
+	//deals all necessary cards and sets up all variables
 	public void deal() {
-		playingCrazyEightsEmbed = true;
+		playingCrazyEights = true;
 			
 		newDeck();
 		deck = shuffle(deck);
@@ -467,13 +483,14 @@ public class CrazyEights extends CustomMessageCreateListener {
 		return fin;
 	}
 	
+	//adds fields for the board
 	public void setBoard() {
-		
 		board.addField("Bot:", botHand.size() + " cards");
 		board.addField("Top of pile:", pile.get(pile.size()-1)+"");
 		board.addField("You:", handToString(playerHand));
 	}
 	
+	//empties the board
 	public void clearBoard() {
 		board.removeAllFields();
 		board.setTitle("");
@@ -497,19 +514,21 @@ public class CrazyEights extends CustomMessageCreateListener {
 	//check if given hand has won
 	public boolean hasWon(ArrayList<Card> hand) {
 		if(hand.size() == 0) {
-			playingCrazyEightsEmbed = false;
+			playingCrazyEights = false;
 			justEnded = true;
 			return true;
 		}
 		return false;
 	}
 	
+	//play card, used in play method
 	public boolean playCard(Card card) {
 		
 		boolean inHand = false;
 		int index = 0;
 		Card topCard = pile.get(pile.size()-1);
 		
+		//check that card is in the players hand, saves the index
 		for(int i = 0; i < playerHand.size(); i++) {
 			if(playerHand.get(i).displayValue == card.displayValue && playerHand.get(i).suit == card.suit) {
 				index = i;
@@ -523,6 +542,7 @@ public class CrazyEights extends CustomMessageCreateListener {
 			return false;
 		}
 			
+		//plays the card
 		if(topCard.displayValue == 8 && topCard.declaredSuit != 0) {
 			if(card.suit == topCard.declaredSuit) {
 				pile.add(playerHand.remove(index));
