@@ -1,5 +1,7 @@
 package org.jointheleague.discord_bot_example;
 
+import java.util.Map;
+
 /**
  * Launches the bot.
  * @author keithgroves and https://tinystripz.com
@@ -7,6 +9,9 @@ package org.jointheleague.discord_bot_example;
  */
 public class Launcher {
 	public static void main(String[] args) {
+		if (args.length == 0) {
+			args = new String[] { "default" };
+		}
 		new Launcher().launch(args);
 	}
 

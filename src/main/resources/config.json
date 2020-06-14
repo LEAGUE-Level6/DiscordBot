@@ -1,6 +1,4 @@
 {
-
-    "channels": ["hmmm", "bot"],
-    "token": "NjcxMDYzMzIzMTM5Mzc1MTQz.Xt0oLg.VtqeA8EqeFgxyX3hy4bYBq7HD0I" 
-
+    "channels": ["channelName"],
+    "token": "token"
 }
