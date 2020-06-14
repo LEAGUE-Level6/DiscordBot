@@ -1,8 +1,6 @@
 {
-  "default": {
 
-    "channel": "channel-name",
-    "token": "insert your bot token here" 
+    "channels": ["garrett"],
+    "token": "NjgzNzQyMzU4NzI2Mzc3NTY2.XuZYxA.VawIKzcs-HLzweBSQ2cjes0L268" 
 
-  }
 }
