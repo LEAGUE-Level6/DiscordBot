@@ -46,15 +46,14 @@ public class TicTacToe extends CustomMessageCreateListener {
 			commands.add(BottomRight);
 			//counter++;
 			counter = 0;
-			System.out.println(counter);
+			//System.out.println(counter);
 			event.getChannel().sendMessage("Choose where you want to place the X");
 		} else {
-			System.out.println(counter);
+			//System.out.println(counter);
 			if (counter == -1) {
 				return;
 			}
 			if (counter % 2 == 0) {
-				System.out.println("Hello");
 				event.getChannel().sendMessage("Choose where you want to place the X");
 				try {
 					Thread.sleep(15000);
@@ -62,56 +61,46 @@ public class TicTacToe extends CustomMessageCreateListener {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				String location = event.getMessageContent().toString();
-				System.out.println(location + "location");
+				String location = event.getMessageContent();
 				user.add(location);
-				// for (int i = commands.size()-1; i >= 0; i--) {
-				// if(commands.get(i).equals(location)) {
-				//// commands.remove(i);
-				//// System.out.println("remove");
-				// }
-				// }
-			} else if (counter % 2 == 1) {
-				// Random r = new Random();
-				// int a = r.nextInt(commands.size());
-				for (int j = commands.size() - 1; j >= 0; j--) {
-					for (int i = 0; i < user.size(); i++) {
-						if (CPU.size() == 0) {
-							if (!commands.get(j).equals(user.get(i))) {
-								System.out.println(commands.get(j) + "computer");
-								CPU.add(commands.get(j));
-								event.getChannel().sendMessage("CPU places O at" + commands.get(j));
-								stopuser = true;
-								stopcommand = true;
+			} 
+			else if (counter % 2 == 1) {
+				if(CPU.size() == 0) {
+					for (int i = 0; i < commands.size(); i++) {
+						if(user.get(0) != commands.get(i)) {
+							System.out.println(user.get(0) + "user");
+							CPU.add(commands.get(i));
+							event.getChannel().sendMessage("CPU places the O at " + commands.get(i));
+							break;
+						}
+					}
+				}
+				else {
+					String temp = "";
+					for (int i = 0; i < commands.size(); i++) {
+						for (int j = 0; j < user.size(); j++) {
+							if(commands.get(i) != user.get(j)) {
+								temp = commands.get(i);
 								break;
 							}
-						} else {
-								System.out.println("elsecall");
-							for (int k = 0; k < CPU.size(); k++) {
-								System.out.println(commands.get(j) + "commands");
-								System.out.println(user.get(i) + "user");
-								System.out.println(CPU.get(k) + "CPU");
-								if (!commands.get(j).equals(user.get(i)) && !commands.get(j).equals(CPU.get(k))) {
-									System.out.println(commands.get(j) + "computer");
-									CPU.add(commands.get(j));
-									event.getChannel().sendMessage("CPU places O at" + commands.get(j));
-									stopuser = true;
-									stopcommand = true;
-									break;
-
-								}
-								
-							}
-							if(stopuser) {
+						}
+						for (int j = 0; j < CPU.size(); j++) {
+							if(temp != CPU.get(j)) {
+								CPU.add(temp);
+								event.getChannel().sendMessage("CPU places the O at " + temp);
+								i = commands.size();
 								break;
 							}
 						}
 						
-					}
-					if(stopcommand) {
-						break;
+						
 					}
 				}
+
+				
+				
+				
+				
 			}
 			counter++;
 			for (int i = 0; i < CPU.size(); i++) {
