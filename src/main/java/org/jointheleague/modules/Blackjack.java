@@ -22,6 +22,7 @@ public class Blackjack extends CustomMessageCreateListener {
 	private ArrayList<Card> playerHand;
 	private ArrayList<Card> botHand;
 	
+	//commands
 	public static final String start = "b!start";
 	private final String hit = "!hit";
 	private final String stand = "!stand";
@@ -31,14 +32,16 @@ public class Blackjack extends CustomMessageCreateListener {
 	private final String help = "b!help";
 	private final String rules = "b!rules";
 	
-	public boolean playingBlackjackEmbed = false;
+	//saved message that will be deleted
+	private Message botMessage;
+	
+	//game status booleans
+	public boolean playingBlackjack = false;
 	private boolean justEnded = false;
 	private boolean playerStanding = false;
 	private boolean botStanding = false;
 	
 	private EmbedBuilder board = new EmbedBuilder();
-	
-	private Message botMessage;
 
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
@@ -46,7 +49,9 @@ public class Blackjack extends CustomMessageCreateListener {
 		String message = event.getMessageContent();
 		clearBoard();
 		
+		//if this is the message sent directly after the end of the last game
 		if(justEnded) {
+			//allows quick play again
 			if(message.equalsIgnoreCase(again)) {
 				deal();
 				
@@ -120,7 +125,10 @@ public class Blackjack extends CustomMessageCreateListener {
 			
 			event.getChannel().sendMessage(rules);
 		}
-		if(playingBlackjackEmbed) {
+		
+		if(playingBlackjack) {
+			
+			//hit
 			if(message.equalsIgnoreCase(hit)) {
 				hit();
 				
@@ -131,6 +139,7 @@ public class Blackjack extends CustomMessageCreateListener {
 					e.printStackTrace();
 				} 
 			}
+			//stand
 			else if(message.equalsIgnoreCase(stand)) {
 				stand();
 				
@@ -141,8 +150,9 @@ public class Blackjack extends CustomMessageCreateListener {
 					e.printStackTrace();
 				} 
 			}
+			//end game
 			else if(message.equalsIgnoreCase(end)) {
-				playingBlackjackEmbed = false;
+				playingBlackjack = false;
 				board.setTitle("GAME TERMINATED");
 				
 				event.getChannel().deleteMessages(botMessage);
@@ -152,6 +162,7 @@ public class Blackjack extends CustomMessageCreateListener {
 					e.printStackTrace();
 				} 
 			}
+			//get board again
 			else if(message.equalsIgnoreCase(getBoard)) {
 				setValueBoard();
 				event.getChannel().sendMessage(board);
@@ -160,7 +171,6 @@ public class Blackjack extends CustomMessageCreateListener {
 	}
 		
 	//makes a new deck
-	//makes new deck
 	public void newDeck() {
 		deck = new ArrayList<Card>();
 		for(int i = 0; i < 52; i++) {
@@ -168,7 +178,6 @@ public class Blackjack extends CustomMessageCreateListener {
 		}
 	}
 	
-	//shuffles given list
 	
 	//shuffles given list
 	public ArrayList<Card> shuffle(ArrayList<Card> cards) {
@@ -183,12 +192,10 @@ public class Blackjack extends CustomMessageCreateListener {
 		
 		return shuffled;
 	}
-	
-	//deals necessary cards
-	
-	//deals necessary cards
+		
+	//deals necessary cards, sets up all variables, and checks for naturals
 	public void deal() {
-		playingBlackjackEmbed = true;
+		playingBlackjack = true;
 		
 		newDeck();
 		deck = shuffle(deck);
@@ -206,12 +213,13 @@ public class Blackjack extends CustomMessageCreateListener {
 		board = new EmbedBuilder();
 		board.setColor(Color.RED/*new Color(112, 28, 232)*/);
 		
+		//check naturals
 		if(handValue(playerHand) == 11 && hasAce(playerHand) && handValue(botHand) == 11 && hasAce(botHand)) {
 			board.setTitle("You tied.");
 			board.setDescription("Both you and the bot have naturals. To play again, enter **" + again + "**");
 			setBoard();
 			
-			playingBlackjackEmbed = false;
+			playingBlackjack = false;
 			justEnded = true;
 		}
 		else if(handValue(playerHand) == 11 && hasAce(playerHand)) {
@@ -219,7 +227,7 @@ public class Blackjack extends CustomMessageCreateListener {
 			board.setDescription("You have a natural! You win! To play again, enter **" + again + "**");
 			setBoard();
 			
-			playingBlackjackEmbed = false;
+			playingBlackjack = false;
 			justEnded = true;
 		}
 		else if(handValue(botHand) == 11 && hasAce(botHand)) { 
@@ -227,9 +235,10 @@ public class Blackjack extends CustomMessageCreateListener {
 			board.setDescription("The bot has a natural. You lose. To play again, enter **" + again + "**");
 			setBoard();
 			
-			playingBlackjackEmbed = false;
+			playingBlackjack = false;
 			justEnded = true;
 		}
+		//if there are no naturals, sets the aces to be 11 and sets board
 		else {
 			if(hasAce(playerHand)) {
 				playerHand.get(aceLoc(playerHand)).value = 11;
@@ -241,15 +250,12 @@ public class Blackjack extends CustomMessageCreateListener {
 			setValueBoard();
 		}
 	}
-	
-	//takes top card of the deck
-	
+		
 	//takes top card of deck
 	public Card pull() {
 		return deck.remove(0);
 	}
 	
-	//returns a string version of the hand
 	
 	//returns string version of hand
 	public String handToString(ArrayList<Card> hand) {
@@ -262,49 +268,13 @@ public class Blackjack extends CustomMessageCreateListener {
 		return fin;
 	}
 	
-	//returns string version of board without values
-	
-	//returns a string version of the board, cards only
-	public String getBoard() {
-		return	"Bot: " + handToString(botHand) + "\n" +
-				"You: " + handToString(playerHand) + "\n"; 
-	}
-	
-	//returns a string version of the board, calculated values built in
-	
-	//returns string version of board with values
-	public String getValueBoard() {
-		if(botStanding && playerStanding) 
-			return	"Bot: " + handToString(botHand) + "\n" +
-					"Bot value: " + handValue(botHand) + "\n" +
-					"Bot is standing. \n" +
-					"You: " + handToString(playerHand) + "\n" +
-					"Your value: " + handValue(playerHand) + "\n" +
-					"You are standing. ";
-		else if(botStanding)
-			return	"Bot: " + handToString(botHand) + "\n" +
-					"Bot value: " + handValue(botHand) + "\n" +
-					"Bot is standing. \n" +
-					"You: " + handToString(playerHand) + "\n" +
-					"Your value: " + handValue(playerHand) + "\n";
-		else if(playerStanding)
-			return	"Bot: " + handToString(botHand) + "\n" +
-					"Bot value: " + handValue(botHand) + "\n" +
-					"You: " + handToString(playerHand) + "\n" +
-					"Your value: " + handValue(playerHand) + "\n" +
-					"You are standing.";
-		
-		return	"Bot: " + handToString(botHand) + "\n" +
-				"Bot value: " + handValue(botHand) + "\n" +
-				"You: " + handToString(playerHand) + "\n" +
-				"Your value: " + handValue(playerHand) + "\n";
-	}
-	
+	//set the simple board for after naturals
 	public void setBoard() {
 		board.addField("Bot: ", handToString(botHand));
 		board.addField("You:", handToString(playerHand));
 	}
 	
+	//set the board showing values and standing status
 	public void setValueBoard() {
 		if(botStanding && playerStanding) {
 			board.addField("Bot:", 
@@ -344,12 +314,13 @@ public class Blackjack extends CustomMessageCreateListener {
 		}
 	}
 	
+	//empties board
 	public void clearBoard() {
 		board.removeAllFields();
+		board.setTitle("");
+		board.setDescription("");
 	}
 	
-	//returns the value of the hand
-
 	//returns hand value
 	public int handValue(ArrayList<Card> hand) {
 		int total = 0;
@@ -361,7 +332,6 @@ public class Blackjack extends CustomMessageCreateListener {
 	}
 	
 	//returns if a hand has an ace
-	
 	public boolean hasAce (ArrayList<Card> hand) {
 		for(Card c : hand)
 			if(c.displayValue == 1) return true;
@@ -370,7 +340,6 @@ public class Blackjack extends CustomMessageCreateListener {
 	}
 	
 	//returns the location of the first ace in the hand
-	
 	public int aceLoc(ArrayList<Card> hand) {
 		for(int i = 0; i < hand.size(); i++)
 			if(hand.get(i).displayValue == 1) return i;
@@ -378,14 +347,12 @@ public class Blackjack extends CustomMessageCreateListener {
 		return -1;
 	}
 	
-	
 	//hit code
 	public void hit() {
 		playerHand.add(pull());
 		botTurn();
 		
 		checkGameOver();
-		//setValueBoard();
 	}
 	
 	//stand code
@@ -397,9 +364,7 @@ public class Blackjack extends CustomMessageCreateListener {
 		if(botStanding || checkBust(botHand)) {
 			checkGameOver();
 		}
-		else {
-			//getValueBoard();
-			
+		else {			
 			while(!botStanding && !checkBust(botHand)) {
 				botTurn();
 			}
@@ -421,25 +386,25 @@ public class Blackjack extends CustomMessageCreateListener {
 		
 	}
 	
-	//returns outcome of current turn (who won/lost and how)
+	//determines outcome of current turn (who won/lost and how) and sets the board title and description to it
 	public void checkGameOver() {
 		
 		if(checkBust(playerHand) && checkBust(botHand)) {
 			board.setTitle("You tied.");
 			board.setDescription("You both went bust. To play again, enter **" + again + "**");
-			playingBlackjackEmbed = false;
+			playingBlackjack = false;
 			justEnded = true;
 		}
 		else if(checkBust(playerHand)) {
 			board.setTitle("You lose.");
 			board.setDescription("You went bust. To play again, enter **" + again + "**");
-			playingBlackjackEmbed = false;
+			playingBlackjack = false;
 			justEnded = true;
 		}
 		else if(checkBust(botHand)) {
 			board.setTitle("You win!");
 			board.setDescription("Bot went bust. To play again, enter **" + again + "**");
-			playingBlackjackEmbed = false;
+			playingBlackjack = false;
 			justEnded = true;
 		}
 		
@@ -447,19 +412,19 @@ public class Blackjack extends CustomMessageCreateListener {
 		else if(handValue(playerHand) == 21 && handValue(botHand) == 21) {
 			board.setTitle("You tied.");
 			board.setDescription("You both got 21. To play again, enter **" + again + "**");
-			playingBlackjackEmbed = false;
+			playingBlackjack = false;
 			justEnded = true;
 		}
 		else if(handValue(botHand) == 21) {
 			board.setTitle("You lose.");
 			board.setDescription("Bot got 21. To play again, enter **" + again + "**");
-			playingBlackjackEmbed = false;
+			playingBlackjack = false;
 			justEnded = true;
 		}
 		else if(handValue(playerHand) == 21) {
 			board.setTitle("You win!");
 			board.setDescription("You got 21! To play again, enter **" + again + "**");
-			playingBlackjackEmbed = false;
+			playingBlackjack = false;
 			justEnded = true;
 		}
 		
@@ -468,32 +433,28 @@ public class Blackjack extends CustomMessageCreateListener {
 			if(handValue(playerHand) > handValue(botHand)) {
 				board.setTitle("You win!");
 				board.setDescription("You were both standing. Since you were closer to 21, you win! To play again, enter **" + again + "**");
-				playingBlackjackEmbed = false;
+				playingBlackjack = false;
 				justEnded = true;
 			}
 			else if(handValue(playerHand) < handValue(botHand)) {
 				board.setTitle("You lose.");
 				board.setDescription("You were both standing. Since the bot was closer to 21, it won. To play again, enter **" + again + "**");
-				playingBlackjackEmbed = false;
+				playingBlackjack = false;
 				justEnded = true;
 			}
 			else if(handValue(playerHand) == handValue(botHand)) {
 				board.setTitle("You tied.");
 				board.setDescription("You were both standing. Since you both had the same total, neither won. To play again, enter **" + again + "**");
-				playingBlackjackEmbed = false;
+				playingBlackjack = false;
 				justEnded = true;
 			}
 		}
-		//else {
-			setValueBoard();
-		//}
 		
-		//setValueBoard();
-	}
+		setValueBoard();
+		}
 	
 	//check if given hand has gone bust
 	public boolean checkBust(ArrayList<Card> hand) {
-		//add code
 		if(handValue(hand) > 21 && !hasAce(hand)) return true;
 		else if(handValue(hand) > 21 && hasAce(hand)) {
 			hand.get(aceLoc(hand)).value = 1;
