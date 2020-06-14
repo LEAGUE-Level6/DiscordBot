@@ -49,6 +49,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 		correctSyntax = true;
 		explain = false;
 		publicEvent = event;
+		try {
 		if(!event.getMessageAuthor().getIdAsString().equals(""+botId)) {
 			String s = event.getMessageContent();
 			if(s.substring(s.length()-1).equals("=")||s.substring(s.length()-1).equals("= ")) {
@@ -71,6 +72,9 @@ public class PEMDASListener extends CustomMessageCreateListener{
 					outputAnswer(event,""+(int)answer);
 				}
 			}
+		}
+		}catch(Exception e) {
+			
 		}
 	}
 	
