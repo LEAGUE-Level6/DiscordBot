@@ -7,19 +7,20 @@ import java.io.IOException;
 import java.util.Random;
 
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.jointheleague.modules.pojo.HelpEmbed;
 
 public class HeadlineListener extends CustomMessageCreateListener{
 	boolean hasGuessed;
 	int r = new Random().nextInt(2);
 	public HeadlineListener(String channelName) {
 		super(channelName);
+		helpEmbed = new HelpEmbed("Welcome to: Real vs Fake; NEWS HEADLINE EDITION!", "Here is how it works: \n You will be presented with a headline; it can be real or fake \n Type '!guess REAL' if you think it's real and '!guess FAKE' if you think it's fake \n Commands: \n '!starthl' = start game \n '!guess REAL' or '!guess FAKE' = for guessing real or fake");
 	}
 	
 	@Override
 	public void handle(MessageCreateEvent event) {
-	if(event.getMessageContent().toLowerCase().startsWith("!start")) {
+	if(event.getMessageContent().toLowerCase().startsWith("!starthl")) {
 		hasGuessed=false;
-		event.getChannel().sendMessage("Welcome to: Real vs Fake; NEWS HEADLINE EDITION! \n Here is how it works: \n You will be presented with a headline; it can be real or fake \n Type '!guess REAL' if you think it's real and '!guess FAKE' if you think it's fake \n Comment '!help' for command help \n ---------------------------------------------");
 		event.getChannel().sendMessage("Here is your headline:");
 		int headlinenum = new Random().nextInt(32);
 		String headline = "";
@@ -52,9 +53,6 @@ public class HeadlineListener extends CustomMessageCreateListener{
 			}
 		event.getChannel().sendMessage(headline);
 		}
-	}
-	if(event.getMessageContent().toLowerCase().startsWith("!help")) {
-		event.getChannel().sendMessage("Commands: \n '!start' = start game \n '!help' = show commands \n '!guess REAL' or '!guess FAKE' = for guessing real or fake");
 	}
 	if(event.getMessageContent().toLowerCase().startsWith("!guess")&& hasGuessed == false) {
 		String guess = event.getMessageContent().substring(7,event.getMessageContent().length());

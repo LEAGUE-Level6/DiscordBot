@@ -42,6 +42,9 @@ public class Bot  {
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 		
 		//add Listeners
+		HeadlineListener head = new HeadlineListener(channelName);
+		api.addMessageCreateListener(head);
+		helpListener.addHelpEmbed(head.getHelpEmbed());
 		
 		RandomNumber randomNumber = new RandomNumber(channelName);
 		api.addMessageCreateListener(randomNumber);
@@ -76,6 +79,5 @@ public class Bot  {
 		api.addMessageCreateListener(new CrazyEights(channelName));
 		api.addMessageCreateListener(new Blackjack(channelName));
 		api.addMessageCreateListener(new RandomCase(channelName));
-		api.addMessageCreateListener(new HeadlineListener(channelName));
 	}
 }
