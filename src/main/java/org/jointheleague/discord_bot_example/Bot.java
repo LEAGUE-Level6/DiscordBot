@@ -2,8 +2,6 @@ package org.jointheleague.discord_bot_example;
 
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
-
-import org.jointheleague.modules.MorseTranslator;
 import org.jointheleague.modules.*;
 
 
@@ -96,7 +94,7 @@ public class Bot  {
 		api.addMessageCreateListener(new FEHStatListener(channelName));
 		api.addMessageCreateListener(new CrazyEights(channelName));
 		api.addMessageCreateListener(new Blackjack(channelName));
-
+		api.addMessageCreateListener(new GetTime(channelName));
 
 	}
 }
