@@ -11,7 +11,7 @@ public class Reverse extends CustomMessageCreateListener {
 	
 	public Reverse(String channelName) {
 		super(channelName);
-		helpEmbed = new HelpEmbed(COMMAND, "Call " + COMMAND + " (Message) and it will return the given word or phrase as itself, but backwards");
+		helpEmbed = new HelpEmbed(COMMAND, "Call " + COMMAND + " (Message) and it will return the given word or phrase as itself, but backwards.");
 	}
 
 	@Override
