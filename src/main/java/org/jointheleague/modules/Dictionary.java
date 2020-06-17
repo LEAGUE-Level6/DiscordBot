@@ -66,13 +66,14 @@ public class Dictionary extends CustomMessageCreateListener {
 			con.setRequestMethod("GET");
 
 			JsonReader repoReader = Json.createReader(con.getInputStream());
-			JsonObject userJSON = ((JsonObject) repoReader.read());
+			JsonStructure userJSON = repoReader.read();
 
+			
 			con.disconnect();
 
-			DictionaryWrapper wrapper = gson.fromJson(userJSON.toString(), DictionaryWrapper.class);
+			DictionaryWrapper[] wrapper = gson.fromJson(userJSON.toString(), DictionaryWrapper[].class);
 
-			return wrapper.getShortdef().get(0);
+			return word + " (" + wrapper[0].getFl() + "): "+ wrapper[0].getShortdef().get(0);
 
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
