@@ -60,6 +60,10 @@ public class Bot  {
 		api.addMessageCreateListener(randomCase);
 		helpListener.addHelpEmbed(randomCase.getHelpEmbed());
 		
+		_ApiExampleListener apiExampleListener = new _ApiExampleListener(channelName);
+		api.addMessageCreateListener(apiExampleListener);
+		helpListener.addHelpEmbed(apiExampleListener.getHelpEmbed());
+		
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
 		api.addMessageCreateListener(new DadJokes(channelName));
