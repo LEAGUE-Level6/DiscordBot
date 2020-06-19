@@ -64,7 +64,7 @@ public class MadLibs extends CustomMessageCreateListener {
 					event.getChannel().sendMessage("Say \"" + words[0] + ",\" the photographer said as the camera "
 							+ "flashed! " + words[1] + " and I had gone to " + words[2] + " to get our photos "
 							+ "taken today. In the first photo, what we really wanted was a picture of us dressed "
-							+ "as " + words[3] + " pretending to be a " + words[4] + ". When we saw the proofs of "
+							+ "as " + words[3] + " pretending to be " + words[4] + ". When we saw the proofs of "
 							+ "it, I was a bit " + words[5] + " because it looked different than in my head. However, "
 							+ "the second photo was exactly what I wanted. We both looked like " + words[6] 
 							+ " wearing " + words[7] + ", exactly what I had in mind!");

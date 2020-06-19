@@ -19,26 +19,27 @@ import org.javacord.api.event.message.MessageCreateEvent;
 import org.jointheleague.modules.pojo.HelpEmbed;
 import org.jointheleague.modules.pojo.UserTest;
 import org.jointheleague.modules.pojo.dictionary.DictionaryWrapper;
+import org.jointheleague.modules.pojo.dictionary.ThesaurusWrapper;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 
 public class Dictionary extends CustomMessageCreateListener {
 
-	private static final String COMMAND = "!define";
 	Gson gson = new Gson();
 
 	public Dictionary(String channelName) {
 		super(channelName);
-		helpEmbed = new HelpEmbed(COMMAND,
-				"Call " + COMMAND + " (Message) and it will return the definition of the given word");
+		helpEmbed = new HelpEmbed("!define + !syns",
+				"Call !define (Message) and it will return the definition of the given word. Call !syns "
+						+ "(Message) and it will return the synonyms of the given word");
 	}
 
 	@Override
 	public void handle(MessageCreateEvent event) {
-		if (event.getMessageContent().contains(COMMAND)) {
+		if (event.getMessageContent().contains("!define")) {
 
-			String msg = event.getMessageContent().replaceAll(" ", "").replace(COMMAND, "");
+			String msg = event.getMessageContent().replaceAll(" ", "").replace("!define", "");
 
 			if (msg.equals("")) {
 
@@ -48,6 +49,20 @@ public class Dictionary extends CustomMessageCreateListener {
 
 				String definition = getDefinition(msg);
 				event.getChannel().sendMessage(definition);
+			}
+
+		} else if (event.getMessageContent().contains("!syns")) {
+
+			String msg = event.getMessageContent().replaceAll(" ", "").replace("!syns", "");
+
+			if (msg.equals("")) {
+
+				event.getChannel().sendMessage("Please put a word after the command");
+
+			} else {
+
+				String synonyms = getSynonyms(msg);
+				event.getChannel().sendMessage(synonyms);
 			}
 		}
 	}
@@ -65,14 +80,14 @@ public class Dictionary extends CustomMessageCreateListener {
 
 			con.setRequestMethod("GET");
 
-			JsonReader repoReader = Json.createReader(con.getInputStream());
-			JsonObject userJSON = ((JsonObject) repoReader.read());
+			JsonReader reader = Json.createReader(con.getInputStream());
+			JsonStructure json = reader.read();
 
 			con.disconnect();
 
-			DictionaryWrapper wrapper = gson.fromJson(userJSON.toString(), DictionaryWrapper.class);
+			DictionaryWrapper[] wrapper = gson.fromJson(json.toString(), DictionaryWrapper[].class);
 
-			return wrapper.getShortdef().get(0);
+			return word + " (" + wrapper[0].getFl() + "): " + wrapper[0].getShortdef().get(0);
 
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -83,5 +98,38 @@ public class Dictionary extends CustomMessageCreateListener {
 		}
 
 		return "Definition not found";
+	}
+
+	String getSynonyms(String word) {
+
+		String requestURL = "https://dictionaryapi.com/api/v3/references/thesaurus/json/" + word
+				+ "?key=5a2a4fe6-a8c2-4b98-976d-a7dfd6cab0b2";
+		URL url;
+
+		try {
+
+			url = new URL(requestURL);
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+			con.setRequestMethod("GET");
+
+			JsonReader reader = Json.createReader(con.getInputStream());
+			JsonStructure json = reader.read();
+
+			con.disconnect();
+
+			ThesaurusWrapper[] wrapper = gson.fromJson(json.toString(), ThesaurusWrapper[].class);
+
+			return "Synonyms for " + word + " include - " + wrapper[0].getSyns().get(0);
+
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (ProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return "No synonyms found";
 	}
 }
