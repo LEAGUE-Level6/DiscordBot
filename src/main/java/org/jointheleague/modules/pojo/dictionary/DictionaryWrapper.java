@@ -21,16 +21,6 @@ public class DictionaryWrapper {
 	public void setShortdef(List<String> shortdef) {
 		this.shortdef = shortdef;
 	}
-<<<<<<< HEAD
-	
-	public String getFl() {
-		return fl;
-	}
-
-	public void setFl(String fl) {
-		this.fl = fl;
-	}
-=======
 
 	public String getFl() {
 		return fl;
@@ -39,6 +29,4 @@ public class DictionaryWrapper {
 	public void setFl(String fl) {
 		this.fl = fl;
 	}
-	
->>>>>>> branch 'feature/EvanBot' of https://github.com/LEAGUE-Level6/DiscordBot.git
 }
