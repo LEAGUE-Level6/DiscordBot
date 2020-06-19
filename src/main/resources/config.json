@@ -1,6 +1,4 @@
 {
-  "default": {
-    "channel": "hmmm",
-    "token": "NjcxMDYzMzIzMTM5Mzc1MTQz.Xi3ejg.Kyap-UiYkj7WA9qcz71ZBVklStM"    
-  }
+    "channels": ["channelName"],
+    "token": "token"
 }
