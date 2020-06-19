@@ -1,4 +1,9 @@
 {
+<<<<<<< HEAD
     "channels": ["evan"],
     "token": "NzIwMDM3NTMyNDUyMTI2NzQx.XuvYfw.SkpKyOV72GhvSetvDEC_cBu33xY"
+=======
+    "channels": ["matt"],
+    "token": "Njg2MDA3Nzg5MDEyOTEwMTky.XuqnTA.RAFe6aw72gBYxK19KGCESbh7s6k"
+>>>>>>> branch 'feature/EvanBot' of https://github.com/LEAGUE-Level6/DiscordBot.git
 }
