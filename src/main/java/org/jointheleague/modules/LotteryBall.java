@@ -22,7 +22,7 @@ public class LotteryBall extends CustomMessageCreateListener {
 
 	public LotteryBall(String channelName) {
 		super(channelName);
-		// TODO Auto-generated constructor stub
+		// TODO Auto-generated constructor stub... f
 	}
 
 	@Override
