@@ -23,7 +23,6 @@ public class ComicMessageListener extends CustomMessageCreateListener {
 					new FileReader(new File("src/main/resources/BestOfXKCD.txt")));
 			while (br.ready()) {
 				xURLS.add(br.readLine());
-				System.out.println(br.readLine());
 			}
 
 			br.close();
