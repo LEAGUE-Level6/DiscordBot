@@ -13,6 +13,7 @@ import org.javacord.api.DiscordApiBuilder;
 import org.jointheleague.modules.*;
 
 
+
 public class Bot  {
 	
 	// The string to show the custom :vomiting_robot: emoji
@@ -95,6 +96,9 @@ public class Bot  {
 		api.addMessageCreateListener(new MinesweeperListener(channelName));
 
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
+
+		api.addMessageCreateListener(new Bot1Listener(channelName));
+
 
 		api.addMessageCreateListener(new QuitMessageListener(channelName));
 		api.addMessageCreateListener(new PingMessageListener(channelName));	

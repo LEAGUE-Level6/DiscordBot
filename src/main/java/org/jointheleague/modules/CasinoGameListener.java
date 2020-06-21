@@ -1,25 +1,19 @@
 package org.jointheleague.modules;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.jointheleague.discord_bot_example.BotInfo;
 import org.jointheleague.discord_bot_example.Utilities;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import net.aksingh.owmjapis.api.APIException;
-//stop adding this stupid line back
 
 
 public class CasinoGameListener extends CustomMessageCreateListener{
