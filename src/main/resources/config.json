@@ -1,6 +1,4 @@
 {
-  "default": {
-    "channel": "yash",
-    "token": "NjYzNTE3MjIyNzY0OTM3MjE3.Xhujkw.H85RM6y1bGVcFjs4flsVMiTs7pI"    
-  }
+    "channels": ["channelName"],
+    "token": "token"
 }
