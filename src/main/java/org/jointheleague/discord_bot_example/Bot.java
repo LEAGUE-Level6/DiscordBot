@@ -3,7 +3,6 @@ package org.jointheleague.discord_bot_example;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 
-import org.jointheleague.modules.MorseTranslator;
 import org.jointheleague.modules.*;
 
 
@@ -13,6 +12,7 @@ import org.jointheleague.modules.*;
  * @author keithgroves and https://tinystripz.com
  *
  */
+
 
 
 public class Bot  {
@@ -79,9 +79,17 @@ public class Bot  {
 		api.addMessageCreateListener(new leetMessageListener(channelName));
 		api.addMessageCreateListener(new ConnectFour(channelName));
 		api.addMessageCreateListener(new FlagMessageListener(channelName));
+
+		
+		api.addMessageCreateListener(new EightBall(channelName));
+		api.addMessageCreateListener(new Reddit(channelName));
+		api.addMessageCreateListener(new DeepFrier(channelName));
+		
+
 		api.addMessageCreateListener(new PictureOf(channelName));
 		api.addMessageCreateListener(new GetPicture(channelName));
 		api.addMessageCreateListener(new CuteAnimal(channelName));
+
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 
