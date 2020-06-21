@@ -1,6 +1,7 @@
 package org.jointheleague.discord_bot_example;
 
 import org.javacord.api.DiscordApi;
+
 import org.javacord.api.DiscordApiBuilder;
 
 import org.jointheleague.modules.*;
@@ -12,6 +13,9 @@ import org.jointheleague.modules.*;
  * @author keithgroves and https://tinystripz.com
  *
  */
+
+
+import org.jointheleague.modules.*;
 
 
 
@@ -97,6 +101,17 @@ public class Bot  {
 
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
 
+		
+		api.addMessageCreateListener(new QuitMessageListener(channelName));
+		api.addMessageCreateListener(new PingMessageListener(channelName));	
+		api.addMessageCreateListener(new CoinFlipMessageListener(channelName));
+		api.addMessageCreateListener(new PlayRPSMessageListener(channelName));
+		api.addMessageCreateListener(new KickMessageListener(channelName));
+		api.addMessageCreateListener(new AssignRoleMessageListener(channelName));
+		api.addMessageCreateListener(new NicknameListener(channelName));
+		api.addMessageCreateListener(new SolveQuadraticListener(channelName));
+		api.addMessageCreateListener(new RollDiceMessageListener(channelName));
+		api.addMessageCreateListener(new HelpMessageListener(channelName));
 
 		api.addMessageCreateListener(new MorseTranslator(channelName));
 
