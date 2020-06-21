@@ -15,6 +15,7 @@ import com.google.gson.GsonBuilder;
 
 import net.aksingh.owmjapis.api.APIException;
 
+
 public class CasinoGameListener extends CustomMessageCreateListener{
 
 	final String BET_ALL_COMMAND = "!bet-it-all";

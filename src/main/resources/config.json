@@ -1,6 +1,4 @@
 {
-  "default": {
-    "channel": "bot1",
-    "token": "NjczNTk1NDA3MDExNDE0MDE2.Xm50ig.DnOocZtpDdw1pA5HaKjrsOC6SE8"    
-  }
+    "channels": ["channelName"],
+    "token": "token"
 }
