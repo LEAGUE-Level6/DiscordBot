@@ -23,7 +23,7 @@ public class TicTacToe extends CustomMessageCreateListener {
 	ArrayList<String> commands = new ArrayList<String>();
 	ArrayList<String> user = new ArrayList<String>();
 	ArrayList<String> CPU = new ArrayList<String>();
-	static int counter = -1;
+	boolean turn = false;
 	boolean stopcommand = false;
 	boolean stopuser = false;
 	public TicTacToe(String channelName) {
@@ -34,7 +34,8 @@ public class TicTacToe extends CustomMessageCreateListener {
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		// TODO Auto-generated method stub
-		if (event.getMessageContent().startsWith(COMMAND)) {
+		String location = event.getMessageContent();
+		if (location.startsWith(COMMAND)) {
 			commands.add(TopLeft);
 			commands.add(TopMiddle);
 			commands.add(TopRight);
@@ -44,33 +45,40 @@ public class TicTacToe extends CustomMessageCreateListener {
 			commands.add(BottomLeft);
 			commands.add(BottomMiddle);
 			commands.add(BottomRight);
-			//counter++;
-			counter = 0;
-			//System.out.println(counter);
-			event.getChannel().sendMessage("Choose where you want to place the X");
-		} else {
-			//System.out.println(counter);
-			if (counter == -1) {
-				return;
-			}
-			if (counter % 2 == 0) {
+			event.getChannel().sendMessage("Welcome to the Game. Type Top to start");
+		} 
+		else if(location.contains("Top") || location.contains("Middle") || location.contains("Bottom") ){		
+			if (turn == false) {
 				event.getChannel().sendMessage("Choose where you want to place the X");
-				try {
-					Thread.sleep(15000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				String location = event.getMessageContent();
+//				try {
+//					Thread.sleep(10000);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				
+				System.out.println(location + "location");
 				user.add(location);
+				for (int i = commands.size()-1; i >= 0; i--) {
+					if(commands.get(i).equals(location)) {
+						commands.remove(i);
+					}
+				}
+				if(location != null) {
+					System.out.println("Hello");
+					turn = true;
+				}
 			} 
-			else if (counter % 2 == 1) {
+			else if (turn == true) {
 				if(CPU.size() == 0) {
 					for (int i = 0; i < commands.size(); i++) {
-						if(user.get(0) != commands.get(i)) {
-							System.out.println(user.get(0) + "user");
 							CPU.add(commands.get(i));
+							for (int j = commands.size()-1; j >= 0; j--) {
+								if(commands.get(j).equals(commands.get(i))) {
+									commands.remove(j);
+								}
+							}
 							event.getChannel().sendMessage("CPU places the O at " + commands.get(i));
+							turn = false;
 							break;
 						}
 					}
@@ -78,20 +86,23 @@ public class TicTacToe extends CustomMessageCreateListener {
 				else {
 					String temp = "";
 					for (int i = 0; i < commands.size(); i++) {
-						for (int j = 0; j < user.size(); j++) {
-							if(commands.get(i) != user.get(j)) {
+						for (int j = 0; j < user.size(); j++) {	
 								temp = commands.get(i);
+								System.out.println(temp + "temp");
 								break;
-							}
 						}
-						for (int j = 0; j < CPU.size(); j++) {
-							if(temp != CPU.get(j)) {
 								CPU.add(temp);
+								for (int k = commands.size()-1; k >= 0; k--) {
+									if(commands.get(k).equals(temp)) {
+										commands.remove(k);
+									}
+								}
 								event.getChannel().sendMessage("CPU places the O at " + temp);
+								turn = false;
 								i = commands.size();
 								break;
-							}
-						}
+					
+						
 						
 						
 					}
@@ -102,7 +113,7 @@ public class TicTacToe extends CustomMessageCreateListener {
 				
 				
 			}
-			counter++;
+		
 			for (int i = 0; i < CPU.size(); i++) {
 				for (int j = 0; j < user.size(); j++) {
 					if (CPU.get(i).equals(TopLeft) && CPU.get(i).equals(TopMiddle) && CPU.get(i).equals(TopRight)) {
@@ -148,4 +159,4 @@ public class TicTacToe extends CustomMessageCreateListener {
 			}
 		}
 	}
-}
+
