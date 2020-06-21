@@ -1,8 +1,4 @@
 {
-  "default": {
-
-    "channel": "channel-name",
+    "channels": ["channel-name"],
     "token": "insert your bot token here" 
-
-  }
 }
