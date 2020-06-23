@@ -1,14 +1,20 @@
 package org.jointheleague.discord_bot_example;
 
 import org.javacord.api.DiscordApi;
-import org.javacord.api.DiscordApiBuilder;
+
 import org.jointheleague.modules.*;
+
+import org.javacord.api.DiscordApiBuilder;
+
 
 /**
  * Launches all of the listeners for one channel.
  * @author keithgroves and https://tinystripz.com
  *
  */
+import org.jointheleague.modules.*;
+
+
 
 public class Bot  {
 	
@@ -68,28 +74,53 @@ public class Bot  {
 		api.addMessageCreateListener(new ElmoMessageListener(channelName));
 		api.addMessageCreateListener(new FactMessageListener(channelName));
 		api.addMessageCreateListener(new CasinoGameListener(channelName));
+
+api.addMessageCreateListener(new HighLowListener(channelName));
+
 		api.addMessageCreateListener(new PEMDASListener(channelName));
 		api.addMessageCreateListener(new Ryland(channelName));
 		api.addMessageCreateListener(new RockPaperScissorsListener(channelName));
+
 		api.addMessageCreateListener(new leetMessageListener(channelName));
 		api.addMessageCreateListener(new ConnectFour(channelName));
 		api.addMessageCreateListener(new FlagMessageListener(channelName));
+
+		
+		api.addMessageCreateListener(new EightBall(channelName));
+		api.addMessageCreateListener(new Reddit(channelName));
+		api.addMessageCreateListener(new DeepFrier(channelName));
+		
+
 		api.addMessageCreateListener(new PictureOf(channelName));
 		api.addMessageCreateListener(new GetPicture(channelName));
 		api.addMessageCreateListener(new CuteAnimal(channelName));
+
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 
+		api.addMessageCreateListener(new LatexRender(channelName));
 		api.addMessageCreateListener(new MinesweeperListener(channelName));
 
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));
 
 		api.addMessageCreateListener(new WolframAlpha(channelName));
 
+		api.addMessageCreateListener(new Bot1Listener(channelName));
 
+
+
+		api.addMessageCreateListener(new QuitMessageListener(channelName));
+		api.addMessageCreateListener(new PingMessageListener(channelName));	
+		api.addMessageCreateListener(new CoinFlipMessageListener(channelName));
+		api.addMessageCreateListener(new PlayRPSMessageListener(channelName));
+		api.addMessageCreateListener(new KickMessageListener(channelName));
+		api.addMessageCreateListener(new AssignRoleMessageListener(channelName));
+		api.addMessageCreateListener(new NicknameListener(channelName));
+		api.addMessageCreateListener(new SolveQuadraticListener(channelName));
+		api.addMessageCreateListener(new RollDiceMessageListener(channelName));
+		api.addMessageCreateListener(new HelpMessageListener(channelName));
 
 		api.addMessageCreateListener(new MorseTranslator(channelName));
-
 
 		api.addMessageCreateListener(new HangmanListener(channelName));
 		api.addMessageCreateListener(new BogoSorterListener(channelName));
