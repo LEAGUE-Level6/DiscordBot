@@ -2,6 +2,8 @@ package org.jointheleague.discord_bot_example;
 
 import org.javacord.api.DiscordApi;
 
+import org.jointheleague.modules.*;
+
 import org.javacord.api.DiscordApiBuilder;
 
 
@@ -11,6 +13,7 @@ import org.javacord.api.DiscordApiBuilder;
  *
  */
 import org.jointheleague.modules.*;
+
 
 
 
@@ -72,9 +75,13 @@ public class Bot  {
 		api.addMessageCreateListener(new ElmoMessageListener(channelName));
 		api.addMessageCreateListener(new FactMessageListener(channelName));
 		api.addMessageCreateListener(new CasinoGameListener(channelName));
+
+api.addMessageCreateListener(new HighLowListener(channelName));
+
 		api.addMessageCreateListener(new PEMDASListener(channelName));
 		api.addMessageCreateListener(new Ryland(channelName));
 		api.addMessageCreateListener(new RockPaperScissorsListener(channelName));
+
 		api.addMessageCreateListener(new leetMessageListener(channelName));
 		api.addMessageCreateListener(new ConnectFour(channelName));
 		api.addMessageCreateListener(new FlagMessageListener(channelName));
