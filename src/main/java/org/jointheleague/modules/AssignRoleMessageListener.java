@@ -31,7 +31,7 @@ public class AssignRoleMessageListener extends CustomMessageCreateListener{
 		if(stage == 0 && event.getMessageContent().equalsIgnoreCase(COMMAND)) {
 			server = event.getServer().orElse(null);
 			if(server ==  null) {
-				System.out.println("no server");
+				//System.out.println("no server");
 				return;
 			}
 			
@@ -49,14 +49,14 @@ public class AssignRoleMessageListener extends CustomMessageCreateListener{
 			
 			userMsg = event.getMessage();
 			if(userMsg == null) {
-				System.out.println("no user message");
+				//System.out.println("no user message");
 				return;
 			}
 			
 			List<User> mentioned = userMsg.getMentionedUsers();
 			
 			if(mentioned == null || mentioned.isEmpty()) {
-				System.out.println("no mentioned users");
+				//System.out.println("no mentioned users");
 				return;
 			}
 		
@@ -76,13 +76,13 @@ public class AssignRoleMessageListener extends CustomMessageCreateListener{
 
 			roleMsg = event.getMessage();
 			if(roleMsg == null) {
-				System.out.println("no role message");
+				//System.out.println("no role message");
 				return;
 			}
 			List<Role> roles = roleMsg.getMentionedRoles();
 			
 			if(roles == null || roles.isEmpty()) {
-				System.out.println("no roles");
+				//System.out.println("no roles");
 				return;
 			}
 			

@@ -31,14 +31,14 @@ public class KillMessageListener extends CustomMessageCreateListener {
 		else if (stage == 1 && event.getMessageContent().contains("user ")) {
 			userMsg = event.getMessage();
 			if(userMsg == null) {
-				System.out.println("no user message");
+				//System.out.println("no user message");
 				return;
 			}
 			
 			List<User> mentioned = userMsg.getMentionedUsers();
 			
 			if(mentioned == null || mentioned.isEmpty()) {
-				System.out.println("no mentioned users");
+				//System.out.println("no mentioned users");
 				return;
 			}
 		

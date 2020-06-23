@@ -1,6 +1,7 @@
 package org.jointheleague.modules;
 
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.jointheleague.modules.pojo.HelpEmbed;
 
 import com.wolfram.alpha.WAEngine;
 import com.wolfram.alpha.WAException;
@@ -34,6 +35,8 @@ public class WolframAlpha extends CustomMessageCreateListener{
 	}
 	public WolframAlpha(String channelName){
 		super(channelName);
+		helpEmbed = new HelpEmbed("!alpha", "Allows you to query the Wolfram Alpha API (e.g. !alpha 5+5)");
+
 	}
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
@@ -42,28 +45,28 @@ public class WolframAlpha extends CustomMessageCreateListener{
 			WAQueryResult user = createQuery(query);
 			for (WAPod pod : user.getPods()) {
                 if (!pod.isError()) {
-                    System.out.println(pod.getTitle());
+                    //System.out.println(pod.getTitle());
                     String title = "**" + pod.getTitle() + "**";
                     
                     event.getChannel().sendMessage(title);
-                    System.out.println("------------");
+                    //System.out.println("------------");
                     for (WASubpod subpod : pod.getSubpods()) {
                         for (Object element : subpod.getContents()) {
                             if (element instanceof WAPlainText) {
                     
                             	event.getChannel().sendMessage(((WAPlainText) element).getText());
-                                System.out.println(((WAPlainText) element).getText());
-                                System.out.println("");
+                                //System.out.println(((WAPlainText) element).getText());
+                                //System.out.println("");
                             }else if(element instanceof WAImage) {
                             	WAImage image = (WAImage)element;
-                            	System.out.println(image.getURL());
+                            	//System.out.println(image.getURL());
                             	event.getChannel().sendMessage(image.getURL());
                             }else {
-                            	System.out.println(element.getClass());
+                            	//System.out.println(element.getClass());
                             }
                         }
                     }
-                    System.out.println("");
+                    //System.out.println("");
                 }
             }
 		}else {
