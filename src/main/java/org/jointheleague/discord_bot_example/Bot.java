@@ -4,11 +4,6 @@ import org.javacord.api.DiscordApi;
 
 import org.javacord.api.DiscordApiBuilder;
 
-/**
- * Launches all of the listeners for one channel.
- * @author keithgroves and https://tinystripz.com
- *
- */
 import org.jointheleague.modules.*;
 
 
@@ -74,6 +69,8 @@ public class Bot  {
 		api.addMessageCreateListener(new HighLowListener(channelName));
 		api.addMessageCreateListener(new Ryland(channelName));
 		api.addMessageCreateListener(new RockPaperScissorsListener(channelName));
+		api.addMessageCreateListener(new Screamer(channelName));
+		api.addMessageCreateListener(new Hangman(channelName));
 		api.addMessageCreateListener(new leetMessageListener(channelName));
 		api.addMessageCreateListener(new ConnectFour(channelName));
 		api.addMessageCreateListener(new FlagMessageListener(channelName));
@@ -102,6 +99,12 @@ public class Bot  {
 		api.addMessageCreateListener(new ComplimentListener(channelName));
 		api.addMessageCreateListener(new CrazyEights(channelName));
 		api.addMessageCreateListener(new Blackjack(channelName));
+		api.addMessageCreateListener(new Frown(channelName));
+		api.addMessageCreateListener(new Marxist(channelName));
+		api.addMessageCreateListener(new Definitions(channelName));
+	}
+
+}
 
 
 	}
