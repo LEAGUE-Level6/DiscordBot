@@ -43,14 +43,11 @@ public class LotteryBall extends CustomMessageCreateListener {
 					+ "\n\"!nball start\" is when I'll pick my numbers. Typing this also finalizes your guesses and bet amount."
 					+ "\n\"!nball reset\" will reset the save file's high score.");
 			event.getChannel().sendMessage("I hope you'll have fun! (*･▽･*)");
-		} else if (event.getMessageContent().startsWith("!nball load")) {
-			event.getChannel().sendMessage(event.getMessageContent().substring(12));
-			saveDataTest(event.getMessage().getAuthor().getName());
 		} else if (event.getMessageContent().equalsIgnoreCase("!nball new")) {
-			loadData();
+			loadData(event.getMessage().getAuthor().getName());
 			if (tokens == 0) {
 				tokens = 5;
-				saveData();
+				saveDataTest(event.getMessage().getAuthor().getName());
 			}
 			actualZero = false;
 			betAmount = 0;
@@ -67,20 +64,16 @@ public class LotteryBall extends CustomMessageCreateListener {
 			event.getChannel().sendMessage(
 					"You can type \"!nball tokens\" at any time to see your token count, or \"!nball reset\" to reset the save file.");
 		} else if (event.getMessageContent().equalsIgnoreCase("!nball tokens")) {
-			loadData();
+			loadData(event.getMessage().getAuthor().getName());
 			event.getChannel().sendMessage("( ﾟ▽ﾟ)/ You have " + tokens + " tokens!");
-			event.getChannel().sendMessage("Seems like the high score is " + highScore + " tokens.");
-		} else if (event.getMessageContent().equalsIgnoreCase("!nball reset")) {
-			event.getChannel().sendMessage("Ok, resetting save...");
-			reset();
-			event.getChannel().sendMessage("All done!");
+			event.getChannel().sendMessage("Your high score is " + highScore + " tokens.");
 		} else if (tokens <= 0 && actualZero) {
 			event.getChannel().sendMessage("Oh no! You ran out of tokens.");
 			event.getChannel()
 					.sendMessage("If you want to play again, just type \"!nball new\" again and the game will reset!");
 			actualZero = false;
 		} else if (event.getMessageContent().startsWith("!nball pick")) {
-			loadData();
+			loadData(event.getMessage().getAuthor().getName());
 			betAmount = 0;
 			numbers = new int[5];
 			if (tokens <= 0) {
@@ -119,7 +112,7 @@ public class LotteryBall extends CustomMessageCreateListener {
 					}
 				}
 				if (allDifferent && fiveNums && inRange) {
-					sort(numbers);
+					numbers = sort(numbers);
 					String s = "";
 					for (int i = 0; i < 5; i++) {
 						s += numbers[i];
@@ -227,21 +220,33 @@ public class LotteryBall extends CustomMessageCreateListener {
 					event.getChannel().sendMessage("If you want to play again, just pick new numbers with \"!nball pick\"!");
 					numbers = new int[5];
 				}
-				saveData();
+				saveDataTest(event.getMessage().getAuthor().getName());
 			}
 		}
 	}
 
-	public void loadData() {
+	public void loadData(String name) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("src/main/resources/LotteryBallSave.txt"));
-			String saveData = br.readLine();
-			String saveData2 = br.readLine();
-			int saveDataNum = Integer.parseInt(saveData);
-			int highScoreNum = Integer.parseInt(saveData2);
-			tokens = saveDataNum;
-			highScore = highScoreNum;
+			String line = "";
+			String allData = "";
+			while(line != null) {
+				line = br.readLine();
+				if (line != null) {
+					allData += line;
+				}
+			}
 			br.close();
+			int nameIndex = allData.lastIndexOf(name);
+			if (nameIndex != (-1)) {
+				String nameSave = allData.substring(nameIndex + 1);
+				String[] saves = nameSave.split("=");
+				tokens = Integer.parseInt(saves[1]);
+				highScore = Integer.parseInt(saves[2]);
+			} else {
+				tokens = 5;
+				highScore = 5;
+			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -252,57 +257,42 @@ public class LotteryBall extends CustomMessageCreateListener {
 			tokens = 5;
 		} catch (StringIndexOutOfBoundsException e) {
 			tokens = 5;
+		} catch (NullPointerException e) {
+			tokens = 5;
+			saveDataTest(name);
 		}
 
 	}
 	
 	public void saveDataTest(String name) {
-		/*try {
-			BufferedReader br = new BufferedReader(new FileReader("src/main/resources/LotteryBallSave.txt"));
-			String saveData = br.readLine();
-			String saveData2 = br.readLine();
-			int highScoreNum = Integer.parseInt(saveData2);
-			br.close();
-			FileWriter fw = new FileWriter("src/main/resources/LotteryBallSave.txt");*/
-			if (tokens > 10)  {//highScoreNum) {
-				//fw.write(name + "=" + tokens + "=" + tokens);
-				System.out.println(name + "=" + tokens + "=" + tokens);
-			} else {
-				//fw.write(name + "=" + tokens + "=" + highScoreNum);
-				System.out.println(name + "=" + tokens + "=" + 10);//highScoreNum);
-			}
-			/*fw.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-	}
-
-	public void saveData() {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("src/main/resources/LotteryBallSave.txt"));
-			String saveData = br.readLine();
-			String saveData2 = br.readLine();
-			int highScoreNum = Integer.parseInt(saveData2);
+			String line = "";
+			String allData = "";
+			while(line != null) {
+				line = br.readLine();
+				if (line != null) {
+					allData += line;
+				}
+			}
 			br.close();
 			FileWriter fw = new FileWriter("src/main/resources/LotteryBallSave.txt");
-			if (tokens > highScoreNum) {
-				fw.write(tokens + "\n" + tokens);
+			System.out.println("allData: " + allData);
+			int nameIndex = allData.lastIndexOf(name);
+			if (nameIndex != (-1)) {
+				String nameSave = allData.substring(nameIndex + 1);
+				String[] saves = nameSave.split("=");
+				System.out.println("high: " + saves[2]);
+				if (tokens > Integer.parseInt(saves[2])) {
+					fw.write(allData + "\n" + name + "=" + tokens + "=" + tokens + "\n");
+					System.out.println(name + "=" + tokens + "=" + tokens);
+				} else {
+					fw.write(allData + "\n" + name + "=" + tokens + "=" + Integer.parseInt(saves[2])+ "\n");
+					System.out.println(name + "=" + tokens + "=" + Integer.parseInt(saves[2]));
+				}
 			} else {
-				fw.write(tokens + "\n" + highScoreNum);
+				fw.write(allData + "\n" + name + "=" + tokens + "=" + tokens + "\n");
 			}
-			fw.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public void reset() {
-		FileWriter fw;
-		try {
-			fw = new FileWriter("src/main/resources/LotteryBallSave.txt");
-			fw.write(tokens + "\n5");
 			fw.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -310,7 +300,7 @@ public class LotteryBall extends CustomMessageCreateListener {
 		}
 	}
 	
-	public void sort(int[] array) {
+	public int[] sort(int[] array) {
 		for (int i = 0; i < array.length - 1; i++) {
 			int index = i;
 			for (int j = (i + 1); j < array.length; j++) {
@@ -321,7 +311,7 @@ public class LotteryBall extends CustomMessageCreateListener {
 				array[index] = array[i];
 				array[i] = tempHolder;
 			}
-			
 		}
+		return array;
 	}
 }
