@@ -70,7 +70,7 @@ public class ToGif extends CustomMessageCreateListener {
 				if (splitCommand.length > 1) {
 					delay = Integer.parseInt(splitCommand[1]);
 				}
-				System.out.println(delay);
+				//System.out.println(delay);
 
 				BufferedImage first = (ImageIO.read(URLS.get(0)));
 				ImageOutputStream output = new FileImageOutputStream(new File("/tmp/example.gif"));
@@ -89,7 +89,7 @@ public class ToGif extends CustomMessageCreateListener {
 
 				// event.getChannel().sendMessage("Consider adding images with " +
 				// COMMAND_AddGifImg + " first Error: " + e);
-				// System.out.println(new File("/tmp/example.gif").length()/1074790400‬);
+				// //System.out.println(new File("/tmp/example.gif").length()/1074790400‬);
 				// (1048576 * 1024)
 				Thread t = new Thread(() -> {
 					if (new File("/tmp/example.gif").length() > 1000000 * 8) {

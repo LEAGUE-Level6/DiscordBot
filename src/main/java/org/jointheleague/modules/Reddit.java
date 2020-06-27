@@ -48,7 +48,7 @@ public class Reddit extends CustomMessageCreateListener {
 					s=s.substring(s.indexOf("https"));
 					imgurl=s.substring(0,s.indexOf("style")-2);
 					imgurl=imgurl.replaceAll("amp;", "");
-					System.out.println(imgurl);
+					//System.out.println(imgurl);
 					break;
 				}
 				s = br.readLine();

@@ -34,7 +34,7 @@ public class DeepFrier extends CustomMessageCreateListener {
 		if (event.getMessageContent().contains("!deepfry")&&(event.getMessageContent().contains(".png")||event.getMessageContent().contains(".jpg"))) {
 			String u = event.getMessageContent().toString();
 			u=u.substring(u.indexOf("https"), u.lastIndexOf(".")+4);
-			System.out.println(u);
+			//System.out.println(u);
 			try {
 				URL url = new URL(u);
 		        BufferedImage img = ImageIO.read(url);

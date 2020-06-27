@@ -35,12 +35,12 @@ public class Utilities {
 			FileReader fr = new FileReader(new File("src/main/resources/config.json"));
 			JSONObject json = (JSONObject) parser.parse(fr);
 
-			System.out.println(json);
+			//System.out.println(json);
 			// Get the array of channels and API token
 			JSONArray channels = (JSONArray) json.get("channels");
 			String token = (String) json.get("token");
 
-			System.out.println(channels + " " + token);
+			//System.out.println(channels + " " + token);
 			// Create a BotInfo and set the channels
 			BotInfo info = new BotInfo();
 			info.setChannels(Arrays.copyOf(channels.toArray(), channels.size(), String[].class));

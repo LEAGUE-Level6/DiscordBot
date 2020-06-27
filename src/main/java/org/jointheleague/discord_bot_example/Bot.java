@@ -2,10 +2,7 @@ package org.jointheleague.discord_bot_example;
 
 import org.javacord.api.DiscordApi;
 
-import org.jointheleague.modules.*;
-
 import org.javacord.api.DiscordApiBuilder;
-
 
 /**
  * Launches all of the listeners for one channel.
@@ -13,7 +10,6 @@ import org.javacord.api.DiscordApiBuilder;
  *
  */
 import org.jointheleague.modules.*;
-
 
 
 
@@ -39,7 +35,7 @@ public class Bot  {
 
 		// Print the URL to invite the bot
 		if (printInvite) {
-			System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
+			////System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
 		}
 
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
@@ -66,6 +62,10 @@ public class Bot  {
 		api.addMessageCreateListener(apiExampleListener);
 		helpListener.addHelpEmbed(apiExampleListener.getHelpEmbed());
 		
+		WolframAlpha wolframAlpha = new WolframAlpha(channelName);
+		api.addMessageCreateListener(wolframAlpha);
+		helpListener.addHelpEmbed(wolframAlpha.getHelpEmbed());
+		
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
 		api.addMessageCreateListener(new DadJokes(channelName));
@@ -76,7 +76,7 @@ public class Bot  {
 		api.addMessageCreateListener(new FactMessageListener(channelName));
 		api.addMessageCreateListener(new CasinoGameListener(channelName));
 
-api.addMessageCreateListener(new HighLowListener(channelName));
+	api.addMessageCreateListener(new HighLowListener(channelName));
 
 		api.addMessageCreateListener(new PEMDASListener(channelName));
 		api.addMessageCreateListener(new Ryland(channelName));
@@ -107,6 +107,7 @@ api.addMessageCreateListener(new HighLowListener(channelName));
 		api.addMessageCreateListener(new Bot1Listener(channelName));
 
 
+
 		api.addMessageCreateListener(new QuitMessageListener(channelName));
 		api.addMessageCreateListener(new PingMessageListener(channelName));	
 		api.addMessageCreateListener(new CoinFlipMessageListener(channelName));
@@ -116,7 +117,6 @@ api.addMessageCreateListener(new HighLowListener(channelName));
 		api.addMessageCreateListener(new NicknameListener(channelName));
 		api.addMessageCreateListener(new SolveQuadraticListener(channelName));
 		api.addMessageCreateListener(new RollDiceMessageListener(channelName));
-		api.addMessageCreateListener(new HelpMessageListener(channelName));
 
 		api.addMessageCreateListener(new MorseTranslator(channelName));
 
