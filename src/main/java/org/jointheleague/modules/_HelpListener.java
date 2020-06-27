@@ -36,8 +36,7 @@ public class _HelpListener extends CustomMessageCreateListener{
 					+ "\n !kick - kicks those who can be kicked below you"
 					+ "\n !nick - works with the manipulation or alteration of nicknames"
 					+ "\n !ping - shows your current ping"
-					+ "\n !playrps - starts a game of Rock Paper Scissors against the bot"
-					+ "\n !quit - turns off the bot").getEmbed());
+					+ "\n !playrps - starts a game of Rock Paper Scissors against the bot").getEmbed());
 			
 		}
 	}
