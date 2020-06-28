@@ -2,6 +2,7 @@ package org.jointheleague.modules;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Stack;
 
 import org.apache.logging.log4j.util.SystemPropertiesPropertySource;
 import org.javacord.api.event.message.MessageCreateEvent;
@@ -20,12 +21,14 @@ public class TicTacToe extends CustomMessageCreateListener {
 	final String BottomMiddle = "!BottomMiddle";
 	final String BottomRight = "!BottomRight";
 
-	ArrayList<String> commands = new ArrayList<String>();
-	ArrayList<String> user = new ArrayList<String>();
-	ArrayList<String> CPU = new ArrayList<String>();
-	boolean turn = false;
-	boolean stopcommand = false;
-	boolean stopuser = false;
+	Stack<String> commands = new Stack<String>();
+	boolean[][] boardUser = new boolean[3][3];
+	boolean[][] boardCPU = new boolean[3][3];
+	boolean userWin = false;
+	boolean CPUWin = false;
+	boolean stop = false;
+	boolean checkCommand = false;
+
 	public TicTacToe(String channelName) {
 		super(channelName);
 
@@ -36,127 +39,173 @@ public class TicTacToe extends CustomMessageCreateListener {
 		// TODO Auto-generated method stub
 		String location = event.getMessageContent();
 		if (location.startsWith(COMMAND)) {
-			commands.add(TopLeft);
-			commands.add(TopMiddle);
-			commands.add(TopRight);
-			commands.add(MiddleLeft);
-			commands.add(MiddleMiddle);
-			commands.add(MiddleRight);
-			commands.add(BottomLeft);
-			commands.add(BottomMiddle);
-			commands.add(BottomRight);
-			event.getChannel().sendMessage("Welcome to the Game. Type Top to start");
-		} 
-		else if(location.contains("Top") || location.contains("Middle") || location.contains("Bottom") ){		
-			if (turn == false) {
-				event.getChannel().sendMessage("Choose where you want to place the X");
-//				try {
-//					Thread.sleep(10000);
-//				} catch (InterruptedException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				
-				System.out.println(location + "location");
-				user.add(location);
-				for (int i = commands.size()-1; i >= 0; i--) {
-					if(commands.get(i).equals(location)) {
-						commands.remove(i);
+			stop = false;
+			userWin = false;
+			CPUWin = false;
+			boardUser = new boolean[3][3];
+			boardCPU = new boolean[3][3];
+			commands = new Stack<String>();
+			commands.push(TopRight);
+			commands.push(MiddleRight);
+			commands.push(MiddleLeft);
+			commands.push(BottomMiddle);
+			commands.push(TopLeft);
+			commands.push(TopMiddle);
+			commands.push(BottomLeft);
+			commands.push(BottomRight);
+			commands.push(MiddleMiddle);
+			
+			event.getChannel().sendMessage("Welcome to the Game.");
+			event.getChannel().sendMessage("Choose where you want to place the X");
+		}
+		location = event.getMessageContent();
+		if (stop == false) {
+			if (location.equals(TopLeft) || location.equals(TopMiddle) || location.equals(TopRight)
+					|| location.equals(MiddleLeft) || location.equals(MiddleMiddle) || location.equals(MiddleRight)
+					|| location.equals(BottomLeft) || location.equals(BottomMiddle) || location.equals(BottomRight)) {
+				checkCommand = false;
+				for (int i = 0; i < commands.size(); i++) {
+					if (commands.get(i).equals(location)) {
+						checkCommand = true;
+						break;
 					}
 				}
-				if(location != null) {
-					System.out.println("Hello");
-					turn = true;
+				if (checkCommand) {
+					event.getChannel().sendMessage("User place X at " + location);
+					fillUserLocation(location);
+					checkWinner();
 				}
-			} 
-			else if (turn == true) {
-				if(CPU.size() == 0) {
-					for (int i = 0; i < commands.size(); i++) {
-							CPU.add(commands.get(i));
-							for (int j = commands.size()-1; j >= 0; j--) {
-								if(commands.get(j).equals(commands.get(i))) {
-									commands.remove(j);
-								}
-							}
-							event.getChannel().sendMessage("CPU places the O at " + commands.get(i));
-							turn = false;
-							break;
-						}
+				if (userWin) {
+					event.getChannel().sendMessage("User wins");
+					stop = true;
+					event.getChannel().sendMessage("Type !TicTacToe to start a new game");
+				} else {
+					event.getChannel().sendMessage("CPU's turn");
+					if(commands.isEmpty() == false) {
+					String CPULocation = commands.pop();
+					event.getChannel().sendMessage("CPU places O at " + CPULocation);
+					fillCPULocation(CPULocation);
+					checkWinner();
+					if (CPUWin) {
+						event.getChannel().sendMessage("CPU wins");
+						stop = true;
+						event.getChannel().sendMessage("Type !TicTacToe to start a new game");
+					} else {
+						event.getChannel().sendMessage("User's turn");
 					}
-				}
-				else {
-					String temp = "";
-					for (int i = 0; i < commands.size(); i++) {
-						for (int j = 0; j < user.size(); j++) {	
-								temp = commands.get(i);
-								System.out.println(temp + "temp");
-								break;
-						}
-								CPU.add(temp);
-								for (int k = commands.size()-1; k >= 0; k--) {
-									if(commands.get(k).equals(temp)) {
-										commands.remove(k);
-									}
-								}
-								event.getChannel().sendMessage("CPU places the O at " + temp);
-								turn = false;
-								i = commands.size();
-								break;
 					
-						
-						
-						
-					}
 				}
-
-				
-				
-				
-				
-			}
-		
-			for (int i = 0; i < CPU.size(); i++) {
-				for (int j = 0; j < user.size(); j++) {
-					if (CPU.get(i).equals(TopLeft) && CPU.get(i).equals(TopMiddle) && CPU.get(i).equals(TopRight)) {
-						event.getChannel().sendMessage("You lose");
-					} else if (user.get(j).equals(TopLeft) && user.get(j).equals(TopMiddle)
-							&& user.get(j).equals(TopRight)) {
-						System.out.println("You win");
-						event.getChannel().sendMessage("You win");
-					} else if (CPU.get(i).equals(MiddleLeft) && CPU.get(i).equals(MiddleMiddle)
-							&& CPU.get(i).equals(MiddleRight)) {
-						event.getChannel().sendMessage("You lose");
-					} else if (user.get(j).equals(MiddleLeft) && user.get(j).equals(MiddleMiddle)
-							&& user.get(j).equals(MiddleRight)) {
-						event.getChannel().sendMessage("You win");
-					} else if (CPU.get(i).equals(BottomLeft) && CPU.get(i).equals(BottomMiddle)
-							&& CPU.get(i).equals(BottomRight)) {
-						event.getChannel().sendMessage("You lose");
-					} else if (user.get(j).equals(BottomLeft) && user.get(j).equals(BottomMiddle)
-							&& user.get(j).equals(BottomRight)) {
-						event.getChannel().sendMessage("You win");
-					} else if (CPU.get(i).equals(TopLeft) && CPU.get(i).equals(MiddleLeft)
-							&& CPU.get(i).equals(BottomLeft)) {
-						event.getChannel().sendMessage("You lose");
-					} else if (user.get(j).equals(TopLeft) && user.get(j).equals(MiddleLeft)
-							&& user.get(j).equals(BottomLeft)) {
-						System.out.println("You win");
-						event.getChannel().sendMessage("You win");
-					} else if (CPU.get(i).equals(TopMiddle) && CPU.get(i).equals(MiddleMiddle)
-							&& CPU.get(i).equals(BottomMiddle)) {
-						event.getChannel().sendMessage("You lose");
-					} else if (user.get(j).equals(TopMiddle) && user.get(j).equals(MiddleMiddle)
-							&& user.get(j).equals(BottomMiddle)) {
-						event.getChannel().sendMessage("You win");
-					} else if (CPU.get(i).equals(TopRight) && CPU.get(i).equals(MiddleRight)
-							&& CPU.get(i).equals(BottomRight)) {
-						event.getChannel().sendMessage("You lose");
-					} else if (user.get(j).equals(TopRight) && user.get(j).equals(MiddleRight)
-							&& user.get(j).equals(BottomRight)) {
-						event.getChannel().sendMessage("You lose");
+					else {
+						event.getChannel().sendMessage("Draw");
+						stop = true;
+						event.getChannel().sendMessage("Type !TicTacToe to start a new game");
 					}
-
 				}
 			}
 		}
 	}
 
+	public void fillUserLocation(String location) {
+		for (int i = commands.size() - 1; i >= 0; i--) {
+			if (commands.get(i).equals(location)) {
+				commands.remove(i);
+				break;
+			}
+		}
+		// TODO Auto-generated method stub
+		if (location.equals(TopLeft)) {
+			boardUser[0][0] = true;
+		} else if (location.equals(TopMiddle)) {
+			boardUser[0][1] = true;
+		} else if (location.equals(TopRight)) {
+			boardUser[0][2] = true;
+		} else if (location.equals(MiddleLeft)) {
+			boardUser[1][0] = true;
+		} else if (location.equals(MiddleMiddle)) {
+			boardUser[1][1] = true;
+		} else if (location.equals(MiddleRight)) {
+			boardUser[1][2] = true;
+		} else if (location.equals(BottomLeft)) {
+			boardUser[2][0] = true;
+		} else if (location.equals(BottomMiddle)) {
+			boardUser[2][1] = true;
+		} else if (location.equals(BottomRight)) {
+			boardUser[2][2] = true;
+		}
+	}
+
+	public void fillCPULocation(String location) {
+		// TODO Auto-generated method stub
+		if (location.equals(TopLeft)) {
+			boardCPU[0][0] = true;
+		} else if (location.equals(TopMiddle)) {
+			boardCPU[0][1] = true;
+		} else if (location.equals(TopRight)) {
+			boardCPU[0][2] = true;
+		} else if (location.equals(MiddleLeft)) {
+			boardCPU[1][0] = true;
+		} else if (location.equals(MiddleMiddle)) {
+			boardCPU[1][1] = true;
+		} else if (location.equals(MiddleRight)) {
+			boardCPU[1][2] = true;
+		} else if (location.equals(BottomLeft)) {
+			boardCPU[2][0] = true;
+		} else if (location.equals(BottomMiddle)) {
+			boardCPU[2][1] = true;
+		} else if (location.equals(BottomRight)) {
+			boardCPU[2][2] = true;
+		}
+	}
+
+	public void checkWinner() {
+		// User checks
+		// rows
+		if (boardUser[0][0] && boardUser[0][1] && boardUser[0][2]) {
+			userWin = true;
+		} else if (boardUser[1][0] && boardUser[1][1] && boardUser[1][2]) {
+			userWin = true;
+		} else if (boardUser[2][0] && boardUser[2][1] && boardUser[2][2]) {
+			userWin = true;
+		}
+		// columns
+		else if (boardUser[0][0] && boardUser[1][0] && boardUser[2][0]) {
+			userWin = true;
+		} else if (boardUser[0][1] && boardUser[1][1] && boardUser[2][1]) {
+			userWin = true;
+		} else if (boardUser[0][2] && boardUser[1][2] && boardUser[2][2]) {
+			userWin = true;
+		}
+		// diagonals
+		else if (boardUser[0][0] && boardUser[1][1] && boardUser[2][2]) {
+			userWin = true;
+		} else if (boardUser[0][2] && boardUser[1][1] && boardUser[2][0]) {
+			userWin = true;
+		}
+
+		// CPU checks
+		// rows
+		else if (boardCPU[0][0] && boardCPU[0][1] && boardCPU[0][2]) {
+			CPUWin = true;
+		} else if (boardCPU[1][0] && boardCPU[1][1] && boardCPU[1][2]) {
+			CPUWin = true;
+		} else if (boardCPU[2][0] && boardCPU[2][1] && boardCPU[2][2]) {
+			CPUWin = true;
+		}
+		// columns
+		else if (boardCPU[0][0] && boardCPU[1][0] && boardCPU[2][0]) {
+			CPUWin = true;
+		} else if (boardCPU[0][1] && boardCPU[1][1] && boardCPU[2][1]) {
+			CPUWin = true;
+		} else if (boardCPU[0][2] && boardCPU[1][2] && boardCPU[2][2]) {
+			CPUWin = true;
+		}
+		// diagonals
+		else if (boardCPU[0][0] && boardCPU[1][1] && boardCPU[2][2]) {
+			CPUWin = true;
+		} else if (boardCPU[0][2] && boardCPU[1][1] && boardCPU[2][0]) {
+			CPUWin = true;
+		}
+
+	}
+
+}
