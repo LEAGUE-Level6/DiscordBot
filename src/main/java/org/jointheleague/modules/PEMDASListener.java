@@ -219,7 +219,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 						lastType = 0;
 						temp = "";
 					}else if(!sub.equals("-")){
-						System.out.println("incorrect");
+						//System.out.println("incorrect");
 						correctSyntax = false;
 					}
 					operations.add(sub);
@@ -327,7 +327,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 			}
 			return new EquationHolder(nums,operations,isNegative);
 		}catch(NumberFormatException | StringIndexOutOfBoundsException e) {
-			System.out.println("incorrect");
+			//System.out.println("incorrect");
 			correctSyntax = false;
 			return new EquationHolder(null,null,null);
 		}	
@@ -382,7 +382,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 			
 			return solve(new EquationHolder(num,operation,isNegative));
 		}catch(NullPointerException e) {
-			System.out.println("incorrect");
+			//System.out.println("incorrect");
 			correctSyntax = false;
 			return -1;
 		}
@@ -406,7 +406,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 			}
 			return out;
 		default:
-			System.out.println("incorrect");
+			//System.out.println("incorrect");
 			correctSyntax = false;
 			return 0;
 		}
@@ -423,7 +423,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 		case "^":return 2;
 		case "d":return 3;
 		default:
-			System.out.println("incorrect");
+			//System.out.println("incorrect");
 			correctSyntax = false;
 			return 0;
 		}
