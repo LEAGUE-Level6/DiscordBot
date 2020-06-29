@@ -49,17 +49,15 @@ public class GetTime extends CustomMessageCreateListener{
 							.setFooter("You can try offestting by hours and minutes like +00:20 or -10:45"))
 					.send(event.getChannel());
 				}catch(DateTimeException e){
-					System.out.println(e.getMessage());
-					System.out.println(e.getLocalizedMessage());
 					new MessageBuilder()
 					.setEmbed(new EmbedBuilder()
-							.setTitle("Error: "+e.getMessage())
-							.setDescription('"'+e.getMessage()+'"')
-							.addField("", "Maybe you inputted the offset wrong? \n"
-									+ "You must have it in one of these formats, with + or - before it: \n"
-									+ "h, hh, hh:mm \n"
-									+ "**h:mm does not work**")
-							.setColor(Color.RED))
+						.setTitle("Error:")
+						.setDescription('"'+e.getMessage()+'"')
+						.addField("Troubleshooting", "Maybe you inputted the offset wrong? \n"
+								+ "You must have it in one of these formats, with + or - before it: \n"
+								+ "h, hh, hh:mm \n"
+								+ "**h:mm does not work**")
+						.setColor(Color.RED))
 					.send(event.getChannel());
 				}
 				
