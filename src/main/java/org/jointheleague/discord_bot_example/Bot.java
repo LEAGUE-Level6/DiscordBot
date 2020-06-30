@@ -35,7 +35,7 @@ public class Bot  {
 
 		// Print the URL to invite the bot
 		if (printInvite) {
-			////System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
+			System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
 		}
 
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
