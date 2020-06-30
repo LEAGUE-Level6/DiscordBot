@@ -15,14 +15,9 @@ import org.javacord.api.event.message.MessageCreateEvent;
 import net.aksingh.owmjapis.api.APIException;
 
 public class Economy extends CustomMessageCreateListener {
-	
-	
-	
-	
-	//Type eco info to use the bot
-	
-	
-	
+
+	// Type eco info to use the bot
+
 	static boolean start = false;
 	private HashMap<String, Double> moneyMap = new HashMap<String, Double>();;
 	private HashMap<String, String> jobMap;
@@ -51,14 +46,15 @@ public class Economy extends CustomMessageCreateListener {
 		if (author.equals("Jrcodd's Bot")) {
 			return;
 		}
+
 		if (e.getMessageContent().equalsIgnoreCase(HELPCMD)) {
 			e.getChannel().sendMessage("__**Valid Commands:**__\n"
 					+ "**eco register** - register your account into the economy (required to do any commands)\n"
 					+ "**eco bal** - check how much money you have\n" + "**eco jobs** - show job info (make money)\n"
 					+ "**eco work** - gain money from your job\n"
 					+ "**eco people** - list all the currently registered users\n"
-					+ "**eco give** - give money to another registered user\n"
-					+ "__**Creater:**__ Jackson Codd");
+					+ "**eco give** - transfer money to another registered user\n"
+					+ "__**Creator:**__ Jackson Codd ©2020");
 		}
 
 		if (e.getMessageContent().contains(REGISTERCMD)) {
@@ -172,7 +168,7 @@ public class Economy extends CustomMessageCreateListener {
 				}
 
 				if (reciever == "null") {
-					e.getChannel().sendMessage("Incorrect usage reciever does not exist");
+					e.getChannel().sendMessage("Incorrect usage recipient does not exist");
 					transfer = false;
 				} else {
 					try {
@@ -190,6 +186,7 @@ public class Economy extends CustomMessageCreateListener {
 					}
 					if (moneyMap.get(sender) < amount) {
 						e.getChannel().sendMessage("Insufficient Funds");
+						transfer = false;
 					}
 					if (transfer) {
 						moneyMap.put(reciever, (moneyMap.get(reciever) + amount));
