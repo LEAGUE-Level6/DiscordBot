@@ -45,6 +45,10 @@ public class Bot  {
 		api.addMessageCreateListener(randomNumber);
 		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
 		
+		HypeMachine hypeMachine = new HypeMachine(channelName);
+		api.addMessageCreateListener(hypeMachine);
+		helpListener.addHelpEmbed(hypeMachine.getHelpEmbed());
+		
 		SetProfilePic setPFP = new SetProfilePic(channelName);
 		api.addMessageCreateListener(setPFP);
 		helpListener.addHelpEmbed(setPFP.getHelpEmbed());
@@ -102,6 +106,7 @@ public class Bot  {
 		api.addMessageCreateListener(new ComplimentListener(channelName));
 		api.addMessageCreateListener(new CrazyEights(channelName));
 		api.addMessageCreateListener(new Blackjack(channelName));
+		api.addMessageCreateListener(new HypeMachine(channelName));
 
 
 	}
