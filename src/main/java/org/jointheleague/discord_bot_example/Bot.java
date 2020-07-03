@@ -49,6 +49,10 @@ public class Bot  {
 		api.addMessageCreateListener(hypeMachine);
 		helpListener.addHelpEmbed(hypeMachine.getHelpEmbed());
 		
+		TextStyler textStyler = new TextStyler(channelName);
+		api.addMessageCreateListener(textStyler);
+		helpListener.addHelpEmbed(textStyler.getHelpEmbed());
+		
 		SetProfilePic setPFP = new SetProfilePic(channelName);
 		api.addMessageCreateListener(setPFP);
 		helpListener.addHelpEmbed(setPFP.getHelpEmbed());
