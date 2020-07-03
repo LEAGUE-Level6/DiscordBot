@@ -27,7 +27,7 @@ public class TextStyler extends CustomMessageCreateListener {
 	public void handle(MessageCreateEvent event) {
 		if (event.getMessageContent().contains(COMMAND)) {
 			
-			String cmd = event.getMessageContent().replaceAll(" ", "").replace("!random","");
+			String cmd = event.getMessageContent().replaceAll(" ", "").replace("!TextStyler","");
 			try {
 				String input = cmd.substring(cmd.indexOf("\"")+1, cmd.lastIndexOf("\""));
 				cmd = cmd.substring(0, cmd.indexOf("\"")) + cmd.substring(cmd.lastIndexOf("\"")+1);

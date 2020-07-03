@@ -53,6 +53,10 @@ public class Bot  {
 		api.addMessageCreateListener(textStyler);
 		helpListener.addHelpEmbed(textStyler.getHelpEmbed());
 		
+		Tomagachi tomagachi = new Tomagachi(channelName);
+		api.addMessageCreateListener(tomagachi);
+		helpListener.addHelpEmbed(tomagachi.getHelpEmbed());
+		
 		SetProfilePic setPFP = new SetProfilePic(channelName);
 		api.addMessageCreateListener(setPFP);
 		helpListener.addHelpEmbed(setPFP.getHelpEmbed());
