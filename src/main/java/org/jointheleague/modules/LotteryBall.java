@@ -20,14 +20,14 @@ public class LotteryBall extends CustomMessageCreateListener {
 	int[] tokenNumbers;
 	boolean actualZero;
 	boolean reach1000 = false;
-	
-	//Inspired by the casino minigame from Tales of the Abyss
+
+	// Inspired by the casino minigame from Tales of the Abyss
 
 	public LotteryBall(String channelName) {
 		super(channelName);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		if (event.getMessageContent().equals("test")) {
@@ -53,32 +53,27 @@ public class LotteryBall extends CustomMessageCreateListener {
 			betAmount = 0;
 			numbers = new int[5];
 			event.getChannel().sendMessage("Let's play a round of Nephry Ball! ╰( ･ ᗜ ･ )╯");
-			event.getChannel().sendMessage("If you haven't played before, I'll give you 5 tokens to start.");
-			event.getChannel().sendMessage(
-					"You'll pick five different numbers from 1 to 35 to bet on. Then I'll choose five out of the 35 too!");
-			event.getChannel().sendMessage(
-					"For each ball that you pick that is also one that I picked, your bet will double, but if you don't pick a ball that I picked, you'll lose your tokens!");
+			event.getChannel().sendMessage("I'll give you 5 tokens to start.");
+			event.getChannel().sendMessage("You'll pick five different numbers from 1 to 35 to bet on. Then I'll choose five out of the 35 too!");
+			event.getChannel().sendMessage("For each ball that you pick that is also one that I picked, your bet will double, but if you don't pick a ball that I picked, you'll lose your tokens!");
 			event.getChannel()
 					.sendMessage("If you're ready to play, type \"!nball pick\" and type your choices afterwards!"
 							+ "\nPlease separate your numbers with commas, so I can read them. Thanks! (◍•ᴗ•◍)");
-			event.getChannel().sendMessage(
-					"You can type \"!nball tokens\" at any time to see your token count, or \"!nball reset\" to reset the save file.");
+			event.getChannel().sendMessage("You can type \"!nball tokens\" at any time to see your token count, or \"!nball reset\" to reset the save file.");
 		} else if (event.getMessageContent().equalsIgnoreCase("!nball tokens")) {
 			loadData(event.getMessage().getAuthor().getName());
 			event.getChannel().sendMessage("( ﾟ▽ﾟ)/ You have " + tokens + " tokens!");
 			event.getChannel().sendMessage("Your high score is " + highScore + " tokens.");
 		} else if (tokens <= 0 && actualZero) {
 			event.getChannel().sendMessage("Oh no! You ran out of tokens.");
-			event.getChannel()
-					.sendMessage("If you want to play again, just type \"!nball new\" again and the game will reset!");
+			event.getChannel().sendMessage("If you want to play again, just type \"!nball new\" again and the game will reset!");
 			actualZero = false;
 		} else if (event.getMessageContent().startsWith("!nball pick")) {
 			loadData(event.getMessage().getAuthor().getName());
 			betAmount = 0;
 			numbers = new int[5];
 			if (tokens <= 0) {
-				event.getChannel().sendMessage(
-						"( ´△｀) You don't have any tokens! \nPlease restart the game by typing \"!nball new\".");
+				event.getChannel().sendMessage("( ´△｀) You don't have any tokens! \nPlease restart the game by typing \"!nball new\".");
 			} else {
 				String numbersRaw = event.getMessageContent().substring(12);
 				numbersRaw = numbersRaw.trim();
@@ -121,8 +116,7 @@ public class LotteryBall extends CustomMessageCreateListener {
 						}
 					}
 					event.getChannel().sendMessage("♪(๑ᴖ◡ᴖ๑)♪ Okay! You've picked these numbers: " + s);
-					event.getChannel().sendMessage(
-							"If you're ready, type \"!nball bet\" and type the number of tokens you want to bet afterwards.");
+					event.getChannel().sendMessage("If you're ready, type \"!nball bet\" and type the number of tokens you want to bet afterwards.");
 				} else {
 					event.getChannel().sendMessage("Please choose 5 different numbers under 35! (｡•́︿•̀｡)");
 				}
@@ -145,15 +139,15 @@ public class LotteryBall extends CustomMessageCreateListener {
 					event.getChannel().sendMessage("Please pick numbers to bet on first! ( •᷄⌓•᷅ )");
 				} else if (betAmount > tokens) {
 					event.getChannel().sendMessage("You don't have that many tokens! (●´⌓`●)");
+					tokens -= betAmount;
 				} else if (betAmount < 1) {
 					event.getChannel().sendMessage("Please bet at least 1 token! (oﾟ□ﾟ)o");
+					tokens -= betAmount;
 				} else {
 					tokens -= betAmount;
 					event.getChannel().sendMessage("(･ัᗜ･ั)و Okay! You're betting this amount of tokens: " + betAmount);
-					event.getChannel()
-							.sendMessage("If you're ready, type \"!nball start\" and we'll start the game! ヽ(´∀｀ヽ)");
+					event.getChannel().sendMessage("If you're ready, type \"!nball start\" and we'll start the game! ヽ(´∀｀ヽ)");
 				}
-
 			}
 		} else if (event.getMessageContent().equalsIgnoreCase("!nball start")) {
 			if (numbers == null) {
@@ -161,8 +155,7 @@ public class LotteryBall extends CustomMessageCreateListener {
 			} else if (betAmount == 0) {
 				event.getChannel().sendMessage("Please bet some tokens first! (꒪⌓꒪)");
 			} else if (tokens <= 0 && actualZero) {
-				event.getChannel().sendMessage(
-						"( ´△｀) You don't have any tokens! \nPlease restart the game by typing \"!nball new\".");
+				event.getChannel().sendMessage("( ´△｀) You don't have any tokens! \nPlease restart the game by typing \"!nball new\".");
 			} else {
 				rand = new Random();
 				tokenNumbers = new int[5];
@@ -230,7 +223,7 @@ public class LotteryBall extends CustomMessageCreateListener {
 			BufferedReader br = new BufferedReader(new FileReader("src/main/resources/LotteryBallSave.txt"));
 			String line = "";
 			String allData = "";
-			while(line != null) {
+			while (line != null) {
 				line = br.readLine();
 				if (line != null) {
 					allData += line;
@@ -263,13 +256,13 @@ public class LotteryBall extends CustomMessageCreateListener {
 		}
 
 	}
-	
+
 	public void saveDataTest(String name) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("src/main/resources/LotteryBallSave.txt"));
 			String line = "";
 			String allData = "";
-			while(line != null) {
+			while (line != null) {
 				line = br.readLine();
 				if (line != null) {
 					allData += line;
@@ -277,7 +270,6 @@ public class LotteryBall extends CustomMessageCreateListener {
 			}
 			br.close();
 			FileWriter fw = new FileWriter("src/main/resources/LotteryBallSave.txt");
-			System.out.println("allData: " + allData);
 			int nameIndex = allData.lastIndexOf(name);
 			if (nameIndex != (-1)) {
 				String nameSave = allData.substring(nameIndex + 1);
@@ -285,10 +277,8 @@ public class LotteryBall extends CustomMessageCreateListener {
 				System.out.println("high: " + saves[2]);
 				if (tokens > Integer.parseInt(saves[2])) {
 					fw.write(allData + "\n" + name + "=" + tokens + "=" + tokens + "\n");
-					System.out.println(name + "=" + tokens + "=" + tokens);
 				} else {
-					fw.write(allData + "\n" + name + "=" + tokens + "=" + Integer.parseInt(saves[2])+ "\n");
-					System.out.println(name + "=" + tokens + "=" + Integer.parseInt(saves[2]));
+					fw.write(allData + "\n" + name + "=" + tokens + "=" + Integer.parseInt(saves[2]) + "\n");
 				}
 			} else {
 				fw.write(allData + "\n" + name + "=" + tokens + "=" + tokens + "\n");
@@ -299,7 +289,7 @@ public class LotteryBall extends CustomMessageCreateListener {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public int[] sort(int[] array) {
 		for (int i = 0; i < array.length - 1; i++) {
 			int index = i;
