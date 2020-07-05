@@ -2,6 +2,7 @@ package org.jointheleague.discord_bot_example;
 
 import org.javacord.api.DiscordApi;
 
+
 import org.javacord.api.DiscordApiBuilder;
 
 /**
@@ -102,7 +103,9 @@ public class Bot  {
 		api.addMessageCreateListener(new ComplimentListener(channelName));
 		api.addMessageCreateListener(new CrazyEights(channelName));
 		api.addMessageCreateListener(new Blackjack(channelName));
+		api.addMessageCreateListener(new GetTime(channelName));
 		api.addMessageCreateListener(new ScreenCapture(channelName));
+
 
 	}
 }
