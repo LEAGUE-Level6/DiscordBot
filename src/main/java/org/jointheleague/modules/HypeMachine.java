@@ -24,15 +24,18 @@ public class HypeMachine extends CustomMessageCreateListener {
 
 	@Override
 	public void handle(MessageCreateEvent event) {
-		
-		if (event.getMessageContent().contains(COMMAND)) {
-			
-			String cmd = event.getMessageContent().replaceAll(" ", "").replace("!random","");
-			
-			if(cmd.contains("add")) {
-				String addResponse = cmd.replace("add", "").replace("!HypeMachine", "");
-				responses.add(addResponse);
-				event.getChannel().sendMessage("Response <"+addResponse+"> appended to hype list!");
+		String contents = event.getMessageContent();
+		String[] cmds = contents.split(" ");
+		if (contents.contains(COMMAND)) {
+			if(cmds.length > 1 && cmds[1].equals("add")) {
+				if(cmds.length > 2) {
+					int messageIndex = contents.indexOf("add") + 3;
+					String addResponse = contents.substring(messageIndex);
+					responses.add(addResponse);
+					event.getChannel().sendMessage("Response <"+addResponse+"> appended to hype list!");
+				}else {
+					event.getChannel().sendMessage("You must add a statement after 'add' to complete the command");
+				}
 			} else {
 				Random r = new Random();
 				event.getChannel().sendMessage(responses.get(r.nextInt(responses.size())));

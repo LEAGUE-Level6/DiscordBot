@@ -114,7 +114,6 @@ public class Bot  {
 		api.addMessageCreateListener(new ComplimentListener(channelName));
 		api.addMessageCreateListener(new CrazyEights(channelName));
 		api.addMessageCreateListener(new Blackjack(channelName));
-		api.addMessageCreateListener(new HypeMachine(channelName));
 
 
 	}

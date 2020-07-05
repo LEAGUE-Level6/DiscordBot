@@ -19,7 +19,7 @@ public class Tomagachi extends CustomMessageCreateListener {
 	
 	public Tomagachi(String channelName) {
 		super(channelName);
-		helpEmbed = new HelpEmbed(COMMAND, "Don't let your tamagachi pet die and get them to maximum smartness to win! Run for a high score.");
+		helpEmbed = new HelpEmbed(COMMAND, "Don't let your tamagachi pet die and get them to maximum smartness to win! Run for a high score. You have multiple actions [eat, sleep, play, learn] to balence out your tomagachi's various needs [Hunger, Happiness, Stamina, Statue, and Intellegence]");
 	}
 	@Override
 	public void handle(MessageCreateEvent event) {	
@@ -72,11 +72,13 @@ public class Tomagachi extends CustomMessageCreateListener {
 							if (Status + total>10) {
 								total = 10 - Status;
 								Status = 10;
-							}else if (Status - total <0) {
+							}
+							if (Status - total <0) {
 								total = -(Status);
 								Status = 0;
 							}
-							Status = Status - total;
+							Status += total;
+							System.out.println(Status);
 							event.getChannel().sendMessage("Health Attrition..." + total +" Health");
 							displayGraphs(event);
 							try {
