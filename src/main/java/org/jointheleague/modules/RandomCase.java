@@ -26,7 +26,7 @@ public class RandomCase extends CustomMessageCreateListener {
 			String newMessage = "";
 
 			
-			System.out.println(message);
+			//System.out.println(message);
 
 
 			for (int i = 0; i < message.length(); i++) {
@@ -36,7 +36,7 @@ public class RandomCase extends CustomMessageCreateListener {
 					newMessage = newMessage + Character.toUpperCase(message.charAt(i));
 			}
 			event.getChannel().sendMessage(newMessage);
-			//System.out.println(event.getChannel().getCreationTimestamp().getNano());
+			////System.out.println(event.getChannel().getCreationTimestamp().getNano());
 		}
 	}
 

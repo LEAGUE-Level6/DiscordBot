@@ -26,7 +26,7 @@ public class SetProfilePic extends CustomMessageCreateListener {
 			URL url = event.getMessageAttachments().get(0).getUrl();
 			
 			System.err.println(url.toString());
-			//System.out.println(event.getMessageContent().);
+			////System.out.println(event.getMessageContent().);
 			try {
 				event.getApi().updateAvatar(ImageIO.read(url));
 			} catch (IOException e) {
@@ -34,7 +34,7 @@ public class SetProfilePic extends CustomMessageCreateListener {
 				e.printStackTrace();
 			}
 			
-			//System.out.println(event.getChannel().getCreationTimestamp().getNano());
+			////System.out.println(event.getChannel().getCreationTimestamp().getNano());
 		}
 	}
 

@@ -25,6 +25,18 @@ public class _HelpListener extends CustomMessageCreateListener{
 			for(HelpEmbed helpEmbed : helpEmbeds) {
 				event.getChannel().sendMessage(helpEmbed.getEmbed());
 			}
+
+			//legacy features
+			event.getChannel().sendMessage(new HelpEmbed("Additional Features" , "" +
+					"!dadon - turns on the dad mode"
+					+ "\n !dadoff - turns off the dad mode"
+					+ "\n !solvequad - solves quadratic equation"
+					+ "\n !addrole - assigns roles to those below you in the role hierarchy"
+					+ "\n !coinflip - flips a coin"
+					+ "\n !kick - kicks those who can be kicked below you"
+					+ "\n !nick - works with the manipulation or alteration of nicknames"
+					+ "\n !ping - shows your current ping"
+					+ "\n !playrps - starts a game of Rock Paper Scissors against the bot").getEmbed());
 			
 		}
 	}
