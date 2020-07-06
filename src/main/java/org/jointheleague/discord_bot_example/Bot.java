@@ -23,6 +23,7 @@ public class Bot  {
 		//add Listeners
 		api.addMessageCreateListener(new MomBot(channelName));
 		api.addMessageCreateListener(new DadBot(channelName));
+		api.addMessageCreateListener(new ChessBot(channelName));
 		api.addMessageCreateListener(new RandomNumber(channelName));
 		api.addMessageCreateListener(new DadJokes(channelName));
 		api.addMessageCreateListener(new ClockMessageListener(channelName));
