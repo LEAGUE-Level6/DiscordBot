@@ -2,7 +2,6 @@ package org.jointheleague.discord_bot_example;
 
 import org.javacord.api.DiscordApi;
 
-
 import org.javacord.api.DiscordApiBuilder;
 
 /**
@@ -42,6 +41,11 @@ public class Bot  {
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 		
 		//add Listeners
+
+		HeadlineListener head = new HeadlineListener(channelName);
+		api.addMessageCreateListener(head);
+		helpListener.addHelpEmbed(head.getHelpEmbed());
+
 		RandomNumber randomNumber = new RandomNumber(channelName);
 		api.addMessageCreateListener(randomNumber);
 		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
@@ -103,6 +107,7 @@ public class Bot  {
 		api.addMessageCreateListener(new ComplimentListener(channelName));
 		api.addMessageCreateListener(new CrazyEights(channelName));
 		api.addMessageCreateListener(new Blackjack(channelName));
+		api.addMessageCreateListener(new RandomCase(channelName));
 		api.addMessageCreateListener(new GetTime(channelName));
 		api.addMessageCreateListener(new ScreenCapture(channelName));
 
