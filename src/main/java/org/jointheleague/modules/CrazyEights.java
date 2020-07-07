@@ -519,7 +519,7 @@ public class CrazyEights extends CustomMessageCreateListener {
 			}
 		}
 		if(!inHand) {
-			System.out.println("not in hand");
+			//System.out.println("not in hand");
 			return false;
 		}
 			

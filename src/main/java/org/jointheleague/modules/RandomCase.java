@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.jointheleague.modules.pojo.HelpEmbed;
 
 public class RandomCase extends CustomMessageCreateListener {
 
@@ -12,6 +13,8 @@ public class RandomCase extends CustomMessageCreateListener {
 
 	public RandomCase(String channelName) {
 		super(channelName);
+		helpEmbed = new HelpEmbed(COMMAND, "Call " + COMMAND + " (Message) and it will return somthing like  Hello > heLlO");
+
 	}
 
 	@Override
@@ -23,7 +26,7 @@ public class RandomCase extends CustomMessageCreateListener {
 			String newMessage = "";
 
 			
-			System.out.println(message);
+			//System.out.println(message);
 
 
 			for (int i = 0; i < message.length(); i++) {
@@ -33,7 +36,7 @@ public class RandomCase extends CustomMessageCreateListener {
 					newMessage = newMessage + Character.toUpperCase(message.charAt(i));
 			}
 			event.getChannel().sendMessage(newMessage);
-			//System.out.println(event.getChannel().getCreationTimestamp().getNano());
+			////System.out.println(event.getChannel().getCreationTimestamp().getNano());
 		}
 	}
 

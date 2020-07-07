@@ -12,7 +12,7 @@ public class RandomNumber extends CustomMessageCreateListener {
 	
 	public RandomNumber(String channelName) {
 		super(channelName);
-		helpEmbed = new HelpEmbed("!random", "Allows you to get a random number.  You can also specify a range of values (e.g. !random 50-100)");
+		helpEmbed = new HelpEmbed(COMMAND, "Allows you to get a random number.  You can also specify a range of values (e.g. !random 50-100)");
 	}
 
 	@Override

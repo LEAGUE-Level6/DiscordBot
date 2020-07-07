@@ -71,7 +71,7 @@ public class PictureOf extends CustomMessageCreateListener {
 							line = br.readLine();
 						
 						}
-						System.out.println("The word is: "+ test);
+						//System.out.println("The word is: "+ test);
 						br.close();
 					} catch (FileNotFoundException e1) {
 						// TODO Auto-generated catch block
@@ -90,7 +90,7 @@ public class PictureOf extends CustomMessageCreateListener {
 					
 					
 					url = picture.getUser(test);
-					System.out.println("ACTUAL URL: "+ url);
+					//System.out.println("ACTUAL URL: "+ url);
 					event.getChannel().sendMessage(url);
 					answer = test;
 					begun = true;
@@ -155,19 +155,19 @@ public class PictureOf extends CustomMessageCreateListener {
 		        user = gson.fromJson(userJSON.toString(), UserTest.class);
 
 		        //Proof that it works
-//		        System.out.println("userJSON: " + userJSON);
+//		        //System.out.println("userJSON: " + userJSON);
 //		        user.getAddress();
-//		        System.out.println("GET USER NAME FROM POJO: " + user.getName());
-//		        System.out.println("GET USER CITY FROM POJO: " + user.getAddress().getCity());
-//		        System.out.println("GET URL FROM POJO: " + user.getWebsite());
+//		        //System.out.println("GET USER NAME FROM POJO: " + user.getName());
+//		        //System.out.println("GET USER CITY FROM POJO: " + user.getAddress().getCity());
+//		        //System.out.println("GET URL FROM POJO: " + user.getWebsite());
 
 		        
-		  //      System.out.println(user.getWebsite());
+		  //      //System.out.println(user.getWebsite());
 		        
 		        
 		        
 //		        for (int i = 0; i < user.toString().length(); i++) {
-//					System.out.println(i);
+//					//System.out.println(i);
 //				}
 		        boolean found = false;
 		        String tempURL ="";
