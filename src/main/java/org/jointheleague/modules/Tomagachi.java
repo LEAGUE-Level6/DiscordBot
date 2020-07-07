@@ -45,14 +45,13 @@ public class Tomagachi extends CustomMessageCreateListener {
 								Thread.sleep(1000);
 								event.getChannel().sendMessage("Attrition starting in 1");
 								Thread.sleep(1000);
-								event.getChannel().sendMessage("Attrition...-1 Happiness, -1 Stamina, -1 Hunger, -1 Intelligence ");
+								event.getChannel().sendMessage("Attrition...-1 Happiness, -1 Stamina, -1 Hunger");
 							}catch(InterruptedException e) {
 								e.printStackTrace();
 							}
 							Happiness -= 1;
 							Stamina -= 1;
 							Hunger -= 1;
-							Smarts -= 1;
 							int total = 0;
 							if (2 < Happiness && Happiness < 8) {
 								total += 1;
@@ -82,7 +81,7 @@ public class Tomagachi extends CustomMessageCreateListener {
 							event.getChannel().sendMessage("Health Attrition..." + total +" Health");
 							displayGraphs(event);
 							try {
-								Thread.sleep(15000);
+								Thread.sleep(45000);
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
