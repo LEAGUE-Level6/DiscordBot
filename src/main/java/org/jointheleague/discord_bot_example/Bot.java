@@ -62,6 +62,10 @@ public class Bot  {
 		api.addMessageCreateListener(apiExampleListener);
 		helpListener.addHelpEmbed(apiExampleListener.getHelpEmbed());
 		
+		FindNBAPlayer nbaPlayerListener = new FindNBAPlayer(channelName);
+		api.addMessageCreateListener(nbaPlayerListener);
+		helpListener.addHelpEmbed(nbaPlayerListener.getHelpEmbed());
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
