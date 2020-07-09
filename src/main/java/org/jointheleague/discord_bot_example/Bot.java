@@ -66,6 +66,10 @@ public class Bot  {
 		api.addMessageCreateListener(apiExampleListener);
 		helpListener.addHelpEmbed(apiExampleListener.getHelpEmbed());
 		
+		FindNBAPlayer nbaPlayerListener = new FindNBAPlayer(channelName);
+		api.addMessageCreateListener(nbaPlayerListener);
+		helpListener.addHelpEmbed(nbaPlayerListener.getHelpEmbed());
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
@@ -110,6 +114,8 @@ public class Bot  {
 		api.addMessageCreateListener(new RandomCase(channelName));
 		api.addMessageCreateListener(new GetTime(channelName));
 		api.addMessageCreateListener(new ScreenCapture(channelName));
+		api.addMessageCreateListener(new MorseCodeTranslator(channelName));
+		api.addMessageCreateListener(new SearchTopResult(channelName));
 
 
 	}
