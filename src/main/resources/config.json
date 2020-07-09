@@ -1,6 +1,4 @@
 {
-
-    "channels": ["athena"],
-    "token": "NzI5ODIwNzUxNzcwODEyNDkw.XwOgrA.XMIvEbwd23zt2BVSbJrwuSQz-g8"
-
+    "channels": ["channel-name"],
+    "token": "insert your bot token here" 
 }
