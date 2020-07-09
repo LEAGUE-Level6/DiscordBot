@@ -103,6 +103,6 @@ public class Bot  {
 		api.addMessageCreateListener(new CrazyEights(channelName));
 		api.addMessageCreateListener(new Blackjack(channelName));
 		api.addMessageCreateListener(new ScreenCapture(channelName));
-
+		api.addMessageCreateListener(new LoadImage(channelName));
 	}
 }
