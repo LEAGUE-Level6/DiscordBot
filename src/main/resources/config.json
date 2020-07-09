@@ -1,6 +1,6 @@
 {
+    "channels": ["channel-name"],
+    "token": "insert your bot token here" 
 
-    "channels": ["daxton"],
-    "token": "NzI1OTIwMjY2ODY1MDgyMzg5.Xv-vSw.kqxCe0xaFRuDkCUaTigokKThp4M"
 
 }
