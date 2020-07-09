@@ -50,6 +50,18 @@ public class Bot  {
 		api.addMessageCreateListener(randomNumber);
 		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
 		
+		HypeMachine hypeMachine = new HypeMachine(channelName);
+		api.addMessageCreateListener(hypeMachine);
+		helpListener.addHelpEmbed(hypeMachine.getHelpEmbed());
+		
+		TextStyler textStyler = new TextStyler(channelName);
+		api.addMessageCreateListener(textStyler);
+		helpListener.addHelpEmbed(textStyler.getHelpEmbed());
+		
+		Tomagachi tomagachi = new Tomagachi(channelName);
+		api.addMessageCreateListener(tomagachi);
+		helpListener.addHelpEmbed(tomagachi.getHelpEmbed());
+		
 		SetProfilePic setPFP = new SetProfilePic(channelName);
 		api.addMessageCreateListener(setPFP);
 		helpListener.addHelpEmbed(setPFP.getHelpEmbed());
