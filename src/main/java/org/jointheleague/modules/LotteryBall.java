@@ -274,7 +274,6 @@ public class LotteryBall extends CustomMessageCreateListener {
 			if (nameIndex != (-1)) {
 				String nameSave = allData.substring(nameIndex + 1);
 				String[] saves = nameSave.split("=");
-				System.out.println("high: " + saves[2]);
 				if (tokens > Integer.parseInt(saves[2])) {
 					fw.write(allData + "\n" + name + "=" + tokens + "=" + tokens + "\n");
 				} else {
