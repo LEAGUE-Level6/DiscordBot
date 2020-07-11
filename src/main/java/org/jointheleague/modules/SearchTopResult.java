@@ -10,13 +10,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.jointheleague.modules.pojo.HelpEmbed;
 
 import net.aksingh.owmjapis.api.APIException;
 
 public class SearchTopResult extends CustomMessageCreateListener {
-
+	private static final String COMMAND = "!search";
 	public SearchTopResult(String channelName) {
 		super(channelName);
+		helpEmbed = new HelpEmbed(COMMAND, "!search helps you surf the web. You can search YouTube,"
+				+ " Google, Yahoo, DuckDuckGo, Ecosia, and Twitter by typing \"!search engine x\". For "
+				+ "example: \"!search youtube lazarbeam\" would return the top YouTube lazarbeam video when searched.");
 	}
 
 	@Override
