@@ -34,7 +34,7 @@ public class SearchTopResult extends CustomMessageCreateListener {
 			} else if (phrase[1].equals("duckduckgo")) {
 				searchLink = "https://duckduckgo.com/?q=";
 			} else if (phrase[1].equals("ecosia")) {
-				searchLink = "https://www.ecosia.org/search?q";
+				searchLink = "https://www.ecosia.org/search?q=";
 			} else if (phrase[1].equals("twitter")) {
 				searchLink = "https://twitter.com/search?q=";
 			}
@@ -54,36 +54,39 @@ public class SearchTopResult extends CustomMessageCreateListener {
 				}
 			}
 
-			URL oracle;
-			String siteContents = "";
-			try {
-				oracle = new URL(searchLink);
-				BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream()));
-				String inputLine = in.readLine();
-				while (inputLine != null) {
-					siteContents += inputLine;
-					inputLine = in.readLine();
+			if (phrase[1].equals("youtube")) {
+				URL oracle;
+				String siteContents = "";
+				try {
+					oracle = new URL(searchLink);
+					BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream()));
+					String inputLine = in.readLine();
+					while (inputLine != null) {
+						siteContents += inputLine;
+						inputLine = in.readLine();
+					}
+
+					in.close();
+					event.getChannel().sendMessage(siteContents);
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 
-				in.close();
-				event.getChannel().sendMessage(siteContents);
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			String link = "";
-			if (phrase[1].equals("youtube")) {
+				String link = "";
 				for (int i = 0; i < siteContents.length() - 9; i++) {
 					if (siteContents.substring(i, i + 9).equals("\"videoId\"")) {
 						link += "https://www.youtube.com/watch?v=" + siteContents.substring(i + 11, i + 22);
 						break;
 					}
-				}
-			} 
 
-			event.getChannel().sendMessage("Top result: " + link);
+				}
+
+				event.getChannel().sendMessage("Top result: " + link);
+			} else {
+				event.getChannel().sendMessage("Top results: " + searchLink);
+			}
 		}
 	}
 }
