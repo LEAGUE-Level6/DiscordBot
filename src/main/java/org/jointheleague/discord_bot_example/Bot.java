@@ -9,7 +9,7 @@ import org.jointheleague.modules.TicTacToe;
 import org.jointheleague.modules.Weather;
 import org.jointheleague.modules.DadJokes;
 import org.jointheleague.modules.DateFact;
-import org.jointheleague.modules.GuessingRandomNumber;
+import org.jointheleague.modules.HighLowGame;
 import org.jointheleague.modules.ClockMessageListener;
 import org.jointheleague.modules.ComicMessageListener;
 import org.jointheleague.modules.ElmoMessageListener;
@@ -49,7 +49,7 @@ public class Bot  {
 		api.addMessageCreateListener(new leetMessageListener(channelName));
 
 		api.addMessageCreateListener(new FlagMessageListener(channelName));
-		api.addMessageCreateListener(new GuessingRandomNumber(channelName));
+		api.addMessageCreateListener(new HighLowGame(channelName));
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
 		api.addMessageCreateListener(new NewPollMessageListener(channelName));

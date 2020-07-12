@@ -3,6 +3,8 @@ package org.jointheleague.modules;
 import java.io.IOException;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+
 import org.javacord.api.event.message.MessageCreateEvent;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -11,28 +13,21 @@ import okhttp3.ResponseBody;
 
 public class DateFact extends CustomMessageCreateListener{
 	
-	private static final String COMMAND = "!Date";
+	private static final String COMMAND = "!DateFact";
 
 	public DateFact(String channelName) {
 		super(channelName);
 	} 
 	int month = 0;
 	int date = 0;
+	boolean b = false;
 	public void handle(MessageCreateEvent event) {
 		if (event.getMessageContent().startsWith(COMMAND)) {
-			Random r = new Random();
-			month = r.nextInt(12);
-			Random rand = new Random();
-			if(month == 2) {
-				date = rand.nextInt(29);
+			if(event.getMessageContent().equals(COMMAND)) {
+				event.getChannel().sendMessage("Enter a month and a date by typing !DateFact <mm/dd>");
 			}
-			else if(month == 4 || month == 6 || month == 9 || month == 11){
-				date = rand.nextInt(30);	
-			}
-			else {
-				date = rand.nextInt(31);
-			}
-			
+			month = Integer.parseInt(event.getMessageContent().substring(10 , 12));
+			date =  Integer.parseInt(event.getMessageContent().substring(13));
 			OkHttpClient client = new OkHttpClient();
 			String url = "https://numbersapi.p.rapidapi.com/"+month+"/"+date+"/date?fragment=true&json=true";
 			Request request = new Request.Builder()
