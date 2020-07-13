@@ -1,7 +1,9 @@
 package org.jointheleague.discord_bot_example;
 
 import org.javacord.api.DiscordApi;
+
 import org.javacord.api.DiscordApiBuilder;
+import org.jointheleague.modules.BattleShip;
 import org.jointheleague.modules.CalculatorMessageListener;
 import org.jointheleague.modules.CasinoGameListener;
 import org.jointheleague.modules.ClockMessageListener;
@@ -16,7 +18,6 @@ import org.jointheleague.modules.NewPollMessageListener;
 import org.jointheleague.modules.RandomNumber;
 import org.jointheleague.modules.RockPaperScissors;
 import org.jointheleague.modules.SpotifyAPICreds;
-import org.jointheleague.modules.NewIdeaChangeName;
 import org.jointheleague.modules.Weather;
 import org.jointheleague.modules.leetMessageListener;
 
@@ -54,7 +55,7 @@ public class Bot  {
 		api.addMessageCreateListener(new RockPaperScissors(channelName));
 		api.addMessageCreateListener(new Connect4(channelName));
 		
-		api.addMessageCreateListener(new NewIdeaChangeName(channelName));
+		api.addMessageCreateListener(new BattleShip(channelName));
 		api.addMessageCreateListener(new SpotifyAPICreds(channelName));
 
 		api.addMessageCreateListener(new Weather(channelName));
