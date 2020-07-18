@@ -1,25 +1,20 @@
 package org.jointheleague.modules;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.jointheleague.discord_bot_example.BotInfo;
 import org.jointheleague.discord_bot_example.Utilities;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 import net.aksingh.owmjapis.api.APIException;
-import sun.reflect.Reflection;
+
 
 public class CasinoGameListener extends CustomMessageCreateListener{
 
@@ -38,7 +33,7 @@ public class CasinoGameListener extends CustomMessageCreateListener{
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		String message = event.getMessageContent();
-		System.out.println(message);
+		//System.out.println(message);
 		if (event.getMessageAuthor().asUser().get().isBot()) return;
 		if (message.startsWith(BET_ALL_COMMAND)) {
 			handleBetItAll(event);
@@ -83,7 +78,7 @@ public class CasinoGameListener extends CustomMessageCreateListener{
 	private void handleBetItAll(MessageCreateEvent event)
 	{
 		long coins = getCoins(event);
-		System.out.println(getCoins(event));
+		//System.out.println(getCoins(event));
 		coins = (new Random().nextInt(2)==0)? coins*3 : 1;
 		setCoins(coins, event);
 		event.getChannel().sendMessage("You now have " + coins + " coin(s).");
@@ -99,7 +94,7 @@ public class CasinoGameListener extends CustomMessageCreateListener{
 			User currentUser = lusers.get(i);
 			if (Long.parseLong(currentUser.getId()) == id)
 			{
-				System.out.println("user has: " + currentUser.getCoins());
+				//System.out.println("user has: " + currentUser.getCoins());
 				return Long.parseLong(currentUser.getCoins());
 			}
 		}
@@ -142,7 +137,7 @@ public class CasinoGameListener extends CustomMessageCreateListener{
 		try (Reader reader = new InputStreamReader(
 				Utilities.class.getClassLoader().getResourceAsStream("userinfo.json"))) {
 			Gson gson = new GsonBuilder().create();
-			System.out.println("Loaded Users");
+			//System.out.println("Loaded Users");
 			return gson.fromJson(reader, Users.class);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -153,18 +148,18 @@ public class CasinoGameListener extends CustomMessageCreateListener{
 	
 	private void setUsers(Users s)
 	{
-		System.out.println("set Users Called");
+		//System.out.println("set Users Called");
 		Gson gson = new GsonBuilder().create();
 		String str = gson.toJson(s);
 		try {
 			PrintWriter out = new PrintWriter(new FileWriter("src/main/resources/userinfo.json", false));
-			System.out.println(str);
+			//System.out.println(str);
 			out.print(str);
 			out.close();
-			System.out.println("saved");
+			//System.out.println("saved");
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("error saving");
+			//System.out.println("error saving");
 		}
 	}
 	
