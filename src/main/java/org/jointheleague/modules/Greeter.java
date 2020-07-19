@@ -30,7 +30,12 @@ public class Greeter extends CustomMessageCreateListener {
 			String name = message.replace("!Greet", "").replaceAll(" ", "");
 			Random r = new Random();
 			int rand = r.nextInt(9);
+<<<<<<< Updated upstream
 			event.getChannel().sendMessage("Greeting: " + name + greetings[rand]);
+=======
+			event.getChannel().sendMessage("Greeting: " + name + greetings[rand] + " " + "\uD83D\uDE00");
+			
+>>>>>>> Stashed changes
 		}
 		
 		
