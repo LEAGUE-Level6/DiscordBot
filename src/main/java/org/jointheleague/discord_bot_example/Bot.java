@@ -78,6 +78,9 @@ public class Bot  {
 		api.addMessageCreateListener(apiExampleListener);
 		helpListener.addHelpEmbed(apiExampleListener.getHelpEmbed());
 		
+		PrimeListener primeListener = new PrimeListener(channelName);
+		api.addMessageCreateListener(primeListener);
+		helpListener.addHelpEmbed(primeListener.getHelpEmbed());
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
