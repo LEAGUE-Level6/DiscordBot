@@ -31,14 +31,14 @@ public class MadLibs extends CustomMessageCreateListener {
 				story = new Random().nextInt(3);
 				event.getChannel().sendMessage("You are now playing Mad Libs");
 				if (story == 0) {
-					event.getChannel().sendMessage("Please enter an occupation, name, verb, adjective, noun, verb, "
+					event.getChannel().sendMessage("Please enter !madAdd an occupation, name, verb, adjective, noun, verb, "
 							+ "noun, and verb in that order separated by a \", \"");
 				} else if (story == 1) {
-					event.getChannel().sendMessage("Please enter a food, name, place, animal (plural), occupation "
+					event.getChannel().sendMessage("Please enter !madAdd a food, name, place, animal (plural), occupation "
 							+ "(plural), feeling, thing (plural), and article of clothing in that order separated "
 							+ "by a \", \"");
 				} else if (story == 2) {
-					event.getChannel().sendMessage("Please enter a name, adjective, thing, color, animal, verb, thing, "
+					event.getChannel().sendMessage("Please enter !madAdd a name, adjective, thing, color, animal, verb, thing, "
 							+ "and adjective in that order separated by a \", \"" );
 				}
 
