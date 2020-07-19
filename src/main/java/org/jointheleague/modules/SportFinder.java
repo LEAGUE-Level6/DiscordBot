@@ -13,7 +13,7 @@ public class SportFinder extends CustomMessageCreateListener {
 		super(channelName);
 		// TODO Auto-generated constructor stub
 		helpEmbed = new HelpEmbed(COMMAND,
-				"Just type !sportfinder followed by the most common/known piece of equipment that your sport uses or 'none'. Make sure your sport is a popular one! It will keep asking you questions until it determines your sport.");
+				"Just type !SportFinder followed by the most common/known piece of equipment that your sport uses or 'none'. Make sure your sport is a popular one! It will keep asking you questions until it determines your sport.");
 
 	}
 
@@ -25,7 +25,15 @@ public class SportFinder extends CustomMessageCreateListener {
 
 		if (equipment.equalsIgnoreCase("racket")) {
 			event.getChannel().sendMessage(
-					"Your sport is either Tennis, Badminton, Squash, Table Tennis, Racquetball, or Pickleball. Is Rafael Nadal a pro player of your sport?");
+					"Your sport is either Tennis, Badminton, Squash, Table Tennis, Racquetball, or Pickleball. Is Rafael Nadal a pro player of your sport? Respond with !Racket followed by yes or no");
+		}
+
+		else if (response.contains("!Racket")) {
+			String racket = response.replace("!Racket", "".replace(" ", ""));
+			if (racket.equalsIgnoreCase("yes")) {
+				event.getChannel().sendMessage("Your sport is tennis!");
+
+			}
 		}
 
 		else if (equipment.equalsIgnoreCase("bat")) {
@@ -53,49 +61,44 @@ public class SportFinder extends CustomMessageCreateListener {
 					"Your sport is either Boxing, Wrestling, Swimming or Running. Is your sport played in the pool? Reply with yes or no and be sure to use the !SportFinder command");
 
 		}
-		
+
 		else if (equipment.equalsIgnoreCase("gloves")) {
 			event.getChannel().sendMessage(
 					"Your sport is either Boxing, Football, Baseball, Softball, or Golf. Does your sport involve fighting? Reply with yes or no and be sure to use the !SportFinder command");
 
 		}
-		
+
 		else if (equipment.equalsIgnoreCase("club")) {
-			event.getChannel().sendMessage(
-					"Your sport is golf! :)");
+			event.getChannel().sendMessage("Your sport is golf! :)");
 
 		}
-		
+
 		else if (equipment.equalsIgnoreCase("ball") || equipment.equalsIgnoreCase("balls")) {
 			event.getChannel().sendMessage(
 					"Your sport is either Football, Basketball, Soccer, Baseball, Tennis, Golf, Volleyball, Water Polo, Lacrosse, Softball, Cricket or Rugby. Almost every sport uses a ball, so to get an actual answer of what your sport is, please use a word more descriptive than 'ball'. Thanks!");
 
 		}
-		
+
 		else if (equipment.equalsIgnoreCase("puck")) {
 			event.getChannel().sendMessage(
 					"Your sport is either Ice Hockey or Field Hockey. Is your sport played on ice? Reply with yes or no and be sure to use the !SportFinder command");
 
 		}
-		
+
 		else if (equipment.equalsIgnoreCase("stick")) {
 			event.getChannel().sendMessage(
 					"Your sport is either Ice Hockey or Field Hockey. Is your played on ice? Reply with yes or no and be sure to use the !SportFinder command");
 
-		}
-		else if (equipment.equalsIgnoreCase("birdie") || equipment.equalsIgnoreCase("shuttlecock")) {
-			event.getChannel().sendMessage(
-					"Your sport is Badminton! :)");
-
-					
-		}
-		
-		else if (equipment.equalsIgnoreCase("car") ) {
-			event.getChannel().sendMessage(
-					"Your sport is Car Racing! :)");
+		} else if (equipment.equalsIgnoreCase("birdie") || equipment.equalsIgnoreCase("shuttlecock")) {
+			event.getChannel().sendMessage("Your sport is Badminton! :)");
 
 		}
-		
+
+		else if (equipment.equalsIgnoreCase("car")) {
+			event.getChannel().sendMessage("Your sport is Car Racing! :)");
+
+		}
+
 	}
 
 }
