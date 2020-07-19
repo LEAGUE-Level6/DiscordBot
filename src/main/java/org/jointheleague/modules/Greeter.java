@@ -13,12 +13,17 @@ public class Greeter extends CustomMessageCreateListener {
 			", what is new?", ", long time no see!", "it has been a while!", ", how is life?",
 			", nice to hear from you!" };
 
+	String[] emojis = { "😃", "😀", "😄", "😁", "😆", "😊", "👌", "👍"
+
+	};
+
 	private static final String COMMAND = "!Greet";
 
 	public Greeter(String channelName) {
 		super(channelName);
 		// TODO Auto-generated constructor stub
-		helpEmbed = new HelpEmbed(COMMAND, "It will respond with your name, followed a by a random greeting. Just type !Greet and then the name of who you would like to greet. Do not reply to the greetings");
+		helpEmbed = new HelpEmbed(COMMAND,
+				"It will respond with your name, followed a by a random greeting. Just type !Greet and then the name of who you would like to greet. Do not reply to the greetings");
 	}
 
 	@Override
@@ -29,8 +34,9 @@ public class Greeter extends CustomMessageCreateListener {
 
 			String name = message.replace("!Greet", "").replaceAll(" ", "");
 			Random r = new Random();
-			int rand = r.nextInt(9);
-			event.getChannel().sendMessage("Greeting: " + name + greetings[rand] + " " + "\uD83D\uDE00");
+			int randGreeting = r.nextInt(9);
+			int randEmoji = r.nextInt(8);
+			event.getChannel().sendMessage("Greeting: " + name + greetings[randGreeting] + " " + emojis[randEmoji]);
 			
 		}
 		
