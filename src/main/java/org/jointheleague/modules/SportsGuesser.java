@@ -12,12 +12,8 @@ public class SportsGuesser extends CustomMessageCreateListener {
 	public SportsGuesser(String channelName) {
 		super(channelName);
 		// TODO Auto-generated constructor stub
-<<<<<<< Updated upstream
-		helpEmbed = new HelpEmbed(COMMAND, "Just type !SportFinder followed by the most common/known piece of equipment that your sport uses. Make sure your sport is a popular one! It will keep asking you questions until it determines your sport.");
-=======
 		helpEmbed = new HelpEmbed(COMMAND,
 				"Just type !SportFinder followed by the most common/known piece of equipment that your sport uses or 'none'. Make sure your sport is a popular one! It will keep asking you questions until it determines your sport.");
->>>>>>> Stashed changes
 
 	}
 
@@ -26,23 +22,6 @@ public class SportsGuesser extends CustomMessageCreateListener {
 		// TODO Auto-generated method stub
 		String response = event.getMessageContent();
 		String equipment = response.replace("!SportFinder", "").replaceAll(" ", "");
-<<<<<<< Updated upstream
-		
-		if (equipment.equalsIgnoreCase("racket")) {
-			event.getChannel().sendMessage("Your sport is either Tennis, Badminton, Squash, Table Tennis, Racquetball, or Pickleball");
-		}
-		
-		else if (equipment.equalsIgnoreCase("bat")) {
-			event.getChannel().sendMessage("Your sport is either Baseball or Cricket. Is your sport played professionally in the US? Reply with yes or no and be sure to use the !SportFinder command");
-			if (equipment.equalsIgnoreCase("yes")) {
-				event.getChannel().sendMessage("Your sport is Baseball!");
-			}
-		}
-
-	}
-
-}
-=======
 
 		if (equipment.equalsIgnoreCase("racket")) {
 			event.getChannel().sendMessage(
@@ -125,4 +104,3 @@ public class SportsGuesser extends CustomMessageCreateListener {
 	}
 
 }
->>>>>>> Stashed changes
