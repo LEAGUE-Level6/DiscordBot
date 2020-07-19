@@ -10,7 +10,7 @@ import net.aksingh.owmjapis.api.APIException;
 public class Greeter extends CustomMessageCreateListener {
 
 	String[] greetings = { ", hope you are doing well!", ", hello!", ", yo!", ", what's up?", ", good day!",
-			", what is new?", ", long time no see!", "it has been a while!", ", how is life?",
+			", what is new?", ", long time no see!", ", it has been a while!", ", how is life?",
 			", nice to hear from you!" };
 
 	String[] emojis = { "😃", "😀", "😄", "😁", "😆", "😊", "👌", "👍"
