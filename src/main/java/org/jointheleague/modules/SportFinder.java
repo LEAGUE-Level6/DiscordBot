@@ -5,15 +5,15 @@ import org.jointheleague.modules.pojo.HelpEmbed;
 
 import net.aksingh.owmjapis.api.APIException;
 
-public class SportsGuesser extends CustomMessageCreateListener {
+public class SportFinder extends CustomMessageCreateListener {
 
 	private static final String COMMAND = "!SportFinder";
 
-	public SportsGuesser(String channelName) {
+	public SportFinder(String channelName) {
 		super(channelName);
 		// TODO Auto-generated constructor stub
 		helpEmbed = new HelpEmbed(COMMAND,
-				"Just type !SportFinder followed by the most common/known piece of equipment that your sport uses or 'none'. Make sure your sport is a popular one! It will keep asking you questions until it determines your sport.");
+				"Just type !sportfinder followed by the most common/known piece of equipment that your sport uses or 'none'. Make sure your sport is a popular one! It will keep asking you questions until it determines your sport.");
 
 	}
 
@@ -96,11 +96,6 @@ public class SportsGuesser extends CustomMessageCreateListener {
 
 		}
 		
-		else {
-			event.getChannel().sendMessage(
-					"Sorry, I do not know your sport :(");
-			
-		}
 	}
 
 }
