@@ -1,9 +1,22 @@
 package org.jointheleague.modules;
 
 import java.awt.Color;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.event.ListSelectionEvent;
 
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class SearchGoogle extends CustomMessageCreateListener {
 	
@@ -14,11 +27,10 @@ public class SearchGoogle extends CustomMessageCreateListener {
 	public SearchGoogle(String channelName) {
 		super(channelName);
 		help = String.join("\n", 
-				"[!gsearch] returns the titles and urls of the first <resultNumber> results",
+				"[!gsearch] returns the urls of the first few results",
 				"with a search using the <keyword> on google.",
-				"<b>Format: </b> !gsearch <keyword> <resultNumber>",
-				"<resultNumber> has to be an positive integer, ",
-				"and if this parameter is null, one result will always be returned.");
+				"**Format: ** !gsearch <keyword>",
+				"**Warning: ** This command is untested with mac system.");
 	}
 
 	@Override
@@ -28,26 +40,50 @@ public class SearchGoogle extends CustomMessageCreateListener {
 			event.getChannel().sendMessage(help);
 		} else if(event.getMessageContent().startsWith(COMMAND)) {
 			String[] params = event.getMessageContent().trim().split(" ");
-			int resultNum = 1;
-			try {
-				int num = Integer.parseInt(params[2]);
-				if(num > 0) {
-					resultNum = num;
-				}
-			} catch(ArrayIndexOutOfBoundsException ie) { }
+			params[0] = "";
+			String keyword = String.join(" ", params);
 			
+			try {
+				String[] results = searchGoogle(keyword);
+				String resultsString = "";
+				for(String url : results) {
+					resultsString += url + "\n";
+				}
+				EmbedBuilder result = new EmbedBuilder().setTitle("!gsearch Results").setColor(Color.green).setDescription("Search results: \n" + resultsString);
+				event.getChannel().sendMessage(result);
+			} catch (IOException e) {
+				EmbedBuilder error = new EmbedBuilder().setTitle("!gsearch Error").setColor(Color.red).setDescription("[!gsearch Error] An IO error has occured when trying to retrive data.");
+				event.getChannel().sendMessage(error);
+			}
 		}
 	}
 	
 	/**
 	* Searches for a result on Google using a keyword
 	* @param keyword The keyword to be used to search
-	* @param index The index of the searched results
 	* 
-	* @return A String array containing the title and URL of the result
+	* @return A String array containing the URLs of the result
+	 * @throws IOException When an IO error occurs
 	*/
-	private String[] searchGoogle(String keyword, int index) {
-		return null;
+	private String[] searchGoogle(String keyword) throws IOException{
+		List<String> resultURLs = new ArrayList<String>();
+		String url = "https://www.google.com/search?q=" + keyword;
+		Document resultDoc = Jsoup.connect(url).get();
+		String resultHtml = resultDoc.html();
+		
+		Files.write(Paths.get(System.getProperty("user.home") + "\\Downloads\\[!gsearch]html.txt"), resultHtml.getBytes());
+		
+		Elements results = resultDoc.select("cite");
+		for(Element link : results) {
+			String resultText = link.text();
+			if(resultText.contains("›")) {
+				resultText = resultText.replaceAll(" › ", "/");
+			}
+			resultURLs.add(resultText);
+		}
+		
+		String[] resultArray = resultURLs.toArray(new String[resultURLs.size()]);
+		return resultArray;
+		
 	}
-	
 }
