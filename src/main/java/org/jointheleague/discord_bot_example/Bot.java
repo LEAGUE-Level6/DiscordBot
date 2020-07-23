@@ -65,7 +65,7 @@ public class Bot  {
 		SetProfilePic setPFP = new SetProfilePic(channelName);
 		api.addMessageCreateListener(setPFP);
 		helpListener.addHelpEmbed(setPFP.getHelpEmbed());
-
+		
 		ToGif toGif = new ToGif(channelName);
 		api.addMessageCreateListener(toGif);
 		helpListener.addHelpEmbed(toGif.getHelpEmbed());
@@ -78,11 +78,17 @@ public class Bot  {
 		api.addMessageCreateListener(apiExampleListener);
 		helpListener.addHelpEmbed(apiExampleListener.getHelpEmbed());
 		
+
 		Greeter greeter = new Greeter(channelName);
 		api.addMessageCreateListener(greeter);
 		helpListener.addHelpEmbed(greeter.getHelpEmbed());
 		
 	
+
+		NewWeather newWeather = new NewWeather(channelName);
+		api.addMessageCreateListener(newWeather);
+		helpListener.addHelpEmbed(newWeather.getHelpEmbed());
+
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
@@ -128,7 +134,6 @@ public class Bot  {
 		api.addMessageCreateListener(new RandomCase(channelName));
 		api.addMessageCreateListener(new GetTime(channelName));
 		api.addMessageCreateListener(new ScreenCapture(channelName));
-
 
 	}
 }
