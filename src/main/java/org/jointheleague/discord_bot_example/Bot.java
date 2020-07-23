@@ -35,15 +35,32 @@ public class Bot  {
 
 		// Print the URL to invite the bot
 		if (printInvite) {
-			////System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
+			System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
 		}
 
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 		
 		//add Listeners
+
+		HeadlineListener head = new HeadlineListener(channelName);
+		api.addMessageCreateListener(head);
+		helpListener.addHelpEmbed(head.getHelpEmbed());
+
 		RandomNumber randomNumber = new RandomNumber(channelName);
 		api.addMessageCreateListener(randomNumber);
 		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
+		
+		HypeMachine hypeMachine = new HypeMachine(channelName);
+		api.addMessageCreateListener(hypeMachine);
+		helpListener.addHelpEmbed(hypeMachine.getHelpEmbed());
+		
+		TextStyler textStyler = new TextStyler(channelName);
+		api.addMessageCreateListener(textStyler);
+		helpListener.addHelpEmbed(textStyler.getHelpEmbed());
+		
+		Tomagachi tomagachi = new Tomagachi(channelName);
+		api.addMessageCreateListener(tomagachi);
+		helpListener.addHelpEmbed(tomagachi.getHelpEmbed());
 		
 		SetProfilePic setPFP = new SetProfilePic(channelName);
 		api.addMessageCreateListener(setPFP);
@@ -106,6 +123,9 @@ public class Bot  {
 		api.addMessageCreateListener(new ComplimentListener(channelName));
 		api.addMessageCreateListener(new CrazyEights(channelName));
 		api.addMessageCreateListener(new Blackjack(channelName));
+		api.addMessageCreateListener(new RandomCase(channelName));
+		api.addMessageCreateListener(new GetTime(channelName));
+		api.addMessageCreateListener(new ScreenCapture(channelName));
 
 	}
 }
