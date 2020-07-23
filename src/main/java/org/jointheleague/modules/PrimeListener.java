@@ -1,6 +1,7 @@
 package org.jointheleague.modules;
 
 import java.math.BigInteger;
+
 import java.util.Random;
 
 import org.javacord.api.event.message.MessageCreateEvent;
@@ -42,12 +43,20 @@ public class PrimeListener extends CustomMessageCreateListener{
 					if(last>10000) {
 						last=10000;
 					}
+					boolean foundDivisor=false;
 					while(check<=last) {
 						if(primeCheck.mod(BigInteger.valueOf(check))==BigInteger.ZERO) {
 							event.getChannel().sendMessage(primeCheck+" is divisible by "+check+".");
+							foundDivisor=true;
+							break;
 						}
 						check++;
 					}
+					if(!foundDivisor) {
+						event.getChannel().sendMessage(primeCheck+" is not divisible by any number under 10000.");
+					}
+					BigInteger nextPrime=primeCheck.nextProbablePrime();
+					event.getChannel().sendMessage("The first prime number after "+primeCheck+" is "+nextPrime+".");
 				}
 			}
 		}

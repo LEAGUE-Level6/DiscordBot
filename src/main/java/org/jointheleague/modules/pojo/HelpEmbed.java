@@ -2,6 +2,7 @@ package org.jointheleague.modules.pojo;
 
 import java.awt.Color;
 
+
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 
 public class HelpEmbed {
