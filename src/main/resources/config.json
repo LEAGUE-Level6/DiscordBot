@@ -1,6 +1,6 @@
 {
+    "channels": ["channel-name"],
+    "token": "insert your bot token here" 
 
-    "channels": ["alvin"],
-    "token": "NzI2ODc3ODU2NjEyODc2Mzc4.Xwz1_g.cWW-FQwkWdxfd8aX_c0usKHZ3TI"
 
 }
