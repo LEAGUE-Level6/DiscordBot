@@ -3,7 +3,6 @@ package org.jointheleague.discord_bot_example;
 import org.javacord.api.DiscordApi;
 
 import org.javacord.api.DiscordApiBuilder;
-
 /**
  * Launches all of the listeners for one channel.
  * @author keithgroves and https://tinystripz.com
@@ -23,8 +22,8 @@ public class Bot  {
 	DiscordApi api;
 	_HelpListener helpListener;
 
-	public Bot(String token, String channelName) {
-		this.token = token;
+	public Bot(String token, String channelName) { 
+		this.token = token; 
 		this.channelName = channelName;
 		helpListener = new _HelpListener(channelName);
 	}
@@ -98,6 +97,9 @@ public class Bot  {
 		api.addMessageCreateListener(new leetMessageListener(channelName));
 		api.addMessageCreateListener(new ConnectFour(channelName));
 		api.addMessageCreateListener(new FlagMessageListener(channelName));
+		api.addMessageCreateListener(new NewPollMessageListener(channelName));
+		api.addMessageCreateListener(new DateFact(channelName));
+		api.addMessageCreateListener(new TicTacToe(channelName));
 		api.addMessageCreateListener(new EightBall(channelName));
 		api.addMessageCreateListener(new Reddit(channelName));
 		api.addMessageCreateListener(new DeepFrier(channelName));

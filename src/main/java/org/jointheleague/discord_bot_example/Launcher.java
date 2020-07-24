@@ -8,7 +8,7 @@ import java.util.Map;
  *
  */
 public class Launcher {
-	public static void main(String[] args) {
+	public static void main(String[] args) { 
 		if (args.length == 0) {
 			args = new String[] { "default" };
 		}

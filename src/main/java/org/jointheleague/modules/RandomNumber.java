@@ -14,15 +14,14 @@ public class RandomNumber extends CustomMessageCreateListener {
 		super(channelName);
 		helpEmbed = new HelpEmbed(COMMAND, "Allows you to get a random number.  You can also specify a range of values (e.g. !random 50-100)");
 	}
-
+ 
 	@Override
 	public void handle(MessageCreateEvent event) {
 		if (event.getMessageContent().contains(COMMAND)) {
 			
 			String cmd = event.getMessageContent().replaceAll(" ", "").replace("!random","");
-			
+			 
 			if(cmd.equals("")) {
-				
 				Random r = new Random();
 				event.getChannel().sendMessage("Your random number is " + r.nextInt(1000));
 				
