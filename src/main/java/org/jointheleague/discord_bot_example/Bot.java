@@ -4,6 +4,7 @@ import org.javacord.api.DiscordApi;
 
 import org.javacord.api.DiscordApiBuilder;
 
+
 /**
  * Launches all of the listeners for one channel.
  * @author keithgroves and https://tinystripz.com
@@ -32,8 +33,7 @@ public class Bot  {
 	public void connect(boolean printInvite) {
 		
 		api = new DiscordApiBuilder().setToken(token).login().join();
-
-		// Print the URL to invite the bot
+  	// Print the URL to invite the bot
 		if (printInvite) {
 			System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
 		}
@@ -92,6 +92,26 @@ public class Bot  {
 		api.addMessageCreateListener(new ElmoMessageListener(channelName));
 		api.addMessageCreateListener(new FactMessageListener(channelName));
 		api.addMessageCreateListener(new CasinoGameListener(channelName));
+    api.addMessageCreateListener(new ProfanityChecker(channelName));
+		api.addMessageCreateListener(new ComDatabase(channelName));
+		api.addMessageCreateListener(new UInames(channelName));
+		api.addMessageCreateListener(new ChangeStatus(channelName));
+		api.addMessageCreateListener(new LAtimes(channelName));
+		api.addMessageCreateListener(new UH_HUH(channelName));
+		api.addMessageCreateListener(new Repeat(channelName));
+		api.addMessageCreateListener(new CTAtimes(channelName));
+		api.addMessageCreateListener(new WeeklyStupidity(channelName));
+		api.addMessageCreateListener(new AnyAPI(channelName));
+		api.addMessageCreateListener(new BEEP(channelName));
+		api.addMessageCreateListener(new RandomNumber(channelName));
+    api.addMessageCreateListener(new leetMessageListener(channelName));
+		api.addMessageCreateListener(new FlagMessageListener(channelName));
+		api.addMessageCreateListener(new Weather(channelName));
+		api.addMessageCreateListener(new FashionAdvisor(channelName));
+		api.addMessageCreateListener(new NewPollMessageListener(channelName));
+		api.addMessageCreateListener(new FDLinks(channelName));
+		api.addMessageCreateListener(new GithubRepos(channelName));
+		api.addMessageCreateListener(new Analogizer(channelName));
 		api.addMessageCreateListener(new HighLowListener(channelName));
 		api.addMessageCreateListener(new Ryland(channelName));
 		api.addMessageCreateListener(new RockPaperScissorsListener(channelName));

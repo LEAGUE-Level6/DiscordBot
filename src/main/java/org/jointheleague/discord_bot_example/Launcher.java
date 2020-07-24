@@ -1,6 +1,11 @@
 package org.jointheleague.discord_bot_example;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Launches the bot.
@@ -9,6 +14,7 @@ import java.util.Map;
  */
 public class Launcher {
 	public static void main(String[] args) {
+		
 		if (args.length == 0) {
 			args = new String[] { "default" };
 		}

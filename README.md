@@ -1,33 +1,33 @@
 # DiscordBot
 
-## importing project into eclipse
+## Importing project into Eclipse
 
-clone the project
+Clone the project
 
-import as existing maven project
+Import as "Existing Maven Project"
 
-run maven clean and maven install
+Right click the project and click Run as > Maven Install
 
 
 ## Running Program from command line:
 
 Open the terminal in your project folder and run one of the following commands:
 
-With default user:
+With Default user:
 
 `mvn clean compile exec:java`
 
-With specific user:
+With Specific user:
 
 `mvn clean compile exec:java -Dexec.args="Keith"`
 
 ## Setup Steps
-- create a discord account
-- create a discord application and a discord bot on the discord developer site.
+- Create a discord account
+- Create a discord application and a discord bot on the discord developer site.
 - Clone this repository
-- import this project into eclipse as a maven project
-- edit the config.json to include your channel name and token.
-- run maven install on your project
-- run the bot (you should see a link output to the console.
-- send your link to your teacher. (your teacher will verify your bot)
-- rerun your program. Your bot should be connected!
+- Import this project into eclipse as a maven project
+- Edit the config.json to include your channel name and token.
+- Run maven install on your project
+- Run the bot (you should see a link output to the console)
+- Send your link to your teacher. (your teacher will verify your bot)
+- Rerun your program. Your bot should be connected!

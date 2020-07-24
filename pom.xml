@@ -87,6 +87,7 @@
 			<version>2.5.3.0</version>
 		</dependency>
 		<dependency>
+
 			<groupId>com.squareup.retrofit2</groupId>
 			<artifactId>retrofit</artifactId>
 			<version>2.5.0</version>
