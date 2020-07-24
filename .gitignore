@@ -26,5 +26,8 @@ hs_err_pid*
 target/
 *.config.json
 
-# Config File
+#API Keys
 **/resources/config.json
+
+src/main/resources/config.json
+src/main/resources/config.json
