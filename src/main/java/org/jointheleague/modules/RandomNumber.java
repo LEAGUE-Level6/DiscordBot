@@ -4,13 +4,15 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.jointheleague.modules.pojo.HelpEmbed;
 
 public class RandomNumber extends CustomMessageCreateListener {
 
 	private static final String COMMAND = "!random";
-
+	
 	public RandomNumber(String channelName) {
 		super(channelName);
+		helpEmbed = new HelpEmbed(COMMAND, "Allows you to get a random number.  You can also specify a range of values (e.g. !random 50-100)");
 	}
  
 	@Override

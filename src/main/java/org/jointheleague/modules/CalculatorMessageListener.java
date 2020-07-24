@@ -1,3 +1,4 @@
+
 package org.jointheleague.modules;
 
 import java.util.regex.Matcher;
@@ -13,7 +14,7 @@ public class CalculatorMessageListener extends CustomMessageCreateListener {
 
 	@Override
 	public void handle(MessageCreateEvent event) {
-		if (event.getMessageContent().startsWith("!math")) { 
+		if (event.getMessageContent().startsWith("!math")) {
 			if (event.getMessageContent().equals("!math")) {
 				event.getChannel().sendMessage("I can do basic arithmetic operations with 2 numbers, such as: ");
 				event.getChannel().sendMessage("X * Y, X + Y, X - Y, X / Y");
