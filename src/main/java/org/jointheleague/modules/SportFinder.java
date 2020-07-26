@@ -21,6 +21,7 @@ public class SportFinder extends CustomMessageCreateListener {
 	public void handle(MessageCreateEvent event) throws APIException {
 		// TODO Auto-generated method stub
 		String response = event.getMessageContent();
+		
 		String equipment = response.replace("!SportFinder", "").replaceAll(" ", "");
 
 		if (equipment.equalsIgnoreCase("racket")) {
