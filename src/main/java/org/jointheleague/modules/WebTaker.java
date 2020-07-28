@@ -19,15 +19,22 @@ public class WebTaker extends CustomMessageCreateListener {
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		// TODO Auto-generated method stub
+		String s = "";
 		String message = event.getMessageContent();
 		if (message.contains("!WebFinder")) {
 			String ws = message.replace("!WebFinder", "").replaceAll(" ", "");
 			event.getChannel().sendMessage("https://" + ws + ".com");
 		}
 
-		else if (message.contains("NFLStats")) {
-			String ws = message.replace("!WebFinder", "");
-			event.getChannel().sendMessage("https://www.nfl.com/players/" + message.replaceAll(" ", "-") + "/");
+		else if (message.contains("!NFLStats")) {
+			String player = message.replace("!NFLStats ", "");
+			for (int i = 0; i < player.length(); i++) {
+				if (i != 0 && player.charAt(i) == ' ') {
+					s += player.charAt(i);
+					player = player.replace(s,"-" );
+				}
+			}
+			event.getChannel().sendMessage("https://www.nfl.com/players/" + player + "/");
 		}
 	}
 }
