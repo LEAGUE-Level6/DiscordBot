@@ -82,6 +82,10 @@ public class Bot  {
 		api.addMessageCreateListener(newWeather);
 		helpListener.addHelpEmbed(newWeather.getHelpEmbed());
 		
+		WebTaker wb = new WebTaker(channelName);
+		api.addMessageCreateListener(wb);
+		helpListener.addHelpEmbed(wb.getHelpEmbed());
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
