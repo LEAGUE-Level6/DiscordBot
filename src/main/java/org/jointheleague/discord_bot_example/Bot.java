@@ -82,8 +82,8 @@ public class Bot  {
 		api.addMessageCreateListener(newWeather);
 		helpListener.addHelpEmbed(newWeather.getHelpEmbed());
 		
-		DanielsTHings dThings = new DanielsTHings(channelName);
-		api.addMessageCreateListener(dThings);
+		CoinFlip cp = new CoinFlip(channelName);
+		api.addMessageCreateListener(cp);
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
