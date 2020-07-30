@@ -22,8 +22,6 @@ public class WebTaker extends CustomMessageCreateListener {
 		
 		helpEmbed = new HelpEmbed("!NBAStats", "After !NBAStats type a player's full name to get their stats.");
 		
-
-
 	}
 
 	@Override
