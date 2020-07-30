@@ -1,0 +1,20 @@
+package org.jointheleague.modules;
+
+import org.javacord.api.event.message.MessageCreateEvent;
+
+import kotlin.random.Random;
+
+public class DiceRoll {
+
+	@Override
+	public void handle(MessageCreateEvent event) {
+		if (event.getMessageContent().startsWith("!diceroll")) {
+			if (event.getMessageContent().equals("!diceroll")) {
+				Random r = new Random();
+				event.getChannel().sendMessage("You landed on a "+r.nextInt(5)+1);
+			} else {
+	
+			}
+		}
+	}
+}
