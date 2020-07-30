@@ -82,6 +82,9 @@ public class Bot  {
 		api.addMessageCreateListener(newWeather);
 		helpListener.addHelpEmbed(newWeather.getHelpEmbed());
 		
+		DanielsTHings dThings = new DanielsTHings(channelName);
+		api.addMessageCreateListener(dThings);
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
