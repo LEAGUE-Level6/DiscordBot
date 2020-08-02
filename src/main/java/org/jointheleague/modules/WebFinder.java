@@ -12,7 +12,7 @@ public class WebFinder extends CustomMessageCreateListener {
 		// TODO Auto-generated constructor stub
 		helpEmbed = new HelpEmbed("!WebFinder",
 				"After typing **!WebFinder** just type any word, and it will take you to the .com version of the website. There are other commands that give you web links as well."
-						+ " \nAfter **!CountryPopulation** type a country to get its population. \nAfter **!CountryInfo** type the country to get info about it. \nAfter **!NFLStats** type a player to get their stats (full name). \nAfter **!NBAStats** type a player's full name to get their stats.");
+						+ "\nAfter **!StatePopulation** type the abbreviation for the state to get its population. \nAfter **!CountryPopulation** type a country to get its population. \nAfter **!CountryInfo** type the country to get info about it. \nAfter **!NFLStats** type a player to get their stats (full name). \nAfter **!NBAStats** type a player's full name to get their stats.");
 
 //		helpEmbed = new HelpEmbed("!NFLStats", "After !NFLStats type a player to get their stats (full name).");
 //		
