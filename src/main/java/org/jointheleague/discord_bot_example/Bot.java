@@ -82,7 +82,7 @@ public class Bot  {
 		api.addMessageCreateListener(newWeather);
 		helpListener.addHelpEmbed(newWeather.getHelpEmbed());
 		
-		WebTaker wb = new WebTaker(channelName);
+		WebFinder wb = new WebFinder(channelName);
 		api.addMessageCreateListener(wb);
 		helpListener.addHelpEmbed(wb.getHelpEmbed());
 		
