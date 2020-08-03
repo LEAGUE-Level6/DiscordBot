@@ -9,6 +9,8 @@ public class ChessBot extends CustomMessageCreateListener{
 	String BlackSquare=" :black_medium_square: ";
 	String WhiteSquare=" :white_medium_square: ";
 	String [][] ChessBoard= new String [8][8];
+	String BlackPlayer="";
+	String WhitePlayer="";
 	public ChessBot(String channelName) {
 		super(channelName);
 		// TODO Auto-generated constructor stub
@@ -24,6 +26,31 @@ public class ChessBot extends CustomMessageCreateListener{
 		if (event.getMessageContent().contains("!chess")) {
 			event.getChannel().sendMessage("switch your Discord to Light Mode, by navigating to 'Appeaarance' in the settings, in order to properly see the chess pieces.");
 			event.getChannel().sendMessage(SpawnChessBoard());
+			event.getChannel().sendMessage("Type -white to take control of the white pieces, and -black to control the black ones");
+			event.getChannel().sendMessage("The Rows of the board are numbered 0-7, and the columns are also numbered 0-7");
+			event.getChannel().sendMessage("Type -move to make your move, then type the coordinates of the piece you want to move and the coordinates of where you want to move that piece");
+			event.getChannel().sendMessage("For example to move the pawn from (1,0) to (2,0) you would type -move 10 to 20");
+			
+		}
+		
+		if (event.getMessageContent().contains("-white")) {
+			WhitePlayer+=event.getMessageAuthor();
+			
+		}
+		else if (event.getMessageContent().contains("-black")) {
+			BlackPlayer+=event.getMessageAuthor();
+		}
+		
+		if (event.getMessageContent().contains("-move")) {
+			String Message= event.getMessageContent();
+			
+			int OgRow= Integer.parseInt(Message.substring(6, 7));
+			int OgColumn= Integer.parseInt(Message.substring(7, 8));
+			int NewRow =Integer.parseInt(Message.substring(12, 13));
+			int NewColumn =Integer.parseInt(Message.substring(13, 14));
+			
+			MovePieces(OgRow,OgColumn,NewRow,NewColumn);
+			SpawnChessBoard();
 		}
 		
 		
@@ -31,7 +58,7 @@ public class ChessBot extends CustomMessageCreateListener{
 		
 	}
 	
-	String SpawnChessBoard() {
+	public String SpawnChessBoard() {
 		//spawn chess board
 				String Board="";
 				for (int i = 0; i < ChessBoard.length; i++) {
@@ -48,7 +75,7 @@ public class ChessBot extends CustomMessageCreateListener{
 		
 	}
 	
-	void SetChessBoard() {
+	public void SetChessBoard() {
 		//tile pieces
 		for (int i = 2; i <= 5; i++) {
 			for (int j = 0; j <ChessBoard[i].length-1; j+=2) {
@@ -119,6 +146,14 @@ public class ChessBot extends CustomMessageCreateListener{
 				
 		
 	}
+	
+	public void MovePieces(int OgRow, int OgColumn, int NewRow, int NewColumn) { 
+		
+		ChessBoard[NewRow][NewColumn]=ChessBoard[OgRow][OgColumn];
+		
+	}
+	
+	
 
 	
 	
