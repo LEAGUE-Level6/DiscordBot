@@ -19,6 +19,8 @@ public class BattleShip extends CustomMessageCreateListener {
 
 	@Override
 	public void handle(MessageCreateEvent event) {
+		boolean validPlay = false;
+
 		player1 = setPlayerGrid(player1);
 		player2 = setPlayerGrid(player2);
 
@@ -28,7 +30,7 @@ public class BattleShip extends CustomMessageCreateListener {
 					.sendMessage("Enter *!battleship-instructions* for how to play\nEnter *!start* to begin the game");
 		}
 		if (event.getMessageContent().equals(instructionCommand)) {
-			event.getChannel().sendMessage("*****HOW TO PLAY*****");
+			event.getChannel().sendMessage("*[HOW TO PLAY]*");
 		}
 		if (event.getMessageContent().equals(startCommand)) {
 			event.getChannel().sendMessage(display(player1));
@@ -58,5 +60,18 @@ public class BattleShip extends CustomMessageCreateListener {
 			}
 		}
 		return playerGrid;
+	}
+
+	public static boolean validate(int row, int column, String[][] board) {
+		// checking to see if  column and row is in bounds
+		if (column < 0 || column > board[0].length || row < 0 || row > board.length) {
+			return false;
+		}
+
+//		if (condition) {
+//			
+//		}
+
+		return true;
 	}
 }
