@@ -46,7 +46,7 @@ public class Bot  {
 		api.addMessageCreateListener(head);
 		helpListener.addHelpEmbed(head.getHelpEmbed());
 
-		RandomNumber randomNumber = new RandomNumber(channelName);
+		RandomNumber randomNumber = new RandomNumber(channelName); //replace with feature class later
 		api.addMessageCreateListener(randomNumber);
 		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
 		
