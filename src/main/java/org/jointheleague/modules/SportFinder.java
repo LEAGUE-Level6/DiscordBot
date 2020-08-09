@@ -1,4 +1,4 @@
-  
+
 package org.jointheleague.modules;
 
 import org.javacord.api.event.message.MessageCreateEvent;
@@ -18,20 +18,24 @@ public class SportFinder extends CustomMessageCreateListener {
 
 	}
 
+	String equipment = " ";
+
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		// TODO Auto-generated method stub
 		String response = event.getMessageContent();
-		
-		String equipment = response.replace("!SportFinder", "").replaceAll(" ", "");
+		if (response.contains("!SportFinder")) {
+
+			equipment = response.replace("!SportFinder", "").replaceAll(" ", "");
+		}
 
 		if (equipment.equalsIgnoreCase("racket")) {
 			event.getChannel().sendMessage(
-					"Your sport is either Tennis, Badminton, Squash, Table Tennis, Racquetball, or Pickleball. Is Rafael Nadal a pro player of your sport? Respond with !Racket followed by yes or no");
+					"Your sport is either Tennis, Badminton, or Table TennisIs Rafael Nadal a pro player of your sport? Respond with !Nadal followed by yes or no");
 		}
 
-		else if (response.contains("!Racket")) {
-			String racket = response.replace("!Racket", "".replace(" ", ""));
+		if (response.contains("!Nadal")) {
+			String racket = response.replace("!Nadal", "".replace(" ", ""));
 			if (racket.equalsIgnoreCase("yes")) {
 				event.getChannel().sendMessage("Your sport is tennis!");
 
