@@ -7,10 +7,15 @@ import org.javacord.api.event.message.MessageCreateEvent;
 public class BattleShip extends CustomMessageCreateListener {
 	String[][] player1 = new String[10][10];
 	String[][] player2 = new String[10][10];
+	String[][] currentGrid = new String[10][10];
+	int turn = 0;
+	String ship = "🚢";
 
 	private static final String gameCommand = "!battleship";
 	private static final String instructionCommand = "!battleship-instructions";
 	private static final String startCommand = "!start";
+	// wave emoji: 🌊
+	// ship emoji: 🚢
 
 	public BattleShip(String channelName) {
 		super(channelName);
@@ -19,8 +24,10 @@ public class BattleShip extends CustomMessageCreateListener {
 
 	@Override
 	public void handle(MessageCreateEvent event) {
+		int cords = 0;
 		boolean validPlay = false;
-
+		boolean numEntered = false;
+		boolean testing = false;
 		player1 = setPlayerGrid(player1);
 		player2 = setPlayerGrid(player2);
 
@@ -33,7 +40,31 @@ public class BattleShip extends CustomMessageCreateListener {
 			event.getChannel().sendMessage("*[HOW TO PLAY]*");
 		}
 		if (event.getMessageContent().equals(startCommand)) {
-			event.getChannel().sendMessage(display(player1));
+			if (turn % 2 == 0) {
+				currentGrid = player1;
+			} else if (turn % 2 == 1) {
+				currentGrid = player2;
+			}
+			event.getChannel().sendMessage(display(currentGrid));
+			event.getChannel().sendMessage("Player: " + (turn % 2) + " enter coordinates to place ship: ");
+
+		} else if (event.getMessageContent().contentEquals("!test")) {
+			cords = 1;
+			numEntered = true;
+		} else if (event.getMessageContent().contentEquals("!one")) {
+			currentGrid = player1;
+			testing = true;
+		} else if (event.getMessageContent().contentEquals("!two")) {
+			currentGrid = player2;
+			testing = true;
+		}
+		if (numEntered == true) {
+			currentGrid[2][3] = ship;
+			turn++;
+			event.getChannel().sendMessage(display(currentGrid));
+		} 
+		else if (testing == true) {
+			event.getChannel().sendMessage(display(currentGrid));
 		}
 
 	}
@@ -63,7 +94,7 @@ public class BattleShip extends CustomMessageCreateListener {
 	}
 
 	public static boolean validate(int row, int column, String[][] board) {
-		// checking to see if  column and row is in bounds
+		// checking to see if column and row is in bounds
 		if (column < 0 || column > board[0].length || row < 0 || row > board.length) {
 			return false;
 		}
