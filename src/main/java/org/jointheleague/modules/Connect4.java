@@ -13,7 +13,7 @@ public class Connect4 extends CustomMessageCreateListener {
 	int turn = 0;
 	boolean winner = false;
 
-	private static final String gameCommand = "!game";
+	private static final String gameCommand = "!connect4";
 	private static final String zero = "0";
 	private static final String one = "1";
 	private static final String two = "2";
