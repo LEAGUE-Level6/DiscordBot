@@ -41,6 +41,9 @@ public class Bot  {
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 		
 		//add Listeners
+		
+		OverwatchStatistics owstats = new OverwatchStatistics(channelName);
+		api.addMessageCreateListener(owstats);
 
 		HeadlineListener head = new HeadlineListener(channelName);
 		api.addMessageCreateListener(head);
