@@ -1,3 +1,6 @@
+
+
+
 package org.jointheleague.discord_bot_example;
 
 import org.javacord.api.DiscordApi;
@@ -65,7 +68,7 @@ public class Bot  {
 		SetProfilePic setPFP = new SetProfilePic(channelName);
 		api.addMessageCreateListener(setPFP);
 		helpListener.addHelpEmbed(setPFP.getHelpEmbed());
-
+		
 		ToGif toGif = new ToGif(channelName);
 		api.addMessageCreateListener(toGif);
 		helpListener.addHelpEmbed(toGif.getHelpEmbed());
@@ -78,17 +81,13 @@ public class Bot  {
 		api.addMessageCreateListener(apiExampleListener);
 		helpListener.addHelpEmbed(apiExampleListener.getHelpEmbed());
 		
-		PrimeListener primeListener = new PrimeListener(channelName);
-		api.addMessageCreateListener(primeListener);
-		helpListener.addHelpEmbed(primeListener.getHelpEmbed());
+		NewWeather newWeather = new NewWeather(channelName);
+		api.addMessageCreateListener(newWeather);
+		helpListener.addHelpEmbed(newWeather.getHelpEmbed());
 		
-		TextAdventureListener textAdventureListener = new TextAdventureListener(channelName);
-		api.addMessageCreateListener(textAdventureListener);
-		helpListener.addHelpEmbed(textAdventureListener.getHelpEmbed());
+		CoinFlip cp = new CoinFlip(channelName);
+		api.addMessageCreateListener(cp);
 		
-		//ClickerListener clickerListener = new ClickerListener(channelName);
-		//api.addMessageCreateListener(clickerListener);
-		//helpListener.addHelpEmbed(clickerListener.getHelpEmbed());
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
@@ -134,6 +133,6 @@ public class Bot  {
 		api.addMessageCreateListener(new GetTime(channelName));
 		api.addMessageCreateListener(new ScreenCapture(channelName));
 
-
 	}
 }
+

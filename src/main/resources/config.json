@@ -1,6 +1,8 @@
-{
-    "channels": ["nicholas"],
-    "token": "NzMzMTMwMjY2MjA1NDg3MTE0.XxSUsQ.SSgwRdYfsX-nIvnklajAs920nlQ" 
 
+{
+
+    "channels": ["channelName"],
+    "token": "token"
 
 }
+
