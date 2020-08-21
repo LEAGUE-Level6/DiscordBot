@@ -10,11 +10,12 @@ import org.javacord.api.DiscordApiBuilder;
  *
  */
 import org.jointheleague.modules.*;
+import org.jointheleague.modules.pojo.HelpEmbed;
 
 
 
 public class Bot  {
-	
+//	private static final String COMMAND = "!help";
 	// The string to show the custom :vomiting_robot: emoji
 	public static String emoji = "<:vomiting_robot:642414033290657803>";
 
@@ -22,8 +23,9 @@ public class Bot  {
 	private String channelName;
 	DiscordApi api;
 	_HelpListener helpListener;
-
+	
 	public Bot(String token, String channelName) {
+		//helpEmbed = new HelpEmbed(COMMAND, "Allows you to get a random number.  You can also specify a range of values (e.g. !random 50-100)");
 		this.token = token;
 		this.channelName = channelName;
 		helpListener = new _HelpListener(channelName);
