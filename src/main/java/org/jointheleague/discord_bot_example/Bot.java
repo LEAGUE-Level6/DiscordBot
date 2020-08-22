@@ -41,6 +41,10 @@ public class Bot  {
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 		
 		//add Listeners
+		
+		ToDoList list = new ToDoList(channelName);
+		api.addMessageCreateListener(list);
+		helpListener.addHelpEmbed(list.getHelpEmbed());
 
 		HeadlineListener head = new HeadlineListener(channelName);
 		api.addMessageCreateListener(head);
