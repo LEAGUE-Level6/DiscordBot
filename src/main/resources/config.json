@@ -1,6 +1,5 @@
 {
-    "channels": ["max"],
-    "token": "" 
-
+   "channels": ["channelName"],
+   "token": "token"
 
 }
