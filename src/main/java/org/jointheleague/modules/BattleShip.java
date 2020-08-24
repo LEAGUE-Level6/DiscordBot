@@ -10,13 +10,20 @@ public class BattleShip extends CustomMessageCreateListener {
 	String[][] currentGrid = new String[10][10];
 	int turn = 0;
 	String ship = "🚢    ";
+	String explosion = "💥\t";
+	String hit = "❌\t";
+	String currentEmoji = "";
+	
+	// wave emoji: 🌊
+	// ship emoji: 🚢
+	// explosion emoji: 💥
+	// hit emoji: ❌
 
 	private static final String gameCommand = "!battleship";
 	private static final String instructionCommand = "!battleship-instructions";
 	private static final String startCommand = "!start";
 	private static final String cordCommand = "!cord";
-	// wave emoji: 🌊
-	// ship emoji: 🚢
+	
 
 	public BattleShip(String channelName) {
 		super(channelName);
@@ -27,7 +34,8 @@ public class BattleShip extends CustomMessageCreateListener {
 	public void handle(MessageCreateEvent event) {
 		boolean validPlay = false;
 		boolean numEntered = false;
-		boolean testing = false;
+		//boolean testing = false;
+		boolean playerHit = false;
 		int[] cordArr = new int[2];
 		int xCord = 0;
 		int yCord = 0;
@@ -43,16 +51,13 @@ public class BattleShip extends CustomMessageCreateListener {
 		if (event.getMessageContent().equals(startCommand)) {
 			player1 = setPlayerGrid(player1);
 			player2 = setPlayerGrid(player2);
-			if (turn % 2 == 0) {
-				currentGrid = player1;
-			} else if (turn % 2 == 1) {
-				currentGrid = player2;
-			}
+			
+			currentGrid = player1;
 			event.getChannel().sendMessage(display(currentGrid));
-			event.getChannel().sendMessage("Player " + ((turn % 2) + 1) + ": Enter coordinates (!cord x,y) to place ship... ");
-		
+			event.getChannel()
+					.sendMessage("Player " + ((turn % 2) + 1) + ": Enter coordinates (!cord x,y) to place ship... ");
 
-		} else if(event.getMessageContent().contains("!cord")) {
+		} else if (event.getMessageContent().contains("!cord")) {
 			cordArr = enterCords(event.getMessageContent(), cordArr);
 			xCord = cordArr[0];
 			yCord = cordArr[1];
@@ -64,12 +69,20 @@ public class BattleShip extends CustomMessageCreateListener {
 			} else if (turn % 2 == 1) {
 				currentGrid = player2;
 			}
-			currentGrid[xCord][yCord] = ship;
+			if (turn <= 9) {
+				currentEmoji = ship;
+			} else {
+				currentEmoji = explosion;
+			}
+			if (currentGrid[xCord][yCord].equals(ship)) {
+				currentEmoji = hit;
+			}
+			currentGrid[xCord][yCord] = currentEmoji;
 			event.getChannel().sendMessage(display(currentGrid));
 			turn++;
-			event.getChannel().sendMessage("Player " + ((turn % 2) + 1) + ": Enter coordinates (!cord x,y) to place ship... ");
-		} 
-		
+			event.getChannel()
+					.sendMessage("Player " + ((turn % 2) + 1) + ": Enter coordinates (!cord x,y) to place ship... ");
+		}
 
 	}
 
@@ -109,10 +122,11 @@ public class BattleShip extends CustomMessageCreateListener {
 
 		return true;
 	}
+
 	public static int[] enterCords(String message, int[] cordsArr) {
 		String newStr = message.replaceAll("[!cord(),]", " ");
 		String[] strs = newStr.trim().split("\\s+");
-		
+
 		for (int i = 0; i < strs.length; i++) {
 
 			cordsArr[i] = Integer.parseInt(strs[i]);
