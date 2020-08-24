@@ -13,7 +13,7 @@ public class BattleShip extends CustomMessageCreateListener {
 	String explosion = "💥\t";
 	String hit = "❌\t";
 	String currentEmoji = "";
-	
+
 	// wave emoji: 🌊
 	// ship emoji: 🚢
 	// explosion emoji: 💥
@@ -23,7 +23,6 @@ public class BattleShip extends CustomMessageCreateListener {
 	private static final String instructionCommand = "!battleship-instructions";
 	private static final String startCommand = "!start";
 	private static final String cordCommand = "!cord";
-	
 
 	public BattleShip(String channelName) {
 		super(channelName);
@@ -34,7 +33,7 @@ public class BattleShip extends CustomMessageCreateListener {
 	public void handle(MessageCreateEvent event) {
 		boolean validPlay = false;
 		boolean numEntered = false;
-		//boolean testing = false;
+		// boolean testing = false;
 		boolean playerHit = false;
 		int[] cordArr = new int[2];
 		int xCord = 0;
@@ -51,7 +50,7 @@ public class BattleShip extends CustomMessageCreateListener {
 		if (event.getMessageContent().equals(startCommand)) {
 			player1 = setPlayerGrid(player1);
 			player2 = setPlayerGrid(player2);
-			
+
 			currentGrid = player1;
 			event.getChannel().sendMessage(display(currentGrid));
 			event.getChannel()
@@ -76,8 +75,13 @@ public class BattleShip extends CustomMessageCreateListener {
 			}
 			if (currentGrid[xCord][yCord].equals(ship)) {
 				currentEmoji = hit;
+				playerHit = true;
 			}
 			currentGrid[xCord][yCord] = currentEmoji;
+
+			if (playerHit == true) {
+				 
+			}
 			event.getChannel().sendMessage(display(currentGrid));
 			turn++;
 			event.getChannel()
