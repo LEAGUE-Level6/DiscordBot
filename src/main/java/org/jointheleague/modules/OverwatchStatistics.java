@@ -29,7 +29,7 @@ public class OverwatchStatistics extends CustomMessageCreateListener {
 		if (event.getMessageContent().contains(COMMAND)) {
 			String msg = event.getMessageContent();
 			String battleTag = "Ignidris-1573";
-			String[] phrase = msg.toLowerCase().split(" ");
+			String[] phrase = msg.split(" ");
 			if (phrase.length < 2) {
 				event.getChannel().sendMessage("Please include a battle tag in your message");
 			} else {
@@ -48,6 +48,9 @@ public class OverwatchStatistics extends CustomMessageCreateListener {
 					JsonReader repoReader = Json.createReader(con.getInputStream());
 					JsonObject userJSON = ((JsonObject) repoReader.read());
 					con.disconnect();
+
+					System.out.println(userJSON.toString());
+
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
