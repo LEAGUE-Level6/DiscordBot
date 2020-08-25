@@ -10,6 +10,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.jointheleague.modules.pojo.OverwatchStatisticsRequest;
 
 import com.google.gson.Gson;
 
@@ -45,11 +46,14 @@ public class OverwatchStatistics extends CustomMessageCreateListener {
 					
 					HttpURLConnection con = (HttpURLConnection) url.openConnection();
 					con.setRequestMethod("GET");
+					con.addRequestProperty("User-Agent", "Chrome");
+
 					JsonReader repoReader = Json.createReader(con.getInputStream());
 					JsonObject userJSON = ((JsonObject) repoReader.read());
 					con.disconnect();
 
-					System.out.println(userJSON.toString());
+					OverwatchStatisticsRequest owstatsrequest = gson.fromJson(userJSON.toString(), OverwatchStatisticsRequest.class);
+					System.out.println(owstatsrequest.getName());
 
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
