@@ -42,14 +42,19 @@ public class Bot  {
 		
 		//add Listeners
 		
+
 		OverwatchStatistics owstats = new OverwatchStatistics(channelName);
 		api.addMessageCreateListener(owstats);
+    
+		ToDoList list = new ToDoList(channelName);
+		api.addMessageCreateListener(list);
+		helpListener.addHelpEmbed(list.getHelpEmbed());
 
 		HeadlineListener head = new HeadlineListener(channelName);
 		api.addMessageCreateListener(head);
 		helpListener.addHelpEmbed(head.getHelpEmbed());
 
-		RandomNumber randomNumber = new RandomNumber(channelName);
+		RandomNumber randomNumber = new RandomNumber(channelName); //replace with feature class later
 		api.addMessageCreateListener(randomNumber);
 		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
 		
