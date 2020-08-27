@@ -26,7 +26,7 @@ public class ClickerListener extends CustomMessageCreateListener{
 			}else if(started) {
 				String cmd=event.getMessageContent().toLowerCase();
 				if(cmd.contains("commands")) {
-					event.getChannel().sendMessage("Type click to click.\nType stats to see your stats.\nType upgrade to upgrade your clicks.");
+					event.getChannel().sendMessage("Type click to click.\nType stats to see your stats.\nType upgrade to upgrade your clicks.\nType !stop to stop.");
 				}else if(cmd.contains("click")) {
 					cash+=cashMultiplier;
 					event.getChannel().sendMessage("You now have "+convert(cash)+" cash.");
@@ -41,6 +41,11 @@ public class ClickerListener extends CustomMessageCreateListener{
 						cashMultiplier*=4;
 						event.getChannel().sendMessage("You successsfully upgraded!\nYou now get "+convert(cashMultiplier)+" cash per click.");
 					}
+				}else if(cmd.contains("!stop")) {
+					started=false;
+					cash=0;
+					cashMultiplier=1;
+					upgradeCost=1;
 				}
 			}
 		}
