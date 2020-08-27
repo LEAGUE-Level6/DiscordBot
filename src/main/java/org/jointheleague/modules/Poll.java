@@ -2,13 +2,16 @@ package org.jointheleague.modules;
 
 import java.awt.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import org.javacord.api.entity.emoji.Emoji;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.Reaction;
+import org.javacord.api.entity.user.User;
 import org.javacord.api.event.message.MessageCreateEvent;
 import net.aksingh.owmjapis.api.APIException;
 public class Poll extends CustomMessageCreateListener implements Reaction, Emoji{
@@ -33,27 +36,36 @@ public class Poll extends CustomMessageCreateListener implements Reaction, Emoji
 			
 		}
 		if(event.getMessageContent().contains("-->Poll:")) {
+			char greenNum=' ';
+			char redNum=' ';
 			event.addReactionsToMessage("🟢");
 			event.addReactionsToMessage("🔴");
 			try {
-				Thread.sleep(3000);
+				Thread.sleep(5000);
 			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			try {
-				Reaction.getUsers(event.getApi(),"738184728426971186", event.getMessageId()+"", getEmoji()).get().size();
-				//System.out.println(size);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			String green =event.getMessage().getReactionByEmoji("🟢")+"";
+			if(green.contains("count: ")) {
+				 greenNum =green.charAt(green.indexOf("count: ")+7);
 			}
-		
 			
+			String red=event.getMessage().getReactionByEmoji("🔴")+"";
+			if(red.contains("count: ")) {
+				 redNum =red.charAt(red.indexOf("count: ")+7);
+			}
+			
+			if(greenNum>redNum) {
+				event.getChannel().sendMessage("green wins");
+			}
+			else if (redNum>greenNum) {
+				event.getChannel().sendMessage("red wins");
+			}
+			else {
+				event.getChannel().sendMessage("The people are undecisive");
+			}
 		}
+		
 		
 	}
 
