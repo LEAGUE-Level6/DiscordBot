@@ -20,17 +20,25 @@ public class RollDie extends CustomMessageCreateListener {
 		// TODO Auto-generated method stub
 		if (event.getMessageContent().contains(COMMAND)) {
 			String message = event.getMessageContent().substring(9, event.getMessageContent().length());
-			String lim = "";
-			for (int i = 0; i < message.length()+1; i++) {
-				if(message.substring(i, i+1).equals(" ")) {
-					lim = message.substring(0, i);
-					
+			String lim = message;
+			String max = "1";
+			String output = "";
+			int start = 0;
+			for (int i = 0; i < message.length(); i++) {
+				if (message.charAt(i) == ' ') {
+					lim = message.substring(start, i);
+					max = message.substring(i + 1, message.length()) + "";
 				}
 			}
 			int limit = Integer.parseInt(lim) - 1;
+			int numberOfDie = Integer.parseInt(max);
 			Random rand = new Random();
-			int num = 1 + rand.nextInt(limit);
-			event.getChannel().sendMessage("" + num);
+			while (numberOfDie > 0) {
+				int random = 1 + rand.nextInt(limit);
+				output += random + " ";
+				numberOfDie--;
+			}
+			event.getChannel().sendMessage(output);
 		}
 	}
 }
