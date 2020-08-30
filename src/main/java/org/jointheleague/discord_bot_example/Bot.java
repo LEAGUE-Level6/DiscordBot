@@ -82,9 +82,17 @@ public class Bot  {
 		api.addMessageCreateListener(apiExampleListener);
 		helpListener.addHelpEmbed(apiExampleListener.getHelpEmbed());
 		
+
+		Greeter greeter = new Greeter(channelName);
+		api.addMessageCreateListener(greeter);
+		helpListener.addHelpEmbed(greeter.getHelpEmbed());
+		
+	
+
 		NewWeather newWeather = new NewWeather(channelName);
 		api.addMessageCreateListener(newWeather);
 		helpListener.addHelpEmbed(newWeather.getHelpEmbed());
+
 		
 		CoinFlip cp = new CoinFlip(channelName);
 		api.addMessageCreateListener(cp);
