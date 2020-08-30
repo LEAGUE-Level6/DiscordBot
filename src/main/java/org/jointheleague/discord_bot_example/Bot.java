@@ -54,6 +54,10 @@ public class Bot  {
 		api.addMessageCreateListener(randomNumber);
 		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
 		
+		RandomStatistic statistic = new RandomStatistic(channelName); //replace with feature class later
+		api.addMessageCreateListener(statistic);
+		helpListener.addHelpEmbed(statistic.getHelpEmbed());
+		
 		HypeMachine hypeMachine = new HypeMachine(channelName);
 		api.addMessageCreateListener(hypeMachine);
 		helpListener.addHelpEmbed(hypeMachine.getHelpEmbed());
