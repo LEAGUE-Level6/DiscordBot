@@ -21,9 +21,10 @@ public class ChessBot extends CustomMessageCreateListener{
 		// TODO Auto-generated method stub
 		
 		
-		SetChessBoard();
+		
 		
 		if (event.getMessageContent().contains("!chess")) {
+			SetChessBoard();
 			event.getChannel().sendMessage("switch your Discord to Light Mode, by navigating to 'Appeaarance' in the settings, in order to properly see the chess pieces.");
 			event.getChannel().sendMessage(SpawnChessBoard());
 			event.getChannel().sendMessage("Type -white to take control of the white pieces, and -black to control the black ones");
@@ -50,7 +51,8 @@ public class ChessBot extends CustomMessageCreateListener{
 			int NewColumn =Integer.parseInt(Message.substring(13, 14));
 			
 			MovePieces(OgRow,OgColumn,NewRow,NewColumn);
-			SpawnChessBoard();
+			
+			event.getChannel().sendMessage(SpawnChessBoard());
 		}
 		
 		
@@ -148,8 +150,25 @@ public class ChessBot extends CustomMessageCreateListener{
 	}
 	
 	public void MovePieces(int OgRow, int OgColumn, int NewRow, int NewColumn) { 
+		String TempPiece= new String(ChessBoard[OgRow][OgColumn]);
 		
-		ChessBoard[NewRow][NewColumn]=ChessBoard[OgRow][OgColumn];
+		
+		ChessBoard[NewRow][NewColumn]=TempPiece;
+		
+		if(OgRow%2==0 && OgColumn%2==0) {
+			ChessBoard[OgRow][OgColumn]= WhiteSquare;
+			
+		}
+		else if(OgRow%2!=0 && OgColumn%2==0 ) {
+			ChessBoard[OgRow][OgColumn]= BlackSquare;
+			
+		}
+		else if (OgRow%2==0 && OgColumn%2!=0 ) {
+			ChessBoard[OgRow][OgColumn]= BlackSquare;
+		}
+		else if (OgRow%2!=0 && OgColumn%2!=0 ) {
+			ChessBoard[OgRow][OgColumn]= WhiteSquare;
+		}
 		
 	}
 	
