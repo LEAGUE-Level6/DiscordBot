@@ -7,7 +7,7 @@ import org.javacord.api.event.message.MessageCreateEvent;
 import org.jointheleague.modules.pojo.HelpEmbed;
 
 public class Feature1 extends CustomMessageCreateListener {
-	private static final String COMMAND = "!random";
+	private static final String COMMAND = "!wildcatfacts";
 	
 	 private String tiger = "The tiger has a muscular body with powerful forelimbs, a large head and a tail that is about half the length of its body. Its pelage is dense and heavy, and colouration varies between shades of orange and brown with white ventral areas and distinctive vertical black stripes that are unique in each individual.";
 	 private String lion = "Lions have strong, compact bodies and powerful forelegs, teeth and jaws for pulling down and killing prey. Their coats are yellow-gold, and adult males have shaggy manes that range in color from blond to reddish-brown to black. The length and color of a lion's mane is likely determined by age, genetics and hormones.";
@@ -19,7 +19,7 @@ public class Feature1 extends CustomMessageCreateListener {
 	
 	 public Feature1 (String channelName) {
 		super(channelName);
-		helpEmbed = new HelpEmbed(COMMAND, "Allows you to get a random number.  You can also specify a range of values (e.g. !random 50-100)");
+		helpEmbed = new HelpEmbed(COMMAND, "Use ! + the name of a wild cat you want to know more about to recieve some information about it. You can ask about tigers, leopards, lynxes, cheetahs, and lions!");
 	}
 
 	@Override
@@ -40,9 +40,6 @@ public class Feature1 extends CustomMessageCreateListener {
 			event.getChannel().sendMessage(lynx);
 		}
 		if(a.equals("!leopard")) {
-			event.getChannel().sendMessage(leopard);
-		}
-		if(a.equals("!help")) {
 			event.getChannel().sendMessage(leopard);
 		}
 		
