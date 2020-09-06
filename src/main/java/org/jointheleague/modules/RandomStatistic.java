@@ -20,10 +20,10 @@ public class RandomStatistic extends CustomMessageCreateListener{
 		facts[2] = "There are nearly 12,000 annual injuries related to TVs falling in the U.S.";
 		facts[3] = "Only 3 percent of adults over 65 use Snapchat. That still seems too high...";
 		facts[4] = "One in five American high schoolers are smoking e-cigarettes. I hope you aren't one of them.";
-
-		if (event.getMessageContent().contains(COMMAND)) {
+		int x = 0;
+		if (event.getMessageContent().contains(COMMAND) && x==0) {
 			
-			
+			x=1;
 			event.getChannel().sendMessage(facts[new Random().nextInt(5)]);
 		}
 	}
