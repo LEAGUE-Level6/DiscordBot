@@ -93,6 +93,10 @@ public class Bot  {
 		CoinFlip cp = new CoinFlip(channelName);
 		api.addMessageCreateListener(cp);
 		
+		PokemonTypeEffectiveness pte = new PokemonTypeEffectiveness(channelName);
+		api.addMessageCreateListener(pte);
+		helpListener.addHelpEmbed(pte.getHelpEmbed());
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
