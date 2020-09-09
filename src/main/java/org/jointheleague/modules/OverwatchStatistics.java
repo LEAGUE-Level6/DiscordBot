@@ -60,17 +60,28 @@ public class OverwatchStatistics extends CustomMessageCreateListener {
 					if (owstatsrequest.getPrivate()) {
 						event.getChannel().sendMessage("Career profile is private.");
 					} else {
-						MessageBuilder builder = new MessageBuilder();
-						builder.addAttachment(new URL(owstatsrequest.getPrestigeIcon()));
-						builder.addAttachment(new URL(owstatsrequest.getLevelIcon()));
-						builder.addAttachment(new URL(owstatsrequest.getRatings().get(0).getRoleIcon()));
-						builder.addAttachment(new URL(owstatsrequest.getRatings().get(0).getRankIcon()));
-						builder.addAttachment(new URL(owstatsrequest.getRatings().get(1).getRoleIcon()));
-						builder.addAttachment(new URL(owstatsrequest.getRatings().get(1).getRankIcon()));
-						builder.addAttachment(new URL(owstatsrequest.getRatings().get(2).getRoleIcon()));
-						builder.addAttachment(new URL(owstatsrequest.getRatings().get(2).getRankIcon()));
-						builder.addAttachment(new URL(owstatsrequest.getIcon()));
-						builder.send(event.getChannel());
+						
+						MessageBuilder builder2 = new MessageBuilder();
+						builder2.addAttachment(new URL(owstatsrequest.getRatings().get(1).getRankIcon()));
+						builder2.addAttachment(new URL(owstatsrequest.getRatings().get(1).getRoleIcon()));
+						builder2.send(event.getChannel());
+						builder2 = new MessageBuilder();
+						
+						MessageBuilder builder1 = new MessageBuilder();
+						builder1 = new MessageBuilder();
+						builder1.addAttachment(new URL(owstatsrequest.getRatings().get(2).getRankIcon()));
+						builder1.addAttachment(new URL(owstatsrequest.getRatings().get(2).getRoleIcon()));
+						builder1.addAttachment(new URL(owstatsrequest.getIcon()));
+						builder1.send(event.getChannel());
+						builder1 = new MessageBuilder();
+						
+						MessageBuilder builder3 = new MessageBuilder();
+						builder3.addAttachment(new URL(owstatsrequest.getPrestigeIcon()));
+						builder3.addAttachment(new URL(owstatsrequest.getLevelIcon()));
+						builder3.addAttachment(new URL(owstatsrequest.getRatings().get(0).getRankIcon()));
+						builder3.addAttachment(new URL(owstatsrequest.getRatings().get(0).getRoleIcon()));
+						builder3.send(event.getChannel());
+						builder3 = new MessageBuilder();
 					}
 
 				} catch (MalformedURLException e) {
