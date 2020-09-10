@@ -41,12 +41,16 @@ public class Bot  {
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 		
 		//add Listeners
+		
+		ToDoList list = new ToDoList(channelName);
+		api.addMessageCreateListener(list);
+		helpListener.addHelpEmbed(list.getHelpEmbed());
 
 		HeadlineListener head = new HeadlineListener(channelName);
 		api.addMessageCreateListener(head);
 		helpListener.addHelpEmbed(head.getHelpEmbed());
 
-		RandomNumber randomNumber = new RandomNumber(channelName);
+		RandomNumber randomNumber = new RandomNumber(channelName); //replace with feature class later
 		api.addMessageCreateListener(randomNumber);
 		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
 		
@@ -85,8 +89,14 @@ public class Bot  {
 		CoinFlip cp = new CoinFlip(channelName);
 		api.addMessageCreateListener(cp);
 		
+
 		Poll poll = new Poll(channelName);
 		api.addMessageCreateListener(poll);
+
+		RollDie rollDie = new RollDie(channelName);
+		api.addMessageCreateListener(rollDie);
+		
+
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
