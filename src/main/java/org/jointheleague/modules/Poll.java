@@ -26,14 +26,16 @@ public class Poll extends CustomMessageCreateListener implements Reaction, Emoji
 		String m = event.getMessageContent();
 		if(m.toLowerCase().contains("!poll")) {
 			String x=event.getMessageContent();
+			int comma1=x.indexOf(",")+1;
+			int comma2=x.lastIndexOf(",");
+			String sub1 =x.substring(comma1, comma2);
+			String sub2=x.substring(comma2+1, x.length());
 			for(int i = 0; i<x.length();i++) {
 				if(i>4) {
 					 message=message+x.charAt(i);
 				}
 			}
-			event.getChannel().sendMessage("-->Poll:"+message+"<--");
-		
-			
+			event.getChannel().sendMessage("-->Poll:"+message+"<--\n"+"Do 🟢 for "+sub1+"\n And do 🔴 for "+sub2);
 		}
 		if(event.getMessageContent().contains("-->Poll:")) {
 			char greenNum=' ';
@@ -56,10 +58,10 @@ public class Poll extends CustomMessageCreateListener implements Reaction, Emoji
 			}
 			
 			if(greenNum>redNum) {
-				event.getChannel().sendMessage("green wins");
+				event.getChannel().sendMessage("The final verdict is that GREEN is the answer");
 			}
 			else if (redNum>greenNum) {
-				event.getChannel().sendMessage("red wins");
+				event.getChannel().sendMessage("The final verdict is that RED is the answer");
 			}
 			else {
 				event.getChannel().sendMessage("The people are undecisive");
