@@ -24,22 +24,25 @@ public class Feature1 extends CustomMessageCreateListener {
 
 	@Override
 	public void handle(MessageCreateEvent event) {
-
+		System.out.println(event.getMessageAuthor().getName());
+		if(event.getMessageAuthor().getName().equals("Ella's Bot")) {
+		return;
+		}
 		
 		String a = event.getMessageContent();
 		if(a.equals("!tiger")) {
 			event.getChannel().sendMessage(tiger);
 		}
-		if(a.equals("!lion")) {
+		else if(a.equals("!lion")) {
 			event.getChannel().sendMessage(lion);
 		}
-		if(a.equals("!cheetah")) {
+		else if(a.equals("!cheetah")) {
 			event.getChannel().sendMessage(cheetah);
 		}
-		if(a.equals("!lynx")) {
+		else if(a.equals("!lynx")) {
 			event.getChannel().sendMessage(lynx);
 		}
-		if(a.equals("!leopard")) {
+		else if(a.equals("!leopard")) {
 			event.getChannel().sendMessage(leopard);
 		}
 		
