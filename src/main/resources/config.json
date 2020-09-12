@@ -1,4 +1,6 @@
 {
-   "channels": ["ryant"],
-   "token": ""
+  
+   "channels": ["channelName"],
+   "token": "token"
+
 }

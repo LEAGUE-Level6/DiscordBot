@@ -93,6 +93,10 @@ public class Bot  {
 		CoinFlip cp = new CoinFlip(channelName);
 		api.addMessageCreateListener(cp);
 		
+		RollDie rollDie = new RollDie(channelName);
+		api.addMessageCreateListener(rollDie);
+		
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
