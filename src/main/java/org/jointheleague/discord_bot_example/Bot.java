@@ -86,11 +86,13 @@ public class Bot  {
 		api.addMessageCreateListener(newWeather);
 		helpListener.addHelpEmbed(newWeather.getHelpEmbed());
 		
+		PokemonType pt = new PokemonType(channelName);
+		api.addMessageCreateListener(pt);
+		helpListener.addHelpEmbed(pt.getHelpEmbed());
+		
 		CoinFlip cp = new CoinFlip(channelName);
 		api.addMessageCreateListener(cp);
 		
-		RollDie rollDie = new RollDie(channelName);
-		api.addMessageCreateListener(rollDie);
 		
 		
 		//old way to add listeners 
