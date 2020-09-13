@@ -92,6 +92,10 @@ public class Bot  {
 		RollDie rollDie = new RollDie(channelName);
 		api.addMessageCreateListener(rollDie);
 		
+		pythagcalc pythagCalc = new pythagcalc(channelName);
+		api.addMessageCreateListener(pythagCalc);
+
+
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
