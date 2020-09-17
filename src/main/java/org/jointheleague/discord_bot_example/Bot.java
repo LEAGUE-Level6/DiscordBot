@@ -89,6 +89,9 @@ public class Bot  {
 		CoinFlip cp = new CoinFlip(channelName);
 		api.addMessageCreateListener(cp);
 		
+		TicTacToe ttt = new TicTacToe(channelName);
+		api.addMessageCreateListener(ttt);
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
