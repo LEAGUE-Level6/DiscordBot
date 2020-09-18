@@ -92,8 +92,8 @@ public class Bot  {
 		RollDie rollDie = new RollDie(channelName);
 		api.addMessageCreateListener(rollDie);
 		
-		HamiltonQuotes hamquotes = new HamiltonQuotes(channelName);
-		api.addMessageCreateListener(hamquotes);
+		HamiltonQuotes hamjams = new HamiltonQuotes(channelName);
+		api.addMessageCreateListener(hamjams);
 		
 		
 		//old way to add listeners 
