@@ -41,6 +41,9 @@ public class Bot  {
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 		
 		//add Listeners
+		CurrencyConverter cc = new CurrencyConverter(channelName);
+		api.addMessageCreateListener(cc);
+		helpListener.addHelpEmbed(cc.getHelpEmbed());
 		
 		ToDoList list = new ToDoList(channelName);
 		api.addMessageCreateListener(list);
