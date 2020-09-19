@@ -92,6 +92,11 @@ public class Bot  {
 		RollDie rollDie = new RollDie(channelName);
 		api.addMessageCreateListener(rollDie);
 		
+		AddTwoNumbers addtwonumbers = new AddTwoNumbers(channelName);
+		api.addMessageCreateListener(addtwonumbers);
+		helpListener.addHelpEmbed(addtwonumbers.getHelpEmbed());
+
+		
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
@@ -102,7 +107,6 @@ public class Bot  {
 		api.addMessageCreateListener(new ComicMessageListener(channelName));
 		api.addMessageCreateListener(new ElmoMessageListener(channelName));
 		api.addMessageCreateListener(new FactMessageListener(channelName));
-		api.addMessageCreateListener(new CasinoGameListener(channelName));
 		api.addMessageCreateListener(new HighLowListener(channelName));
 		api.addMessageCreateListener(new Ryland(channelName));
 		api.addMessageCreateListener(new RockPaperScissorsListener(channelName));
