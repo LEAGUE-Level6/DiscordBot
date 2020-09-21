@@ -8,9 +8,11 @@ public class ChessBot extends CustomMessageCreateListener{
 
 	String BlackSquare=" :black_medium_square: ";
 	String WhiteSquare=" :white_medium_square: ";
-	String [][] ChessBoard= new String [8][8];
+	ChessPieces [][] ChessBoard= new ChessPieces [8][8];
 	String BlackPlayer="";
 	String WhitePlayer="";
+	String black="black";
+	String white="white";
 	public ChessBot(String channelName) {
 		super(channelName);
 		// TODO Auto-generated constructor stub
@@ -83,65 +85,100 @@ public class ChessBot extends CustomMessageCreateListener{
 			for (int j = 0; j <ChessBoard[i].length-1; j+=2) {
 			if(i%2==0 && j%2==0) {
 				
-					ChessBoard[i][j]=WhiteSquare;
-					ChessBoard[i][j+1]=BlackSquare;
+					ChessBoard[i][j].setPieceType(WhiteSquare);
+					ChessBoard[i][j].setPieceColor(null);
+					ChessBoard[i][j+1].setPieceType(BlackSquare);
+					ChessBoard[i][j+1].setPieceColor(null);
+					
 				
 			}
 				else {
-				ChessBoard[i][j]=BlackSquare;
-				ChessBoard[i][j+1]=WhiteSquare;
+					ChessBoard[i][j].setPieceType(BlackSquare);
+					ChessBoard[i][j].setPieceColor(null);
+					ChessBoard[i][j+1].setPieceType(WhiteSquare);
+					ChessBoard[i][j+1].setPieceColor(null);
 				}
 			}
 		}
 		
 		
 				//black rook
-				ChessBoard [0][0]="  ♜  ";
-				ChessBoard [0][7]="  ♜  ";
+				ChessBoard [0][0].setPieceType("  ♜  ");
+				ChessBoard [0][7].setPieceType("  ♜  ");
+				
+				ChessBoard [0][0].setPieceColor(black);
+				ChessBoard [0][7].setPieceColor(black);
 				
 				//black knight
-				ChessBoard [0][1]=" ♞  ";
-				ChessBoard[0][6]=" ♞   ";
+				ChessBoard [0][1].setPieceType(" ♞  ");
+				ChessBoard [0][6].setPieceType(" ♞  ");
+				
+				ChessBoard [0][1].setPieceColor(black);
+				ChessBoard [0][6].setPieceColor(black);
 				
 				//black bishop
-				ChessBoard [0][2]="  ♝  ";
-				ChessBoard [0][5]="  ♝  ";
+				ChessBoard [0][2].setPieceType("  ♝  ");
+				ChessBoard [0][5].setPieceType("  ♝  ");
+				
+				ChessBoard [0][2].setPieceColor(black);
+				ChessBoard [0][5].setPieceColor(black);
 				
 				//black queen
-				ChessBoard [0][3]= "  ♛  ";
+				ChessBoard [0][3].setPieceType("  ♛  ");
+				
+				ChessBoard [0][3].setPieceColor(black);
 				
 				//black king
-				ChessBoard [0][4]="  ♚  ";
+				ChessBoard [0][4].setPieceType("  ♚  ");
+				
+				ChessBoard [0][4].setPieceColor(black);
 				
 				//black pawns
 				for (int i = 0; i < 8; i++) {
-					ChessBoard[1][i]=" ♟ ";
+					ChessBoard[1][i].setPieceType(" ♟ ");
+					
+					ChessBoard[1][i].setPieceColor(black);
 				}
 				
 				
 				
 				
 				//White rook
-				ChessBoard [7][0]="  ♖  ";
-				ChessBoard [7][7]="  ♖  ";
+				ChessBoard [7][0].setPieceType("  ♖  ");
+				ChessBoard [7][7].setPieceType("  ♖  ");
+				
+				ChessBoard [7][0].setPieceColor(white);
+				ChessBoard [7][7].setPieceColor(white);
 						
 				//white knight
-				ChessBoard [7][1]="  ♘  ";
-				ChessBoard[7][6]="  ♘  ";
+				ChessBoard [7][1].setPieceType("  ♘  ");
+				ChessBoard[7][6].setPieceType("  ♘  ");
+				
+				ChessBoard [7][1].setPieceColor(white);
+				ChessBoard[7][6].setPieceColor(white);
 						
 				//white bishop
-				ChessBoard [7][2]="  ♗  ";
-				ChessBoard [7][5]="  ♗  ";
+				ChessBoard [7][2].setPieceType("  ♗  ");
+				ChessBoard [7][5].setPieceType("  ♗  ");
+				
+				ChessBoard [7][2].setPieceColor(white);
+				ChessBoard [7][5].setPieceColor(white);
 						
 				//white queen
-				ChessBoard [7][3]="  ♕  ";
+				ChessBoard [7][3].setPieceType("  ♕  ");
+				
+				ChessBoard [7][3].setPieceColor(white);
 						
 				//white king
-				ChessBoard [7][4]="  ♔  ";
+				ChessBoard [7][4].setPieceType("  ♔  ");
+				
+				ChessBoard [7][4].setPieceColor(white);
 				
 				//white pawns
 				for (int i = 0; i < 8; i++) {
-					ChessBoard[6][i]="  ♙  ";
+					ChessBoard[6][i].setPieceType("  ♙  ");
+					
+					ChessBoard[6][i].setPieceColor(white);
 				}
 				
 				
@@ -169,6 +206,11 @@ public class ChessBot extends CustomMessageCreateListener{
 		else if (OgRow%2!=0 && OgColumn%2!=0 ) {
 			ChessBoard[OgRow][OgColumn]= WhiteSquare;
 		}
+		
+	}
+	
+	public void TakePiece() {
+		
 		
 	}
 	
