@@ -25,17 +25,27 @@ public class FortuneTeller extends CustomMessageCreateListener {
 		
 		String a = event.getMessageContent();
 		if(a.equals("!fortune")) {
+			System.out.println("GOT MESSAGE");
 			fO = true;
 			interaction = 1;
 			event.getChannel().sendMessage("~Greetings, "+event.getMessageAuthor().getName() + ", I will tell you your fortune. Tell me, what is your favorite " + objects[new Random().nextInt(objects.length)]+"?~");
 		}
 		else if (interaction == 1) {
+			System.out.println("GOT MESSAGE");
 			String m = event.getMessageContent();
 			event.getChannel().sendMessage("Interesting... Give me a moment as I forsee your future...");
 			if(m.charAt(m.length()-1) == 'a') {
 				event.getChannel().sendMessage("You will die.");
+				fO = false;
 			}
+			//else {
+			//	event.getChannel().sendMessage("Nice!");
+			//}
 		}
+		else {
+			System.out.println("FAILED");
+		}
+	
 		
 	}
 }
