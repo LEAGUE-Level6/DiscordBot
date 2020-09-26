@@ -92,6 +92,9 @@ public class Bot  {
 		RollDie rollDie = new RollDie(channelName);
 		api.addMessageCreateListener(rollDie);
 		
+		SentenceReverser sentenceReverser = new SentenceReverser(channelName);
+		api.addMessageCreateListener(sentenceReverser);
+		
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
