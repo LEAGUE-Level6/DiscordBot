@@ -39,74 +39,68 @@ public class SportFinder extends CustomMessageCreateListener {
 			if (racket.equalsIgnoreCase("yes")) {
 				event.getChannel().sendMessage("Your sport is tennis!");
 
-			}
-			else {
+			} else {
 				event.getChannel().sendMessage("Your sport badminton or table tennis!");
 
 			}
 		}
 
-		 if (equipment.equalsIgnoreCase("bat")) {
-			event.getChannel().sendMessage(
-					"Your sport is either Baseball, Softball, or Cricket. ");
+		if (equipment.equalsIgnoreCase("bat")) {
+			event.getChannel().sendMessage("Your sport is either Baseball, Softball, or Cricket. ");
 
 		}
 
-		 if (equipment.equalsIgnoreCase("goal")) {
+		if (equipment.equalsIgnoreCase("goal")) {
 			event.getChannel().sendMessage(
 					"Your sport is either Soccer, Rugby, Football, Water polo, Lacrosse, Field Hockey, or Ice Hockey. ");
 
 		}
 
-		 if (equipment.equalsIgnoreCase("net")) {
+		if (equipment.equalsIgnoreCase("net")) {
 			event.getChannel().sendMessage(
 					"Your sport is either Basketball, Volleyball, Tennis, Badminton, Squash, Table Tennis, Racquetball, or Pickleball.");
 
 		}
 
-		 if (equipment.equalsIgnoreCase("none")) {
-			event.getChannel().sendMessage(
-					"Your sport is either Boxing, Wrestling, Swimming or Running.");
+		if (equipment.equalsIgnoreCase("none")) {
+			event.getChannel().sendMessage("Your sport is either Boxing, Wrestling, Swimming or Running.");
 
 		}
 
-		 if (equipment.equalsIgnoreCase("gloves")) {
+		if (equipment.equalsIgnoreCase("gloves")) {
 			event.getChannel().sendMessage(
 					"Your sport is either Boxing, Football, Baseball, Softball, or Golf. Too bad, many sports require gloves.");
 
 		}
 
-		 if (equipment.equalsIgnoreCase("club")) {
+		if (equipment.equalsIgnoreCase("club")) {
 			event.getChannel().sendMessage("Your sport is golf! :)");
 
 		}
 
-		 if (equipment.equalsIgnoreCase("ball") || equipment.equalsIgnoreCase("balls")) {
+		if (equipment.equalsIgnoreCase("ball") || equipment.equalsIgnoreCase("balls")) {
 			event.getChannel().sendMessage(
 					"Your sport is either Football, Basketball, Soccer, Baseball, Tennis, Golf, Volleyball, Water Polo, Lacrosse, Softball, Cricket or Rugby. Almost every sport uses a ball, so to get an actual answer of what your sport is, please use a word more descriptive than 'ball'. Thanks!");
 
 		}
 
-		 if (equipment.equalsIgnoreCase("puck") || equipment.equalsIgnoreCase("stick")) {
-			event.getChannel().sendMessage(
-					"Your sport is either a version of hockey, Ice Hockey or Field Hockey.");
+		if (equipment.equalsIgnoreCase("puck") || equipment.equalsIgnoreCase("stick")) {
+			event.getChannel().sendMessage("Your sport is either a version of hockey, Ice Hockey or Field Hockey.");
 
 		}
 
+		if (equipment.equalsIgnoreCase("birdie") || equipment.equalsIgnoreCase("shuttlecock"))
 
-		}if(equipment.equalsIgnoreCase("birdie")||equipment.equalsIgnoreCase("shuttlecock"))
+		{
+			event.getChannel().sendMessage("Your sport is Badminton! :)");
 
-	{
-		event.getChannel().sendMessage("Your sport is Badminton! :)");
+		}
+
+		else {
+			event.getChannel().sendMessage("Your sport is Car Racing/Nascar! :)");
+
+		}
 
 	}
-
-	else
-	{
-		event.getChannel().sendMessage("Your sport is Car Racing/Nascar! :)");
-
-	}
-
-}
 
 }
