@@ -6,13 +6,13 @@ import java.util.Random;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.jointheleague.modules.pojo.HelpEmbed;
 
-public class FortuneTeller extends CustomMessageCreateListener {
+public class StarSignSeeker extends CustomMessageCreateListener {
 	private static final String COMMAND = "!fortune";
 	private boolean fO = false;
 	private int interaction = 0;
 	private String[] objects = {"food", "animal", "TV show", "restaurant", "school subject", "video game", "band", "fictional character", "sport", "season"};
 	
-	 public FortuneTeller (String channelName) {
+	 public StarSignSeeker (String channelName) {
 		super(channelName);
 		helpEmbed = new HelpEmbed(COMMAND, "Use ! + fortune to recieve a prediction about your life!");
 	}
