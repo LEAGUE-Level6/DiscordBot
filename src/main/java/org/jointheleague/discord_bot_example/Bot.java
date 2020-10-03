@@ -58,6 +58,10 @@ public class Bot  {
 		api.addMessageCreateListener(hypeMachine);
 		helpListener.addHelpEmbed(hypeMachine.getHelpEmbed());
 		
+		rockpaperscissors rps = new rockpaperscissors(channelName);
+		api.addMessageCreateListener(rps);
+		helpListener.addHelpEmbed(rps.getHelpEmbed());
+		
 		TextStyler textStyler = new TextStyler(channelName);
 		api.addMessageCreateListener(textStyler);
 		helpListener.addHelpEmbed(textStyler.getHelpEmbed());
