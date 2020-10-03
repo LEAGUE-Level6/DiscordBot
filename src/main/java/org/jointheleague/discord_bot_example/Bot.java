@@ -86,6 +86,11 @@ public class Bot  {
 		api.addMessageCreateListener(newWeather);
 		helpListener.addHelpEmbed(newWeather.getHelpEmbed());
 		
+		AdditionListener additionListener = new AdditionListener(channelName);
+		api.addMessageCreateListener(additionListener);
+		helpListener.addHelpEmbed(additionListener.getHelpEmbed());
+		
+		
 		CoinFlip cp = new CoinFlip(channelName);
 		api.addMessageCreateListener(cp);
 		
