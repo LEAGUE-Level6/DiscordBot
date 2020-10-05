@@ -92,6 +92,10 @@ public class Bot  {
 		RollDie rollDie = new RollDie(channelName);
 		api.addMessageCreateListener(rollDie);
 		
+
+		nicknames nick = new nicknames(channelName);
+		api.addMessageCreateListener(nick);
+		
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
