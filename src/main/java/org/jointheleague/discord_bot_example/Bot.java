@@ -93,6 +93,9 @@ public class Bot  {
 		api.addMessageCreateListener(randomString);
 		helpListener.addHelpEmbed(randomString.getHelpEmbed());
 
+		Bingo bingo = new Bingo(channelName);
+		api.addMessageCreateListener(bingo);
+		helpListener.addHelpEmbed(randomString.getHelpEmbed());
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
