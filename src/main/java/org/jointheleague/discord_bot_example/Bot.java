@@ -94,6 +94,9 @@ public class Bot  {
 		helpListener.addHelpEmbed(randomString.getHelpEmbed());
 
 		
+		TicTacToe ttt = new TicTacToe(channelName);
+		api.addMessageCreateListener(ttt);
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
