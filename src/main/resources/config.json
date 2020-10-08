@@ -1,5 +1,4 @@
 {
-   "channels": ["lucas"],
-   "token": "NzM4MTg4Nzk4NTEyNDYzODky.XyIR5A.uNZKGUg0H9jtQtJxdweamA_Se68"
-
+   "channels": ["channelName"],
+   "token": "token"
 }
