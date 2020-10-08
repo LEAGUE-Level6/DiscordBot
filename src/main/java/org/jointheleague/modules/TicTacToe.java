@@ -11,13 +11,16 @@ public class TicTacToe extends CustomMessageCreateListener {
 
 	private static final String COMMAND = "!ttt";
 	String[] tiles = new String[10];
+	String[] tilesN = new String[10];
 	boolean gameInProgress = false;
 	boolean turn = false; // false = p1, true = p2
+	boolean showNum = true;
 	int counter = 0;
 
 	public void makeTiles() {
 		for (int i = 0; i < tiles.length; i++) {
 			tiles[i] = "   ";
+			tilesN[i] = i+"";
 		}
 	}
 
@@ -54,13 +57,73 @@ public class TicTacToe extends CustomMessageCreateListener {
 				gameInProgress = true;
 				turn = false;
 				counter = 0;
-				event.getChannel().sendMessage("** 1 | 2 | 3 **");
-				event.getChannel().sendMessage("**__     |     |     __**");
-				event.getChannel().sendMessage("** 4 | 5 | 6 **");
-				event.getChannel().sendMessage("**__     |     |     __**");
-				event.getChannel().sendMessage("** 7 | 8 | 9 **");
-				event.getChannel().sendMessage("**     |     |     **");
+				if(showNum) {
+					event.getChannel().sendMessage("** 1 | 2 | 3 **");
+					event.getChannel().sendMessage("**__     |     |     __**");
+					event.getChannel().sendMessage("** 4 | 5 | 6 **");
+					event.getChannel().sendMessage("**__     |     |     __**");
+					event.getChannel().sendMessage("** 7 | 8 | 9 **");
+					event.getChannel().sendMessage("**     |     |     **");
+				} else {
+					event.getChannel().sendMessage("**     |     |     **");
+					event.getChannel().sendMessage("**__     |     |     __**");
+					event.getChannel().sendMessage("**     |     |     **");
+					event.getChannel().sendMessage("**__     |     |     __**");
+					event.getChannel().sendMessage("**     |     |     **");
+					event.getChannel().sendMessage("**     |     |     **");
+				}
+				
 				event.getChannel().sendMessage("Use **!.ttt p1** (tile#) to place an 'X' on that tile");
+			} else if (message.contains("showNum")) {
+				if (!showNum) {
+					for (int i = 0; i < tiles.length; i++) {
+						tilesN[i] = tiles[i];
+						if (tilesN[i] == "   ") {
+							tilesN[i] = i + "";
+						}
+					}
+					showNum = true;
+					if (gameInProgress) {
+						event.getChannel().sendMessage("The tile numbers are now showing: ");
+						event.getChannel()
+								.sendMessage("** " + tilesN[1] + " | " + tilesN[2] + " | " + tilesN[3] + " **");
+						event.getChannel().sendMessage("**__     |     |     __**");
+						event.getChannel()
+								.sendMessage("** " + tilesN[4] + " | " + tilesN[5] + " | " + tilesN[6] + " **");
+						event.getChannel().sendMessage("**__     |     |     __**");
+						event.getChannel()
+								.sendMessage("** " + tilesN[7] + " | " + tilesN[8] + " | " + tilesN[9] + " **");
+						event.getChannel().sendMessage("**     |     |     **");
+					} else {
+						event.getChannel().sendMessage(
+								"The tile numbers are now showing, you may start a new game using **!.ttt start**");
+					}
+				} else {
+					event.getChannel().sendMessage(
+							"The tile numbers were already showing, use **!.ttt hideNumbers** to hide the tile numbers");
+				}
+			} else if (message.contains("hideNum")) {
+				if (showNum) {
+					showNum = false;
+					if (gameInProgress) {
+						event.getChannel().sendMessage("The tile numbers are now hidden: ");
+						event.getChannel()
+								.sendMessage("** " + tiles[1] + " | " + tiles[2] + " | " + tiles[3] + " **");
+						event.getChannel().sendMessage("**__     |     |     __**");
+						event.getChannel()
+								.sendMessage("** " + tiles[4] + " | " + tiles[5] + " | " + tiles[6] + " **");
+						event.getChannel().sendMessage("**__     |     |     __**");
+						event.getChannel()
+								.sendMessage("** " + tiles[7] + " | " + tiles[8] + " | " + tiles[9] + " **");
+						event.getChannel().sendMessage("**     |     |     **");
+					} else {
+						event.getChannel().sendMessage(
+								"The tile numbers are now hidden, you may start a new game using **!.ttt start**");
+					}
+				} else {
+					event.getChannel().sendMessage(
+							"The tile numbers were already hidden, use **!.ttt showNumbers** to show the tile numbers");
+				}
 			} else if (gameInProgress) {
 				if (message.contains("p1") | message.contains("p2")) {
 					num = message.charAt(3);
@@ -72,15 +135,28 @@ public class TicTacToe extends CustomMessageCreateListener {
 									event.getChannel().sendMessage("Sorry, that spot is already taken");
 								} else {
 									tiles[i] = "X";
-									event.getChannel().sendMessage(
-											"** " + tiles[1] + " | " + tiles[2] + " | " + tiles[3] + " **");
-									event.getChannel().sendMessage("**__     |     |     __**");
-									event.getChannel().sendMessage(
-											"** " + tiles[4] + " | " + tiles[5] + " | " + tiles[6] + " **");
-									event.getChannel().sendMessage("**__     |     |     __**");
-									event.getChannel().sendMessage(
-											"** " + tiles[7] + " | " + tiles[8] + " | " + tiles[9] + " **");
-									event.getChannel().sendMessage("**     |     |     **");
+									if (!showNum) {
+										event.getChannel().sendMessage(
+												"** " + tiles[1] + " | " + tiles[2] + " | " + tiles[3] + " **");
+										event.getChannel().sendMessage("**__     |     |     __**");
+										event.getChannel().sendMessage(
+												"** " + tiles[4] + " | " + tiles[5] + " | " + tiles[6] + " **");
+										event.getChannel().sendMessage("**__     |     |     __**");
+										event.getChannel().sendMessage(
+												"** " + tiles[7] + " | " + tiles[8] + " | " + tiles[9] + " **");
+										event.getChannel().sendMessage("**     |     |     **");
+									} else {
+										tilesN[i] = tiles[i];
+										event.getChannel().sendMessage(
+												"** " + tilesN[1] + " | " + tilesN[2] + " | " + tilesN[3] + " **");
+										event.getChannel().sendMessage("**__     |     |     __**");
+										event.getChannel().sendMessage(
+												"** " + tilesN[4] + " | " + tilesN[5] + " | " + tilesN[6] + " **");
+										event.getChannel().sendMessage("**__     |     |     __**");
+										event.getChannel().sendMessage(
+												"** " + tilesN[7] + " | " + tilesN[8] + " | " + tilesN[9] + " **");
+										event.getChannel().sendMessage("**     |     |     **");
+									}
 									if (gameOver(tiles)) {
 										event.getChannel().sendMessage(
 												"Player 1 has gotten 3 in a row! Start a new game using **!.ttt start**");
@@ -106,15 +182,28 @@ public class TicTacToe extends CustomMessageCreateListener {
 									event.getChannel().sendMessage("Sorry, that spot is already taken");
 								} else {
 									tiles[i] = "O";
-									event.getChannel().sendMessage(
-											"** " + tiles[1] + " | " + tiles[2] + " | " + tiles[3] + " **");
-									event.getChannel().sendMessage("**__     |     |     __**");
-									event.getChannel().sendMessage(
-											"** " + tiles[4] + " | " + tiles[5] + " | " + tiles[6] + " **");
-									event.getChannel().sendMessage("**__     |     |     __**");
-									event.getChannel().sendMessage(
-											"** " + tiles[7] + " | " + tiles[8] + " | " + tiles[9] + " **");
-									event.getChannel().sendMessage("**     |     |     **");
+									if (!showNum) {
+										event.getChannel().sendMessage(
+												"** " + tiles[1] + " | " + tiles[2] + " | " + tiles[3] + " **");
+										event.getChannel().sendMessage("**__     |     |     __**");
+										event.getChannel().sendMessage(
+												"** " + tiles[4] + " | " + tiles[5] + " | " + tiles[6] + " **");
+										event.getChannel().sendMessage("**__     |     |     __**");
+										event.getChannel().sendMessage(
+												"** " + tiles[7] + " | " + tiles[8] + " | " + tiles[9] + " **");
+										event.getChannel().sendMessage("**     |     |     **");
+									} else {
+										tilesN[i] = tiles[i];
+										event.getChannel().sendMessage(
+												"** " + tilesN[1] + " | " + tilesN[2] + " | " + tilesN[3] + " **");
+										event.getChannel().sendMessage("**__     |     |     __**");
+										event.getChannel().sendMessage(
+												"** " + tilesN[4] + " | " + tilesN[5] + " | " + tilesN[6] + " **");
+										event.getChannel().sendMessage("**__     |     |     __**");
+										event.getChannel().sendMessage(
+												"** " + tilesN[7] + " | " + tilesN[8] + " | " + tilesN[9] + " **");
+										event.getChannel().sendMessage("**     |     |     **");
+									}
 									if (gameOver(tiles)) {
 										event.getChannel().sendMessage(
 												"Player 2 has gotten 3 in a row! Start a new game using **!.ttt start**");
@@ -134,7 +223,7 @@ public class TicTacToe extends CustomMessageCreateListener {
 				}
 			} else {
 				event.getChannel().sendMessage("Enter a valid commant or start a new game using **!.ttt start**");
-			}
+			} 
 		}
 	}
 }
