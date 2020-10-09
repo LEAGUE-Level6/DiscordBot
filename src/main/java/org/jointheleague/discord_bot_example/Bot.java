@@ -22,13 +22,14 @@ public class Bot  {
 	private String channelName;
 	DiscordApi api;
 	_HelpListener helpListener;
- 
+
 	public Bot(String token, String channelName) {
 		this.token = token;
 		this.channelName = channelName;
 		helpListener = new _HelpListener(channelName);
 	}
 
+	
 	public void connect(boolean printInvite) {
 		
 		api = new DiscordApiBuilder().setToken(token).login().join();
