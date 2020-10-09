@@ -22,7 +22,7 @@ public class Bot  {
 	private String channelName;
 	DiscordApi api;
 	_HelpListener helpListener;
-
+ 
 	public Bot(String token, String channelName) {
 		this.token = token;
 		this.channelName = channelName;
