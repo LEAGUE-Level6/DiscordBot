@@ -9,10 +9,10 @@ import org.jointheleague.modules.pojo.HelpEmbed;
 public class rockpaperscissors extends CustomMessageCreateListener{
 
 	private static final String COMMAND = "!play rock paper scissors";
-	private static final String COMMAND2 = "rock";
-	private static final String COMMAND3 = "paper";
-	private static final String COMMAND4 = "scissors";
-
+	private static final String COMMAND2 = "!ROCK";
+	private static final String COMMAND3 = "!PAPER";
+	private static final String COMMAND4 = "!SCISSORS";
+	String answer;
 	public rockpaperscissors(String channelName) {
 		super(channelName);
 		helpEmbed = new HelpEmbed(COMMAND, "you can play a game of rock paper scissors");
@@ -20,9 +20,8 @@ public class rockpaperscissors extends CustomMessageCreateListener{
 
 	@Override
 	public void handle(MessageCreateEvent event) {
-		String answer = "";
 		if (event.getMessageContent().contains(COMMAND)) {
-			event.getChannel().sendMessage("starting game of rock paper scissors. type in one of the three options");
+			event.getChannel().sendMessage("starting game of rock paper scissors. type in one of three options, write it in capitals please");
 		int number = new Random().nextInt(3);
 		if(number == 0) {
 			answer = "rock";
@@ -31,32 +30,45 @@ public class rockpaperscissors extends CustomMessageCreateListener{
 		}if(number == 2) {
 			answer = "scissors";
 		}
+		System.out.println(number + answer);
 		}
 		if(event.getMessageContent().contains(COMMAND2)) {
-			if(answer == "paper") {
-				event.getChannel().sendMessage("the bot chose paper. its a tie.");
-			}if(answer == "rock") {
-				event.getChannel().sendMessage("the bot chose rock. you win!");
-			}if(answer == "scissors") {
-				event.getChannel().sendMessage("the bot chose scissors. you lose.");
+			event.getChannel().sendMessage("you chose rock");
+			event.getChannel().sendMessage("the bot chose " + answer);
+			if(answer.equals("rock")) {
+				event.getChannel().sendMessage("its a tie");
+			}
+			if(answer.equals("paper")) {
+				event.getChannel().sendMessage("you lost");
+			}
+			if(answer.equals("scissors")) {
+				event.getChannel().sendMessage("you win");
 			}
 		}
 		if(event.getMessageContent().contains(COMMAND3)) {
-			if(answer == "paper") {
-				event.getChannel().sendMessage("the bot chose paper. you lose..");
-			}if(answer == "rock") {
-				event.getChannel().sendMessage("the bot chose rock. its a tie.");
-			}if(answer == "scissors") {
-				event.getChannel().sendMessage("the bot chose scissors. you win!");
+			event.getChannel().sendMessage("you chose paper");
+			event.getChannel().sendMessage("the bot chose " + answer);
+			if(answer.equals("rock")) {
+				event.getChannel().sendMessage("you win");
+			}
+			if(answer.equals("paper")) {
+				event.getChannel().sendMessage("its a tie");
+			}
+			if(answer.equals("scissors")) {
+				event.getChannel().sendMessage("you lose");
 			}
 		}
 		if(event.getMessageContent().contains(COMMAND4)) {
-			if(answer == "paper") {
-				event.getChannel().sendMessage("the bot chose paper. you win!");
-			}if(answer == "rock") {
-				event.getChannel().sendMessage("the bot chose rock. you lose.");
-			}if(answer == "scissors") {
-				event.getChannel().sendMessage("the bot chose scissors. its a tie.");
+			event.getChannel().sendMessage("you chose scissors");
+			event.getChannel().sendMessage("the bot chose " + answer);
+			if(answer.equals("rock")) {
+				event.getChannel().sendMessage("you lose");
+			}
+			if(answer.equals("paper")) {
+				event.getChannel().sendMessage("you win");
+			}
+			if(answer.equals("scissors")) {
+				event.getChannel().sendMessage("its a tie");
 			}
 		}
 		}
