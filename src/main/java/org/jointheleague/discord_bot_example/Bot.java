@@ -92,8 +92,8 @@ public class Bot  {
 		RollDie rollDie = new RollDie(channelName);
 		api.addMessageCreateListener(rollDie);
 		
-		UltraRPS ultraRPS = new UltraRPS(channelName);
-		api.addMessageCreateListener(ultraRPS);
+		SuperComplexRPS superComplexRPS = new SuperComplexRPS(channelName);
+		api.addMessageCreateListener(superComplexRPS);
 		
 		
 		//old way to add listeners 
