@@ -37,10 +37,7 @@ public class nicknames extends CustomMessageCreateListener {
 		} else if (strArray[0].contains(INP)) {
 			//help message
 			event.getChannel().sendMessage("Format your messages like: !nickname ~your name here~");
-		}// else {
-			//error message
-			//event.getChannel().sendMessage("Please format your answers correctly use !helpNickname for instructions");
-		//}
+		}
 	}
 
 }
