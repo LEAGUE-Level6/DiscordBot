@@ -11,6 +11,7 @@ import javax.json.JsonReader;
 
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.jointheleague.modules.pojo.HelpEmbed;
 import org.jointheleague.modules.pojo.OverwatchStatisticsRequest;
 import org.jointheleague.modules.pojo.Rating;
 
@@ -24,6 +25,7 @@ public class OverwatchStatistics extends CustomMessageCreateListener {
 
 	public OverwatchStatistics(String channelName) {
 		super(channelName);
+		helpEmbed = new HelpEmbed(COMMAND, "Gives the Overwatch competitive ranks, the level, and profile image of a player. Type !owstats and the battletag of a player to use the command.");
 	}
 
 	@Override

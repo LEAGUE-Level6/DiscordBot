@@ -45,58 +45,63 @@ public class Bot  {
 
 		OverwatchStatistics owstats = new OverwatchStatistics(channelName);
 		api.addMessageCreateListener(owstats);
+		helpListener.addHelpEmbed(owstats.getHelpEmbed());
     
-		ToDoList list = new ToDoList(channelName);
-		api.addMessageCreateListener(list);
-		helpListener.addHelpEmbed(list.getHelpEmbed());
-
-		HeadlineListener head = new HeadlineListener(channelName);
-		api.addMessageCreateListener(head);
-		helpListener.addHelpEmbed(head.getHelpEmbed());
-
-		RandomNumber randomNumber = new RandomNumber(channelName); //replace with feature class later
-		api.addMessageCreateListener(randomNumber);
-		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
+		ImageLibrary imgs = new ImageLibrary(channelName);
+		api.addMessageCreateListener(imgs);
+		helpListener.addHelpEmbed(imgs.getHelpEmbed());
 		
-		HypeMachine hypeMachine = new HypeMachine(channelName);
-		api.addMessageCreateListener(hypeMachine);
-		helpListener.addHelpEmbed(hypeMachine.getHelpEmbed());
-		
-		TextStyler textStyler = new TextStyler(channelName);
-		api.addMessageCreateListener(textStyler);
-		helpListener.addHelpEmbed(textStyler.getHelpEmbed());
-		
-		Tomagachi tomagachi = new Tomagachi(channelName);
-		api.addMessageCreateListener(tomagachi);
-		helpListener.addHelpEmbed(tomagachi.getHelpEmbed());
-		
-		SetProfilePic setPFP = new SetProfilePic(channelName);
-		api.addMessageCreateListener(setPFP);
-		helpListener.addHelpEmbed(setPFP.getHelpEmbed());
-		
-		ToGif toGif = new ToGif(channelName);
-		api.addMessageCreateListener(toGif);
-		helpListener.addHelpEmbed(toGif.getHelpEmbed());
-		
-		RandomCase randomCase = new RandomCase(channelName);
-		api.addMessageCreateListener(randomCase);
-		helpListener.addHelpEmbed(randomCase.getHelpEmbed());
-		
-		_ApiExampleListener apiExampleListener = new _ApiExampleListener(channelName);
-		api.addMessageCreateListener(apiExampleListener);
-		helpListener.addHelpEmbed(apiExampleListener.getHelpEmbed());
-		
-		NewWeather newWeather = new NewWeather(channelName);
-		api.addMessageCreateListener(newWeather);
-		helpListener.addHelpEmbed(newWeather.getHelpEmbed());
-		
-		CoinFlip cp = new CoinFlip(channelName);
-		api.addMessageCreateListener(cp);
-		
-		RollDie rollDie = new RollDie(channelName);
-		api.addMessageCreateListener(rollDie);
-		
-		
+//		ToDoList list = new ToDoList(channelName);
+//		api.addMessageCreateListener(list);
+//		helpListener.addHelpEmbed(list.getHelpEmbed());
+//
+//		HeadlineListener head = new HeadlineListener(channelName);
+//		api.addMessageCreateListener(head);
+//		helpListener.addHelpEmbed(head.getHelpEmbed());
+//
+//		RandomNumber randomNumber = new RandomNumber(channelName); //replace with feature class later
+//		api.addMessageCreateListener(randomNumber);
+//		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
+//		
+//		HypeMachine hypeMachine = new HypeMachine(channelName);
+//		api.addMessageCreateListener(hypeMachine);
+//		helpListener.addHelpEmbed(hypeMachine.getHelpEmbed());
+//		
+//		TextStyler textStyler = new TextStyler(channelName);
+//		api.addMessageCreateListener(textStyler);
+//		helpListener.addHelpEmbed(textStyler.getHelpEmbed());
+//		
+//		Tomagachi tomagachi = new Tomagachi(channelName);
+//		api.addMessageCreateListener(tomagachi);
+//		helpListener.addHelpEmbed(tomagachi.getHelpEmbed());
+//		
+//		SetProfilePic setPFP = new SetProfilePic(channelName);
+//		api.addMessageCreateListener(setPFP);
+//		helpListener.addHelpEmbed(setPFP.getHelpEmbed());
+//		
+//		ToGif toGif = new ToGif(channelName);
+//		api.addMessageCreateListener(toGif);
+//		helpListener.addHelpEmbed(toGif.getHelpEmbed());
+//		
+//		RandomCase randomCase = new RandomCase(channelName);
+//		api.addMessageCreateListener(randomCase);
+//		helpListener.addHelpEmbed(randomCase.getHelpEmbed());
+//		
+//		_ApiExampleListener apiExampleListener = new _ApiExampleListener(channelName);
+//		api.addMessageCreateListener(apiExampleListener);
+//		helpListener.addHelpEmbed(apiExampleListener.getHelpEmbed());
+//		
+//		NewWeather newWeather = new NewWeather(channelName);
+//		api.addMessageCreateListener(newWeather);
+//		helpListener.addHelpEmbed(newWeather.getHelpEmbed());
+//		
+//		CoinFlip cp = new CoinFlip(channelName);
+//		api.addMessageCreateListener(cp);
+//		
+//		RollDie rollDie = new RollDie(channelName);
+//		api.addMessageCreateListener(rollDie);
+//		
+//		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
