@@ -94,6 +94,8 @@ public class Bot  {
 		
 		pythagcalc pythagCalc = new pythagcalc(channelName);
 		api.addMessageCreateListener(pythagCalc);
+		helpListener.addHelpEmbed(pythagCalc.getHelpEmbed());
+
 
 
 		
