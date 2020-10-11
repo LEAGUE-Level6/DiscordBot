@@ -75,7 +75,7 @@ public class pythagcalc extends CustomMessageCreateListener {
 		
 		else if(stage == 3) {
 
-			
+			stage = 0;
 			BigDecimal aSquared = a.multiply(a);
 			BigDecimal bSquared = b.multiply(b);
 			BigDecimal bothAdded = a.add(b);
