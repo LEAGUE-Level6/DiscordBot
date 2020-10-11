@@ -3,6 +3,15 @@ package org.jointheleague.modules;
 public class ChessPieces {
 	String PieceColor="";
 	String PieceType="";
+	String PieceName="";
+	
+	
+	public ChessPieces(String PieceColor, String PieceType, String PieceName) {
+		
+		this.PieceColor =PieceColor;
+		this.PieceType =PieceType;
+		this.PieceName =PieceName;
+	}
 	
 	public String getPieceColor() {
 		
@@ -22,5 +31,15 @@ public class ChessPieces {
 	public void setPieceType(String PieceType) {
 		
 		this.PieceType=  PieceType;
+	}
+	
+	public void setPieceName(String PieceName) {
+		
+		this.PieceName= PieceName;
+	}
+	
+	public String getPieceName() {
+		return PieceName;
+		
 	}
 }

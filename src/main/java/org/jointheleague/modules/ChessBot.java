@@ -36,13 +36,7 @@ public class ChessBot extends CustomMessageCreateListener{
 			
 		}
 		
-		if (event.getMessageContent().contains("-white")) {
-			WhitePlayer+=event.getMessageAuthor();
-			
-		}
-		else if (event.getMessageContent().contains("-black")) {
-			BlackPlayer+=event.getMessageAuthor();
-		}
+		
 		
 		if (event.getMessageContent().contains("-move")) {
 			String Message= event.getMessageContent();
@@ -67,7 +61,7 @@ public class ChessBot extends CustomMessageCreateListener{
 				String Board="";
 				for (int i = 0; i < ChessBoard.length; i++) {
 					for (int j = 0; j < ChessBoard[i].length; j++) {
-						Board+=ChessBoard[i][j];
+						Board+=ChessBoard[i][j].PieceType;
 						
 						  if (j==7) { Board+=" \n"; }
 						 
@@ -85,100 +79,89 @@ public class ChessBot extends CustomMessageCreateListener{
 			for (int j = 0; j <ChessBoard[i].length-1; j+=2) {
 			if(i%2==0 && j%2==0) {
 				
-					ChessBoard[i][j].setPieceType(WhiteSquare);
-					ChessBoard[i][j].setPieceColor(null);
-					ChessBoard[i][j+1].setPieceType(BlackSquare);
-					ChessBoard[i][j+1].setPieceColor(null);
+					ChessBoard[i][j]= new ChessPieces(white,WhiteSquare,"tile");
+					
+					ChessBoard[i][j+1]=new ChessPieces(black,BlackSquare,"tile");
 					
 				
 			}
 				else {
-					ChessBoard[i][j].setPieceType(BlackSquare);
-					ChessBoard[i][j].setPieceColor(null);
-					ChessBoard[i][j+1].setPieceType(WhiteSquare);
-					ChessBoard[i][j+1].setPieceColor(null);
+					ChessBoard[i][j]=new ChessPieces(black,BlackSquare,"tile");
+					ChessBoard[i][j+1]= new ChessPieces(white,WhiteSquare,"tile");
 				}
 			}
 		}
 		
 		
 				//black rook
-				ChessBoard [0][0].setPieceType("  ♜  ");
-				ChessBoard [0][7].setPieceType("  ♜  ");
 				
-				ChessBoard [0][0].setPieceColor(black);
-				ChessBoard [0][7].setPieceColor(black);
+				ChessBoard [0][0]=new ChessPieces(black,"  ♜  ","rook");
+				ChessBoard [0][7]=new ChessPieces(black,"  ♜  ","rook");
 				
 				//black knight
-				ChessBoard [0][1].setPieceType(" ♞  ");
-				ChessBoard [0][6].setPieceType(" ♞  ");
 				
-				ChessBoard [0][1].setPieceColor(black);
-				ChessBoard [0][6].setPieceColor(black);
+				
+				ChessBoard [0][1]=new ChessPieces(black," ♞  ", "knight");
+				ChessBoard [0][6]=new ChessPieces(black," ♞  ","knight");
 				
 				//black bishop
-				ChessBoard [0][2].setPieceType("  ♝  ");
-				ChessBoard [0][5].setPieceType("  ♝  ");
 				
-				ChessBoard [0][2].setPieceColor(black);
-				ChessBoard [0][5].setPieceColor(black);
+				
+				ChessBoard [0][2]=new ChessPieces(black,"  ♝  ", "bishop");
+				ChessBoard [0][5]=new ChessPieces(black,"  ♝  ", "bishop");
 				
 				//black queen
-				ChessBoard [0][3].setPieceType("  ♛  ");
 				
-				ChessBoard [0][3].setPieceColor(black);
+				
+				ChessBoard [0][3]=new ChessPieces(black,"  ♛  ", "queen");
 				
 				//black king
-				ChessBoard [0][4].setPieceType("  ♚  ");
 				
-				ChessBoard [0][4].setPieceColor(black);
+				
+				ChessBoard [0][4]=new ChessPieces(black,"  ♚  ", "king");
 				
 				//black pawns
 				for (int i = 0; i < 8; i++) {
-					ChessBoard[1][i].setPieceType(" ♟ ");
+				
 					
-					ChessBoard[1][i].setPieceColor(black);
+					ChessBoard[1][i]=new ChessPieces(black," ♟ ", "pawn");
 				}
 				
 				
 				
 				
 				//White rook
-				ChessBoard [7][0].setPieceType("  ♖  ");
-				ChessBoard [7][7].setPieceType("  ♖  ");
 				
-				ChessBoard [7][0].setPieceColor(white);
-				ChessBoard [7][7].setPieceColor(white);
+				
+				ChessBoard [7][0]= new ChessPieces(white,"  ♖  ","rook");
+				ChessBoard [7][7]= new ChessPieces(white,"  ♖  ", "rook");
 						
 				//white knight
-				ChessBoard [7][1].setPieceType("  ♘  ");
-				ChessBoard[7][6].setPieceType("  ♘  ");
 				
-				ChessBoard [7][1].setPieceColor(white);
-				ChessBoard[7][6].setPieceColor(white);
+				ChessBoard [7][1]= new ChessPieces(white,"  ♘  ","knight");
+				ChessBoard[7][6]= new ChessPieces(white,"  ♘  ","knight");
 						
 				//white bishop
-				ChessBoard [7][2].setPieceType("  ♗  ");
-				ChessBoard [7][5].setPieceType("  ♗  ");
 				
-				ChessBoard [7][2].setPieceColor(white);
-				ChessBoard [7][5].setPieceColor(white);
+				
+				ChessBoard [7][2]= new ChessPieces(white,"  ♗  ","bishop");
+				ChessBoard [7][5]= new ChessPieces(white,"  ♗  ", "bishop");
 						
 				//white queen
-				ChessBoard [7][3].setPieceType("  ♕  ");
 				
-				ChessBoard [7][3].setPieceColor(white);
+				
+				ChessBoard [7][3]= new ChessPieces(white,"  ♕  ","queen");
 						
 				//white king
-				ChessBoard [7][4].setPieceType("  ♔  ");
 				
-				ChessBoard [7][4].setPieceColor(white);
+				
+				ChessBoard [7][4]= new ChessPieces(white,"  ♔  ","king");
 				
 				//white pawns
 				for (int i = 0; i < 8; i++) {
-					ChessBoard[6][i].setPieceType("  ♙  ");
 					
-					ChessBoard[6][i].setPieceColor(white);
+					
+					ChessBoard[6][i]= new ChessPieces(white,"  ♙  ","pawn");
 				}
 				
 				
@@ -187,29 +170,31 @@ public class ChessBot extends CustomMessageCreateListener{
 	}
 	
 	public void MovePieces(int OgRow, int OgColumn, int NewRow, int NewColumn) { 
-		String TempPiece= new String(ChessBoard[OgRow][OgColumn]);
 		
+		ChessPieces TempPiece = ChessBoard[OgRow][OgColumn];
 		
 		ChessBoard[NewRow][NewColumn]=TempPiece;
 		
 		if(OgRow%2==0 && OgColumn%2==0) {
-			ChessBoard[OgRow][OgColumn]= WhiteSquare;
+			ChessBoard[OgRow][OgColumn]= new ChessPieces(white, WhiteSquare,"tile");
 			
 		}
 		else if(OgRow%2!=0 && OgColumn%2==0 ) {
-			ChessBoard[OgRow][OgColumn]= BlackSquare;
+			ChessBoard[OgRow][OgColumn]= new ChessPieces(black, BlackSquare,"tile");
 			
 		}
 		else if (OgRow%2==0 && OgColumn%2!=0 ) {
-			ChessBoard[OgRow][OgColumn]= BlackSquare;
+			ChessBoard[OgRow][OgColumn]= new ChessPieces(black, BlackSquare,"tile");
+			
 		}
 		else if (OgRow%2!=0 && OgColumn%2!=0 ) {
-			ChessBoard[OgRow][OgColumn]= WhiteSquare;
+			ChessBoard[OgRow][OgColumn]= new ChessPieces(white, WhiteSquare, "tile");
 		}
 		
 	}
 	
 	public void TakePiece() {
+		
 		
 		
 	}
