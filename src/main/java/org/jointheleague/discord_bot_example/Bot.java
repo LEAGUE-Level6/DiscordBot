@@ -133,5 +133,6 @@ public class Bot  {
 		api.addMessageCreateListener(new GetTime(channelName));
 		api.addMessageCreateListener(new ScreenCapture(channelName));
 		api.addMessageCreateListener(new StarSignSeeker(channelName));
+		api.addMessageCreateListener(new War(channelName));
 	}
 }

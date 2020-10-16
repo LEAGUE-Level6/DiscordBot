@@ -6,14 +6,14 @@ import java.util.Random;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.jointheleague.modules.pojo.HelpEmbed;
 
-public class StarSignSeeker extends CustomMessageCreateListener {
+public class War extends CustomMessageCreateListener {
 	private static final String COMMAND = "!fortune";
 	private boolean fO = false;
 	private int interaction = 0;
 	String month;
 	String object;
 	
-	 public StarSignSeeker (String channelName) {
+	 public War (String channelName) {
 		super(channelName);
 		helpEmbed = new HelpEmbed(COMMAND, "Use ! + sign to recieve a prediction about your life!");
 	}
@@ -25,10 +25,11 @@ public class StarSignSeeker extends CustomMessageCreateListener {
 		}
 		
 		String a = event.getMessageContent();
-		if(a.equals("!birthstone")) {
+		if(a.equals("!War")) {
+
 			System.out.println("GOT MESSAGE");
 			interaction = 1;
-			event.getChannel().sendMessage("~Greetings, "+event.getMessageAuthor().getName() + ", I will tell you your birthstone and make a prediction about you. Tell me, what is your birth month?");
+			event.getChannel().sendMessage("🂡");
 		}
 		else if (interaction==1) {
 				month = event.getMessageContent();
@@ -99,4 +100,3 @@ public class StarSignSeeker extends CustomMessageCreateListener {
 		
 	}
 }
-
