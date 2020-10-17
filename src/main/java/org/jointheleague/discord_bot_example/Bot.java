@@ -89,9 +89,12 @@ public class Bot  {
 		CoinFlip cp = new CoinFlip(channelName);
 		api.addMessageCreateListener(cp);
 	
-    RandomString randomString = new RandomString(channelName);
+		RandomString randomString = new RandomString(channelName);
 		api.addMessageCreateListener(randomString);
 		helpListener.addHelpEmbed(randomString.getHelpEmbed());
+		
+		MafiaPlayer mafiaPlayer = new MafiaPlayer(channelName);
+		api.addMessageCreateListener(mafiaPlayer);
 
 		
 		//old way to add listeners 
