@@ -3,17 +3,18 @@ package org.jointheleague.discord_bot_example;
 import org.javacord.api.DiscordApi;
 
 import org.javacord.api.DiscordApiBuilder;
+import org.jointheleague.modules.*;
+import org.jointheleague.modules._HelpListener;
 
 /**
  * Launches all of the listeners for one channel.
  * @author keithgroves and https://tinystripz.com
  *
  */
-import org.jointheleague.modules.*;
 
 
 
-public class Bot  {
+public class Bot {
 	
 	// The string to show the custom :vomiting_robot: emoji
 	public static String emoji = "<:vomiting_robot:642414033290657803>";
@@ -92,6 +93,10 @@ public class Bot  {
     RandomString randomString = new RandomString(channelName);
 		api.addMessageCreateListener(randomString);
 		helpListener.addHelpEmbed(randomString.getHelpEmbed());
+		
+		WordSearchPuzzleGenerator wspg = new WordSearchPuzzleGenerator(channelName);
+		api.addMessageCreateListener(wspg);
+		helpListener.addHelpEmbed(wspg.getHelpEmbed());
 
 		
 		//old way to add listeners 
