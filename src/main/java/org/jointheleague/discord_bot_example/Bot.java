@@ -92,6 +92,10 @@ public class Bot  {
     RandomString randomString = new RandomString(channelName);
 		api.addMessageCreateListener(randomString);
 		helpListener.addHelpEmbed(randomString.getHelpEmbed());
+		
+		MaxTicTacToe mttt = new MaxTicTacToe(channelName);
+		api.addMessageCreateListener(mttt);
+		helpListener.addHelpEmbed(mttt.getHelpEmbed());
 
 		
 		//old way to add listeners 
