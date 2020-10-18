@@ -18,8 +18,9 @@ public class ImageLibrary extends CustomMessageCreateListener {
 	private static final String COMMAND = "!image";
 	BufferedReader br = null;
 	BufferedWriter bw = null;
-	String filePath = System.getProperty("user.dir") + "hashmap-data.txt";
+	String filePath = System.getProperty("user.dir") + "\\src\\main\\java\\org\\jointheleague\\modules\\hasmap-data.txt";
 	File file = new File(filePath);
+	String[] fileTypes = {".png", ".jpg", ".jpeg", ".gif"};
 
 	public ImageLibrary(String channelName) {
 		super(channelName);
@@ -64,9 +65,11 @@ public class ImageLibrary extends CustomMessageCreateListener {
 					if (images.size() > 0) {
 						if (images.containsKey(name)) {
 							event.getChannel().sendMessage("This name is already in use. Please use a different name.");
-						} else {
+						} else if(name.contains(".png") || name.contains(".jpg") || name.contains(".jpeg") || name.contains(".gif")){
 							images.put(name, url);
 							event.getChannel().sendMessage("Added " + url + " with the name of " + name);
+						} else {
+							event.getChannel().sendMessage("This is not an image url.");
 						}
 					} else {
 						images.put(name, url);
@@ -104,12 +107,14 @@ public class ImageLibrary extends CustomMessageCreateListener {
 				if (phrase.length > 2) {
 					event.getChannel().sendMessage(
 							"Incorrect usage of the command. Correct usages: !image add <url> <name>  !image view <name>  !image remove <name>  !image names");
-				} else {
+				} else if (!(images.size() == 0)){
 					String names = "";
 					for (Map.Entry<String, String> entry : images.entrySet()) {
 						names += entry.getKey() + "\n";
 					}
 					event.getChannel().sendMessage(names);
+				} else {
+					event.getChannel().sendMessage("There is currently no stored images.");
 				}
 			}
 			try {
