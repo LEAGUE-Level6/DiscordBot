@@ -184,50 +184,31 @@ public class NHLApi extends CustomMessageCreateListener {
 			Example example = gson.fromJson(userJSON.toString(), Example.class);
 
 			// get the first article (these are just java objects now)
-			Team teams = (Team) example.getTeams();
+			List<Team> teams = example.getTeams();
 
 			// get the title of the article
-			//Roster roster = teams.getRoster();
+			Roster roster;
+			for (int i = 0; i < teams.size(); i++) {
+			 roster = teams.get(i).getRoster();
+			}
 
 			// get the content of the article
-			//Roster_ roster_ = (Roster_) roster.getRoster();
-		//	String jerseyNum = roster_.getJerseyNumber();
-			//Person person = roster_.getPerson();
-			//String fullName = person.getFullName();
+			Roster_ roster_ = (Roster_) roster.getRoster();
+			String jerseyNum = roster_.getJerseyNumber();
+			Person person = roster_.getPerson();
+			String fullName = person.getFullName();
 
-		//	Position position = roster_.getPosition();
-		//	String positionAbbrev = position.getAbbreviation();
-		//	String p = position.getType();
-//			String p1 = position.getName();
+			Position position = roster_.getPosition();
+			String positionAbbrev = position.getAbbreviation();
+			String p = position.getType();
+			String p1 = position.getName();
 
-			String message = "test message";
-			//"The roster for " + team + " : Jersey Number: " + jerseyNum + " Name: " + fullName
-		//	+ " position: " + positionAbbrev + p + p1
+			String message = "The roster for " + team + " : Jersey Number: " + jerseyNum + " Name: " + fullName
+					+ " position: " + positionAbbrev + p + p1;
+			
 			// send the message
-//			return message;
-//			public Person getPerson() {
-//				return person;
-//				}
-//
-//				public void setPerson(Person person) {
-//				this.person = person;
-//				}
-//
-//				public String getJerseyNumber() {
-//				return jerseyNumber;
-//				}
-//
-//				public void setJerseyNumber(String jerseyNumber) {
-//				this.jerseyNumber = jerseyNumber;
-//				}
-//
-//				public Position getPosition() {
-//				return position;
-//				}
-//
-//				public void setPosition(Position position) {
-//				this.position = position;
-//				}
+		return message;
+
 
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
