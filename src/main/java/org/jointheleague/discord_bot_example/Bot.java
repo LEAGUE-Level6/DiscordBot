@@ -89,6 +89,18 @@ public class Bot  {
 		CoinFlip cp = new CoinFlip(channelName);
 		api.addMessageCreateListener(cp);
 		
+		TicTacToe ttt = new TicTacToe(channelName);
+		api.addMessageCreateListener(ttt);
+		helpListener.addHelpEmbed(ttt.getHelpEmbed());
+		
+		CoinTossGame ctg = new CoinTossGame(channelName);
+		api.addMessageCreateListener(ctg);
+		helpListener.addHelpEmbed(ctg.getHelpEmbed());
+		
+		NHLApi nhl = new NHLApi(channelName);
+		api.addMessageCreateListener(nhl);
+		helpListener.addHelpEmbed(nhl.getHelpEmbed());
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));

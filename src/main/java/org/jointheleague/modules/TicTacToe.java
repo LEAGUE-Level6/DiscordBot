@@ -282,25 +282,25 @@ public class TicTacToe extends CustomMessageCreateListener {
 		if (topLeft && topMiddle && topRight) {
 			winStage(event);
 		}
-		if (middleLeft && middleMiddle && middleRight) {
+		else if (middleLeft && middleMiddle && middleRight) {
 			winStage(event);
 		}
-		if (bottomLeft && bottomMiddle && bottomRight) {
+		else if (bottomLeft && bottomMiddle && bottomRight) {
 			winStage(event);
 		}
-		if (topLeft && middleLeft && bottomLeft) {
+		else if (topLeft && middleLeft && bottomLeft) {
 			winStage(event);
 		}
-		if (topMiddle && middleMiddle && bottomMiddle) {
+		else if (topMiddle && middleMiddle && bottomMiddle) {
 			winStage(event);
 		}
-		if (topRight && middleRight && bottomRight) {
+		else if (topRight && middleRight && bottomRight) {
 			winStage(event);
 		}
-		if (topLeft && middleMiddle && bottomRight) {
+		else if (topLeft && middleMiddle && bottomRight) {
 			winStage(event);
 		}
-		if (topRight && middleMiddle && bottomLeft) {
+		else if (topRight && middleMiddle && bottomLeft) {
 			winStage(event);
 		}
 	}
