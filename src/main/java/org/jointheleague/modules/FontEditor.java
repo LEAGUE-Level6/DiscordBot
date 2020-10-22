@@ -1,5 +1,7 @@
 package org.jointheleague.modules;
 
+import java.util.ArrayList;
+
 import org.javacord.api.event.message.MessageCreateEvent;
 
 import net.aksingh.owmjapis.api.APIException;
@@ -17,7 +19,9 @@ public class FontEditor extends CustomMessageCreateListener {
 			int comma =x.indexOf(',');
 				String message=x.substring(comma+1,x.length());
 				String finalMessage=message.trim();
-				String sendMessage = getSpacing(finalMessage);
+				for(int i = 0; i<getSpacing(finalMessage).size();i++) {
+				event.getChannel().sendMessage(getSpacing(finalMessage).get(i));
+				}
 			/*	if(finalMessage.length()>12) {
 					for(int i =1;i<finalMessage.length();i++) {
 						if(i%12==0) {
@@ -36,18 +40,36 @@ public class FontEditor extends CustomMessageCreateListener {
 			}*/
 		}
 	}
-	String getSpacing(String s) {
+	ArrayList<String> getSpacing(String s) {
 		
-		if(s.length()>12) {
+		ArrayList<String> sentences = new ArrayList<String>(); 
 			for(int i = 1;i<s.length();i++) {
-				if(i%13==0&&s.charAt(i)==' ') {
-					String sub =s.substring(i-13, i);
-					
-				}
+				boolean ifSpace = false; 
+				 if(i%13==0) {
+					 System.out.println("for lop");
+					int x = i; 
+					 while(!ifSpace) {
+						 System.out.println("while loop");
+						 if(s.charAt(i)==' ') {
+							 ifSpace=true;
+						 }
+						 else {
+							 x--;
+						 }
+					 }
+					 String sub = s.substring(0,x);
+					 sentences.add(getLetters(sub));
+					 s= s.substring(i, s.length());
+					 System.out.println("this is sub: "+sub);
+				 }
 			}
-		}
-		return "";
+			if(s.length()<=13) {
+			System.out.println("short sentence");
+			sentences.add(getLetters(s));
+			}
+		return sentences;
 	}
+
 	String getLetters(String s) {
 		String message="";
 		String messageLineOne="";
