@@ -95,6 +95,9 @@ public class Bot  {
 		HamiltonQuotes hamjams = new HamiltonQuotes(channelName);
 		api.addMessageCreateListener(hamjams);
 		
+		NegativityDetector negdetector = new NegativityDetector(channelName);
+		api.addMessageCreateListener(negdetector);
+		
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
