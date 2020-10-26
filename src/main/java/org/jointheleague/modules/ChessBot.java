@@ -1,5 +1,7 @@
 package org.jointheleague.modules;
 
+import java.util.ArrayList;
+
 import org.javacord.api.event.message.MessageCreateEvent;
 
 import net.aksingh.owmjapis.api.APIException;
@@ -9,10 +11,15 @@ public class ChessBot extends CustomMessageCreateListener{
 	String BlackSquare=" :black_medium_square: ";
 	String WhiteSquare=" :white_medium_square: ";
 	ChessPieces [][] ChessBoard= new ChessPieces [8][8];
+	ArrayList<ChessPieces> TakenPieces= new  ArrayList<ChessPieces>();
 	String BlackPlayer="";
 	String WhitePlayer="";
 	String black="black";
 	String white="white";
+	int OgRow= 0;
+	int OgColumn=0;
+	int NewRow = 0;
+	int NewColumn = 0;
 	public ChessBot(String channelName) {
 		super(channelName);
 		// TODO Auto-generated constructor stub
@@ -41,12 +48,13 @@ public class ChessBot extends CustomMessageCreateListener{
 		if (event.getMessageContent().contains("-move")) {
 			String Message= event.getMessageContent();
 			
-			int OgRow= Integer.parseInt(Message.substring(6, 7));
-			int OgColumn= Integer.parseInt(Message.substring(7, 8));
-			int NewRow =Integer.parseInt(Message.substring(12, 13));
-			int NewColumn =Integer.parseInt(Message.substring(13, 14));
+			 OgRow+= Integer.parseInt(Message.substring(6, 7));
+			 OgColumn+= Integer.parseInt(Message.substring(7, 8));
+			 NewRow +=Integer.parseInt(Message.substring(12, 13));
+			 NewColumn +=Integer.parseInt(Message.substring(13, 14));
 			
-			MovePieces(OgRow,OgColumn,NewRow,NewColumn);
+			 TakePiece();
+			 MovePieces(OgRow,OgColumn,NewRow,NewColumn);
 			
 			event.getChannel().sendMessage(SpawnChessBoard());
 		}
@@ -194,7 +202,17 @@ public class ChessBot extends CustomMessageCreateListener{
 	}
 	
 	public void TakePiece() {
-		
+		 
+		for (int i = 0; i < ChessBoard.length; i++) {
+			for (int j = 0; j < ChessBoard[i].length; j++) {
+				if (OgRow==NewRow && OgColumn==NewColumn) {
+					if (!ChessBoard[OgRow][OgColumn].PieceColor.equals(ChessBoard[NewRow][NewColumn])) {
+						TakenPieces.add(ChessBoard[NewRow][NewColumn]);
+						
+					}
+				}
+			}
+		}
 		
 		
 	}
