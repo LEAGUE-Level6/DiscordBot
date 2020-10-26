@@ -16,9 +16,10 @@ public class Bingo extends CustomMessageCreateListener {
 	ArrayList<Integer> randomNumbers = new ArrayList<Integer>(); // keep numbers the same
 	ArrayList<Integer> randomNumArr; // remove numbers from
 	int random;
+	int index;
 	String discordCard = "\n\t  ";
-	String newNumber = "";
-	
+	String newOutput = "";
+
 	public Bingo(String channelName) {
 		super(channelName);
 
@@ -27,9 +28,9 @@ public class Bingo extends CustomMessageCreateListener {
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		String message = event.getMessageContent();
+		Random r = new Random();
 
 		if (message.equalsIgnoreCase("!bingo")) {
-
 			while (randomNumbers.size() < 60) {
 				random = (int) (Math.random() * 99 + 1);
 				if (!randomNumbers.contains(random)) {
@@ -58,12 +59,49 @@ public class Bingo extends CustomMessageCreateListener {
 
 			event.getChannel().sendMessage(discordCard);
 		}
-		
+
 		if (message.equalsIgnoreCase("!new")) {
-			randomNumArr.get(random);
-			randomNumArr.remove(random);
-			newNumber += random;
-			event.getChannel().sendMessage(newNumber);
+			//getting the index of a random number from the arraylist with all of the numbbers
+			index = r.nextInt(randomNumbers.size());
+			int newRandom = randomNumbers.get(index);
+			//puts 0 in front of single digits
+			if (newRandom > 9) {
+				newOutput += newRandom;
+			} else {
+				newOutput += "0" + newRandom;
+			}
+			//sends the new number to the discord chat
+			event.getChannel().sendMessage(newOutput);
+
+			// using for loop to find index of the new random number (newOutput)
+			for (int i = 0; i < bingoCard.length; i++) {
+				for (int j = 0; j < bingoCard[i].length; j++) {
+					// if the bingo card has the number in the card, replace it with a check mark
+					if (bingoCard[i][j].contains(newOutput)) {
+						bingoCard[i][j] = bingoCard[i][j].replace(newOutput, ":white_check_mark:");
+						updateDiscordCard();
+						event.getChannel().sendMessage(discordCard);
+					}
+				}
+			}
+
+			System.out.println("no match");
+
+			// removes the new random number from the array and sets the text equal to an
+			// empty String
+			randomNumbers.remove(index);
+			newOutput = "";
+		}
+	}
+
+	// updates the discord card by adding the numbers to the discordCard string
+	public void updateDiscordCard() {
+		discordCard = "";
+		for (int i = 0; i < bingoCard.length; i++) {
+			for (int j = 0; j < bingoCard[i].length; j++) {
+				discordCard += bingoCard[i][j] + "   ";
+			}
+			discordCard += "\n";
 		}
 	}
 }
