@@ -100,8 +100,8 @@ public class Bot  {
 //		
 //		RollDie rollDie = new RollDie(channelName);
 //		api.addMessageCreateListener(rollDie);
-//		
-//		
+		
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
