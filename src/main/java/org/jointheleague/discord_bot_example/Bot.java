@@ -42,7 +42,6 @@ public class Bot  {
 		
 		//add Listeners
 		
-
 		OverwatchStatistics owstats = new OverwatchStatistics(channelName);
 		api.addMessageCreateListener(owstats);
 		helpListener.addHelpEmbed(owstats.getHelpEmbed());
@@ -100,7 +99,6 @@ public class Bot  {
 //		
 //		RollDie rollDie = new RollDie(channelName);
 //		api.addMessageCreateListener(rollDie);
-		
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
