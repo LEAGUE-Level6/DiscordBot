@@ -1,5 +1,7 @@
 package org.jointheleague.modules;
 
+import java.util.Random;
+
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.jointheleague.modules.pojo.HelpEmbed;
 
@@ -25,20 +27,34 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener{
 				now++;
 			}
 		}
-		System.out.println(now + " words");
-		String[] words = new String[now];
-		int o = -1;
-		for(int n = 0; n < response.length(); n++) {
-			if(response.charAt(n)==',') {
-				o++;
-				words[o] = response.substring(0, response.indexOf(','));
-				//response = response.substring(response.indexOf(',')+1, response.length());
-			}
-		}
-		for(int i = 0; i < words.length; i++) {
+		//System.out.println(now + " words");
+		String[] words = response.split(",");
+		
+		for(int i = 0; i < words.length;i++) {
 			System.out.println(words[i]);
 		}
+		int bruh[] = new int[words.length];
+		for(int i = 0; i < bruh.length; i++) {
+			bruh[i] = new Random().nextInt(3);
+		}
+		// 0 = vertical, 1 = horizontal, 2 = diagonal
 		char[][] puzzle = new char[10][10];
+		for(int i = 0; i < puzzle.length; i++) {
+			for(int j = 0; j < puzzle[i].length; j++) {
+				//puzzle[i][j] = 
+			}
+		}
+		for(int p = 0; p < words.length; p++) {
+			
+			if(bruh[p] == 0) {
+			char j[] = words[p].toCharArray();
+			int gaaah = new Random().nextInt(10);
+				for(int i = 0; i < j.length; i++) {
+			puzzle[i][gaaah] = j[i];
+			}
+			}
+	
+		}
 			}
 		}
 		
