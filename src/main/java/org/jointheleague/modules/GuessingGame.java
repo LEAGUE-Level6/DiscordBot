@@ -17,6 +17,7 @@ public class GuessingGame extends CustomMessageCreateListener {
 	int upperBound;
 	int numberToGuess;
 	int guessCount = 0;
+	String COMMAND = "?guessgame";
 
 	public GuessingGame(String channelName) {
 		super(channelName);
@@ -31,13 +32,6 @@ public class GuessingGame extends CustomMessageCreateListener {
 		if (!event.getMessageAuthor().isYourself()) {
 
 			String command = event.getMessageContent().toLowerCase();
-
-			if (command.contains("?help")) {
-
-				event.getChannel().sendMessage(
-						"``` ?guessgame x y: starts a game with range from x to y (inclusive)\n?jpegify: makes the last image sent very low quality```");
-
-			}
 
 			// starts game
 			if (command.contains("?guessgame")) {
@@ -62,9 +56,10 @@ public class GuessingGame extends CustomMessageCreateListener {
 								+ player.getIdAsString() + ">");
 
 					} catch (Exception e) {
-						event.getChannel().sendMessage("@" + player.getDiscriminatedName()
-								+ "Please type the upper and lower bounds of my range of numbers like so:\n`?guessgame x y`");
+						event.getChannel().sendMessage("Please type the upper and lower bounds of my range of numbers like so:\n`?guessgame x y`. Also, don't make the upper limit too high!");
 					}
+					
+					// game already going?	
 				} else {
 					
 					event.getChannel().sendMessage("A game is already in progress. Type ?endgame to end the current game.");
@@ -72,13 +67,13 @@ public class GuessingGame extends CustomMessageCreateListener {
 			}
 			
 			if (command.contains("?endgame") && gameInSession) {
-				
+
 				gameInSession = false;
 				guessCount = 0;
 				
 			}
 
-			// game
+			// game itself
 			if (gameInSession) {
 				if (command.contains("?guess") && !command.contains("?guessgame")) {
 					if (checkAuthor(player, event)) {

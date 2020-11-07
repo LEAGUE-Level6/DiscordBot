@@ -47,7 +47,7 @@ public class PEMDASListener extends CustomMessageCreateListener{
 		correctSyntax = true;
 		explain = false;
 		publicEvent = event;
-		if(!event.getMessageAuthor().getIdAsString().equals(""+botId)) {
+		if(!event.getMessageAuthor().isYourself()) {
 			String s = event.getMessageContent();
 			if(s.substring(s.length()-1).equals("=")||s.substring(s.length()-1).equals("= ")) {
 				String equation = s.substring(0,s.length()-1);
