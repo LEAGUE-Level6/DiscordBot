@@ -6,6 +6,7 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.MessageAuthor;
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.jointheleague.modules.pojo.HelpEmbed;
 
 import net.aksingh.owmjapis.api.APIException;
 
@@ -21,8 +22,10 @@ public class GuessingGame extends CustomMessageCreateListener {
 
 	public GuessingGame(String channelName) {
 		super(channelName);
-
-		// TODO Auto-generated constructor stub
+		
+			helpEmbed = new HelpEmbed(COMMAND,
+					"Give the bot the upper and lower bounds of its range of numbers it can pick from like so:\n`?guessgame x y`");
+		
 	}
 
 	@Override
