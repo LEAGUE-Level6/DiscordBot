@@ -92,6 +92,10 @@ public class Bot  {
     RandomString randomString = new RandomString(channelName);
 		api.addMessageCreateListener(randomString);
 		helpListener.addHelpEmbed(randomString.getHelpEmbed());
+		
+		Gomoku g = new Gomoku(channelName);
+		api.addMessageCreateListener(cp);
+		helpListener.addHelpEmbed(g.getHelpEmbed());
 
 		
 		//old way to add listeners 
