@@ -29,19 +29,20 @@ public class War extends CustomMessageCreateListener {
 		ArrayList<Integer> cards = new ArrayList<Integer>();
 		ArrayList<Integer> pD = new ArrayList<Integer>();
 		ArrayList<Integer> bD = new ArrayList<Integer>();
-		for(int i = 1; i <= 10; i++) {
+		for(int i = 1; i <= 13; i++) {
 			for(int j = 0; j < 4; j++) {
 				cards.add(i);	
 			}
 		}	
-		for(int i = 0; i < cards.size()/2; i++) {
-			int index = new Random().nextInt(40-i);
+		int half = cards.size()/2;
+		for(int i = 0; i < half; i++) {
+			int index = new Random().nextInt(half-i);
 			pD.add(cards.get(index));
 			System.out.println("ADDING "+cards.get(index)+" to player deck");
 			cards.remove(index);
 		}
-		for(int i = 0; i < 20; i++) {
-			int index = new Random().nextInt(20-i);
+		for(int i = 0; i < half; i++) {
+			int index = new Random().nextInt(half-i);
 			bD.add(cards.get(index));
 			cards.remove(index);
 		}
@@ -55,7 +56,7 @@ public class War extends CustomMessageCreateListener {
 		if(a.equals("flip")) {
 			System.out.println("FLIP RESISTERED");
 			event.getChannel().sendMessage("```Your card:   "+pD.get(turns)+"\nBot card:   "+bD.get(turns)+"```");
-			if(pD.get(turns)>(pD.get(turns))) {
+			if(pD.get(turns)>(bD.get(turns))) {
 				event.getChannel().sendMessage("```Your card was greater than the Bot's! You win the round! Points: 1```");
 			}
 			else {
