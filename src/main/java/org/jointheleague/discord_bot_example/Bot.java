@@ -92,6 +92,13 @@ public class Bot  {
 		RollDie rollDie = new RollDie(channelName);
 		api.addMessageCreateListener(rollDie);
 		
+		testFeature feature = new testFeature(channelName);
+		api.addMessageCreateListener(feature);
+		helpListener.addHelpEmbed(feature.getHelpEmbed());
+		
+		Minesweeper minesweeper = new Minesweeper(channelName);
+		api.addMessageCreateListener(minesweeper);
+		helpListener.addHelpEmbed(minesweeper.getHelpEmbed());
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
