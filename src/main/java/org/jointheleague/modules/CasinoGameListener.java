@@ -32,28 +32,28 @@ public class CasinoGameListener extends CustomMessageCreateListener{
 
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
-		String message = event.getMessageContent();
-		//System.out.println(message);
-		if (event.getMessageAuthor().asUser().get().isBot()) return;
-		if (message.startsWith(BET_ALL_COMMAND)) {
-			handleBetItAll(event);
-		}
-		else if (message.startsWith(BET_COMMAND)
-				&& message.length() != BET_COMMAND.length())
-		{
-			handleBetCommand(event);
-		}
-		else if (message.startsWith(GET_COINS_COMMAND))
-		{
-			handleGetMyCoins(event);
-		}
-		else if (message.startsWith(HELP_COMMAND))
-		{
-			event.getChannel().sendMessage("The commands are:\n" + 
-					BET_ALL_COMMAND + ": that bets all of your coins making you have either double the coins or resets you to 1 coin\n" +
-					GET_COINS_COMMAND + ": that tells you how many coins you have\n" + 
-					BET_COMMAND + "#: that bets whatever number of coins you put instead of the # and adds double that to your total, or subtracts that from your total");
-		}
+//		String message = event.getMessageContent();
+//		//System.out.println(message);
+//		if (event.getMessageAuthor().asUser().get().isBot()) return;
+//		if (message.startsWith(BET_ALL_COMMAND)) {
+//			handleBetItAll(event);
+//		}
+//		else if (message.startsWith(BET_COMMAND)
+//				&& message.length() != BET_COMMAND.length())
+//		{
+//			handleBetCommand(event);
+//		}
+//		else if (message.startsWith(GET_COINS_COMMAND))
+//		{
+//			handleGetMyCoins(event);
+//		}
+//		else if (message.startsWith(HELP_COMMAND))
+//		{
+//			event.getChannel().sendMessage("The commands are:\n" + 
+//					BET_ALL_COMMAND + ": that bets all of your coins making you have either double the coins or resets you to 1 coin\n" +
+//					GET_COINS_COMMAND + ": that tells you how many coins you have\n" + 
+//					BET_COMMAND + "#: that bets whatever number of coins you put instead of the # and adds double that to your total, or subtracts that from your total");
+//		}
 	}
 	
 	private void handleBetCommand(MessageCreateEvent event) {

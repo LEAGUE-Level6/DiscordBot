@@ -65,6 +65,12 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener{
 				System.out.print(puzzle[o][j] + " ");
 			}
 		}
+		boolean[][] taken = new boolean[10][10];
+		for(int i = 0; i < taken.length; i++) {
+			for(int j = 0; j < taken[i].length; j++) {
+				taken[i][j] = false;
+			}
+		}
 		
 		for(int p = 0; p < words.length; p++) {	
 			//vertical
@@ -72,9 +78,16 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener{
 			if(bruh[p] == 0) {
 			char j[] = words[p].toCharArray();
 			int gaaah = new Random().nextInt(10);
-				for(int i = new Random().nextInt(10-j.length); i < j.length; i++) {
+			int sp = new Random().nextInt(10-j.length);
+				for(int i = sp; i < j.length; i++) {
+				System.out.println(i);
+				//if(taken[i][gaaah] = true) {
+				//System.out.println("spot is taken");
+				//}else if(taken[i][gaaah] != true){
 			puzzle[i][gaaah] = j[i];
-			}
+			taken[i][gaaah] = true;
+			//}
+				}
 			}
 			
 			//horizontal
