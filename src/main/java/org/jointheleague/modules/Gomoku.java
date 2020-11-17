@@ -49,7 +49,7 @@ public class Gomoku extends CustomMessageCreateListener {
 				}
 
 			} else if(command.equals("Rules")) {
-				event.getChannel().sendMessage("Players alternate turns placing a stone of their color on an empty square./n The winner is the first player to form an unbroken chain of five stones horizontally, vertically, or diagonally./n The origin of this board (0,0) is in the top left corner.");
+				event.getChannel().sendMessage("Players alternate turns placing a stone of their color on an empty square.\n The winner is the first player to form an unbroken chain of five stones horizontally, vertically, or diagonally.\n The origin of this board (0,0) is in the top left corner.");
 			}
 
 		} else if(event.getMessageContent().contains("!gm")) {
