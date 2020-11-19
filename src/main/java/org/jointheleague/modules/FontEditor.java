@@ -22,54 +22,54 @@ public class FontEditor extends CustomMessageCreateListener {
 				for(int i = 0; i<getSpacing(finalMessage).size();i++) {
 				event.getChannel().sendMessage(getSpacing(finalMessage).get(i));
 				}
-			/*	if(finalMessage.length()>12) {
-					for(int i =1;i<finalMessage.length();i++) {
-						if(i%12==0) {
-							String subOne= finalMessage.substring(0, i+1);
-							String subTwo= finalMessage.substring(i+1);
-							System.out.println("1");
-							event.getChannel().sendMessage(getLetters(subOne));
-							
-							System.out.println("2");
-							event.getChannel().sendMessage(getLetters(subTwo));
-						}
-					}
-				}
-				else {
-				event.getChannel().sendMessage(getLetters(finalMessage));
-			}*/
 		}
 	}
-	ArrayList<String> getSpacing(String s) {
-		
+	ArrayList<String> getSpacing(String s) {		
 		ArrayList<String> sentences = new ArrayList<String>(); 
-			for(int i = 1;i<s.length();i++) {
-				boolean ifSpace = false; 
-				 if(i%13==0) {
-					 System.out.println("for lop");
-					int x = i; 
-					 while(!ifSpace) {
-						 System.out.println("while loop");
-						 if(s.charAt(i)==' ') {
-							 ifSpace=true;
-						 }
-						 else {
+			if(s.length()==1) {
+				sentences.add(getLetters(s));
+			}
+			else if(!s.contains(" ")){
+				for(int i =1;i<s.length();i++) {
+					if(i%13==0) {
+						String sub = s.substring(0, i);
+						sentences.add(getLetters(sub));
+						s=s.substring(i, s.length());
+						i=0;
+					}
+					if(s.length()<=13) {
+						sentences.add(getLetters(s));
+						break;
+					}
+				}
+			}
+			else {
+				for(int i = 1;i<s.length();i++) {
+					boolean ifSpace = false; 
+					if(i%13==0) {
+						int x = i; 
+						while(!ifSpace) {
+							if(s.charAt(x)==' ') {
+								ifSpace=true;
+							}
+							else {
 							 x--;
-						 }
-					 }
-					 String sub = s.substring(0,x);
-					 sentences.add(getLetters(sub));
-					 s= s.substring(i, s.length());
-					 System.out.println("this is sub: "+sub);
-				 }
+							}
+						}
+						String sub = s.substring(0,x);
+						String sub2=sub.trim();
+						sentences.add(getLetters(sub2));
+						s= s.substring(x, s.length());
+						i=0;
+					}
+				}
+				if(s.length()<=13) {
+					sentences.add(getLetters(s));
+				}
+		
 			}
-			if(s.length()<=13) {
-			System.out.println("short sentence");
-			sentences.add(getLetters(s));
-			}
-		return sentences;
+			return sentences;
 	}
-
 	String getLetters(String s) {
 		String message="";
 		String messageLineOne="";
@@ -106,7 +106,7 @@ public class FontEditor extends CustomMessageCreateListener {
 				messageLineOne=messageLineOne+"╔╗──";
 			}
 			if(sLower.charAt(i)=='i') {
-				messageLineOne=messageLineOne+"────";
+				messageLineOne=messageLineOne+"──";
 			}
 			if(sLower.charAt(i)=='j') {
 				messageLineOne=messageLineOne+"────";
@@ -160,7 +160,7 @@ public class FontEditor extends CustomMessageCreateListener {
 				messageLineOne=messageLineOne+"────";
 			}
 			if(sLower.charAt(i)==' ') {
-				messageLineOne = messageLineOne+'─';
+				messageLineOne = messageLineOne+"──";
 			}
 				//line two
 				//line two
@@ -189,10 +189,10 @@ public class FontEditor extends CustomMessageCreateListener {
 				messageLineTwo=messageLineTwo+"║║──";
 			}
 			if(sLower.charAt(i)=='i') {
-				messageLineTwo=messageLineTwo+"─╔╗─";
+				messageLineTwo=messageLineTwo+"╔╗";
 			}
 			if(sLower.charAt(i)=='j') {
-				messageLineTwo=messageLineTwo+"────";
+				messageLineTwo=messageLineTwo+"─╔╗─";
 			}
 			if(sLower.charAt(i)=='k') {
 				messageLineTwo=messageLineTwo+"║║──";
@@ -243,7 +243,7 @@ public class FontEditor extends CustomMessageCreateListener {
 				messageLineTwo=messageLineTwo+"────";
 			}
 			if(sLower.charAt(i)==' ') {
-				messageLineTwo = messageLineTwo+'─';
+				messageLineTwo = messageLineTwo+"──";
 			}
 			//line three
 			//line three
@@ -272,10 +272,10 @@ public class FontEditor extends CustomMessageCreateListener {
 				messageLineThree=messageLineThree+"║╚═╗";
 			}
 			if(sLower.charAt(i)=='i') {
-				messageLineThree=messageLineThree+"─╚╝─";
+				messageLineThree=messageLineThree+"╚╝";
 			}
 			if(sLower.charAt(i)=='j') {
-				messageLineThree=messageLineThree+"──╔╗";
+				messageLineThree=messageLineThree+"─╚╝─";
 			}
 			if(sLower.charAt(i)=='k') {
 				messageLineThree=messageLineThree+"║║╔╗";
@@ -326,7 +326,7 @@ public class FontEditor extends CustomMessageCreateListener {
 				messageLineThree=messageLineThree+"╔══╗";
 			}
 			if(sLower.charAt(i)==' ') {
-				messageLineThree = messageLineThree+'─';
+				messageLineThree = messageLineThree+"──";
 			}
 			//line four
 			//line four
@@ -355,10 +355,10 @@ public class FontEditor extends CustomMessageCreateListener {
 				messageLineFour=messageLineFour+"║╔╗║";
 			}
 			if(sLower.charAt(i)=='i') {
-				messageLineFour=messageLineFour+"─╔╗─";
+				messageLineFour=messageLineFour+"╔╗";
 			}
 			if(sLower.charAt(i)=='j') {
-				messageLineFour=messageLineFour+"──╚╝";
+				messageLineFour=messageLineFour+"─╔╗─";
 			}
 			if(sLower.charAt(i)=='k') {
 				messageLineFour=messageLineFour+"║╚╝╝";
@@ -409,7 +409,7 @@ public class FontEditor extends CustomMessageCreateListener {
 				messageLineFour=messageLineFour+"╠═╝║";
 			}
 			if(sLower.charAt(i)==' ') {
-				messageLineFour = messageLineFour+'─';
+				messageLineFour = messageLineFour+"──";
 			}
 			//line five
 			//line five
@@ -438,10 +438,10 @@ public class FontEditor extends CustomMessageCreateListener {
 				messageLineFive=messageLineFive+"║║║║";
 			}
 			if(sLower.charAt(i)=='i') {
-				messageLineFive=messageLineFive+"─║║─";
+				messageLineFive=messageLineFive+"║║";
 			}
 			if(sLower.charAt(i)=='j') {
-				messageLineFive=messageLineFive+"──╔╗";
+				messageLineFive=messageLineFive+"─║║─";
 			}
 			if(sLower.charAt(i)=='k') {
 				messageLineFive=messageLineFive+"║╔╗╗";
@@ -492,7 +492,7 @@ public class FontEditor extends CustomMessageCreateListener {
 				messageLineFive=messageLineFive+"║╚═╣";
 			}
 			if(sLower.charAt(i)==' ') {
-				messageLineFive = messageLineFive+'─';
+				messageLineFive = messageLineFive+"──";
 			}
 			//line six
 			//line six
@@ -521,10 +521,10 @@ public class FontEditor extends CustomMessageCreateListener {
 				messageLineSix=messageLineSix+"╚╝╚╝";
 			}
 			if(sLower.charAt(i)=='i') {
-				messageLineSix=messageLineSix+"─╚╝─";
+				messageLineSix=messageLineSix+"╚╝";
 			}
 			if(sLower.charAt(i)=='j') {
-				messageLineSix=messageLineSix+"─╔╝║";
+				messageLineSix=messageLineSix+"╔╝║─";
 			}
 			if(sLower.charAt(i)=='k') {
 				messageLineSix=messageLineSix+"╚╝╚╝";
@@ -575,7 +575,7 @@ public class FontEditor extends CustomMessageCreateListener {
 				messageLineSix=messageLineSix+"╚══╝";
 			}
 			if(sLower.charAt(i)==' ') {
-				messageLineSix = messageLineSix+'─';
+				messageLineSix = messageLineSix+"──";
 			}
 			//line seven
 			//line seven
@@ -604,10 +604,10 @@ public class FontEditor extends CustomMessageCreateListener {
 				messageLineSeven=messageLineSeven+"────";
 			}
 			if(sLower.charAt(i)=='i') {
-				messageLineSeven=messageLineSeven+"────";
+				messageLineSeven=messageLineSeven+"──";
 			}
 			if(sLower.charAt(i)=='j') {
-				messageLineSeven=messageLineSeven+"─╚═╝";
+				messageLineSeven=messageLineSeven+"╚═╝─";
 			}
 			if(sLower.charAt(i)=='k') {
 				messageLineSeven=messageLineSeven+"────";
@@ -658,7 +658,7 @@ public class FontEditor extends CustomMessageCreateListener {
 				messageLineSeven=messageLineSeven+"────";
 			}
 			if(sLower.charAt(i)==' ') {
-				messageLineSeven = messageLineSeven+'─';
+				messageLineSeven = messageLineSeven+"──";
 			}
 		}
 		message=messageLineOne+"\n"+messageLineTwo+"\n"+messageLineThree+"\n"+messageLineFour+"\n"+messageLineFive+"\n"+messageLineSix+"\n"+messageLineSeven;

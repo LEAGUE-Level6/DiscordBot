@@ -30,7 +30,7 @@ public class Bot  {
 	}
 
 	public void connect(boolean printInvite) {
-		
+	
 		api = new DiscordApiBuilder().setToken(token).login().join();
 
 		// Print the URL to invite the bot
@@ -39,7 +39,6 @@ public class Bot  {
 		}
 
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
-		
 		//add Listeners
 		
 		ToDoList list = new ToDoList(channelName);
