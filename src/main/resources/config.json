@@ -1,4 +1,7 @@
+
 {
-   "channels": ["harrison"],
-   "token": "NzcyOTcxOTI3NjE4MDYwMjg4.X6CcNA.Fga_YSruFsXN93vKtEW_-XxG9zQ"
+
+    "channels": ["channelName"],
+    "token": "token"
+
 }
