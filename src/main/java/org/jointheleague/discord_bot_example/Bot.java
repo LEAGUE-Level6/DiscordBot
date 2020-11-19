@@ -89,15 +89,22 @@ public class Bot  {
 		CoinFlip cp = new CoinFlip(channelName);
 		api.addMessageCreateListener(cp);
 	
-    RandomString randomString = new RandomString(channelName);
+    		RandomString randomString = new RandomString(channelName);
 		api.addMessageCreateListener(randomString);
 		helpListener.addHelpEmbed(randomString.getHelpEmbed());
 		
 		Greeter g = new Greeter(channelName);
 		api.addMessageCreateListener(g);
 		helpListener.addHelpEmbed(g.getHelpEmbed());
-
 		
+		GuessingGame guessingGame = new GuessingGame(channelName);
+		api.addMessageCreateListener(guessingGame);
+		helpListener.addHelpEmbed(guessingGame.getHelpEmbed());
+		
+		Jpegify jpegify = new Jpegify(channelName);
+		api.addMessageCreateListener(jpegify);
+		helpListener.addHelpEmbed(jpegify.getHelpEmbed());
+
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
