@@ -13,7 +13,7 @@ import net.aksingh.owmjapis.api.APIException;
 public class GuessingGame extends CustomMessageCreateListener {
 
 	MessageAuthor player;
-	boolean gameInSession = false;
+	boolean gameInSession = false ;
 	int lowerBound;
 	int upperBound;
 	int numberToGuess;
