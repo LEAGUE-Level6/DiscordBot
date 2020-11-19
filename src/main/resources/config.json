@@ -1,6 +1,4 @@
 {
-
-   "channels": ["daniel"],
-   "token": "NzM1NjY4ODc1NTc1OTUxNDAw.XxjnCA.pQdEUTvkLR3U00tx-P771LmvTw8"
-
+   "channels": ["channelName"],
+   "token": "token"
 }

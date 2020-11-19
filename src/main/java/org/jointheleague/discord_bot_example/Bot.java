@@ -87,12 +87,20 @@ public class Bot  {
 		
 		CoinFlip cp = new CoinFlip(channelName);
 		api.addMessageCreateListener(cp);
+
 		
 		RollDie rollDie = new RollDie(channelName);
 		api.addMessageCreateListener(rollDie);
 		
 		FontEditor fe = new FontEditor(channelName);
 		api.addMessageCreateListener(fe);
+    
+    RandomString randomString = new RandomString(channelName);
+		api.addMessageCreateListener(randomString);
+		helpListener.addHelpEmbed(randomString.getHelpEmbed());
+
+		
+
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
