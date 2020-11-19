@@ -1,6 +1,5 @@
+
 {
-
-   "channels": ["rachel"],
-   "token": "NzU2OTk2OTIxNjIwNTYyMDcz.X2Z-Ug.K06Se_pF2KHtIjy2e0ot0nGLN90"
-
+    "channels": ["channelName"],
+    "token": "token"
 }
