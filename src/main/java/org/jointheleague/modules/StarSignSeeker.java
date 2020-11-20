@@ -26,7 +26,6 @@ public class StarSignSeeker extends CustomMessageCreateListener {
 		
 		String a = event.getMessageContent();
 		if(a.equals("!birthstone")) {
-			System.out.println("GOT MESSAGE");
 			interaction = 1;
 			event.getChannel().sendMessage("~Greetings, "+event.getMessageAuthor().getName() + ", I will tell you your birthstone and make a prediction about you. Tell me, what is your birth month?");
 		}
@@ -107,7 +106,6 @@ public class StarSignSeeker extends CustomMessageCreateListener {
 		}
 
 		else {
-			System.out.println("FAILED");
 		}
 	
 		
