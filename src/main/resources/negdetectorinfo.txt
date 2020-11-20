@@ -1,2 +1,1 @@
-afraid: 3
-bitter: 1
+suffocated: 1

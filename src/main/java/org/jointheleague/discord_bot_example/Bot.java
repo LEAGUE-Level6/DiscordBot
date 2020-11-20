@@ -98,6 +98,9 @@ public class Bot  {
 		NegativityDetector negdetector = new NegativityDetector(channelName);
 		api.addMessageCreateListener(negdetector);
 		
+		OpusByComposer opuscomposer = new OpusByComposer(channelName);
+		api.addMessageCreateListener(opuscomposer);
+		
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
