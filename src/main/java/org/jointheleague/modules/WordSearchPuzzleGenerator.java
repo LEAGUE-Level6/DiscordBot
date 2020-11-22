@@ -35,7 +35,7 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener{
 		
 		int bruh[] = new int[words.length];
 		for(int i = 0; i < bruh.length; i++) {
-			bruh[i] = new Random().nextInt(3);
+			bruh[i] = 0; //new Random().nextInt(3);
 		}
 		// 0 = vertical, 1 = horizontal, 2 = diagonal
 		//printing
@@ -80,25 +80,26 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener{
 			int gaaah = new Random().nextInt(10);
 			int sp = new Random().nextInt(10-j.length);
 				for(int i = sp; i < j.length; i++) {
-				System.out.println(i);
-				//if(taken[i][gaaah] = true) {
-				//System.out.println("spot is taken");
-				//}else if(taken[i][gaaah] != true){
+				System.out.println(gaaah + " " + i);
+				puzzle[i][gaaah]=j[i];
+			/*	if(taken[i][gaaah] = false) {
 			puzzle[i][gaaah] = j[i];
 			taken[i][gaaah] = true;
-			//}
+			}else if(taken[i][gaaah] = true) {
+				sp = new Random().nextInt(10-j.length);
+			}*/
 				}
 			}
 			
 			//horizontal
-			/*
-			if(bruh[p] == 1) {
-				char itsraining[] = words[p].toCharArray();
-				int idwtwmd = new Random().nextInt(10);
-					for(int i = new Random().nextInt(10-itsraining.length); i < itsraining.length; i++) {
-				puzzle[idwtwmd][i] = itsraining[i];
-				}
-				*/
+			
+			//if(bruh[p] == 1) {
+				//char itsraining[] = words[p].toCharArray();
+				//int idwtwmd = new Random().nextInt(10);
+					//for(int i = new Random().nextInt(10-itsraining.length); i < itsraining.length; i++) {
+				//puzzle[idwtwmd][i] = itsraining[i];
+				//}
+				
 			//diagonal >>:(
 			//}
 		}
