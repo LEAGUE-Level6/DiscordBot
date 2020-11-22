@@ -104,6 +104,10 @@ public class Bot  {
 		Dice d = new Dice(channelName);
 		api.addMessageCreateListener(d);
 		helpListener.addHelpEmbed(d.getHelpEmbed());
+		
+		Chopsticks CS = new Chopsticks(channelName);
+		api.addMessageCreateListener(CS);
+		helpListener.addHelpEmbed(CS.getHelpEmbed());
 
 		
 		//old way to add listeners 
