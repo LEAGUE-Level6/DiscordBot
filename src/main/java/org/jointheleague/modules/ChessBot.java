@@ -32,6 +32,8 @@ public class ChessBot extends CustomMessageCreateListener {
 
 		if (event.getMessageContent().contains("!chess")) {
 			SetChessBoard();
+			event.getChannel().sendMessage("Taken Pieces:  ");
+			SpawnTakenPieces();
 			event.getChannel().sendMessage(
 					"switch your Discord to Light Mode, by navigating to 'Appeaarance' in the settings, in order to properly see the chess pieces.");
 			event.getChannel().sendMessage(SpawnChessBoard());
@@ -54,8 +56,9 @@ public class ChessBot extends CustomMessageCreateListener {
 			NewRow = Integer.parseInt(Message.substring(12, 13));
 			NewColumn = Integer.parseInt(Message.substring(13, 14));
 
-			TakePiece();
-			MovePieces(OgRow, OgColumn, NewRow, NewColumn);
+			TakePiece(event);
+			MovePieces(OgRow, OgColumn, NewRow, NewColumn, event);
+			regainPiece(event);
 
 			event.getChannel().sendMessage(SpawnChessBoard());
 		}
@@ -80,6 +83,16 @@ public class ChessBot extends CustomMessageCreateListener {
 		return Board;
 
 	}
+	public String SpawnTakenPieces() {
+		String Pieces="";
+		for (int i = 0; i < TakenPieces.size(); i++) {
+			Pieces+=TakenPieces.get(i).PieceType;
+		}
+		
+		
+		return Pieces;
+	}
+	
 
 	public void SetChessBoard() {
 		// tile pieces
@@ -158,7 +171,20 @@ public class ChessBot extends CustomMessageCreateListener {
 
 	}
 
-	public void MovePieces(int OgRow, int OgColumn, int NewRow, int NewColumn) {
+	public void MovePieces(int OgRow, int OgColumn, int NewRow, int NewColumn, MessageCreateEvent event) {
+
+		
+		if (ChessBoard[NewRow][NewColumn].PieceName.equals("king")) {
+			
+			if (ChessBoard[NewRow][NewColumn].PieceColor.equals("white")) {
+				event.getChannel().sendMessage("Black Wins!");
+				
+
+			} else {
+				event.getChannel().sendMessage("White Wins!");
+				
+			}
+		}
 
 		ChessPieces TempPiece = ChessBoard[OgRow][OgColumn];
 
@@ -179,31 +205,37 @@ public class ChessBot extends CustomMessageCreateListener {
 
 	}
 
-	public void TakePiece() {
+	public void TakePiece(MessageCreateEvent event) {
 
 		for (int i = 0; i < ChessBoard.length; i++) {
 			for (int j = 0; j < ChessBoard[i].length; j++) {
 				if (OgRow == NewRow && OgColumn == NewColumn) {
 					if (!ChessBoard[OgRow][OgColumn].PieceColor.equals(ChessBoard[NewRow][NewColumn])) {
 						TakenPieces.add(ChessBoard[NewRow][NewColumn]);
-						MovePieces(OgRow, OgColumn, NewRow, NewColumn);
+						MovePieces(OgRow, OgColumn, NewRow, NewColumn, event);
 					}
+
 				}
 			}
 		}
 
 	}
 
-	public void regainPiece() {
+	public void regainPiece(MessageCreateEvent event) {
 		for (int i = 0; i < ChessBoard.length; i++) {
 			for (int j = 0; j < ChessBoard[i].length; j++) {
 				if (ChessBoard[i][j].PieceType.equals("pawn")) {
 					if (i == 0 && ChessBoard[i][j].PieceColor.equals("white")) {
-							
+						event.getChannel().sendMessage("Because your pawn made it to the other side, you "
+								+ "can now regain a piece! Type -regain followed by the piece that you want to get the piece");
+						if (event.getMessageContent().contains("-regain")) {
+
+						}
 					}
 
 					else if (i == 7 && ChessBoard[i][j].PieceColor.equals("black")) {
-
+						event.getChannel().sendMessage("Because your pawn made it to the other side, you "
+								+ "can now regain a piece! Type -regain followed by the piece that you want to get the piece");
 					}
 
 				}
