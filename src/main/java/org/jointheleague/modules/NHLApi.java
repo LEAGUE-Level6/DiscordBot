@@ -78,14 +78,14 @@ public class NHLApi extends CustomMessageCreateListener {
 		if (event.getMessageContent().contains(COMMAND)) {
 
 			// remove the command so we are only left with the search term
-			String msg = event.getMessageContent().replaceAll(" ", "").replace("!NHL", "");
+			String msg = event.getMessageContent().replaceAll(" ", "").replace("!NHL", "").replace("Roster", "");
 
 			if (msg.equals("")) {
 				event.getChannel().sendMessage("Please put the teams abbreviation after the command");
 			} else {
 
 				String message = getTeam(msg);
-
+				System.out.println(message);
 				event.getChannel().sendMessage(message);
 			}
 
@@ -158,10 +158,8 @@ public class NHLApi extends CustomMessageCreateListener {
 		} else if (team.contains("VGK")) {
 			teamKey = VGK;
 		}
-		String requestURL = "http://statsapi.web.nhl.com/api/v1/teams/" + teamKey;
-		if (team.contains("Roster")) {
-			requestURL += "?expand=team.roster";
-		}
+		String requestURL = "http://statsapi.web.nhl.com/api/v1/teams/?expand=team.roster" + teamKey;
+System.out.println(requestURL);
 		try {
 
 			// the following code will probably be the same for your feature
@@ -185,24 +183,44 @@ public class NHLApi extends CustomMessageCreateListener {
 
 			// get the first article (these are just java objects now)
 			List<Team> teams = example.getTeams();
-
+			
 			// get the title of the article
-			Roster roster;
-			for (int i = 0; i < teams.size(); i++) {
-			 roster = teams.get(i).getRoster();
+			Roster roster = new Roster();
+			if(roster == null) {
+				System.out.println("roster is null");
 			}
-
 			// get the content of the article
-			Roster_ roster_ = (Roster_) roster.getRoster();
-			String jerseyNum = roster_.getJerseyNumber();
-			Person person = roster_.getPerson();
-			String fullName = person.getFullName();
-
-			Position position = roster_.getPosition();
-			String positionAbbrev = position.getAbbreviation();
-			String p = position.getType();
-			String p1 = position.getName();
-
+			for (int i = 0; i < teams.size(); i++) {
+				Roster r = teams.get(i).getRoster();
+				List<Roster_> newRoster_ = r.getRoster();
+				for (int j = 0; j < newRoster_.size() ; j++) {
+					
+				}
+			}
+			
+			List<Roster_> roster_ = roster.getRoster();
+			Person person = null;
+			Position position = null;
+			String jerseyNum = null;
+			String fullName = null;
+			String positionAbbrev = null;
+			String p = null;
+			String p1 = null;
+			if(roster_!=null) {
+			for (int i = 0; i < roster_.size()-1; i++) {
+				Roster_ newRoster_ = roster_.get(i);
+				person = newRoster_.getPerson();
+				 position = newRoster_.getPosition();
+				jerseyNum = newRoster_.getJerseyNumber();
+				fullName = person.getFullName();
+				positionAbbrev = position.getAbbreviation();
+				p = position.getType();
+				p1 = position.getName();
+			}
+			}else {
+				System.out.println("roster_ is null");
+			}
+			//String fmessage = ""+roster_;
 			String message = "The roster for " + team + " : Jersey Number: " + jerseyNum + " Name: " + fullName
 					+ " position: " + positionAbbrev + p + p1;
 			
