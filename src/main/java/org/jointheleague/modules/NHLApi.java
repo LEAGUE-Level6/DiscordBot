@@ -5,6 +5,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.json.Json;
@@ -79,13 +80,14 @@ public class NHLApi extends CustomMessageCreateListener {
 
 			// remove the command so we are only left with the search term
 			String msg = event.getMessageContent().replaceAll(" ", "").replace("!NHL", "").replace("Roster", "");
-
+			 event.getChannel().sendMessage("\n"+"test");
 			if (msg.equals("")) {
 				event.getChannel().sendMessage("Please put the teams abbreviation after the command");
 			} else {
-
+				 event.getChannel().sendMessage(" 	second test");
 				String message = getTeam(msg);
 				System.out.println(message);
+				 event.getChannel().sendMessage(" 	third test");
 				event.getChannel().sendMessage(message);
 			}
 
@@ -158,8 +160,9 @@ public class NHLApi extends CustomMessageCreateListener {
 		} else if (team.contains("VGK")) {
 			teamKey = VGK;
 		}
-		String requestURL = "http://statsapi.web.nhl.com/api/v1/teams/?expand=team.roster" + teamKey;
-System.out.println(requestURL);
+		// https://statsapi.web.nhl.com/api/v1/t/16?expand=team.roster
+		String requestURL = "http://statsapi.web.nhl.com/api/v1/teams/" + teamKey + "/?expand=team.roster";
+		System.out.println(requestURL);
 		try {
 
 			// the following code will probably be the same for your feature
@@ -183,50 +186,45 @@ System.out.println(requestURL);
 
 			// get the first article (these are just java objects now)
 			List<Team> teams = example.getTeams();
-			
+
 			// get the title of the article
 			Roster roster = new Roster();
-			if(roster == null) {
-				System.out.println("roster is null");
-			}
+			List<Roster_> nRoster_ = new ArrayList<Roster_>();
 			// get the content of the article
+			String message = "The roster for " + team + ": " + "\n";
 			for (int i = 0; i < teams.size(); i++) {
 				Roster r = teams.get(i).getRoster();
-				List<Roster_> newRoster_ = r.getRoster();
-				for (int j = 0; j < newRoster_.size() ; j++) {
-					
-				}
-			}
-			
-			List<Roster_> roster_ = roster.getRoster();
-			Person person = null;
-			Position position = null;
-			String jerseyNum = null;
-			String fullName = null;
-			String positionAbbrev = null;
-			String p = null;
-			String p1 = null;
-			if(roster_!=null) {
-			for (int i = 0; i < roster_.size()-1; i++) {
-				Roster_ newRoster_ = roster_.get(i);
-				person = newRoster_.getPerson();
-				 position = newRoster_.getPosition();
-				jerseyNum = newRoster_.getJerseyNumber();
-				fullName = person.getFullName();
-				positionAbbrev = position.getAbbreviation();
-				p = position.getType();
-				p1 = position.getName();
-			}
-			}else {
-				System.out.println("roster_ is null");
-			}
-			//String fmessage = ""+roster_;
-			String message = "The roster for " + team + " : Jersey Number: " + jerseyNum + " Name: " + fullName
-					+ " position: " + positionAbbrev + p + p1;
-			
-			// send the message
-		return message;
+				nRoster_ = (r.getRoster());
 
+				Person person = null;
+				Position position = null;
+				String jerseyNum = null;
+				String fullName = null;
+				String positionAbbrev = null;
+				String p = null;
+				String p1 = null;
+
+				if (nRoster_ != null) {
+					for (int k = 0; k < nRoster_.size(); k++) {
+						Roster_ newRoster_ = nRoster_.get(k);
+						person = newRoster_.getPerson();
+						position = newRoster_.getPosition();
+						jerseyNum = newRoster_.getJerseyNumber();
+						fullName = person.getFullName();
+						positionAbbrev = position.getAbbreviation();
+						p = position.getType();
+						p1 = position.getName();
+						message += "Jersey Number: " + jerseyNum + " Name: " + fullName + " position: " + positionAbbrev
+								+ p + p1 + "\n";
+
+					}
+				} else {
+					System.out.println("roster_ is null");
+				}
+
+			}
+			// send the message
+			return message;
 
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
