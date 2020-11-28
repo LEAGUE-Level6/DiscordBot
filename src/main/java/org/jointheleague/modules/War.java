@@ -71,12 +71,14 @@ public class War extends CustomMessageCreateListener {
 				pPoints++;
 				event.getChannel().sendMessage("```Your card was greater than the Bot's! You win the round! Points: "+pPoints+"\nBot Points: "+bPoints+"```");
 			}
+			
 			else if(pD.get(turns)<(bD.get(turns))){
 				bPoints++;
 				event.getChannel().sendMessage("```Your card was less than the Bot's. You lose the round! Points: "+pPoints+"\nBot Points: "+bPoints+"```");
 			}
-			else {
+			else if (pD.get(turns)==(bD.get(turns))){
 				event.getChannel().sendMessage("```Your cards are the same. This means War!```");
+				event.getChannel().sendMessage("🂠🂠🂠");
 			}
 			turns++;
 		}
