@@ -11,41 +11,33 @@ import net.aksingh.owmjapis.api.APIException;
 
 public class MaxTicTacToe extends CustomMessageCreateListener {
 	private char[][] board = new char[3][3];
-	private String turn;
-	boolean playing;
 
 	public MaxTicTacToe(String channelName) {
 		super(channelName);
-		helpEmbed = new HelpEmbed("!playTicTacToe",
-				"Play TicTacToe with the computer." + " Strict keyword usage follows: upperleft, top, upperright, "
-						+ "left, center, right, lowerleft, bottom, and lowerright.");
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				board[i][j] = '-';
+			}
+		}
+		helpEmbed = new HelpEmbed("!ttt",
+				"Play TicTacToe with the computer." + " Type the command followed by two integers for the row and column"
+						+ " (ex. '!ttt 1 2' to place your piece on the top middle spot or '!ttt 2 2 for the center spot.");
 // TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
-		if (event.getMessageContent().contains("!playTicTacToe")) {
-			resetBoard();
-			turn = "X";
-			playing = true;
-			while (true) {
-				event.getChannel()
-						.sendMessage("Enter row then column number (Ex. 1 2 for top middle or 3 3 for bottom right");
-				String[] input = event.getMessageContent().split(" ");
-				int row = Integer.parseInt(input[0]);
-				int col = Integer.parseInt(input[1]);
-				if (input.length == 2) {
-					if (row > 0 && row <= 3 && col > 0 && col <= 3) {
-						break;
-					}
-
-				}
-				board[row][col] = 'x';
-			}
+		String message = event.getMessageContent();
+		if (message.contains("!ttt")) {
+			String input = message.substring(5);
+			String[] nums = input.split(" ");
+			if(nums.length!=2) return;
+			else boardInput(Integer.parseInt(nums[0]),Integer.parseInt(nums[1]));
 		}
 	}
 
-	public void printBoard() {
+	public void boardInput(int row, int col) {
+		board[row][col] = 'x';
 	}
 
 	public void resetBoard() {
