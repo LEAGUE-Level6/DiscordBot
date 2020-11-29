@@ -42,6 +42,10 @@ public class Bot  {
 		
 		//add Listeners
 		
+		RandomWords randomwords = new RandomWords(channelName);
+		api.addMessageCreateListener(randomwords);
+		helpListener.addHelpEmbed(randomwords.getHelpEmbed());
+		
 		OverwatchStatistics owstats = new OverwatchStatistics(channelName);
 		api.addMessageCreateListener(owstats);
 		helpListener.addHelpEmbed(owstats.getHelpEmbed());

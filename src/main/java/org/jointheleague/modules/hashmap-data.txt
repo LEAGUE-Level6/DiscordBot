@@ -1,2 +1,3 @@
+diamond https://cdn.discordapp.com/attachments/742890558879694902/782416613172707348/game_rank-icons_rank-DiamondTier.png
 tree https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Ash_Tree_-_geograph.org.uk_-_590710.jpg/220px-Ash_Tree_-_geograph.org.uk_-_590710.jpg
 pumpkin https://images-na.ssl-images-amazon.com/images/I/41RORFSdPrL._AC_.jpg
