@@ -35,6 +35,7 @@ public class Dice extends CustomMessageCreateListener{
 			event.getChannel().sendMessage("Rolled a "+(randy+modifier));
 			modifier = 0;
 		}
+			//don't need the rest
 //			if(eventContent.contains("d4")) {
 //				randy = new Random().nextInt(4)+1;
 //				event.getChannel().sendMessage("Rolled a "+(randy+modifier));
