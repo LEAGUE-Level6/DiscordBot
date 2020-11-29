@@ -1,5 +1,7 @@
 package org.jointheleague.modules;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 import org.javacord.api.event.message.MessageCreateEvent;
@@ -33,14 +35,14 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener{
 			System.out.println(words[i]);
 		}
 		
-		int bruh[] = new int[words.length];
-		for(int i = 0; i < bruh.length; i++) {
-			bruh[i] = 0; //new Random().nextInt(3);
+		int voh[] = new int[words.length];
+		for(int i = 0; i < voh.length; i++) {
+			voh[i] = 0; //new Random().nextInt(3);
 		}
 		// 0 = vertical, 1 = horizontal, 2 = diagonal
 		//printing
 		for(int i = 0; i < words.length; i++) {
-			System.out.println(words[i] + " has " + bruh[i]);
+			System.out.println(words[i] + " has " + voh[i]);
 		}
 		
 		char[][] puzzle = new char[10][10];
@@ -54,7 +56,7 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener{
 		}
 		for(int i = 0; i < puzzle.length; i++) {
 			for(int j = 0; j < puzzle[i].length; j++) {
-				puzzle[i][j] = (char)('a' + amidoingthisright[i][j]);
+				puzzle[i][j] = 'a';//(char)('a' + amidoingthisright[i][j]);
 			}
 		}
 		
@@ -71,37 +73,30 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener{
 				taken[i][j] = false;
 			}
 		}
+		int[] locations = new int[words.length];
+		for(int i = 0; i < locations.length; i++) {
+			locations[i] = new Random().nextInt(10);
+		}
+		for(int h = 0; h < locations.length; h++) {
+			System.out.println(locations[h]);
+		}
 		
+		for(int h = 0; h < locations.length; h++) {
+			System.out.println(locations[h]);
+		}
 		for(int p = 0; p < words.length; p++) {	
 			//vertical
-			
-			if(bruh[p] == 0) {
+			System.out.println(locations[p]);
+			if(voh[p] == 0) {
 			char j[] = words[p].toCharArray();
-			int gaaah = new Random().nextInt(10);
-			int sp = new Random().nextInt(10-j.length);
-				for(int i = sp; i < j.length; i++) {
-				System.out.println(gaaah + " " + i);
-				puzzle[i][gaaah]=j[i];
-			/*	if(taken[i][gaaah] = false) {
-			puzzle[i][gaaah] = j[i];
-			taken[i][gaaah] = true;
-			}else if(taken[i][gaaah] = true) {
-				sp = new Random().nextInt(10-j.length);
-			}*/
+			//int sp = new Random().nextInt(10-j.length);
+			//int test = j.length + 1;
+				for(int i = 0; i < j.length; i++) {
+				puzzle[i][locations[p]]=j[i];
 				}
 			}
 			
 			//horizontal
-			
-			//if(bruh[p] == 1) {
-				//char itsraining[] = words[p].toCharArray();
-				//int idwtwmd = new Random().nextInt(10);
-					//for(int i = new Random().nextInt(10-itsraining.length); i < itsraining.length; i++) {
-				//puzzle[idwtwmd][i] = itsraining[i];
-				//}
-				
-			//diagonal >>:(
-			//}
 		}
 		System.out.println();
 		for(int o = 0; o < puzzle.length; o++) {
