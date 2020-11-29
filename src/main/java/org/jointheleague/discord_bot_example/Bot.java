@@ -92,9 +92,9 @@ public class Bot  {
     RandomString randomString = new RandomString(channelName);
 		api.addMessageCreateListener(randomString);
 		helpListener.addHelpEmbed(randomString.getHelpEmbed());
-		HeHe HeHe = new HeHe(channelName);
-		api.addMessageCreateListener(HeHe);
-		helpListener.addHelpEmbed(HeHe.getHelpEmbed());
+		Dice dice = new Dice(channelName);
+		api.addMessageCreateListener(dice);
+		helpListener.addHelpEmbed(dice.getHelpEmbed());
 
 		
 		//old way to add listeners 
