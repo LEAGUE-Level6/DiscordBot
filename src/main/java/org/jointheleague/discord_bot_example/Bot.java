@@ -93,6 +93,14 @@ public class Bot  {
 		api.addMessageCreateListener(randomString);
 		helpListener.addHelpEmbed(randomString.getHelpEmbed());
 		
+		RollDie rollDie = new RollDie(channelName);
+		api.addMessageCreateListener(rollDie);
+		
+
+		nicknames nick = new nicknames(channelName);
+		api.addMessageCreateListener(nick);
+		
+
 		Greeter g = new Greeter(channelName);
 		api.addMessageCreateListener(g);
 		helpListener.addHelpEmbed(g.getHelpEmbed());
