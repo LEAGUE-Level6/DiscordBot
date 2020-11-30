@@ -32,11 +32,11 @@ public class ChessBot extends CustomMessageCreateListener {
 
 		if (event.getMessageContent().contains("!chess")) {
 			SetChessBoard();
-			event.getChannel().sendMessage("Taken Pieces:  ");
+
 			SpawnTakenPieces();
 			event.getChannel().sendMessage(
 					"switch your Discord to Light Mode, by navigating to 'Appeaarance' in the settings, in order to properly see the chess pieces.");
-			event.getChannel().sendMessage(SpawnChessBoard());
+			event.getChannel().sendMessage(SpawnChessBoard(event));
 			event.getChannel().sendMessage(
 					"Type -white to take control of the white pieces, and -black to control the black ones");
 			event.getChannel()
@@ -60,12 +60,20 @@ public class ChessBot extends CustomMessageCreateListener {
 			MovePieces(OgRow, OgColumn, NewRow, NewColumn, event);
 			regainPiece(event);
 
-			event.getChannel().sendMessage(SpawnChessBoard());
+			event.getChannel().sendMessage(SpawnChessBoard(event));
 		}
 
+		if (event.getMessageContent().contains("-regain")) {
+			regainPiece(event);
+			String Message = event.getMessageContent();
+			
+			String RegainedPiece= Message.substring(8);
+			
+		}
+		
 	}
 
-	public String SpawnChessBoard() {
+	public String SpawnChessBoard(MessageCreateEvent event) {
 		// spawn chess board
 		String Board = "";
 		for (int i = 0; i < ChessBoard.length; i++) {
@@ -79,20 +87,20 @@ public class ChessBot extends CustomMessageCreateListener {
 			}
 		}
 		// board
-
+		event.getChannel().sendMessage("Taken Pieces:  " + SpawnTakenPieces());
 		return Board;
 
 	}
+
 	public String SpawnTakenPieces() {
-		String Pieces="";
+		String Pieces = " ";
 		for (int i = 0; i < TakenPieces.size(); i++) {
-			Pieces+=TakenPieces.get(i).PieceType;
+			Pieces += TakenPieces.get(i).PieceType;
 		}
-		
-		
+
+		System.out.println(Pieces + "Taken Pieces size " + TakenPieces.size());
 		return Pieces;
 	}
-	
 
 	public void SetChessBoard() {
 		// tile pieces
@@ -173,16 +181,14 @@ public class ChessBot extends CustomMessageCreateListener {
 
 	public void MovePieces(int OgRow, int OgColumn, int NewRow, int NewColumn, MessageCreateEvent event) {
 
-		
 		if (ChessBoard[NewRow][NewColumn].PieceName.equals("king")) {
-			
+
 			if (ChessBoard[NewRow][NewColumn].PieceColor.equals("white")) {
 				event.getChannel().sendMessage("Black Wins!");
-				
 
 			} else {
 				event.getChannel().sendMessage("White Wins!");
-				
+
 			}
 		}
 
@@ -209,13 +215,17 @@ public class ChessBot extends CustomMessageCreateListener {
 
 		for (int i = 0; i < ChessBoard.length; i++) {
 			for (int j = 0; j < ChessBoard[i].length; j++) {
-				if (OgRow == NewRow && OgColumn == NewColumn) {
-					if (!ChessBoard[OgRow][OgColumn].PieceColor.equals(ChessBoard[NewRow][NewColumn])) {
-						TakenPieces.add(ChessBoard[NewRow][NewColumn]);
-						MovePieces(OgRow, OgColumn, NewRow, NewColumn, event);
-					}
 
+				if (!ChessBoard[NewRow][NewColumn].PieceName.equals("tile") && !ChessBoard[OgRow][OgColumn].PieceName.equals("tile")) {
+					
+					if (!ChessBoard[OgRow][OgColumn].PieceColor.equals(ChessBoard[NewRow][NewColumn].PieceColor)) {
+						ChessPieces Pieces = new ChessPieces("Black", "Pawn", "Pawn");
+						TakenPieces.add(ChessBoard[NewRow][NewColumn]);
+						//TakenPieces.add(Pieces);
+						return;
+					}
 				}
+
 			}
 		}
 
@@ -241,6 +251,7 @@ public class ChessBot extends CustomMessageCreateListener {
 				}
 			}
 		}
+		
 
 	}
 
