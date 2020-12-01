@@ -186,6 +186,7 @@ public class Bingo extends CustomMessageCreateListener {
 		return hasWon;
 	}
 
+	//works
 	public boolean checkColumn() {
 		boolean hasWon = false;
 		for (int i = 0; i < bingoCard.length; i++) {
