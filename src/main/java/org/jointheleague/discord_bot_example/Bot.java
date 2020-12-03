@@ -105,6 +105,9 @@ public class Bot  {
 		api.addMessageCreateListener(d);
 		helpListener.addHelpEmbed(d.getHelpEmbed());
 
+		UnbeatableRockPaperScissors rps = new UnbeatableRockPaperScissors(channelName);
+		api.addMessageCreateListener(rps);
+		helpListener.addHelpEmbed(rps.getHelpEmbed());
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
