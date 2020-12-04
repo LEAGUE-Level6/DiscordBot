@@ -7,6 +7,8 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.jointheleague.modules.CustomMessageCreateListener;
+import org.jointheleague.modules.SearchData;
 
 import com.google.gson.Gson;
 
@@ -71,19 +73,47 @@ public class OpusByComposer extends CustomMessageCreateListener{
 				searchdata = getByComposer(loc);	//repetitive
 				System.out.println(searchdata.toString());
 				System.out.println(searchdata.composers.length);
-				if (searchdata.composers.length == 1) {
+				if (searchdata.composers.length == 0) {
+					event.getChannel().sendMessage("That composer is not in our database. Please try again.");
+				}
+				else if (searchdata.composers.length == 1) {
 					System.out.println("Received");
 					searchdata = getWorkById(searchdata.composers[0].id);
 					
 					ArrayList<String> completeworks = searchdata.toStringWorks();
+					event.getChannel().sendMessage(completeworks.get(0));
 
-					for (int i = 0; i < completeworks.size(); i++) {
-						event.getChannel().sendMessage(completeworks.get(i));
-					}
+//					for (int i = 0; i < completeworks.size(); i++) {
+//						event.getChannel().sendMessage(completeworks.get(i));
+//					}
 				}
+				else {
+					System.out.println("More than one: received");
+					
+					String altcomposers = "";
+					for (int i = 0; i < searchdata.composers.length; i++) {
+						altcomposers += i + ". " + searchdata.composers[i].complete_name + "\n";
+					}
+					event.getChannel().sendMessage("More than one composer.\n" + altcomposers);
+					event.getChannel().sendMessage("Type in !specific followed by the number that matches your composer to choose.");
+				}
+			}
+		}
+		if (event.getMessageContent().contains("!specific")) {
+			String loc = event.getMessageContent().replaceAll(" ", "").replace("!specific","");
+			if (loc.equals("")) {
+				event.getChannel().sendMessage("Please input the number corresponding to the composer you are looking for.");
+			}
+			else {
+				int index = Integer.parseInt(loc);
+				searchdata = getWorkById(searchdata.composers[index].id);
 				
+				ArrayList<String> completeworks = searchdata.toStringWorks();
+
+				for (int i = 0; i < completeworks.size(); i++) {
+					event.getChannel().sendMessage(completeworks.get(i));
+				}
 			}
 		}
 	}
-	
 }
