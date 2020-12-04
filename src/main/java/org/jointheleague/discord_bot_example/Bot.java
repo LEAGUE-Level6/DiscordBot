@@ -88,6 +88,10 @@ public class Bot  {
 		api.addMessageCreateListener(newWeather);
 		helpListener.addHelpEmbed(newWeather.getHelpEmbed());
 		
+		HungerGames hungerGames = new HungerGames(channelName);
+		api.addMessageCreateListener(hungerGames);
+		helpListener.addHelpEmbed(hungerGames.getHelpEmbed());
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
