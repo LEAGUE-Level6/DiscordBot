@@ -82,7 +82,8 @@ public class OpusByComposer extends CustomMessageCreateListener{
 					
 					ArrayList<String> completeworks = searchdata.toStringWorks();
 					event.getChannel().sendMessage(completeworks.get(0));
-
+					
+//					for printing out every single piece instead of first 2000 characters					
 //					for (int i = 0; i < completeworks.size(); i++) {
 //						event.getChannel().sendMessage(completeworks.get(i));
 //					}

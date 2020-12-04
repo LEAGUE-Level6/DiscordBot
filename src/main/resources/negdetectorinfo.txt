@@ -1,1 +1,2 @@
-suffocated: 1
+anxious: 1
+scared: 1
