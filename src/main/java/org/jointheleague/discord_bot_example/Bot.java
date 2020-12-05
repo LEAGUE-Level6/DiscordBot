@@ -4,6 +4,7 @@ import org.javacord.api.DiscordApi;
 
 import org.javacord.api.DiscordApiBuilder;
 
+
 /**
  * Launches all of the listeners for one channel.
  * @author keithgroves and https://tinystripz.com
@@ -130,6 +131,9 @@ public class Bot  {
 		api.addMessageCreateListener(new CuteAnimal(channelName));
 		api.addMessageCreateListener(new Weather(channelName));
 		api.addMessageCreateListener(new FashionAdvisor(channelName));
+		api.addMessageCreateListener(new NewPollMessageListener(channelName));
+		api.addMessageCreateListener(new LotteryBall(channelName));
+
 		api.addMessageCreateListener(new LatexRender(channelName));
 		api.addMessageCreateListener(new MinesweeperListener(channelName));
 		api.addMessageCreateListener(new Bot1Listener(channelName));
