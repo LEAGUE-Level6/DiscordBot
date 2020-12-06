@@ -109,6 +109,10 @@ public class Bot  {
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
 		
+		Chopsticks CS = new Chopsticks(channelName);
+		api.addMessageCreateListener(CS);
+		helpListener.addHelpEmbed(CS.getHelpEmbed());
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
