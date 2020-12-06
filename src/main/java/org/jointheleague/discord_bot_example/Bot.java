@@ -110,6 +110,7 @@ public class Bot  {
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
 		
 		//old way to add listeners 
+		api.addMessageCreateListener(new RaffleBot(channelName, api));
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
 		api.addMessageCreateListener(new DadJokes(channelName));
