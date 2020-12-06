@@ -1,4 +1,5 @@
+
 {
-   "channels": ["ryant"],
-   "token": "NzQyODkwMDM4NjY4NTU4NDE2.XzMsQw.NbaPLqiLwNaT7j_yuGHzeHz_40s"
+    "channels": ["channel"],
+    "token": "token"
 }
