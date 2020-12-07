@@ -70,6 +70,10 @@ public class Bot  {
 		api.addMessageCreateListener(setPFP);
 		helpListener.addHelpEmbed(setPFP.getHelpEmbed());
 		
+		Checkers checkers = new Checkers(channelName);
+		api.addMessageCreateListener(checkers);
+		helpListener.addHelpEmbed(checkers.getHelpEmbed());
+		
 		ToGif toGif = new ToGif(channelName);
 		api.addMessageCreateListener(toGif);
 		helpListener.addHelpEmbed(toGif.getHelpEmbed());
