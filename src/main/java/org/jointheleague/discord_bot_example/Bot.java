@@ -104,7 +104,11 @@ public class Bot  {
 		Dice d = new Dice(channelName);
 		api.addMessageCreateListener(d);
 		helpListener.addHelpEmbed(d.getHelpEmbed());
-
+		
+		RockPaperScissors rps = new RockPaperScissors(channelName);
+		api.addMessageCreateListener(rps);
+		helpListener.addHelpEmbed(rps.getHelpEmbed());
+		
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
