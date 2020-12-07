@@ -58,19 +58,44 @@ public class ChessBot extends CustomMessageCreateListener {
 
 			TakePiece(event);
 			MovePieces(OgRow, OgColumn, NewRow, NewColumn, event);
+			
+			
+
+			event.getChannel().sendMessage(SpawnChessBoard(event));
+			
+			for (int i = 0; i < ChessBoard.length; i++) {
+				for (int j = 0; j < ChessBoard[i].length; j++) {
+					if (ChessBoard[i][j].PieceName.equals("pawn")) {
+						if (i == 0 && ChessBoard[i][j].PieceColor.equals("white")) {
+							// System.out.println("The Piece can be regained");
+							event.getChannel().sendMessage("Because your pawn made it to the other side, you "
+									+ "can now regain a piece! Type - followed by regain followed by the color and piece that you want to get the piece");
+							return;
+						}
+					}
+				}
+			}
+		}
+		
+		
+
+		if (event.getMessageContent().contains("-regain")) {
+
+			
 			regainPiece(event);
 
 			event.getChannel().sendMessage(SpawnChessBoard(event));
 		}
 
-		if (event.getMessageContent().contains("-regain")) {
-			regainPiece(event);
-			String Message = event.getMessageContent();
-			
-			String RegainedPiece= Message.substring(8);
-			
-		}
-		
+		/*
+		 * if (event.getMessageContent().contains("-regain")) { regainPiece(event);
+		 * String Message = event.getMessageContent();
+		 * 
+		 * String RegainedPiece= Message.substring(8);
+		 * 
+		 * }
+		 */
+
 	}
 
 	public String SpawnChessBoard(MessageCreateEvent event) {
@@ -216,12 +241,13 @@ public class ChessBot extends CustomMessageCreateListener {
 		for (int i = 0; i < ChessBoard.length; i++) {
 			for (int j = 0; j < ChessBoard[i].length; j++) {
 
-				if (!ChessBoard[NewRow][NewColumn].PieceName.equals("tile") && !ChessBoard[OgRow][OgColumn].PieceName.equals("tile")) {
-					
+				if (!ChessBoard[NewRow][NewColumn].PieceName.equals("tile")
+						&& !ChessBoard[OgRow][OgColumn].PieceName.equals("tile")) {
+
 					if (!ChessBoard[OgRow][OgColumn].PieceColor.equals(ChessBoard[NewRow][NewColumn].PieceColor)) {
 						ChessPieces Pieces = new ChessPieces("Black", "Pawn", "Pawn");
 						TakenPieces.add(ChessBoard[NewRow][NewColumn]);
-						//TakenPieces.add(Pieces);
+						// TakenPieces.add(Pieces);
 						return;
 					}
 				}
@@ -231,27 +257,56 @@ public class ChessBot extends CustomMessageCreateListener {
 
 	}
 
+	public void regainingPiece(MessageCreateEvent event, int row, int column) {
+		System.out.println("-regain");
+		String Message = event.getMessageContent();
+
+		String PieceColor=Message.substring(8, 13);
+		//-regain white rook
+		String RegainedPiece = Message.substring(15);
+
+		for (int k = 0; k < TakenPieces.size(); k++) {
+			if (TakenPieces.get(k).PieceName.equals(RegainedPiece)) {
+				if (TakenPieces.get(k).PieceColor.equals(PieceColor)) {
+					ChessBoard[row][column] = TakenPieces.get(k);
+					TakenPieces.remove(k);
+				}
+			
+			}
+		}
+
+	}
+	
+
 	public void regainPiece(MessageCreateEvent event) {
 		for (int i = 0; i < ChessBoard.length; i++) {
 			for (int j = 0; j < ChessBoard[i].length; j++) {
-				if (ChessBoard[i][j].PieceType.equals("pawn")) {
+				if (ChessBoard[i][j].PieceName.equals("pawn")) {
 					if (i == 0 && ChessBoard[i][j].PieceColor.equals("white")) {
-						event.getChannel().sendMessage("Because your pawn made it to the other side, you "
-								+ "can now regain a piece! Type -regain followed by the piece that you want to get the piece");
-						if (event.getMessageContent().contains("-regain")) {
-
-						}
+						// System.out.println("The Piece can be regained");
+						/*
+						 * event.getChannel().
+						 * sendMessage("Because your pawn made it to the other side, you " +
+						 * "can now regain a piece! Type - followed by regain followed by the piece that you want to get the piece"
+						 * );
+						 */
+						regainingPiece(event, i, j);
 					}
 
 					else if (i == 7 && ChessBoard[i][j].PieceColor.equals("black")) {
-						event.getChannel().sendMessage("Because your pawn made it to the other side, you "
-								+ "can now regain a piece! Type -regain followed by the piece that you want to get the piece");
+						/*
+						 * event.getChannel().
+						 * sendMessage("Because your pawn made it to the other side, you " +
+						 * "can now regain a piece! Type - followed by regain followed by the piece that you want to get the piece"
+						 * );
+						 */
+						regainingPiece(event, i, j);
+
 					}
 
 				}
 			}
 		}
-		
 
 	}
 
