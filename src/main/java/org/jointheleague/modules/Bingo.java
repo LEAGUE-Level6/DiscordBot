@@ -13,9 +13,11 @@ public class Bingo extends CustomMessageCreateListener {
 	private static final String BINGO = "!bingo";
 	private static final String NEW = "!new";
 	private static final String RESTART = "!restart";
+	private static final String CHEAT = "!cheat";
 	String bingoCard[][] = new String[5][5];
-	ArrayList<Integer> randomNumbers = new ArrayList<Integer>(); // keep numbers the same
-	ArrayList<Integer> randomNumArr; // remove numbers from
+	ArrayList<Integer> randomNumbers; // arrayList of 60 random numbers ranging between 1 and 99
+	ArrayList<Integer> randomNumArr; // copy of randomNumbers; removes numbers so !new does not repeat numbers when
+										// called
 	int random;
 	int index;
 	String discordCard = "\n\t  ";
@@ -33,19 +35,22 @@ public class Bingo extends CustomMessageCreateListener {
 		Random r = new Random();
 
 		if (message.equalsIgnoreCase("!bingo")) {
+			randomNumbers = new ArrayList<Integer>();
 			while (randomNumbers.size() < 60) {
 				random = (int) (Math.random() * 99 + 1);
 				if (!randomNumbers.contains(random)) {
 					randomNumbers.add(random);
 				}
 			}
+
 			System.out.println(randomNumbers);
 			randomNumArr = new ArrayList<Integer>(randomNumbers);
 
 			for (int i = 0; i < bingoCard.length; i++) {
 				for (int j = 0; j < bingoCard[i].length; j++) {
 					if (i == 2 && j == 2) {
-						bingoCard[i][j] = "" + "FREE" + " ";
+						// used to be "FREE"
+						bingoCard[i][j] = "" + ":star:" + " ";
 					} else {
 						int tempRandom = randomNumArr.remove((int) (Math.random() * randomNumArr.size() - 1));
 						if (tempRandom > 9) {
@@ -93,71 +98,31 @@ public class Bingo extends CustomMessageCreateListener {
 			randomNumbers.remove(index);
 			newOutput = "";
 
-//			for (int i = 0; i < bingoCard.length; i++) {
-//				for (int j = 0; j < bingoCard[i].length; j++) {
-//					// column
-//					if (i == 0 && bingoCard[i][j].contains(":white_check_mark:")
-//							&& bingoCard[i + 1][j].contains(":white_check_mark:")
-//							&& (bingoCard[i + 2][j].contains(":white_check_mark:")
-//									|| bingoCard[i + 2][j + 2].contains("FREE"))
-//							&& bingoCard[i + 3][j].contains(":white_check_mark:")
-//							&& bingoCard[i + 4][j].contains(":white_check_mark:")) {
-//						System.out.println("you win!!");
-//						event.getChannel().sendMessage(":trophy: BINGO! You win! :trophy:");
-//						hasWon = true;
-//						break;
-//					}
-//					// row
-//					if (j == 0 && bingoCard[i][j].equals(":white_check_mark:")
-//							&& bingoCard[i][j + 1].equals(":white_check_mark:")
-//							&& bingoCard[i][j + 2].equals(":white_check_mark:")
-//							&& bingoCard[i][j + 3].equals(":white_check_mark:")
-//							&& bingoCard[i][j + 4].equals(":white_check_mark:")
-//							|| bingoCard[i + 2][j + 2].equals("FREE")) {
-//						event.getChannel().sendMessage(":trophy: BINGO! You win! :trophy:");
-//						System.out.println("you win!!");
-//						hasWon = true;
-//						break;
-//					}
-//					// diagonal from the right
-//					if (i == 4 && j == 4 && bingoCard[i - 4][j - 4].equals(":white_check_mark:")
-//							&& bingoCard[i - 3][j - 3].equals(":white_check_mark:")
-//							&& bingoCard[i - 2][j - 2].equals(":white_check_mark:")
-//							&& bingoCard[i - 1][j - 1].equals(":white_check_mark:")
-//							&& bingoCard[i][j].equals(":white_check_mark:") && bingoCard[i - 2][j - 2].equals("FREE")) {
-//						event.getChannel().sendMessage(":trophy: BINGO! You win! :trophy:");
-//						System.out.println("you win!!");
-//						hasWon = true;
-//						break;
-//					}
-//					// diagonal from the left
-//					if (i == 0 && j == 0 && bingoCard[i][j].equals(":white_check_mark:")
-//							&& bingoCard[i + 1][j + 1].equals(":white_check_mark:")
-//							&& bingoCard[i + 2][j + 2].equals(":white_check_mark:")
-//							&& bingoCard[i + 3][j + 3].equals(":white_check_mark:")
-//							&& bingoCard[i + 4][j + 4].equals(":white_check_mark:")
-//							&& bingoCard[i + 2][j + 2].equals("FREE")) {
-//						event.getChannel().sendMessage(":trophy: BINGO! You win! :trophy:");
-//						System.out.println("you win!!");
-//						hasWon = true;
-//						break;
-//					}
-//				}
-//				if (hasWon == true) {
-//					break;
-//				}
-//			}
-			
 			if (checkForWinner()) {
-			event.getChannel().sendMessage(":trophy: BINGO! You win! :trophy:");
-		}
-			
-			if (message.equalsIgnoreCase("!restart")) {
-				
+				event.getChannel().sendMessage(":trophy: BINGO! You win! :trophy:");
 			}
-		
 		}
-		
+
+		if (message.equalsIgnoreCase("!restart")) {
+			// reset the array
+		}
+
+// TEST WINS (!cheat)
+
+//		if (message.equalsIgnoreCase("!cheat")) {
+//			bingoCard[0][4] = ":white_check_mark:";
+//			bingoCard[1][3] = ":white_check_mark:";
+//			//bingoCard[2][2] = ":star:";
+//			bingoCard[3][1] = ":white_check_mark:";
+//			bingoCard[4][0] = ":white_check_mark:";
+//			updateDiscordCard();
+//			event.getChannel().sendMessage(discordCard);
+//			
+//			if (checkForWinner()) {
+//				event.getChannel().sendMessage(":trophy: BINGO! You win! :trophy:");
+//			}
+//		}
+
 	}
 
 	// updates the discord card by adding the numbers to the discordCard string
@@ -171,32 +136,32 @@ public class Bingo extends CustomMessageCreateListener {
 		}
 	}
 
+//WINNING MESSAGE WORKS NOW
 	public boolean checkForWinner() {
 		boolean hasWon = false;
-		if (hasWon = checkColumn()) {
+		if (checkColumn()) {
 			hasWon = true;
-		} else if (hasWon = checkRow()) {
+		} else if (checkRow()) {
 			hasWon = true;
-		} else if (hasWon = checkLeftDiagonal()) {
+		} else if (checkLeftDiagonal()) {
 			hasWon = true;
-		} else {
+		} else if (checkRightDiagonal()) {
 			hasWon = true;
 		}
 
 		return hasWon;
 	}
 
-	//works
+	// works
 	public boolean checkColumn() {
 		boolean hasWon = false;
 		for (int i = 0; i < bingoCard.length; i++) {
 			for (int j = 0; j < bingoCard[i].length; j++) {
-				if (i == 0 && bingoCard[i][j].contains(":white_check_mark:")
+				if (i == 0 && (bingoCard[i][j].contains(":white_check_mark:")
 						&& bingoCard[i + 1][j].contains(":white_check_mark:")
-						&& (bingoCard[i + 2][j].contains(":white_check_mark:")
-								|| bingoCard[i + 2][j + 2].contains("FREE"))
-						&& bingoCard[i + 3][j].contains(":white_check_mark:")
-						&& bingoCard[i + 4][j].contains(":white_check_mark:")) {
+						&& (bingoCard[i + 2][j].contains(":white_check_mark:") || bingoCard[2][2].contains(":star:"))
+						&& bingoCard[i + 3][j].equals(":white_check_mark:")
+						&& bingoCard[i + 4][j].contains(":white_check_mark:"))) {
 					System.out.println("you win!!");
 					hasWon = true;
 					break;
@@ -206,16 +171,16 @@ public class Bingo extends CustomMessageCreateListener {
 		return hasWon;
 	}
 
-	//changed to contains. was originally equals
+	// changed to contains. was originally equals
 	public boolean checkRow() {
 		boolean hasWon = false;
 		for (int i = 0; i < bingoCard.length; i++) {
 			for (int j = 0; j < bingoCard[i].length; j++) {
-				if (j == 0 && bingoCard[i][j].contains(":white_check_mark:")
+				if (j == 0 && (bingoCard[i][j].contains(":white_check_mark:")
 						&& bingoCard[i][j + 1].contains(":white_check_mark:")
-						&& bingoCard[i][j + 2].contains(":white_check_mark:")
+						&& (bingoCard[i][j + 2].contains(":white_check_mark:") || bingoCard[2][2].contains(":star:"))
 						&& bingoCard[i][j + 3].contains(":white_check_mark:")
-						&& bingoCard[i][j + 4].contains(":white_check_mark:") || bingoCard[i + 2][j + 2].contains("FREE")) {
+						&& bingoCard[i][j + 4].contains(":white_check_mark:"))) {
 					System.out.println("you win!!");
 					hasWon = true;
 					break;
@@ -227,38 +192,24 @@ public class Bingo extends CustomMessageCreateListener {
 
 	public boolean checkLeftDiagonal() {
 		boolean hasWon = false;
-		for (int i = 0; i < bingoCard.length; i++) {
-			for (int j = 0; j < bingoCard[i].length; j++) {
-				if (i == 4 && j == 4 && bingoCard[i - 4][j - 4].equals(":white_check_mark:")
-						&& bingoCard[i - 3][j - 3].equals(":white_check_mark:")
-						&& bingoCard[i - 2][j - 2].equals(":white_check_mark:")
-						&& bingoCard[i - 1][j - 1].equals(":white_check_mark:")
-						&& bingoCard[i][j].equals(":white_check_mark:") && bingoCard[i - 2][j - 2].equals("FREE")) {
-					System.out.println("you win!!");
-					hasWon = true;
-					break;
-				}
-			}
+		if (bingoCard[4][4].equals(":white_check_mark:") && bingoCard[3][3].equals(":white_check_mark:")
+				&& bingoCard[1][1].equals(":white_check_mark:") && bingoCard[0][0].equals(":white_check_mark:")) {
+			System.out.println("you win!!");
+			hasWon = true;
+
 		}
+
 		return hasWon;
 	}
-	
+
 	public boolean checkRightDiagonal() {
 		boolean hasWon = false;
-		for (int i = 0; i < bingoCard.length; i++) {
-			for (int j = 0; j < bingoCard[i].length; j++) {
-				if (i == 0 && j == 0 && bingoCard[i][j].equals(":white_check_mark:")
-						&& bingoCard[i + 1][j + 1].equals(":white_check_mark:")
-						&& bingoCard[i + 2][j + 2].equals(":white_check_mark:")
-						&& bingoCard[i + 3][j + 3].equals(":white_check_mark:")
-						&& bingoCard[i + 4][j + 4].equals(":white_check_mark:")
-						&& bingoCard[i + 2][j + 2].equals("FREE")) {
-					System.out.println("you win!!");
-					hasWon = true;
-					break;
-				}
-			}
+		if (bingoCard[0][4].equals(":white_check_mark:") && bingoCard[1][3].equals(":white_check_mark:")
+				&& bingoCard[3][1].equals(":white_check_mark:") && bingoCard[4][0].equals(":white_check_mark:")) {
+			System.out.println("you win!!");
+			hasWon = true;
 		}
+
 		return hasWon;
 	}
 
