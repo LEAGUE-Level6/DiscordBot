@@ -109,6 +109,10 @@ public class Bot  {
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
 		
+		Trivia t = new Trivia(channelName);
+		api.addMessageCreateListener(t);
+		helpListener.addHelpEmbed(t.getHelpEmbed());
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
