@@ -1,2 +1,0 @@
-anxious: 1
-scared: 1

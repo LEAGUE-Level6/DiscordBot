@@ -16,6 +16,7 @@ import net.aksingh.owmjapis.api.APIException;
 
 public class OpusByComposer extends CustomMessageCreateListener{
 	SearchData searchdata;
+	boolean previouslyDone;
 
 	public OpusByComposer(String channelName) {
 		super(channelName);
@@ -70,6 +71,7 @@ public class OpusByComposer extends CustomMessageCreateListener{
 			}
 			
 			else {
+				previouslyDone = true;
 				searchdata = getByComposer(loc);	//repetitive
 				System.out.println(searchdata.toString());
 				System.out.println(searchdata.composers.length);
@@ -101,19 +103,21 @@ public class OpusByComposer extends CustomMessageCreateListener{
 			}
 		}
 		if (event.getMessageContent().contains("!specific")) {
-			String loc = event.getMessageContent().replaceAll(" ", "").replace("!specific","");
-			if (loc.equals("")) {
-				event.getChannel().sendMessage("Please input the number corresponding to the composer you are looking for.");
+			if (previouslyDone == true) {
+				String loc = event.getMessageContent().replaceAll(" ", "").replace("!specific","");
+				if (loc.equals("")) {
+					event.getChannel().sendMessage("Please input the number corresponding to the composer you are looking for.");
+				}
+				else {
+					int index = Integer.parseInt(loc);
+					searchdata = getWorkById(searchdata.composers[index].id);
+					
+					ArrayList<String> completeworks = searchdata.toStringWorks();
+					event.getChannel().sendMessage(completeworks.get(0));
+				}
 			}
 			else {
-				int index = Integer.parseInt(loc);
-				searchdata = getWorkById(searchdata.composers[index].id);
-				
-				ArrayList<String> completeworks = searchdata.toStringWorks();
-
-				for (int i = 0; i < completeworks.size(); i++) {
-					event.getChannel().sendMessage(completeworks.get(i));
-				}
+				event.getChannel().sendMessage("Please enter the !opusbycomposer command first!");
 			}
 		}
 	}

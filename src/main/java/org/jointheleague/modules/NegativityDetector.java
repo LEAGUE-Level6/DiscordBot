@@ -136,11 +136,15 @@ public class NegativityDetector extends CustomMessageCreateListener {
 			} else {
 				try {
 					BufferedReader br = new BufferedReader(new FileReader(infosheet));
+					
+					String message = "YOUR STATS:\n";
 					String line = br.readLine();
 					while(line != null){
-						event.getChannel().sendMessage(line);
+						message += line + "\n";
 						line = br.readLine();
 					}
+					
+					event.getChannel().sendMessage(message);
 
 					br.close();
 				} catch (FileNotFoundException e) {
