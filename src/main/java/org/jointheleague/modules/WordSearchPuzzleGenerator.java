@@ -2,6 +2,7 @@ package org.jointheleague.modules;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import org.javacord.api.event.message.MessageCreateEvent;
@@ -32,7 +33,7 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener{
 		//making string array
 		String[] words = response.split(",");
 		for(int i = 0; i < words.length;i++) {
-			System.out.println(words[i]);
+			//System.out.println(words[i]);
 		}
 		
 		int voh[] = new int[words.length];
@@ -42,7 +43,7 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener{
 		// 0 = vertical, 1 = horizontal, 2 = diagonal
 		//printing
 		for(int i = 0; i < words.length; i++) {
-			System.out.println(words[i] + " has " + voh[i]);
+			//System.out.println(words[i] + " has " + voh[i]);
 		}
 		
 		char[][] puzzle = new char[10][10];
@@ -62,9 +63,9 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener{
 		
 		//printing	
 		for(int o = 0; o < puzzle.length; o++) {
-			System.out.println();
+			//System.out.println();
 			for(int j = 0; j < puzzle[o].length;j++) {
-				System.out.print(puzzle[o][j] + " ");
+				//System.out.print(puzzle[o][j] + " ");
 			}
 		}
 		boolean[][] taken = new boolean[10][10];
@@ -73,24 +74,24 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener{
 				taken[i][j] = false;
 			}
 		}
-		int[] locations = new int[words.length];
+		Integer[] locations = new Integer[words.length];
 		for(int i = 0; i < locations.length; i++) {
-			locations[i] = new Random().nextInt(10);
+			locations[i] = i;
 		}
-		for(int h = 0; h < locations.length; h++) {
-			System.out.println(locations[h]);
-		}
+		System.out.println(Arrays.toString(locations));
+		
+		List<Integer> test = Arrays.asList(locations);
+		Collections.shuffle(test);	
+		System.out.println(Arrays.toString(locations));
 		
 		for(int h = 0; h < locations.length; h++) {
-			System.out.println(locations[h]);
+			//System.out.println(locations[h]);
 		}
 		for(int p = 0; p < words.length; p++) {	
 			//vertical
-			System.out.println(locations[p]);
+			//System.out.println(locations[p]);
 			if(voh[p] == 0) {
 			char j[] = words[p].toCharArray();
-			//int sp = new Random().nextInt(10-j.length);
-			//int test = j.length + 1;
 				for(int i = 0; i < j.length; i++) {
 				puzzle[i][locations[p]]=j[i];
 				}
@@ -98,11 +99,11 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener{
 			
 			//horizontal
 		}
-		System.out.println();
+		//System.out.println();
 		for(int o = 0; o < puzzle.length; o++) {
-			System.out.println();
+			//System.out.println();
 			for(int j = 0; j < puzzle[o].length;j++) {
-				System.out.print(puzzle[o][j] + " ");
+				//System.out.print(puzzle[o][j] + " ");
 			}
 		}
 		String[] answer = new String[10];
