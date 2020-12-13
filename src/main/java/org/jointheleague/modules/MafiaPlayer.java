@@ -20,6 +20,7 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 	private static final String vote = ".mafia-vote";
 	private static final String instructions = ".mafia-intructions";
 	private static final String end = ".mafia-end";
+	private static final String ready = ".mafia-ready";
 	
 	private static final String mafiaKill = ".mafia-kill";
 	private static final String detectiveInspect = ".mafia-inspect";
@@ -30,12 +31,6 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 	private static boolean detectivetime = false;
 	private static boolean doctortime = false;
 
-	int p = 7;
-	public MafiaPlayer(String channelName) {
-		super(channelName);
-		helpEmbed = new HelpEmbed(COMMAND, "Starts a game of Mafia //(e.g. !playMafia). **Make sure all players enable messages from server members. Bot must also have permission to message server members. ");
-	}
-
 	ArrayList<org.javacord.api.entity.user.User> names = new ArrayList<org.javacord.api.entity.user.User>();
 	ArrayList<org.javacord.api.entity.user.User> backup = new ArrayList<org.javacord.api.entity.user.User>();
 
@@ -44,235 +39,259 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 	ArrayList<org.javacord.api.entity.user.User> Detective = new ArrayList<org.javacord.api.entity.user.User>();
 	ArrayList<org.javacord.api.entity.user.User> Villagers = new ArrayList<org.javacord.api.entity.user.User>();
 	
-	String[] beginningStorylines = {"11", "22"};
-	String[] deathStorylines = {"1", "2", "3", "", "", "", "", "", "", "", "", "", "", "", "", ""};
+	String[] beginningStorylines = {"begin1", "begin2"};
+	String[] deathStorylines = {"d1", "d2", "d3", "d4"};
+	
+	int p = 0;
+	boolean assigningPlayers = false;
+	int currentPlayer = 1;
+	
+	long bot;
+	
+	public MafiaPlayer(String channelName) {
+		super(channelName);
+		helpEmbed = new HelpEmbed(COMMAND, "Starts a game of Mafia //(e.g. !playMafia 8). **Make sure all players enable messages from server members. Bot must also have permission to message server members. ");
+	}
 
-	boolean mafia = false;
 	
 	@Override
-	public void handle(MessageCreateEvent event) {
+	public void handle(MessageCreateEvent event) { //occurs whenever a msg is sent
 		String msg = event.getMessageContent();
 				
 		//!Playing
 		if (!Playing) {
-			if (msg.equalsIgnoreCase(COMMAND)) {
-				event.getChannel().sendMessage("Welcome To Mafia! Please enter the number of players that will be participating (7-16 players)");
+			if (msg.contains(COMMAND)) {
+				p = Integer.parseInt(msg.replace(COMMAND + " ", "").trim());
+				if (7 <= p && p <= 16) {
+					event.getChannel().sendMessage("Welcome To Mafia! Starting game with " + p + " players...\n");
+					event.getChannel().sendMessage("Player 1, please type below:   Player 1");
+					assigningPlayers = true;
+					return;
+				} 
+			}			
+			
+			if (msg.equals("Player 1, please type below:   Player 1")) {
+				bot = event.getMessageAuthor().getId();
 			}
 			
-			if (msg.equals("7") || msg.equals("8") || msg.equals("9") || msg.equals("10") || msg.equals("11") || msg.equals("12") || msg.equals("13") || msg.equals("14") || msg.equals("15") || msg.equals("16")) {
-				playernum(event);
-			} else {
-				event.getChannel().sendMessage("Invalid response. Please enter in a number. 2");
-			}
-			
-			
-			if (msg.equalsIgnoreCase("confirm players")) {
-				for (int i = 1; i <= p; i++) {
-					event.getChannel().sendMessage("Player " + i + ", please type below:   Player " + i);
-				}
-			} 
-			
-			//temp
-			if (msg.equalsIgnoreCase("1")) {
-				confirmPlayers(event);
-			}if (msg.equalsIgnoreCase("Player 1")) {
-				confirmPlayers(event);
-			}if (msg.equalsIgnoreCase("Player 2")) {
-				confirmPlayers(event);
-			}if (msg.equalsIgnoreCase("Player 3")) {
-				confirmPlayers(event);
-			}if (msg.equalsIgnoreCase("Player 4")) {
-				confirmPlayers(event);
-			}if (msg.equalsIgnoreCase("Player 5")) {
-				confirmPlayers(event);
-			}if (msg.equalsIgnoreCase("Player 6")) {
-				confirmPlayers(event);
-			}if (msg.equalsIgnoreCase("Player 7")) {
-				confirmPlayers(event);
-			}if (msg.equalsIgnoreCase("Player 8")) {
-				confirmPlayers(event);
-			}if (msg.equalsIgnoreCase("Player 9")) {
-				confirmPlayers(event);
-			}if (msg.equalsIgnoreCase("Player 10")) {
-				confirmPlayers(event);
-			}if (msg.equalsIgnoreCase("Player 11")) {
-				confirmPlayers(event);
-			}if (msg.equalsIgnoreCase("Player 12")) {
-				confirmPlayers(event);
-			}if (msg.equalsIgnoreCase("Player 13")) {
-				confirmPlayers(event);
-			}if (msg.equalsIgnoreCase("Player 14")) {
-				confirmPlayers(event);
-			}if (msg.equalsIgnoreCase("Player 15")) {
-				confirmPlayers(event);
-			}if (msg.equalsIgnoreCase("Player 16")) {
-				confirmPlayers(event);
-			}
-			
-			
-			if (names.size() == p) {  
-				System.out.println(names.listIterator());
-				System.out.println("jsutincase" + names.toString());
-				event.getChannel().sendMessage("Setup Done");
-				Playing = true;
-			}
-		}
-		
-		
-		
-		//Playing		
-		boolean start = false;
-		if (Playing) {
-			start = true;
-			if (start) {
-				setRoles(event);
-				System.out.println("setroles");
-				Mafia(event);
-				start = false;
-//				mafia = true;
-			}
-			
-			//temporary
-			if (msg.equalsIgnoreCase("equals")) {
-				mafia = true;
-			}
-			
-			if (msg.equalsIgnoreCase("list")) {
-				for (int i = 0; i < names.size(); i++) {
-					System.out.println(names.get(i).getName());
-				}
-			}
-			
-			//vote
-			if (msg.startsWith(vote)) {
-				org.javacord.api.entity.user.User user = null;
-				for (int i = 0; i < names.size(); i++) {
-					if (names.get(i).getName() == msg.replaceAll(" ", "").replace(vote,"")) {
-						user = names.get(i);
+			if (assigningPlayers) {
+				System.out.println(event.getMessageAuthor().getId() + " " + bot);
+				if (event.getMessageAuthor().getId() != bot) {
+					confirmPlayers(event);
+					currentPlayer++;
+					if (currentPlayer > p) {
+						assigningPlayers = false;
+					} else {
+						event.getChannel().sendMessage("Player " + currentPlayer + ", please type below:   Player " + currentPlayer);
 					}
 				}
-				vote(event, user);		
 			}
+		}
+	}
 			
-			
-			//run game
-			while (mafia) {
-				Mafia(event);
-				if (Mafia.isEmpty()) {
-					event.getChannel().sendMessage("Villagers win!\n" + Villagers.toString());	
-					mafia = false;
-					Playing = false;
-				} else if (Villagers.isEmpty()) {
-					event.getChannel().sendMessage("Mafia win!\n" + Mafia.toString());	
-					mafia = false;
-					Playing = false;
-				}
-			}
-		} 
-		
-		//end of Playing
-		
-		
-		//instructions (AT)			
-		if (msg.equalsIgnoreCase(instructions)) {
-			EmbedBuilder instructions = new EmbedBuilder();
-			
-			instructions.setColor(new Color(255, 40, 20));
-			instructions.setTitle("Mafia Game Instructions");
-			instructions.setDescription(
-					"This is a version of the game Mafia. \n" + "If you need to know the rules, enter the command **" + "" + "**\n");
-//			instructions.addField("To play the game, use these commands:", 
-//							"**" + COMMAND + "** - start the game\n" +
-//							...
+//			if (msg.equalsIgnoreCase("Player 1")) {
+//				confirmPlayers(event);
+//			}if (msg.equalsIgnoreCase("Player 2")) {
+//				confirmPlayers(event);
+//			}if (msg.equalsIgnoreCase("Player 3")) {
+//				confirmPlayers(event);
+//			}if (msg.equalsIgnoreCase("Player 4")) {
+//				confirmPlayers(event);
+//			}if (msg.equalsIgnoreCase("Player 5")) {
+//				confirmPlayers(event);
+//			}if (msg.equalsIgnoreCase("Player 6")) {
+//				confirmPlayers(event);
+//			}if (msg.equalsIgnoreCase("Player 7")) {
+//				confirmPlayers(event);
+//			}if (msg.equalsIgnoreCase("Player 8")) {
+//				confirmPlayers(event);
+//			}if (msg.equalsIgnoreCase("Player 9")) {
+//				confirmPlayers(event);
+//			}if (msg.equalsIgnoreCase("Player 10")) {
+//				confirmPlayers(event);
+//			}if (msg.equalsIgnoreCase("Player 11")) {
+//				confirmPlayers(event);
+//			}if (msg.equalsIgnoreCase("Player 12")) {
+//				confirmPlayers(event);
+//			}if (msg.equalsIgnoreCase("Player 13")) {
+//				confirmPlayers(event);
+//			}if (msg.equalsIgnoreCase("Player 14")) {
+//				confirmPlayers(event);
+//			}if (msg.equalsIgnoreCase("Player 15")) {
+//				confirmPlayers(event);
+//			}if (msg.equalsIgnoreCase("Player 16")) {
+//				confirmPlayers(event);
+//			}
 //			
-//							"**" + again + "** - used only directly after the last game ends, it allows you to play a new game in quick succession");
-		}
-		
-		//end game (AT)
-		if (msg.equalsIgnoreCase(end)) {
-			mafia = false;
-			Playing = false;
-		}
-	}
+//			
+//			if (names.size() == p) {  
+//				System.out.println("jsutincase" + names.toString());
+//				Playing = true;
+//			}
+//		}
+//		
+//		
+//		boolean mafia = false;
+//		
+//		//Playing		
+//		boolean start = true;
+//		if (Playing) {
+//			if (start) {
+//				setRoles(event);
+//				start = false;
+//				mafia = true;
+//			}
+//			
+//				
+//			if (msg.equalsIgnoreCase("list")) {
+//				System.out.println("n" + names.toString());
+//				System.out.println("\n");
+//				System.out.println("m" + Mafia.toString());
+//				System.out.println("doc" + Doctor.toString());
+//				System.out.println("d" + Detective.toString());
+//				System.out.println("v" + Villagers.toString());
+//			}			
+//			
+//			//run game
+//			while (mafia) {
+//				Mafia(event);
+//				if (Mafia.isEmpty()) {
+//					event.getChannel().sendMessage("Villagers win!\n" + Villagers.toString());	
+//					mafia = false;
+//				} else if (Villagers.size() == 1) {
+//					event.getChannel().sendMessage("Mafia win!\n" + Mafia.toString());	
+//					mafia = false;
+//				} else {
+//					System.out.println("not there yet");
+//					mafia = false;
+//				}
+//			}
+//			
+//			if (msg.equalsIgnoreCase("end")) {
+//				Playing = false;
+//			}
+//		} 
+//		
+//		//Playing ends
+//		
+//		
+//		//instructions (AT)			
+//		if (msg.equalsIgnoreCase(instructions)) {
+//			EmbedBuilder instructions = new EmbedBuilder();
+//			
+//			instructions.setColor(new Color(255, 40, 20));
+//			instructions.setTitle("Mafia Game Instructions");
+//			instructions.setDescription(
+//					"This is a version of the game Mafia. \n" + "If you need to know the rules, enter the command **" + "" + "**\n");
+////			instructions.addField("To play the game, use these commands:", 
+////							"**" + COMMAND + "** - start the game\n" +
+////							...
+////			
+////							"**" + again + "** - used only directly after the last game ends, it allows you to play a new game in quick succession");
+//		}
+//		
+//		//end game (AT)
+//		if (msg.equalsIgnoreCase(end)) {
+//			mafia = false;
+//			Playing = false;
+//		}
+//	}
 	
 	
 	
-	//Get user input of number of players
-	private void playernum(MessageCreateEvent event) {
-		String msg = event.getMessageContent();
-		try {
-			p = 1;//Integer.parseInt(msg);
-			event.getChannel().sendMessage("Please type \"confirm players\" (no quotations) to continue.");
-		} catch (NumberFormatException e) {
-			event.getChannel().sendMessage("Invalid response. Please enter in a number.");
-		}
-	}
+//	//Get user input of number of players
+//	private void playernum(MessageCreateEvent event) {
+//		try {
+//			p = 1; //delete
+//		} catch (NumberFormatException e) {
+//			event.getChannel().sendMessage("Invalid response. Please enter in a number.");
+//		}
+//	}
 	
 	//Get user input to confirm players
 	private void confirmPlayers(MessageCreateEvent event) {
-		Server server = event.getServer().get();		
+		System.out.println(event.getMessageContent());
 		names.add(event.getMessageAuthor().asUser().get());		
-		//xO two user types 
-		System.out.println(names.size());
+		System.out.println(names.size() + " " + names.get(names.size()-1));
 	}
 	
 	//Randomly assign roles
 	private void setRoles(MessageCreateEvent event) {
+		System.out.println("setting roles");
+
 		backup = names;
 		
 		//chooses mafia
-		for (int i = 0; i < (int) backup.size()/3; i++) {
+		for (int i = 0; i < ((int) backup.size()/4)+1; i++) {  //fix back to i < (int) backup.size()/3
 			int r = new Random().nextInt(backup.size());
 			Mafia.add(backup.get(r));
-			backup.remove(backup.get(r));
+			//backup.remove(backup.get(r));
 		}
 		
 		//chooses doctor
 		int r2 = new Random().nextInt(backup.size());
 		Doctor.add(backup.get(r2));
 		Villagers.add(backup.get(r2));
-		backup.remove(backup.get(r2));
+		//backup.remove(backup.get(r2));
 				
 		//chooses detective
 		int r3 = new Random().nextInt(backup.size());
 		Detective.add(backup.get(r3));
 		Villagers.add(backup.get(r3));
-		backup.remove(backup.get(r3));
+		//backup.remove(backup.get(r3));
 		
 		backup = names;
+		
+		System.out.println("n" + names.toString());
+		System.out.println("m" + Mafia.toString());
+		System.out.println("doc" + Doctor.toString());
+		System.out.println("d" + Detective.toString());
+		System.out.println("v" + Villagers.toString());
+		
 	}
 	
 	
+	/////////////////////////////////////////////////////////////////////////////////
+	
+	//GAME
 	int round = 1;
 	private void Mafia(MessageCreateEvent event) {
-		String msg = event.getMessageContent();
+		System.out.println("Round " + round);
 		
+		String msg = event.getMessageContent();
+		boolean start2 = false;
+		boolean discussing = false;
 		if (round == 1) {
 			event.getChannel().sendMessage(beginningStorylines[(int) new Random().nextInt(beginningStorylines.length)]);
+		}
+		
+		
+		if (start2) {
 			event.getChannel().sendMessage("The night cycle now begins.");
+			mafiatime = true;
+			start2 = false;
 		}
 		
 		
 		//get Mafia input
 		if (mafiatime) {
+			System.out.println("maf");
 			boolean replied = false;
 			try {
 				org.javacord.api.entity.user.User user = null;
-				for (int i = 0; i < Mafia.size(); i++) {
-					Mafia.get(i).openPrivateChannel().get().sendMessage("Who would you like to kill?");
-					if (msg.startsWith(mafiaKill)) {
-						while (!replied) {
-							for (int i1 = 0; i1 < names.size(); i1++) {
-								if (names.get(i1).getName() == msg.replaceAll(" ", "").replace(mafiaKill,"")) {
-									user = names.get(i1);
-								}
-							}
-							replied = true;
+				Mafia.get(0).openPrivateChannel().get().sendMessage("Who would you like to kill?");
+				if (msg.startsWith(mafiaKill) && event.getMessageAuthor() == Mafia.get(0)) {
+					for (int i1 = 0; i1 < names.size(); i1++) {
+						if (names.get(i1).getName().equalsIgnoreCase(msg.replaceAll(" ", "").replace(mafiaKill,""))) {
+							user = names.get(i1);
 						}
-						kill(event, user);
-						mafiatime = false;
-					} 
-				}
+					}
+					System.out.println("mk");
+					kill(event, user);
+					doctortime = true;
+					mafiatime = false;
+				} 
+				
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}
@@ -280,16 +299,18 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 		
 		//get Doctor input
 		if (doctortime) {
+			System.out.println("doc");
 			try {
 				org.javacord.api.entity.user.User user = null;
 				Doctor.get(0).openPrivateChannel().get().sendMessage("Who would you like to save?");
-				if (msg.startsWith(doctorSave)) {
+				if (msg.startsWith(doctorSave) && event.getMessageAuthor() == Doctor.get(0)) {
 					for (int i1 = 0; i1 < names.size(); i1++) {
 						if (names.get(i1).getName() == msg.replaceAll(" ", "").replace(doctorSave,"")) {
 							user = names.get(i1);
 						}
 					}
 					save(event, user);
+					detectivetime = true;
 					doctortime = false;
 				}
 			} catch (InterruptedException | ExecutionException e) {
@@ -299,6 +320,7 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 		
 		//get Detective input
 		if (detectivetime) {
+			System.out.println("dec");
 			try {
 				org.javacord.api.entity.user.User user = null;
 				Detective.get(0).openPrivateChannel().get().sendMessage("Who would you like to inspect?");
@@ -317,9 +339,23 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 		}
 		
 		
+		//vote
+		if (msg.startsWith(vote)) {
+			org.javacord.api.entity.user.User user = null;
+			for (int i = 0; i < names.size(); i++) {
+				if (names.get(i).getName() == msg.replaceAll(" ", "").replace(vote,"")) {
+					user = names.get(i);
+				}
+			}
+			vote(event, user);		
+		}
+		
 		round+=1;
-		System.out.println(round);
+		System.out.println("end");
 	}
+	
+	//////////////////////////////////////////////////////////////////////////////
+	
 	
 	private void vote(MessageCreateEvent event, org.javacord.api.entity.user.User user) {
 		try {
