@@ -96,6 +96,10 @@ public class Bot  {
 		Greeter g = new Greeter(channelName);
 		api.addMessageCreateListener(g);
 		helpListener.addHelpEmbed(g.getHelpEmbed());
+		
+		BuildHouse builder = new BuildHouse(channelName);
+		api.addMessageCreateListener(builder);
+		helpListener.addHelpEmbed(builder.getHelpEmbed());
 
 		
 		//old way to add listeners 
