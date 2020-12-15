@@ -12,12 +12,11 @@ public class Bingo extends CustomMessageCreateListener {
 
 	private static final String BINGO = "!bingo";
 	private static final String NEW = "!new";
-	private static final String RESTART = "!restart";
 	private static final String CHEAT = "!cheat";
 	String bingoCard[][] = new String[5][5];
 	ArrayList<Integer> randomNumbers; // arrayList of 60 random numbers ranging between 1 and 99
-	ArrayList<Integer> randomNumArr; // copy of randomNumbers; removes numbers so !new does not repeat numbers when
-										// called
+	ArrayList<Integer> randomNumArr; // copy of randomNumbers; removes nums so !new won't repeat numbers when called
+
 	int random;
 	int index;
 	String discordCard = "\n\t  ";
@@ -26,7 +25,6 @@ public class Bingo extends CustomMessageCreateListener {
 
 	public Bingo(String channelName) {
 		super(channelName);
-
 	}
 
 	@Override
@@ -46,24 +44,10 @@ public class Bingo extends CustomMessageCreateListener {
 			System.out.println(randomNumbers);
 			randomNumArr = new ArrayList<Integer>(randomNumbers);
 
-			for (int i = 0; i < bingoCard.length; i++) {
-				for (int j = 0; j < bingoCard[i].length; j++) {
-					if (i == 2 && j == 2) {
-						// used to be "FREE"
-						bingoCard[i][j] = "" + ":star:" + " ";
-					} else {
-						int tempRandom = randomNumArr.remove((int) (Math.random() * randomNumArr.size() - 1));
-						if (tempRandom > 9) {
-							bingoCard[i][j] = " " + tempRandom + "\t";
-						} else {
-							bingoCard[i][j] = " 0" + tempRandom + "\t";
-						}
-					}
-					discordCard += bingoCard[i][j] + "   ";
-				}
-				discordCard += "\n";
-			}
+			createDiscordCard();
 
+			event.getChannel().sendMessage("Here is your bingo card! To play, respond with '!new'. "
+					+ "You win when you get 5 in a row. The middle space is free  :sunglasses:");
 			event.getChannel().sendMessage(discordCard);
 		}
 
@@ -100,11 +84,9 @@ public class Bingo extends CustomMessageCreateListener {
 
 			if (checkForWinner()) {
 				event.getChannel().sendMessage(":trophy: BINGO! You win! :trophy:");
+				// updateDiscordCard();
+				// resetDiscordCard();
 			}
-		}
-
-		if (message.equalsIgnoreCase("!restart")) {
-			// reset the array
 		}
 
 // TEST WINS (!cheat)
@@ -122,7 +104,26 @@ public class Bingo extends CustomMessageCreateListener {
 //				event.getChannel().sendMessage(":trophy: BINGO! You win! :trophy:");
 //			}
 //		}
+	}
 
+	public void createDiscordCard() {
+		for (int i = 0; i < bingoCard.length; i++) {
+			for (int j = 0; j < bingoCard[i].length; j++) {
+				if (i == 2 && j == 2) {
+					// used to be "FREE"
+					bingoCard[i][j] = "" + ":star:" + " ";
+				} else {
+					int tempRandom = randomNumArr.remove((int) (Math.random() * randomNumArr.size() - 1));
+					if (tempRandom > 9) {
+						bingoCard[i][j] = " " + tempRandom + "\t";
+					} else {
+						bingoCard[i][j] = " 0" + tempRandom + "\t";
+					}
+				}
+				discordCard += bingoCard[i][j] + "   ";
+			}
+			discordCard += "\n";
+		}
 	}
 
 	// updates the discord card by adding the numbers to the discordCard string
@@ -136,6 +137,11 @@ public class Bingo extends CustomMessageCreateListener {
 		}
 	}
 
+//	public void resetDiscordCard() {
+//		bingoCard = new String[5][5];
+//		discordCard = "";
+//	}
+
 //WINNING MESSAGE WORKS NOW
 	public boolean checkForWinner() {
 		boolean hasWon = false;
@@ -148,7 +154,6 @@ public class Bingo extends CustomMessageCreateListener {
 		} else if (checkRightDiagonal()) {
 			hasWon = true;
 		}
-
 		return hasWon;
 	}
 
@@ -196,9 +201,7 @@ public class Bingo extends CustomMessageCreateListener {
 				&& bingoCard[1][1].equals(":white_check_mark:") && bingoCard[0][0].equals(":white_check_mark:")) {
 			System.out.println("you win!!");
 			hasWon = true;
-
 		}
-
 		return hasWon;
 	}
 
@@ -209,8 +212,6 @@ public class Bingo extends CustomMessageCreateListener {
 			System.out.println("you win!!");
 			hasWon = true;
 		}
-
 		return hasWon;
 	}
-
 }
