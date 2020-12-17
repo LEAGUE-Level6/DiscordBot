@@ -1,7 +1,7 @@
 
 {
 
-    "channels": ["name"],
+    "channels": ["channels"],
     "token": "token"
 
 }

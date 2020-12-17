@@ -105,7 +105,7 @@ public class Bot  {
 		api.addMessageCreateListener(d);
 		helpListener.addHelpEmbed(d.getHelpEmbed());
 		
-		Rythm r = new Rythm(channelName);
+		Rythm r = new Rythm(channelName, api);
 		api.addMessageCreateListener(r);
 		helpListener.addHelpEmbed(r.getHelpEmbed());
 		
