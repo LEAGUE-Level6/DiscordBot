@@ -30,7 +30,7 @@ public class Bot  {
 	}
 
 	public void connect(boolean printInvite) {
-		
+	
 		api = new DiscordApiBuilder().setToken(token).login().join();
 
 		// Print the URL to invite the bot
@@ -39,7 +39,6 @@ public class Bot  {
 		}
 
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
-		
 		//add Listeners
 		
 		ToDoList list = new ToDoList(channelName);
@@ -88,7 +87,14 @@ public class Bot  {
 		
 		CoinFlip cp = new CoinFlip(channelName);
 		api.addMessageCreateListener(cp);
-	
+
+		
+		RollDie rollDie = new RollDie(channelName);
+		api.addMessageCreateListener(rollDie);
+		
+		FontEditor fe = new FontEditor(channelName);
+		api.addMessageCreateListener(fe);
+    
     RandomString randomString = new RandomString(channelName);
 		api.addMessageCreateListener(randomString);
 		helpListener.addHelpEmbed(randomString.getHelpEmbed());
@@ -109,6 +115,7 @@ public class Bot  {
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
 		
+
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
