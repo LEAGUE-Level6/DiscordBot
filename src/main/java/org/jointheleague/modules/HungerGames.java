@@ -8,14 +8,13 @@ import org.jointheleague.modules.pojo.HelpEmbed;
 
 public class HungerGames extends CustomMessageCreateListener{
 	private static final String COMMAND = "!HungerGames";
-	private boolean gS = false;
-	private int stage = 0;
-	String month;
-	String object;
-	ArrayList<String> names = new ArrayList<String>();
-	ArrayList<String> team1 = new ArrayList<String>();
-	ArrayList<String> team2 = new ArrayList<String>();
-	ArrayList<String> team3 = new ArrayList<String>();
+	public boolean gS = false;
+	public int stage = 0;
+	public ArrayList<String> names = new ArrayList<String>(); 
+	public ArrayList<String> namesR = new ArrayList<String>();
+	public ArrayList<String> team1 = new ArrayList<String>();
+	public ArrayList<String> team2 = new ArrayList<String>();
+	public ArrayList<String> team3 = new ArrayList<String>();
 	
 	public HungerGames (String channelName) {
 		super(channelName);
@@ -29,48 +28,61 @@ public class HungerGames extends CustomMessageCreateListener{
 		if(event.getMessageAuthor().getName().equals("Ella's Bot")) {
 		return;
 		}
-		if(m.equals("!HungerGames")&& !gS) {
-			names = new ArrayList<String>();
-			stage = 0;
-			event.getChannel().sendMessage("Select your party. Enter 3 names. They can be names of users in the server or made up:");
+		if(m.equals("!HungerGames")) {
 			gS = true;
 			stage = 1;
+			event.getChannel().sendMessage("Welcome to the Deathmatch. Enter 4-10 names to proceed:");
 		}
-		else if(m.equals("!Start")) {
-			stage = 2;
-			String namesList = "";
+		if(m.equals("!Start")) {
+			System.out.println("START INITIALIZED");
+		//Randomizing list of names
+			boolean[] printed = new boolean[names.size()];
 			for(int i = 0; i < names.size(); i++) {
-				namesList+=names.get(i)+"\n";
+				int rand = new Random().nextInt(names.size());
+				if(!printed[rand]) {
+					printed[rand] = true;
+					namesR.add(names.get(rand));
+				}
+				else {
+					i--;
+				}        
+		    }   
+		//Printing randomized names list
+			for(int i = 0; i < namesR.size(); i++) {
+				event.getChannel().sendMessage(namesR.get(i));
 			}
-			event.getChannel().sendMessage("Game started. \n"+names.size()+"people are gathered at the Cornocopia. Your party:\n"+namesList);
-			while(!names.isEmpty()) {
-				int index = new Random().nextInt(names.size());
-				team1.add(names.get(index));
-				names.remove(names.get(index));
-				index = new Random().nextInt(names.size());
-				team2.add(names.get(index));
-				names.remove(names.get(index));	
-				index = new Random().nextInt(names.size());
-				team3.add(names.get(index));
-				names.remove(names.get(index));
-				System.out.println("1 loop");
+			while(!(namesR.isEmpty())){
+				team1.add(namesR.get(0));
+				namesR.remove(0);
+				if(names.isEmpty()) {
+					
+				}
+				team2.add(names.get(0));
+				if(names.isEmpty()) {
+					return;
+				}
+				namesR.remove(0);
+				team3.add(names.get(0));
+				if(names.isEmpty()) {
+					return;
+				}
+				namesR.remove(0);
 			}
-			for(int i = 0; i < team1.size(); i++) {
-			event.getChannel().sendMessage("Team 1 member:"+team1.get(i));
+			for(int i = 0; i < team1.size(); i++){
+				event.getChannel().sendMessage(team1.get(i));
+			}	
+			for(int i = 0; i < team2.size(); i++){
+				event.getChannel().sendMessage(team2.get(i));
 			}
-			for(int i = 0; i < team2.size(); i++) {
-			event.getChannel().sendMessage("Team 2 member:"+team2.get(i));
+			for(int i = 0; i < team3.size(); i++){
+				event.getChannel().sendMessage(team3.get(i));
 			}
-			for(int i = 0; i < team3.size(); i++) {
-			event.getChannel().sendMessage("Team 3 member:"+team3.get(i));
-			}
-				
-			}
-		
-		else if(stage == 1 && gS) {
-			names.add(m);
-			event.getChannel().sendMessage(m+" was added to the party. Message *Start!* to begin.");
 		}
+		else if(!(m.equals("!Start")) && stage == 1) {
+			event.getChannel().sendMessage(m+"has been added to the game.");
+			
+		}
+
 		
 	}
 	void kill(int killer, int victim) {
