@@ -92,6 +92,10 @@ public class Bot  {
     RandomString randomString = new RandomString(channelName);
 		api.addMessageCreateListener(randomString);
 		helpListener.addHelpEmbed(randomString.getHelpEmbed());
+		
+	RandomBoxGuess randomBox = new RandomBoxGuess(channelName);
+		api.addMessageCreateListener(randomBox);
+		helpListener.addHelpEmbed(randomBox.getHelpEmbed());
 
 		
 		//old way to add listeners 
