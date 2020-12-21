@@ -7,8 +7,8 @@ import net.aksingh.owmjapis.api.APIException;
 public class Checkers extends CustomMessageCreateListener {
 	private final String CMD = "!checkers";
 	private final String INP = "!helpCheckers";
-	private final String CMDSUN = "!sun";
-	private final String CMDMOON = "!moon";
+	private final String CMDSUN = "!moveSun";
+	private final String CMDMOON = "!moveMoon";
 
 	// makes strings for emojis
 	private final String MOONFACE = "<:moon_with_red:785324927465160704>";
@@ -16,19 +16,18 @@ public class Checkers extends CustomMessageCreateListener {
 	private final String REDSQUARE = ":red_square:";
 	private final String BLACKSQUARE = ":black_large_square:";
 	String boardTwo = "";
-
+	int x;
+	int y;
+	
 	public Checkers(String channelName) {
 		super(channelName);
 		// TODO Auto-generated constructor stub
 
 	}
 
-	public void move() {
-		
-		
-		
-		
-		
+	public void move(String num1, String num2) {
+		x = Integer.parseInt(num1);
+		y=  Integer.parseInt(num2);
 		
 	}
 	public void checkerboard() {
@@ -65,12 +64,21 @@ public class Checkers extends CustomMessageCreateListener {
 		
 		//if(input.cont)
 		if (input.contains(CMD)) {
-			event.getChannel().sendMessage("To move a piece use !movesSun or !moveMoon following it with the coordinates");
+			event.getChannel().sendMessage("To move a piece use !moveSun or !moveMoon following it with the coordinates");
 			checkerboard();
 			event.getChannel().sendMessage(boardTwo);
 		}
 
-		
+		if(input.contains(CMDSUN)|| input.contains(CMDMOON)) {
+			String[] parts = input.split(" ");
+			String part1 = parts[0]; 
+			String part2 = parts[1]; 
+			String[]nums = part2.split(",");
+			String nums1 = nums[0]; 
+			String nums2 = nums[1]; 
+			move(nums1, nums2);
+			event.getChannel().sendMessage(x+" " + y);
+		}
 		
 
 }
