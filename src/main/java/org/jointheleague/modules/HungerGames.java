@@ -33,7 +33,7 @@ public class HungerGames extends CustomMessageCreateListener{
 			stage = 1;
 			event.getChannel().sendMessage("Welcome to the Deathmatch. Enter 4-10 names to proceed:");
 		}
-		if(m.equals("!Start")) {
+		else if(m.equals("!Start")) {
 			System.out.println("START INITIALIZED");
 		//Randomizing list of names
 			boolean[] printed = new boolean[names.size()];
@@ -47,40 +47,42 @@ public class HungerGames extends CustomMessageCreateListener{
 					i--;
 				}        
 		    }   
-		//Printing randomized names list
-			for(int i = 0; i < namesR.size(); i++) {
-				event.getChannel().sendMessage(namesR.get(i));
-			}
-			while(!(namesR.isEmpty())){
+			for(int i = 0; i < namesR.size(); i++){
+				if(!(namesR.isEmpty())) {
 				team1.add(namesR.get(0));
 				namesR.remove(0);
-				if(names.isEmpty()) {
-					
 				}
-				team2.add(names.get(0));
-				if(names.isEmpty()) {
-					return;
+				else {
+					break;
 				}
+				if(!(namesR.isEmpty())) {
+				team2.add(namesR.get(0));
 				namesR.remove(0);
-				team3.add(names.get(0));
-				if(names.isEmpty()) {
-					return;
 				}
+				else {
+					break;
+				}
+				if(!(namesR.isEmpty())) {
+				team3.add(namesR.get(0));
 				namesR.remove(0);
+				}
+				else { 
+					break;
+				}
 			}
 			for(int i = 0; i < team1.size(); i++){
-				event.getChannel().sendMessage(team1.get(i));
+				event.getChannel().sendMessage("Team 1: "+team1.get(i));
 			}	
 			for(int i = 0; i < team2.size(); i++){
-				event.getChannel().sendMessage(team2.get(i));
+				event.getChannel().sendMessage("Team 2: "+team2.get(i));
 			}
 			for(int i = 0; i < team3.size(); i++){
-				event.getChannel().sendMessage(team3.get(i));
+				event.getChannel().sendMessage("Team 3: "+team3.get(i));
 			}
 		}
 		else if(!(m.equals("!Start")) && stage == 1) {
 			event.getChannel().sendMessage(m+"has been added to the game.");
-			
+			names.add(m);
 		}
 
 		
