@@ -79,12 +79,16 @@ public class HungerGames extends CustomMessageCreateListener{
 			for(int i = 0; i < team3.size(); i++){
 				event.getChannel().sendMessage("Team 3: "+team3.get(i));
 			}
+			stage = 2;
 		}
-		else if(!(m.equals("!Start")) && stage == 1) {
+		//Adding players to the game
+		else if(stage == 1) {
 			event.getChannel().sendMessage(m+"has been added to the game.");
 			names.add(m);
 		}
-
+		else if(stage == 2) {
+			
+		}
 		
 	}
 	void kill(int killer, int victim) {
