@@ -2,6 +2,8 @@ package org.jointheleague.discord_bot_example;
 
 import java.util.Map;
 
+
+
 /**
  * Launches the bot.
  * @author keithgroves and https://tinystripz.com
@@ -13,8 +15,9 @@ public class Launcher {
 			args = new String[] { "default" };
 		}
 		new Launcher().launch(args);
+		
 	}
-
+	
 	public void launch(String[] args) {
 		// Use Utilities to load the channels and token from a JSON file...
 		// ...and put the information in a BotInfo instance
