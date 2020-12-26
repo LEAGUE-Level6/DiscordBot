@@ -41,6 +41,10 @@ public class Bot  {
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 		
 		//add Listeners
+		DiscordLibrary dl = new DiscordLibrary(channelName);
+		api.addMessageCreateListener(dl);
+		helpListener.addHelpEmbed(dl.getHelpEmbed());
+		
 		CurrencyConverter cc = new CurrencyConverter(channelName);
 		api.addMessageCreateListener(cc);
 		helpListener.addHelpEmbed(cc.getHelpEmbed());
