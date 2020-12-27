@@ -16,10 +16,12 @@ public class MaxTicTacToe extends CustomMessageCreateListener {
 		super(channelName);
 		resetBoard();
 		helpEmbed = new HelpEmbed("!ttt",
-				"Play TicTacToe with the computer." + " Type the command followed by two integers for the row and column"
-						+ " (ex. '!ttt 0 1' to place your piece on the top middle spot or '!ttt 1 1 for the center spot. "
-						+ "If the input is invalid, simply nothing will happen and you will have to retype the command."
-						+ " Only integers 0-2 are valid inputs.");
+				"Play TicTacToe with the computer." + " Type the command !ttt followed by a keyword"
+						+ " for your square. Valid keywords include topright, "
+						+ "topmiddle, topleft, centerleft, center, centerright, bottomleft, "
+						+ "bottommiddle, bottomright. "
+						+ "If your keyword is invalid, simply nothing will happen and "
+						+ "you will have to retype the command");
 // TODO Auto-generated constructor stub
 	}
 
@@ -32,11 +34,30 @@ public class MaxTicTacToe extends CustomMessageCreateListener {
 			resetBoard();
 			event.getChannel().sendMessage("Board succesfully wiped");
 		}
-		if (message.contains("!ttt")) {
+		if (message.contains("!ttt")) {	
 			String input = message.substring(5);
-			String[] nums = input.split(" ");
-			int[] playerInput = {Integer.parseInt(nums[0]),Integer.parseInt(nums[1])};
-			if(playerInput.length!=2 || !validInput(playerInput[0],playerInput[1])) {
+			int[] playerInput = {3,3};
+			if(input.equals("topleft")) {
+				playerInput[0]=0; playerInput[1]=0;
+			} else if(input.equals("topmiddle")){
+				playerInput[0]=0; playerInput[1]=1;
+			} else if(input.equals("topright")){
+				playerInput[0]=0; playerInput[1]=2;
+			} else if(input.equals("centerleft")){
+				playerInput[0]=1; playerInput[1]=0;
+			} else if(input.equals("center")){
+				playerInput[0]=1; playerInput[1]=1;
+			} else if(input.equals("centerright")){
+				playerInput[0]=1; playerInput[1]=2;
+			} else if(input.equals("bottomleft")){
+				playerInput[0]=2; playerInput[1]=0;
+			} else if(input.equals("bottommiddle")){
+				playerInput[0]=2; playerInput[1]=1;
+			} else if(input.equals("bottomright")){
+				playerInput[0]=2; playerInput[1]=2;
+			}
+			
+			if(playerInput[0]<0 || playerInput[0]>2 || playerInput[1]<0 || playerInput[1]>2 || !validInput(playerInput[0],playerInput[1])) {
 				return;
 			} else {
 				boardInput(playerInput[0],playerInput[1], 'x');
