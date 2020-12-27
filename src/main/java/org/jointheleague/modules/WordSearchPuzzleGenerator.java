@@ -2,8 +2,10 @@ package org.jointheleague.modules;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.jointheleague.modules.pojo.HelpEmbed;
@@ -34,6 +36,12 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener {
 			// making string array
 			String[] words = response.split(",");
 			for (int i = 0; i < words.length; i++) {
+				if(words[i].length()>10) {
+					String vocab = words[i];
+					System.out.println(words[i]);
+					event.getChannel().sendMessage("the word " + vocab + " is more than 10 letters. removing.");
+					System.arraycopy(words, i-1, words, i, words.length-i-1);
+				}
 				// System.out.println(words[i]);
 			}
 
@@ -75,36 +83,25 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener {
 					taken[i][j] = false;
 				}
 			}
-			Integer[] lct = new Integer[words.length];
-			for (int i = 0; i < lct.length; i++) {
-				lct[i] = i;
-			}
-			System.out.println(Arrays.toString(lct));
-
-			List<Integer> test = Arrays.asList(lct);
-			Collections.shuffle(test);
-			System.out.println(Arrays.toString(lct));
-
-			int size = test.size();
-			int[] locations = new int[size];
-			Integer[] temp = test.toArray(new Integer[size]);
-			for (int n = 0; n < size; ++n) {
-				locations[n] = temp[n];
-			}
 			
-			System.out.println(Arrays.toString(locations));
+			int[] lct = new int[words.length];
+			for(int i = 0; i < lct.length; i++) {
+				lct[i] = new Random().nextInt(10);
+			}
+			System.out.println(Arrays.toString(lct));
 
 			for (int p = 0; p < words.length; p++) {
 				// vertical
 				// System.out.println(locations[p]);
 				if (voh[p] == 0) {
 					char j[] = words[p].toCharArray();
-					for (int i = 0; i < puzzle.length; i++) {
-						int yIndex = locations[p];
+					int yIndex = lct[p];
+					System.out.println(yIndex);
+					for (int i = 0; i < j.length; i++) {
 						char b = j[i];
+						if(taken[i][yIndex]=false) {
 						puzzle[i][yIndex] = b;
-						if(i>j.length) {
-							puzzle[i][yIndex] = puzzle[i][yIndex];
+						taken[i][yIndex] = true;
 						}
 						//System.out.println(puzzle[i]);
 					}
