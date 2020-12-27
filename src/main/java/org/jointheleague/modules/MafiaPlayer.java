@@ -12,6 +12,7 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.event.channel.user.PrivateChannelCreateEvent;
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.javacord.api.listener.message.MessageCreateListener;
 import org.jointheleague.discord_bot_example.Bot;
 import org.jointheleague.discord_bot_example.BotInfo;
 import org.jointheleague.discord_bot_example.Utilities;
@@ -194,18 +195,16 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 	
 	/////////////////////////////////////////////////////////////////////////////////
 	
-//	BotInfo n = Utilities.loadBotsFromJson();
-//	// Get the channels from the BotInfo class
-//	String[] channels = n.getChannels();
-//
-//	// Load all of the bots for every channel
-//	for (int i = 0; i < channels.length; i++) {
-//		new Bot(n.getToken(), channels[i]).connect(i == 0);
-//	}
-	
+	String pmchannel = "rachel";
 	
 	int day = 1;
-	private void Mafia(MessageCreateEvent event) throws InterruptedException {
+	private void Mafia(MessageCreateEvent event, MessageCreateListener evt) throws InterruptedException {
+		BotInfo n = Utilities.loadBotsFromJson();
+		Bot pmBot = new Bot(n.getToken(), pmchannel);
+		pmBot.connect(false);
+		
+		//MessageCreateListener evt = new MessageCreateListener();
+		
 		String msg = event.getMessageContent();
 		
 		event.getChannel().sendMessage("Day " + day);
@@ -223,13 +222,14 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 		
 		//get Mafia input
 		if (mafiatime) {
-			System.out.println("maf");
 			try {
 				org.javacord.api.entity.user.User user = null;
 				Mafia.get(0).openPrivateChannel().get().sendMessage("Who would you like to kill?");
-				System.out.println(msg + " msg, msgauthor " + event.getMessageAuthor().getId() + " code " + Mafia.get(0).getPrivateChannel().get().getMessageCache().toString());
-				if (Mafia.get(0).getPrivateChannel().get().addMessageCreateListener(arg0)
-						.startsWith(mafiaKill) && event.getMessageAuthor() == Mafia.get(0)) {
+				pmchannel = Mafia.get(0).getPrivateChannel().toString();
+				System.out.println(pmchannel + " | " + Mafia.get(0).getPrivateChannel().toString());
+				Mafia.get(0).getPrivateChannel().get().addMessageCreateListener(evt);
+				System.out.println(msg + " msg, msgauthor " + event.getMessageAuthor().getId() + "\n\n");
+				if (event.getMessageContent().startsWith(mafiaKill) && event.getMessageAuthor() == Mafia.get(0)) {
 					for (int i1 = 0; i1 < names.size(); i1++) {
 						if (names.get(i1).getName().equalsIgnoreCase(msg.replaceAll(" ", "").replace(mafiaKill,""))) {
 							user = names.get(i1);
@@ -239,8 +239,8 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 					doctortime = true;
 					mafiatime = false;
 				} else {
-					doctortime = true;
-					mafiatime = false;
+//					doctortime = true;
+//					mafiatime = false;
 				}
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
@@ -300,7 +300,7 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 		}
 		
 		day+=1;
-		System.out.println("end");
+		System.out.println("end Mafia");
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////
