@@ -11,11 +11,17 @@ public class Minesweeper extends CustomMessageCreateListener {
 	public static final String cheat = "-cheat";
 	public static final String flag = "-flag";
 	public static final String click = "-click";
-	public static final String help = "-help";
 
 	public Minesweeper(String channelName) {
 		super(channelName);
-		helpEmbed = new HelpEmbed(help, "Starts a Minesweeper game! Type -help for instructions.");
+		helpEmbed = new HelpEmbed("Minesweeper", "Commands for Minesweeper game: \n\n" + "-minesweeper start\n"
+				+ "Starts the game of Minesweeper. It should give you an empty board(All other commands except -help will not run before this).\n\n"
+				+ "-minesweeper stop\n" + "Stops the game of Minesweeper\n\n" + "-click x y\n"
+				+ "Peforms a click on the specified coordinate(Ex. -click 1 2)\n\n" + "-flag x y\n"
+				+ "Places a flag on the specified coordinate(Ex. -flag 1 2)\n\n" + "-cheat\n"
+				+ "Places a flag on all mines\n\n"
+				+ "You now know all the commands to play this game. Good Luck!");
+		
 		System.out.println("\nRunning...");
 		Thread c = new Thread(() -> {
 			console();
@@ -80,18 +86,6 @@ public class Minesweeper extends CustomMessageCreateListener {
 
 			event.getChannel().sendMessage(update());
 
-		} else if (message.length() == help.length() && message.substring(0, help.length()).equals(help)) {
-
-			System.out.println("Message detected: '" + message + "'. Displaying help message");
-
-			event.getChannel().sendMessage("Commands for Minesweeper game: \n\n" + "-minesweeper start\n"
-					+ "Starts the game of Minesweeper. It should give you an empty board(All other commands except -help will not run before this).\n\n"
-					+ "-minesweeper stop\n" + "Stops the game of Minesweeper\n\n" + "-click x y\n"
-					+ "Peforms a click on the specified coordinate(Ex. -click 1 2)\n\n" + "-flag x y\n"
-					+ "Places a flag on the specified coordinate(Ex. -flag 1 2)\n\n" + "-cheat\n"
-					+ "Places a flag on all mines\n\n" + "-help\n" + "Shows this message\n\n"
-					+ "You now know all the commands to play this game. Good Luck!");
-
 		} else {
 
 			System.out.println("Message Detected: '" + message + "'; Message length equals " + message.length()
@@ -100,7 +94,7 @@ public class Minesweeper extends CustomMessageCreateListener {
 
 		}
 
-		if (message.charAt(0) == '`') {
+		if (message.length() > 0 && message.charAt(0) == '`') {
 			if (lastCom != null) {
 				lastCom.deleteMessage();
 
@@ -447,18 +441,6 @@ public class Minesweeper extends CustomMessageCreateListener {
 			showMines();
 
 			System.out.println(update());
-
-		} else if (command.length() == help.length() && command.substring(0, help.length()).equals(help)) {
-
-			System.out.println("Message detected: '" + command + "'. Displaying help message");
-
-			System.out.println("Commands for Minesweeper game: \n\n" + "-minesweeper start\n"
-					+ "Starts the game of Minesweeper. It should give you an empty board(All other commands except -help will not run before this).\n\n"
-					+ "-minesweeper stop\n" + "Stops the game of Minesweeper\n\n" + "-click x y\n"
-					+ "Peforms a click on the specified coordinate(Ex. -click 1 2)\n\n" + "-flag x y\n"
-					+ "Places a flag on the specified coordinate(Ex. -flag 1 2)\n\n" + "-cheat\n"
-					+ "Places a flag on all mines\n\n" + "-help\n" + "Shows this message\n\n"
-					+ "You now know all the commands to play this game. Good Luck!");
 
 		} else {
 
