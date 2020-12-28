@@ -105,10 +105,9 @@ public class Bot  {
 		api.addMessageCreateListener(d);
 		helpListener.addHelpEmbed(d.getHelpEmbed());
 		
-		RockPaperScissors rps = new RockPaperScissors(channelName);
-		api.addMessageCreateListener(rps);
-		helpListener.addHelpEmbed(rps.getHelpEmbed());
-		
+		Hangman h = new Hangman(channelName);
+		api.addMessageCreateListener(h);
+		helpListener.addHelpEmbed(h.getHelpEmbed());
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
