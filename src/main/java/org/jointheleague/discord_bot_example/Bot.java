@@ -101,7 +101,9 @@ public class Bot  {
 		api.addMessageCreateListener(builder);
 		helpListener.addHelpEmbed(builder.getHelpEmbed());
 
-		
+		EverythingSorter everySorter = new EverythingSorter(channelName);
+		api.addMessageCreateListener(everySorter);
+		helpListener.addHelpEmbed(everySorter.getHelpEmbed());
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));

@@ -9,6 +9,13 @@ import org.jointheleague.modules.pojo.HelpEmbed;
 
 public class BuildHouse extends CustomMessageCreateListener{
 
+	
+	
+	
+	
+	
+	
+	
 	private static final String COMMAND = "!build";
 	public BuildHouse(String channelName) {
 		super(channelName);
