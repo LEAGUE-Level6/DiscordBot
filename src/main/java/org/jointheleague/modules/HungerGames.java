@@ -12,9 +12,8 @@ public class HungerGames extends CustomMessageCreateListener{
 	public int stage = 0;
 	public ArrayList<String> names = new ArrayList<String>(); 
 	public ArrayList<String> namesR = new ArrayList<String>();
-	public ArrayList<String> team1 = new ArrayList<String>();
-	public ArrayList<String> team2 = new ArrayList<String>();
-	public ArrayList<String> team3 = new ArrayList<String>();
+	public ArrayList<String>[] stringArray;
+	public ArrayList<ArrayList<String>> teams = new ArrayList<ArrayList<String>>();
 	
 	public HungerGames (String channelName) {
 		super(channelName);
@@ -46,55 +45,63 @@ public class HungerGames extends CustomMessageCreateListener{
 				else {
 					i--;
 				}        
-		    }   
-			for(int i = 0; i < namesR.size(); i++){
-				if(!(namesR.isEmpty())) {
-				team1.add(namesR.get(0));
-				namesR.remove(0);
-				}
-				else {
-					break;
-				}
-				if(!(namesR.isEmpty())) {
-				team2.add(namesR.get(0));
-				namesR.remove(0);
-				}
-				else {
-					break;
-				}
-				if(!(namesR.isEmpty())) {
-				team3.add(namesR.get(0));
-				namesR.remove(0);
-				}
-				else { 
-					break;
+		    }  
+			if(namesR.size()%3 == 0) {
+				for(int i = 0; i < namesR.size()/3; i++){
+					teams.add(new ArrayList<String>());
 				}
 			}
-			for(int i = 0; i < team1.size(); i++){
-				event.getChannel().sendMessage("Team 1: "+team1.get(i));
+			else {
+				for(int i = 0; i < (namesR.size()/3)+1; i++){
+					teams.add(new ArrayList<String>());
+				}
+			}
+
+			
+			for(int i = 0; i < teams.size(); i++) {
+				for(int j = 0; j < 3; j++) {
+				if(namesR.isEmpty()) {
+					break;
+				}
+				else {
+				teams.get(i).add(namesR.get(0));
+				namesR.remove(0);
+				}
+				}
+			}
+			
+			System.out.println("Number of teams: "+teams.size());
+			for(int i = 0; i < teams.size(); i++) {
+				System.out.println("Team "+i+" size: "+teams.get(i).size());
 			}	
-			for(int i = 0; i < team2.size(); i++){
-				event.getChannel().sendMessage("Team 2: "+team2.get(i));
-			}
-			for(int i = 0; i < team3.size(); i++){
-				event.getChannel().sendMessage("Team 3: "+team3.get(i));
-			}
 			stage = 2;
+			event.getChannel().sendMessage("Say 'Continue' to view round one");
 		}
 		//Adding players to the game
 		else if(stage == 1) {
-			event.getChannel().sendMessage(m+"has been added to the game.");
+			event.getChannel().sendMessage(m+" has been added to the game.");
 			names.add(m);
 		}
-		else if(stage == 2) {
-			
+		else if(stage == 2 && m.equals("Continue")) {
+			event.getChannel().sendMessage(swap());
 		}
-		
 	}
-	void kill(int killer, int victim) {
-		
+	
+	public String swap(){
+		int oldTeam = new Random().nextInt(teams.size());
+		int newTeam = new Random().nextInt(teams.size());
+		int member = new Random().nextInt(teams.get(oldTeam).size());
+		String announcement;
+		if(oldTeam == newTeam) {
+			announcement = "There have been no changes of alignment this round.";
+		}
+		else {
+			announcement = teams.get(oldTeam).get(member)+" has abandoned Team "+(oldTeam+1)+" and joined Team "+(newTeam+1);
+		}
+		teams.get(newTeam).add(teams.get(oldTeam).get(member));
+		teams.get(oldTeam).remove(member);
+		return announcement;
 	}
-	void summon(int summoner) {
-		
-	}
+	
+	
 }
