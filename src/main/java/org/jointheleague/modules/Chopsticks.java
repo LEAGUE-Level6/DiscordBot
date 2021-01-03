@@ -20,6 +20,7 @@ public class Chopsticks extends CustomMessageCreateListener {
 	Boolean botTurn = false;
 	Boolean eliminate = false;
 	Boolean easy = false;
+	Boolean invalidMessage = false;
 
 	public Chopsticks(String channelName) {
 		super(channelName);
@@ -43,14 +44,18 @@ public class Chopsticks extends CustomMessageCreateListener {
 			botTurn = true;
 		}
 		if (botTurn == true) {
-			if (easy == false) {
-				HandleBotPlayHard(event);
+			if (invalidMessage == true) {
+				invalid(event);
+			} else {
+				if (easy == false) {
+					HandleBotPlayHard(event);
 
-			} else if (easy == true) {
+				} else if (easy == true) {
 
-				HandleBotPlayEasy(event);
+					HandleBotPlayEasy(event);
+				}
+				botTurn = false;
 			}
-			botTurn = false;
 		}
 		if (hand1.length() + hand2.length() == 0 && playing == true) {
 			event.getChannel().sendMessage("Bot Wins");
@@ -72,7 +77,7 @@ public class Chopsticks extends CustomMessageCreateListener {
 
 	}
 
-	// I  II
+	// I II
 	//
 	// II II
 	private void HandleBotPlayHard(MessageCreateEvent event) {
@@ -114,52 +119,58 @@ public class Chopsticks extends CustomMessageCreateListener {
 
 			}
 		} else if (botHand1.length() == 1 && botHand2.length() == 3) {
-			botHand1 += "II";
-			botHand2 = "I";
+			botHand1 = "II";
+			botHand2 = "II";
 
 		} else if (botHand2.length() == 1 && botHand1.length() == 3) {
-			botHand2 += "II";
-			botHand1 = "I";
+			botHand2 = "II";
+			botHand1 = "II";
 
 		} else if (botHand1.length() == 0 || botHand2.length() == 0) {
-			if (botHand1.length() + botHand1.length() == 2) {
+
+			if (botHand1.length() + botHand2.length() == 2) {
+
 				botHand1 = "I";
 				botHand2 = "I";
 			} else if (botHand1.length() + botHand2.length() == 3) {
+
 				botHand2 = "II";
 				botHand1 = "I";
 			} else if (botHand1.length() + botHand2.length() == 4) {
 				botHand1 = "II";
 				botHand2 = "II";
-			}
-		} else {
-			if (hand1.length() >= hand2.length()) {
+			} else if (botHand1.length() + botHand2.length() == 1) {
+				if (hand1.length() >= hand2.length()) {
 
-				if (botHand1.length() >= botHand2.length()) {
-					hand1 += botHand1;
+					if (botHand1.length() >= botHand2.length()) {
+						hand1 += botHand1;
+					} else {
+						hand1 += botHand2;
+					}
 				} else {
-					hand1 += botHand2;
-				}
-			} else {
-				if (botHand1.length() >= botHand2.length()) {
-					hand2 += botHand1;
-				} else {
-					hand2 += botHand2;
+					if (botHand1.length() >= botHand2.length()) {
+						hand2 += botHand1;
+					} else {
+						hand2 += botHand2;
+					}
 				}
 			}
+		}else {
+			HandleBotPlayEasy(event);
 		}
+
 		showhands(event);
 	}
 
 	private void HandleSplit(String str, MessageCreateEvent event) {
 		// TODO Auto-generated method stub
 		String[] move = str.split(" ");
-	
+
 		int num = Integer.parseInt(move[1]);
 		if (move[0].equals("right")) {
-			
+
 			if (hand1.length() > num) {
-				
+
 				String temp = "";
 				for (int i = 0; i < num; i++) {
 					temp += "I";
@@ -167,27 +178,24 @@ public class Chopsticks extends CustomMessageCreateListener {
 				hand2 += temp;
 				hand1 = hand1.substring(0, hand1.length() - temp.length());
 
-			}else {
-				event.getChannel().sendMessage("invalid message");
-				botTurn = false;
+			} else {
+				invalidMessage = true;
 			}
 		} else if (move[0].equals("left")) {
 			if (hand2.length() > num) {
 
 				String temp = "";
-				for (int i = 0; i < num-1; i++) {
+				for (int i = 0; i < num; i++) {
 					temp += "I";
 				}
 				hand1 += temp;
-				hand2 = hand1.substring(0, hand1.length() - temp.length());
+				hand2 = hand2.substring(0, hand2.length() - temp.length());
 
-			}else {
-				event.getChannel().sendMessage("invalid message");
-				botTurn = false;
+			} else {
+				invalidMessage = true;
 			}
 		} else {
-			event.getChannel().sendMessage("invalid message");
-			botTurn = false;
+			invalidMessage = true;
 		}
 		showhands(event);
 
@@ -195,7 +203,7 @@ public class Chopsticks extends CustomMessageCreateListener {
 
 	private void HandleBotPlayEasy(MessageCreateEvent event) {
 		// TODO Auto-generated method stub
-		event.getChannel().sendMessage("easy");
+		
 		if (hand1.length() >= hand2.length()) {
 			if (botHand1.length() >= botHand2.length()) {
 				hand1 += botHand1;
@@ -217,25 +225,42 @@ public class Chopsticks extends CustomMessageCreateListener {
 		// TODO Auto-generated method stub
 		String[] str = hand.split(" ");
 		if (str[0].equals("right")) {
-			if (str[1].equals("right")) {
-
-				botHand2 += hand2;
+			if(botHand2.length()==0) {
+				invalidMessage = true;
+			}else if (str[1].equals("right")) {
+				if(hand2.length()==0) {invalidMessage = true;}else {
+				
+				botHand2 += hand2;}
 			} else if (str[1].equals("left")) {
-				botHand2 += hand1;
+				if(hand1.length()==0) {invalidMessage = true;}else {
+				botHand2 += hand1;}
 
+			} else {
+				invalidMessage = true;
 			}
 		} else if (str[0].equals("left")) {
-			if (str[1].equals("right")) {
-				botHand1 += hand2;
+			if(botHand1.length()==0) {
+				invalidMessage = true;
+			}else if (str[1].equals("right")) {
+				if (hand2.length() == 0) {
+					invalidMessage = true;
+				} else {
+					botHand1 += hand2;
+				}
 			} else if (str[1].equals("left")) {
-				botHand1 += hand1;
-
+				if (hand1.length() == 0) {
+					invalidMessage = true;
+				} else {
+					botHand1 += hand1;
+				}
+			} else {
+				invalidMessage = true;
 			}
 		} else {
-			event.getChannel().sendMessage("invalid message");
+			invalidMessage = true;
 		}
 		showhands(event);
-		
+
 	}
 
 	private void HandlePlay(String level, MessageCreateEvent event) {
@@ -255,6 +280,7 @@ public class Chopsticks extends CustomMessageCreateListener {
 		event.getChannel().sendMessage("You:   " + hand1 + "     " + hand2);
 
 	}
+
 	public void showhands(MessageCreateEvent event) {
 		if (hand1.length() >= 5) {
 			hand1 = "";
@@ -271,6 +297,12 @@ public class Chopsticks extends CustomMessageCreateListener {
 		event.getChannel().sendMessage("Bot:   " + botHand1 + "     " + botHand2);
 		event.getChannel().sendMessage("You:   " + hand1 + "     " + hand2);
 	}
+
+	public void invalid(MessageCreateEvent event) {
+		event.getChannel().sendMessage("invalid message");
+		botTurn = false;
+		invalidMessage = false;
 	}
+}
 
 
