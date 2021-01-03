@@ -1,12 +1,15 @@
 package org.jointheleague.modules;
 
 import java.awt.Color;
+import java.nio.channels.Channel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import org.javacord.api.DiscordApi;
+import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.channel.PrivateChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
@@ -43,8 +46,8 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 	ArrayList<org.javacord.api.entity.user.User> Detective = new ArrayList<org.javacord.api.entity.user.User>();
 	ArrayList<org.javacord.api.entity.user.User> Villagers = new ArrayList<org.javacord.api.entity.user.User>();
 	
-	String[] beginningStorylines = {"You are all passengers on a plane when suddenly, the engine gets stuck and the plane must take a crash landing. Luckily, the pilot(s) crash the plane onto a small, deserted island in the middle of the ocean, but the pilot is gone. " +
-		"Now, you must all work together to survive until help arrives. However, there are imposters among the group. Collaborate together to find these imposters and survive until the end."};
+	String[] beginningStorylines = {"asdfghjkl;"/*You are all passengers on a plane when suddenly, the engine gets stuck and the plane must take a crash landing. Luckily, the pilot(s) crash the plane onto a small, deserted island in the middle of the ocean, but the pilot is gone. " +
+		"Now, you must all work together to survive until help arrives. However, there are imposters among the group. Collaborate together to find these imposters and survive until the end."*/};
 	String[] deathStorylines = {" was chased by a flock of angry pelicans.", " went for a swim and never came back.", " got crushed by a rock.", " hit their head too hard on a tree."};
 	
 	int p = 0;
@@ -195,16 +198,15 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 	
 	/////////////////////////////////////////////////////////////////////////////////
 	
-	String pmchannel = "rachel";
+	long pmchannelID;
+	DiscordApi api;
 	
 	int day = 1;
-	private void Mafia(MessageCreateEvent event, MessageCreateListener evt) throws InterruptedException {
+	private void Mafia(MessageCreateEvent event) throws InterruptedException {
 		BotInfo n = Utilities.loadBotsFromJson();
-		Bot pmBot = new Bot(n.getToken(), pmchannel);
-		pmBot.connect(false);
-		
-		//MessageCreateListener evt = new MessageCreateListener();
-		
+		Bot pmBot = new Bot(n.getToken(), "");
+		api = new DiscordApiBuilder().setToken(n.getToken()).login().join();
+				
 		String msg = event.getMessageContent();
 		
 		event.getChannel().sendMessage("Day " + day);
@@ -216,19 +218,20 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 		} else {
 			event.getChannel().sendMessage("The night cycle now begins.");
 			mafiatime = true;
-		}
-		
-			
+		}		
 		
 		//get Mafia input
 		if (mafiatime) {
 			try {
 				org.javacord.api.entity.user.User user = null;
+				
+				System.out.println(Mafia.get(0).getPrivateChannel().get().getId());
+				pmchannelID = Mafia.get(0).getPrivateChannel().get().getId();
+				System.out.println(pmchannelID + " | " + Mafia.get(0).getPrivateChannel().get().getId());
+				api.getServerTextChannelById(pmchannelID).get().sendMessage("Bot Connected");		
+				pmBot.connect(false);	
+				
 				Mafia.get(0).openPrivateChannel().get().sendMessage("Who would you like to kill?");
-				pmchannel = Mafia.get(0).getPrivateChannel().toString();
-				System.out.println(pmchannel + " | " + Mafia.get(0).getPrivateChannel().toString());
-				Mafia.get(0).getPrivateChannel().get().addMessageCreateListener(evt);
-				System.out.println(msg + " msg, msgauthor " + event.getMessageAuthor().getId() + "\n\n");
 				if (event.getMessageContent().startsWith(mafiaKill) && event.getMessageAuthor() == Mafia.get(0)) {
 					for (int i1 = 0; i1 < names.size(); i1++) {
 						if (names.get(i1).getName().equalsIgnoreCase(msg.replaceAll(" ", "").replace(mafiaKill,""))) {
