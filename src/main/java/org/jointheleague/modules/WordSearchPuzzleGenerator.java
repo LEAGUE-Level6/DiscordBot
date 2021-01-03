@@ -47,12 +47,12 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener {
 
 			int voh[] = new int[words.length];
 			for (int i = 0; i < voh.length; i++) {
-				voh[i] = 0; // new Random().nextInt(3);
+				voh[i] = new Random().nextInt(2);
 			}
-			// 0 = vertical, 1 = horizontal, 2 = diagonal
+			// 0 = vertical, 1 = horizontal
 			// printing
 			for (int i = 0; i < words.length; i++) {
-				// System.out.println(words[i] + " has " + voh[i]);
+				System.out.println(words[i] + " has " + voh[i]);
 			}
 
 			char[][] puzzle = new char[10][10];
@@ -66,7 +66,7 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener {
 			}
 			for (int i = 0; i < puzzle.length; i++) {
 				for (int j = 0; j < puzzle[i].length; j++) {
-					puzzle[i][j] = 'a';// (char)('a' + amidoingthisright[i][j]);
+					puzzle[i][j] = 'a';//(char)('a' + amidoingthisright[i][j]);
 				}
 			}
 
@@ -77,6 +77,7 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener {
 					// System.out.print(puzzle[o][j] + " ");
 				}
 			}
+			
 			boolean[][] taken = new boolean[10][10];
 			for (int i = 0; i < taken.length; i++) {
 				for (int j = 0; j < taken[i].length; j++) {
@@ -96,24 +97,42 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener {
 				if (voh[p] == 0) {
 					char j[] = words[p].toCharArray();
 					int yIndex = lct[p];
-					System.out.println(yIndex);
 					for (int i = 0; i < j.length; i++) {
 						char b = j[i];
-						if(taken[i][yIndex]=false) {
+						if(taken[i][yIndex] = false) {
 						puzzle[i][yIndex] = b;
 						taken[i][yIndex] = true;
+						}else {
+						yIndex = new Random().nextInt(10);
+						System.out.println(words[p] + yIndex);
+						puzzle[i][yIndex] = b;
 						}
 						//System.out.println(puzzle[i]);
 					}
 				}
-
 				// horizontal
+				if (voh[p] == 1) {
+					char j[] = words[p].toCharArray();
+					int yIndex = lct[p];
+					for (int i = 0; i < j.length; i++) {
+						char b = j[i];
+						if(taken[yIndex][i] = false) {
+						puzzle[yIndex][i] = b;
+						taken[yIndex][i] = true;
+						}else{
+							yIndex = new Random().nextInt(10);
+							System.out.println( words[p] + yIndex);
+							puzzle[yIndex][i] = b;
+						}
+						//System.out.println(puzzle[i]);
+					}
+				}
 			}
 			// System.out.println();
 			for (int o = 0; o < puzzle.length; o++) {
-				// System.out.println();
+				 System.out.println();
 				for (int j = 0; j < puzzle[o].length; j++) {
-					// System.out.print(puzzle[o][j] + " ");
+				 System.out.print(puzzle[o][j] + " ");
 				}
 			}
 			String[] answer = new String[10];
