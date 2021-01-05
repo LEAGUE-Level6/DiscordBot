@@ -109,6 +109,10 @@ public class Bot  {
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
 		
+		BasicMath basicMath = new BasicMath(channelName);
+		api.addMessageCreateListener(basicMath);
+		helpListener.addHelpEmbed(basicMath.getHelpEmbed());
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
