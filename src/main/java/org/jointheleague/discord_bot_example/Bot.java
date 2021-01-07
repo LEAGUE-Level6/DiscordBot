@@ -155,6 +155,7 @@ public class Bot  {
 		api.addMessageCreateListener(new ScreenCapture(channelName));
 
 		api.addMessageCreateListener(new Hello(channelName));
+		api.addMessageCreateListener(new Reminder(channelName));
 		
 	}
 }
