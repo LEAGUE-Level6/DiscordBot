@@ -14,6 +14,8 @@ public class HungerGames extends CustomMessageCreateListener{
 	public ArrayList<String> namesR = new ArrayList<String>();
 	public ArrayList<String>[] stringArray;
 	public ArrayList<ArrayList<String>> teams = new ArrayList<ArrayList<String>>();
+	public ArrayList<String> teamNames = new ArrayList<String>();
+
 	
 	public HungerGames (String channelName) {
 		super(channelName);
@@ -83,11 +85,21 @@ public class HungerGames extends CustomMessageCreateListener{
 			names.add(m);
 		}
 		else if(stage == 2 && m.equals("Continue")) {
-			event.getChannel().sendMessage(swap());
+			event.getChannel().sendMessage(dissolveTeams());
+			for(int i = 0; i < 3; i++) {
+				int action = new Random().nextInt(2);
+				if(action==2) {
+					event.getChannel().sendMessage(swap());
+				}
+				else {
+					event.getChannel().sendMessage(death());
+				}
+			}
 		}
 	}
 	
 	public String swap(){
+		dissolveTeams();
 		int oldTeam = new Random().nextInt(teams.size());
 		int newTeam = new Random().nextInt(teams.size());
 		int member = new Random().nextInt(teams.get(oldTeam).size());
@@ -101,6 +113,33 @@ public class HungerGames extends CustomMessageCreateListener{
 		teams.get(newTeam).add(teams.get(oldTeam).get(member));
 		teams.get(oldTeam).remove(member);
 		return announcement;
+	}
+	
+	public String death(){
+		dissolveTeams();
+		int killerTeam = new Random().nextInt(teams.size());
+		int victimTeam = new Random().nextInt(teams.size());
+		int victim = new Random().nextInt(teams.get(victimTeam).size());
+		int killer = new Random().nextInt(teams.get(killerTeam).size());
+		String[] killMethod = {" was killed by an arrow through the head from ", " was stabbed in the heart by ", " was killed by a trap set by "};
+		String announcement = teams.get(victimTeam).get(victim)+killMethod[new Random().nextInt(killMethod.length)]+teams.get(killerTeam).get(killer);
+		teams.get(victimTeam).remove(victim);
+		
+		return announcement;
+		
+	}
+	public String dissolveTeams() {
+		int dissolvedTeam;
+		for(int i = 0; i < teams.size(); i++) {
+			if(teams.get(i).isEmpty()) {
+				dissolvedTeam = i;
+				teams.remove(i);
+				String announcement = "Team "+ dissolvedTeam+" has been dissolved, as no members remain.";
+				return announcement;
+			}
+				
+		}
+		return null;		
 	}
 	
 	
