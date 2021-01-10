@@ -1,4 +1,5 @@
+
 {
-   "channels": ["max4"],
-   "token": ""
+   "channels": ["channel"],
+   "token": "token"
 }

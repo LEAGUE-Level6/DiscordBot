@@ -41,6 +41,13 @@ public class Bot  {
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 		
 		//add Listeners
+		DiscordLibrary dl = new DiscordLibrary(channelName);
+		api.addMessageCreateListener(dl);
+		helpListener.addHelpEmbed(dl.getHelpEmbed());
+		
+		CurrencyConverter cc = new CurrencyConverter(channelName);
+		api.addMessageCreateListener(cc);
+		helpListener.addHelpEmbed(cc.getHelpEmbed());
 		
 		ToDoList list = new ToDoList(channelName);
 		api.addMessageCreateListener(list);
@@ -93,10 +100,26 @@ public class Bot  {
 		api.addMessageCreateListener(randomString);
 		helpListener.addHelpEmbed(randomString.getHelpEmbed());
 		
+
 		MaxTicTacToe mttt = new MaxTicTacToe(channelName);
 		api.addMessageCreateListener(mttt);
 		helpListener.addHelpEmbed(mttt.getHelpEmbed());
+    
+		Greeter g = new Greeter(channelName);
+		api.addMessageCreateListener(g);
+		helpListener.addHelpEmbed(g.getHelpEmbed());
+		
+		ListMakerMessageListener LM = new ListMakerMessageListener(channelName);
+		api.addMessageCreateListener(LM);
+		helpListener.addHelpEmbed(LM.getHelpEmbed());
+		
+		Dice d = new Dice(channelName);
+		api.addMessageCreateListener(d);
+		helpListener.addHelpEmbed(d.getHelpEmbed());
 
+		UnbeatableRockPaperScissors rps = new UnbeatableRockPaperScissors(channelName);
+		api.addMessageCreateListener(rps);
+		helpListener.addHelpEmbed(rps.getHelpEmbed());
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
