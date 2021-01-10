@@ -95,11 +95,10 @@ public class Bot  {
 		
 		CoinFlip cp = new CoinFlip(channelName);
 		api.addMessageCreateListener(cp);
-	
-    RandomString randomString = new RandomString(channelName);
-		api.addMessageCreateListener(randomString);
-		helpListener.addHelpEmbed(randomString.getHelpEmbed());
 		
+		RollDie rollDie = new RollDie(channelName);
+		api.addMessageCreateListener(rollDie);
+
 
 		MaxTicTacToe mttt = new MaxTicTacToe(channelName);
 		api.addMessageCreateListener(mttt);
@@ -108,7 +107,19 @@ public class Bot  {
 		Greeter g = new Greeter(channelName);
 		api.addMessageCreateListener(g);
 		helpListener.addHelpEmbed(g.getHelpEmbed());
-		
+
+		pythagcalc pythagCalc = new pythagcalc(channelName);
+		api.addMessageCreateListener(pythagCalc);
+		helpListener.addHelpEmbed(pythagCalc.getHelpEmbed());
+
+		//Greeter g = new Greeter(channelName);
+		//api.addMessageCreateListener(g);
+		//helpListener.addHelpEmbed(g.getHelpEmbed());
+    
+		CovidCaseGetter covid = new CovidCaseGetter(channelName);
+		api.addMessageCreateListener(covid);
+		helpListener.addHelpEmbed(covid.getHelpEmbed());
+
 		ListMakerMessageListener LM = new ListMakerMessageListener(channelName);
 		api.addMessageCreateListener(LM);
 		helpListener.addHelpEmbed(LM.getHelpEmbed());
