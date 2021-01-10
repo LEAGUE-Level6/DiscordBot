@@ -88,10 +88,6 @@ public class Bot  {
 		
 		CoinFlip cp = new CoinFlip(channelName);
 		api.addMessageCreateListener(cp);
-	
-    RandomString randomString = new RandomString(channelName);
-		api.addMessageCreateListener(randomString);
-		helpListener.addHelpEmbed(randomString.getHelpEmbed());
 		
 		RollDie rollDie = new RollDie(channelName);
 		api.addMessageCreateListener(rollDie);
@@ -99,11 +95,20 @@ public class Bot  {
 		pythagcalc pythagCalc = new pythagcalc(channelName);
 		api.addMessageCreateListener(pythagCalc);
 		helpListener.addHelpEmbed(pythagCalc.getHelpEmbed());
+<<<<<<< Updated upstream
 
 
 		Greeter g = new Greeter(channelName);
 		api.addMessageCreateListener(g);
 		helpListener.addHelpEmbed(g.getHelpEmbed());
+=======
+		
+		CovidCaseGetter covid = new CovidCaseGetter(channelName);
+		api.addMessageCreateListener(covid);
+		helpListener.addHelpEmbed(covid.getHelpEmbed());
+
+
+>>>>>>> Stashed changes
 
 		
 		//old way to add listeners 
