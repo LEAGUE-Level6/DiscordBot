@@ -15,6 +15,7 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.event.channel.user.PrivateChannelCreateEvent;
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.javacord.api.listener.channel.user.PrivateChannelCreateListener;
 import org.javacord.api.listener.message.MessageCreateListener;
 import org.jointheleague.discord_bot_example.Bot;
 import org.jointheleague.discord_bot_example.BotInfo;
@@ -46,7 +47,7 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 	ArrayList<org.javacord.api.entity.user.User> Detective = new ArrayList<org.javacord.api.entity.user.User>();
 	ArrayList<org.javacord.api.entity.user.User> Villagers = new ArrayList<org.javacord.api.entity.user.User>();
 	
-	String[] beginningStorylines = {"asdfghjkl;"/*You are all passengers on a plane when suddenly, the engine gets stuck and the plane must take a crash landing. Luckily, the pilot(s) crash the plane onto a small, deserted island in the middle of the ocean, but the pilot is gone. " +
+	String[] beginningStorylines = {"beginningStoryline"/*You are all passengers on a plane when suddenly, the engine gets stuck and the plane must take a crash landing. Luckily, the pilot(s) crash the plane onto a small, deserted island in the middle of the ocean, but the pilot is gone. " +
 		"Now, you must all work together to survive until help arrives. However, there are imposters among the group. Collaborate together to find these imposters and survive until the end."*/};
 	String[] deathStorylines = {" was chased by a flock of angry pelicans.", " went for a swim and never came back.", " got crushed by a rock.", " hit their head too hard on a tree."};
 	
@@ -89,7 +90,7 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 					if (currentPlayer > p) {
 						assigningPlayers = false;
 					} else {
-						event.getChannel().sendMessage("Player " + currentPlayer + ", please type below:   Player " + currentPlayer);
+						event.getChannel().sendMessage("Player " + currentPlayer + ", please type below:");
 					}
 					confirmPlayers(event);
 					currentPlayer++;
@@ -157,7 +158,8 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 	
 	//Get user input to confirm players
 	private void confirmPlayers(MessageCreateEvent event) {
-		names.add(event.getMessageAuthor().asUser().get());		
+		names.add(event.getMessageAuthor().asUser().get());	
+		System.out.println("working??");
 	}
 	
 	//Randomly assign roles
@@ -174,6 +176,7 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 		}
 		
 		//chooses doctor (only 1)
+		System.out.println("choose doctor " + backup.size());
 		int r2 = new Random().nextInt(backup.size());
 		Doctor.add(backup.get(r2));
 		Villagers.add(backup.get(r2));
@@ -204,7 +207,11 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 	int day = 1;
 	private void Mafia(MessageCreateEvent event) throws InterruptedException {
 		BotInfo n = Utilities.loadBotsFromJson();
-		Bot pmBot = new Bot(n.getToken(), "");
+//		for (int i = 0; i < 3; i++) {
+//			new Bot(n.getToken(), "").connect(false);
+//		}
+// 		Bot pmBot = new Bot(n.getToken(), "rachel");
+//		pmBot.connect(false);
 		api = new DiscordApiBuilder().setToken(n.getToken()).login().join();
 				
 		String msg = event.getMessageContent();
@@ -224,14 +231,11 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 		if (mafiatime) {
 			try {
 				org.javacord.api.entity.user.User user = null;
-				
-				System.out.println(Mafia.get(0).getPrivateChannel().get().getId());
-				pmchannelID = Mafia.get(0).getPrivateChannel().get().getId();
-				System.out.println(pmchannelID + " | " + Mafia.get(0).getPrivateChannel().get().getId());
-				api.getServerTextChannelById(pmchannelID).get().sendMessage("Bot Connected");		
-				pmBot.connect(false);	
-				
+				pmchannelID = Mafia.get(0).openPrivateChannel().get().getId();
+				System.out.println("id = " + pmchannelID);
+				api.getPrivateChannelById(pmchannelID).get().sendMessage("Bot Cooonenencnntend");
 				Mafia.get(0).openPrivateChannel().get().sendMessage("Who would you like to kill?");
+				
 				if (event.getMessageContent().startsWith(mafiaKill) && event.getMessageAuthor() == Mafia.get(0)) {
 					for (int i1 = 0; i1 < names.size(); i1++) {
 						if (names.get(i1).getName().equalsIgnoreCase(msg.replaceAll(" ", "").replace(mafiaKill,""))) {
@@ -352,5 +356,8 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 		} 
 	}
 	
+	private void onPrivateChannelCreate​(PrivateChannelCreateListener pmc) {
+		Mafia.get(0).addPrivateChannelCreateListener(pmc);
+	}
 	
 }
