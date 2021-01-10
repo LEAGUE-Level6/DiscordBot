@@ -100,6 +100,11 @@ public class Bot  {
 		api.addMessageCreateListener(randomString);
 		helpListener.addHelpEmbed(randomString.getHelpEmbed());
 		
+
+		MaxTicTacToe mttt = new MaxTicTacToe(channelName);
+		api.addMessageCreateListener(mttt);
+		helpListener.addHelpEmbed(mttt.getHelpEmbed());
+    
 		Greeter g = new Greeter(channelName);
 		api.addMessageCreateListener(g);
 		helpListener.addHelpEmbed(g.getHelpEmbed());
