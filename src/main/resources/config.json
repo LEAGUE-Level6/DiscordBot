@@ -1,15 +1,5 @@
 {
-<<<<<<< Updated upstream
-    "channels": ["channelName"],
-    "token": "token"
+   "channels": ["channel"],
+   "token": "token"
 }
 
-=======
-
-   "channels": [""],
-   "token": ""
-
-}
-
-
->>>>>>> Stashed changes
