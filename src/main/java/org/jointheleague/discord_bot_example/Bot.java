@@ -98,7 +98,16 @@ public class Bot  {
 		
 		RollDie rollDie = new RollDie(channelName);
 		api.addMessageCreateListener(rollDie);
-		
+
+
+		MaxTicTacToe mttt = new MaxTicTacToe(channelName);
+		api.addMessageCreateListener(mttt);
+		helpListener.addHelpEmbed(mttt.getHelpEmbed());
+    
+		Greeter g = new Greeter(channelName);
+		api.addMessageCreateListener(g);
+		helpListener.addHelpEmbed(g.getHelpEmbed());
+
 		pythagcalc pythagCalc = new pythagcalc(channelName);
 		api.addMessageCreateListener(pythagCalc);
 		helpListener.addHelpEmbed(pythagCalc.getHelpEmbed());
