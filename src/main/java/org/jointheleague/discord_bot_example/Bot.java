@@ -103,9 +103,9 @@ public class Bot  {
 		api.addMessageCreateListener(pythagCalc);
 		helpListener.addHelpEmbed(pythagCalc.getHelpEmbed());
 
-		Greeter g = new Greeter(channelName);
-		api.addMessageCreateListener(g);
-		helpListener.addHelpEmbed(g.getHelpEmbed());
+		//Greeter g = new Greeter(channelName);
+		//api.addMessageCreateListener(g);
+		//helpListener.addHelpEmbed(g.getHelpEmbed());
     
 		CovidCaseGetter covid = new CovidCaseGetter(channelName);
 		api.addMessageCreateListener(covid);

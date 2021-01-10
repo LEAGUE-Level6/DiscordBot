@@ -24,8 +24,8 @@ public class pythagcalc extends CustomMessageCreateListener {
 	private static final String COMMAND = "!pythagCalc";
 	int stage = 0;
 	private static String n = "";
-	private static BigDecimal a;
-	private static BigDecimal b;
+	private static int a;
+	private static int b;
 
 	//private static String a;
 	//private static String b;
@@ -57,7 +57,8 @@ public class pythagcalc extends CustomMessageCreateListener {
 		else if(stage == 1) {
 			if(event.getMessageAuthor().getDisplayName().equals(n)) {
 				stage = 2;
-				a = new BigDecimal(event.getMessageContent(),mc);
+				a = Integer.parseInt(event.getMessageContent());
+			//	a = new BigDecimal(event.getMessageContent(),mc);
 				event.getChannel().sendMessage("**Pythag Calc**: Enter the B Value of the triangle");
 				
 				
@@ -68,26 +69,37 @@ public class pythagcalc extends CustomMessageCreateListener {
 		
 		else if(stage == 2) {
 			if(event.getMessageAuthor().getDisplayName().equals(n)) {
-				stage = 3;
-				b = new BigDecimal(event.getMessageContent(),mc);
+				//stage = 3;
+				//b = new BigDecimal(event.getMessageContent(),mc);
+				b = Integer.parseInt(event.getMessageContent());
+				int aSquared = a * a;
+				int bSquared = b * b;
+				int bothAdded = aSquared + bSquared;
+				System.out.println(bothAdded);
+				
+				Double rooted = Math.sqrt(bothAdded);
+				//BigDecimal finalAnswerNotRounded = new BigDecimal(Math.sqrt(bothAdded));
+				long finalAnswer = Math.round(rooted);
+				event.getChannel().sendMessage("**Pythag Calc**: Your answer is " + finalAnswer);
+				stage = 0;
+				
 			}
 		}
+		/*
 		
 		else if(stage == 3) {
-
-			stage = 0;
-			BigDecimal aSquared = a.multiply(a);
-			BigDecimal bSquared = b.multiply(b);
-			BigDecimal bothAdded = a.add(b);
+			int aSquared = a * a;
+			int bSquared = b * b;
+			long bothAdded = a + b;
 			
-			BigDecimal finalAnswerNotRounded = new BigDecimal(Math.sqrt(bothAdded.doubleValue()));
+			BigDecimal finalAnswerNotRounded = new BigDecimal(Math.sqrt(bothAdded));
 			long finalAnswer = Math.round(finalAnswerNotRounded.doubleValue());
 			event.getChannel().sendMessage("**Pythag Calc**: Your answer is " + finalAnswer);
-			}
-		}
+			stage = 0;
 
-		
+		}
+		*/
 	}
-	
-	
+
+}
 
