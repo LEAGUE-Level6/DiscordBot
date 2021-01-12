@@ -21,8 +21,8 @@ import net.aksingh.owmjapis.api.APIException;
 
 public class FilmRecommendations extends CustomMessageCreateListener {
 
-	private final String apiKey = "74590d2a04d94185bb36d38a39d6238e";
-	private static final String COMMAND = "!newsAPI";
+	private final String apiKey = "AIzaSyDNMPIR-dNHFahbddV_T2XrMlMiT_y89MY";
+	private static final String COMMAND = "!moviesAPI";
 	private final Gson gson = new Gson();
 	
 	public FilmRecommendations(String channelName) {
@@ -99,7 +99,4 @@ public class FilmRecommendations extends CustomMessageCreateListener {
 		return "No news story found for the keyword: " + topic;
 	}
 	
-	
 }
-
-
