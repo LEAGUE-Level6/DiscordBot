@@ -12,6 +12,7 @@ public class Dice extends CustomMessageCreateListener{
 	private static final String COMMAND2 = "!format";
 	private static final String COMMAND3 = "!reroll";
 	private static final String COMMAND4 = "!beNice";
+	private static final String COMMAND5 = "!playSound";
 	int randy = 0;
 	int tempRandy = 0;
 	int tempRandy2 = 0;
@@ -27,6 +28,19 @@ public class Dice extends CustomMessageCreateListener{
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		String eventContent = event.getMessageContent();
+		
+//		ServerVoiceChannel channel = ["General"];
+//		channel.connect().thenAccept(audioConnection -> {
+//		    // Do stuff
+//		}).exceptionally(e -> {
+//		    // Failed to connect to voice channel (no permissions?)
+//		    e.printStackTrace();
+//		    return null;
+//		});
+		
+		if(eventContent.equals(COMMAND5)) {
+			
+		}
 		if(eventContent.equals(COMMAND4)) {
 			if(beNice) {
 				beNice = false;
@@ -71,7 +85,6 @@ public class Dice extends CustomMessageCreateListener{
 				else if(sides ==20&&randy == 1){
 					event.getChannel().sendMessage("You rolled a natural 1 :(");
 					}
-				
 				display1(event);
 			}
 		}
@@ -101,7 +114,6 @@ public class Dice extends CustomMessageCreateListener{
 					else if(sides ==20&&randy == 1){
 						event.getChannel().sendMessage("You rolled a natural 1 :(");
 						}
-					
 					display1(event);
 				}
 			}
@@ -133,7 +145,6 @@ public class Dice extends CustomMessageCreateListener{
 			else if(sides ==20&&randy == 1){
 				event.getChannel().sendMessage("You rolled a natural 1 :(");
 				}
-			
 			display1(event);
 		}
 			else if(eventContent.contains("d")&&adv&&eventContent.contains("+")&&!eventContent.contains(COMMAND2)) {
@@ -150,7 +161,6 @@ public class Dice extends CustomMessageCreateListener{
 					else if(sides ==20&&randy == 1){
 						event.getChannel().sendMessage("You rolled a natural 1 :(");
 						}
-					
 					display2(event);
 					displayFinal(event);
 			}
@@ -199,7 +209,6 @@ public class Dice extends CustomMessageCreateListener{
 				else if(setRoll.equals("1")){
 					event.getChannel().sendMessage("You rolled a natural 1 :(");
 					}
-				
 				event.getChannel().sendMessage("Rolled a "+ setRoll);
 				
 			}
