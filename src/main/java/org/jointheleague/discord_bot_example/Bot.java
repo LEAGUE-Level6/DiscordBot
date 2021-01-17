@@ -92,6 +92,13 @@ public class Bot  {
 		RollDie rollDie = new RollDie(channelName);
 		api.addMessageCreateListener(rollDie);
 		
+		Workout workout = new Workout(channelName);
+		api.addMessageCreateListener(workout);
+		helpListener.addHelpEmbed(workout.getHelpEmbed());
+		
+		NewWorkout newWorkout = new NewWorkout(channelName);
+		api.addMessageCreateListener(newWorkout);
+		helpListener.addHelpEmbed(newWorkout.getHelpEmbed());
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
