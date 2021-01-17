@@ -1,5 +1,6 @@
 package org.jointheleague.modules;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -17,7 +18,7 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener {
 	public WordSearchPuzzleGenerator(String channelName) {
 		super(channelName);
 		helpEmbed = new HelpEmbed(COMMAND,
-				"Creates a 10 x 10 random word search puzzle with the words you want. except the words need to be less than 11 letters long");
+				"Creates a 10 x 10 random word search puzzle with the words you want. word limit is 10, words must not be more than 10 letters");
 
 	}
 
@@ -45,19 +46,12 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener {
 				// System.out.println(words[i]);
 			}
 
-			int voh[] = new int[words.length];
-			for (int i = 0; i < voh.length; i++) {
-				voh[i] = new Random().nextInt(2);
-			}
-			// 0 = vertical, 1 = horizontal
-			// printing
-			for (int i = 0; i < words.length; i++) {
-				System.out.println(words[i] + " has " + voh[i]);
-			}
-
 			char[][] puzzle = new char[10][10];
 			int[][] amidoingthisright = new int[10][10];
-
+			List<Boolean>column = new ArrayList<>();
+			for(int i = 0; i <10; i++) {
+				column.add(false);
+			}
 			// putting a random letter in for each place
 			for (int bah = 0; bah < amidoingthisright.length; bah++) {
 				for (int poiuytrewq = 0; poiuytrewq < amidoingthisright[bah].length; poiuytrewq++) {
@@ -66,7 +60,7 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener {
 			}
 			for (int i = 0; i < puzzle.length; i++) {
 				for (int j = 0; j < puzzle[i].length; j++) {
-					puzzle[i][j] = 'a';//(char)('a' + amidoingthisright[i][j]);
+					puzzle[i][j] = '.';//(char)('a' + amidoingthisright[i][j]);
 				}
 			}
 
@@ -85,49 +79,36 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener {
 				}
 			}
 			
-			int[] lct = new int[words.length];
-			for(int i = 0; i < lct.length; i++) {
-				lct[i] = new Random().nextInt(10);
-			}
-			System.out.println(Arrays.toString(lct));
-
 			for (int p = 0; p < words.length; p++) {
 				// vertical
-				// System.out.println(locations[p]);
-				if (voh[p] == 0) {
 					char j[] = words[p].toCharArray();
-					int yIndex = lct[p];
+					int yIndex = 0; //new Random().nextInt(column.size());
+					System.out.println(yIndex);
+					//if(column.get(yIndex)==false) {
+					if(taken[0][yIndex]=false) {
 					for (int i = 0; i < j.length; i++) {
 						char b = j[i];
-						if(taken[i][yIndex] = false) {
 						puzzle[i][yIndex] = b;
 						taken[i][yIndex] = true;
-						}else {
-						yIndex = new Random().nextInt(10);
-						System.out.println(words[p] + yIndex);
-						puzzle[i][yIndex] = b;
 						}
-						//System.out.println(puzzle[i]);
-					}
-				}
-				// horizontal
-				if (voh[p] == 1) {
-					char j[] = words[p].toCharArray();
-					int yIndex = lct[p];
-					for (int i = 0; i < j.length; i++) {
-						char b = j[i];
-						if(taken[yIndex][i] = false) {
-						puzzle[yIndex][i] = b;
-						taken[yIndex][i] = true;
-						}else{
-							yIndex = new Random().nextInt(10);
-							System.out.println( words[p] + yIndex);
-							puzzle[yIndex][i] = b;
+					}else {
+						for(int i = 0; i < 10; i++) {
+							if(taken[i][yIndex] = false) {
+								for(int k = 0; k < j.length; k++) {
+									char b = j[i];
+									puzzle[i][yIndex] = b;
+								}
+								}else {
+									event.getChannel().sendMessage("unsuccessful");
+								}
+							}
 						}
-						//System.out.println(puzzle[i]);
 					}
-				}
-			}
+						//System.out.println(puzzle[i]);
+					//column.remove(yIndex);
+					//}
+			
+			
 			// System.out.println();
 			for (int o = 0; o < puzzle.length; o++) {
 				 System.out.println();
