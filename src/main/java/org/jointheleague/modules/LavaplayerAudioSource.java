@@ -51,15 +51,7 @@ public class LavaplayerAudioSource extends AudioSourceBase {
         return new LavaplayerAudioSource(getApi(), audioPlayer);     
 	}
 	
-	void initialize() {
-	 playerManager = new DefaultAudioPlayerManager();
-	playerManager.registerSourceManager(new YoutubeAudioSourceManager());
-	AudioPlayer player = playerManager.createPlayer();
-
-	// Create an audio source and add it to the audio connection's queue
-	AudioSource source = new LavaplayerAudioSource(getApi(), player);
-	Rythm.audioConnection.setAudioSource(source);
-	}
+	
 	// You can now use the AudioPlayer like you would normally do with Lavaplayer, e.g.,
 	
 	  
