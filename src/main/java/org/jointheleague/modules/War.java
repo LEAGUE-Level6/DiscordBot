@@ -26,7 +26,7 @@ public class War extends CustomMessageCreateListener {
 
 	@Override
 	public void handle(MessageCreateEvent event) {
-		if(event.getMessageAuthor().getName().equals("Ella's Bot")) {
+		if(event.getMessageAuthor().getName().equals("Deathmatch Bot")) {
 		return;
 		}
 		String a = event.getMessageContent();

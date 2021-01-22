@@ -20,7 +20,7 @@ public class StarSignSeeker extends CustomMessageCreateListener {
 
 	@Override
 	public void handle(MessageCreateEvent event) {
-		if(event.getMessageAuthor().getName().equals("Ella's Bot")) {
+		if(event.getMessageAuthor().getName().equals("Deathmatch Bot")) {
 		return;
 		}
 		

@@ -26,7 +26,7 @@ public class HungerGames extends CustomMessageCreateListener{
 	public void handle(MessageCreateEvent event) {
 		
 		String m = event.getMessageContent();
-		if(event.getMessageAuthor().getName().equals("Ella's Bot")) {
+		if(event.getMessageAuthor().getName().equals("Deathmatch Bot")) {
 		return;
 		}
 		if(m.equals("!HungerGames")) {
@@ -73,7 +73,8 @@ public class HungerGames extends CustomMessageCreateListener{
 			}
 			
 			System.out.println("Number of teams: "+teams.size());
-			String[] namesBank = {"Kinkou", "OotS", "Cultists", "MorningStar Crew"};
+			//String[] namesBank = {"Kinkou", "OotS", "Cultists", "MorningStar Crew", "Death Eaters","Void Monsters"};
+			String[] namesBank = {"Team Chungus", "Pro Fortniters", "Miraak Enjoyers", "Creative Team Name", "Sus Impostors","Void Monsters"};
 			for(int i = 0; i < teams.size(); i++) {
 				teamNames.add(namesBank[i]);
 			}
@@ -81,7 +82,18 @@ public class HungerGames extends CustomMessageCreateListener{
 				System.out.println(teamNames.get(i)+" size: "+teams.get(i).size());
 			}	
 			stage = 2;
+			//printing all teams
+			event.getChannel().sendMessage("Teams:");
+			for(int i = 0; i < teams.size(); i++) {
+				event.getChannel().sendMessage("**"+teamNames.get(i)+":**");
+				for(int x = 0; x < teams.get(i).size(); x++) {
+					event.getChannel().sendMessage("*"+teams.get(i).get(x)+"*");
+				}
+				event.getChannel().sendMessage(" ");
+			}
 			event.getChannel().sendMessage("Say 'Continue' to view round one");
+			
+			
 		}
 		//Adding players to the game
 		else if(stage == 1) {
@@ -90,14 +102,24 @@ public class HungerGames extends CustomMessageCreateListener{
 		}
 		else if(stage == 2 && m.equals("Continue")) {
 			event.getChannel().sendMessage(dissolveTeams());
-			for(int i = 0; i < 3; i++) {
+			for(int i = 0; i < (teams.size()/2)+1; i++) {
 				int action = new Random().nextInt(2);
-				if(action==2) {
+				if(action==1) {
 					event.getChannel().sendMessage(swap());
 				}
 				else {
 					event.getChannel().sendMessage(death());
 				}
+				event.getChannel().sendMessage(dissolveTeams());
+			}
+			//printing all teams
+			event.getChannel().sendMessage("Teams:");
+			for(int i = 0; i < teams.size(); i++) {
+				event.getChannel().sendMessage("**"+teamNames.get(i)+":**");
+				for(int x = 0; x < teams.get(i).size(); x++) {
+					event.getChannel().sendMessage("*"+teams.get(i).get(x)+"*");
+				}
+				event.getChannel().sendMessage(" ");
 			}
 		}
 	}
@@ -109,10 +131,10 @@ public class HungerGames extends CustomMessageCreateListener{
 		int member = new Random().nextInt(teams.get(oldTeam).size());
 		String announcement;
 		if(oldTeam == newTeam) {
-			announcement = "There have been no changes of alignment this round.";
+			announcement = "";
 		}
 		else {
-			announcement = teams.get(oldTeam).get(member)+" has abandoned Team "+(oldTeam+1)+" and joined Team "+(newTeam+1);
+			announcement = teams.get(oldTeam).get(member)+" has abandoned "+teamNames.get(oldTeam)+ " and joined "+teamNames.get(newTeam);
 		}
 		teams.get(newTeam).add(teams.get(oldTeam).get(member));
 		teams.get(oldTeam).remove(member);
@@ -142,10 +164,18 @@ public class HungerGames extends CustomMessageCreateListener{
 	}
 	public String dissolveTeams() {
 		int dissolvedTeam;
+		String winnerNames="";
+		if(teams.size()==1) {
+			for(int i =0; i < teams.get(0).size(); i++) {
+				winnerNames+=teams.get(0).get(i)+"\n";
+			}
+			String winners = teamNames.get(0)+" wins the Deathmatch! Congratulations to: "+winnerNames;
+			return winners;
+		}
 		for(int i = 0; i < teams.size(); i++) {
 			if(teams.get(i).isEmpty()) {
 				dissolvedTeam = i;
-				String announcement = teamNames.get(dissolvedTeam)+" has been dissolved, as no members remain.";
+				String announcement = "*"+teamNames.get(dissolvedTeam)+" has been dissolved, as no members remain.*";
 				teams.remove(i);
 				teamNames.remove(i);
 				return announcement;

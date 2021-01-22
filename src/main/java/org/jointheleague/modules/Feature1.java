@@ -25,7 +25,7 @@ public class Feature1 extends CustomMessageCreateListener {
 	@Override
 	public void handle(MessageCreateEvent event) {
 		System.out.println(event.getMessageAuthor().getName());
-		if(event.getMessageAuthor().getName().equals("Ella's Bot")) {
+		if(event.getMessageAuthor().getName().equals("Deathmatch Bot")) {
 		return;
 		}
 		
