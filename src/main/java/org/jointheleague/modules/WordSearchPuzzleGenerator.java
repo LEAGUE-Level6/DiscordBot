@@ -60,53 +60,28 @@ public class WordSearchPuzzleGenerator extends CustomMessageCreateListener {
 			}
 			for (int i = 0; i < puzzle.length; i++) {
 				for (int j = 0; j < puzzle[i].length; j++) {
-					puzzle[i][j] = '.';//(char)('a' + amidoingthisright[i][j]);
+					puzzle[i][j] = (char)('a' + amidoingthisright[i][j]);
 				}
 			}
 
-			// printing
-			for (int o = 0; o < puzzle.length; o++) {
-				// System.out.println();
-				for (int j = 0; j < puzzle[o].length; j++) {
-					// System.out.print(puzzle[o][j] + " ");
-				}
+			ArrayList<Integer> tteesstt = new ArrayList<Integer>();
+			for(int i = 0; i < 10; i++) {
+				tteesstt.add(i);
 			}
-			
-			boolean[][] taken = new boolean[10][10];
-			for (int i = 0; i < taken.length; i++) {
-				for (int j = 0; j < taken[i].length; j++) {
-					taken[i][j] = false;
-				}
-			}
-			
+			Collections.shuffle(tteesstt);
 			for (int p = 0; p < words.length; p++) {
 				// vertical
 					char j[] = words[p].toCharArray();
-					int yIndex = 0; //new Random().nextInt(column.size());
+					int u = j.length + 1;
+					int pw = new Random().nextInt(10-j.length);
+					int yIndex = tteesstt.get(p);
 					System.out.println(yIndex);
-					//if(column.get(yIndex)==false) {
-					if(taken[0][yIndex]=false) {
 					for (int i = 0; i < j.length; i++) {
 						char b = j[i];
-						puzzle[i][yIndex] = b;
-						taken[i][yIndex] = true;
-						}
-					}else {
-						for(int i = 0; i < 10; i++) {
-							if(taken[i][yIndex] = false) {
-								for(int k = 0; k < j.length; k++) {
-									char b = j[i];
-									puzzle[i][yIndex] = b;
-								}
-								}else {
-									event.getChannel().sendMessage("unsuccessful");
-								}
-							}
+						puzzle[i+pw][yIndex] = b;
 						}
 					}
-						//System.out.println(puzzle[i]);
-					//column.remove(yIndex);
-					//}
+					
 			
 			
 			// System.out.println();
