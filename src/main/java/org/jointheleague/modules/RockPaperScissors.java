@@ -3,7 +3,6 @@ package org.jointheleague.modules;
 import java.awt.Color;
 import java.io.File;
 import java.util.Random;
-
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.MessageDecoration;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -150,7 +149,7 @@ public class RockPaperScissors extends CustomMessageCreateListener{
 				event.getChannel().sendMessage("scissors");
 				//display image of scissors
 				event.getChannel().sendMessage("SCISSORS DECAPITATES LIZARD. I WIN!");
-				event.getChannel().sendMessage("https://cdn.drawception.com/drawings/947828/0fzAPXyhOY.png");
+				event.getChannel().sendMessage("https://images-na.ssl-images-amazon.com/images/I/61mpns1kbWL._AC_SX569_.jpg");
 			}
 			else if(randy == 3) {
 				event.getChannel().sendMessage("lizard");
