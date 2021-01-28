@@ -105,7 +105,6 @@ public class Reminder extends CustomMessageCreateListener implements ActionListe
 			event.getChannel().sendMessage("Successfully created a reminder for " + time.toString());
 			
 		}
-
 	}
 
 	@Override
