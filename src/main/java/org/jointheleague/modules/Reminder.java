@@ -1,11 +1,9 @@
 package org.jointheleague.modules;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalTime;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
-
 import javax.swing.Timer;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
@@ -32,12 +30,15 @@ public class Reminder extends CustomMessageCreateListener implements ActionListe
 
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
-
+		
 		if (event.getMessageContent().contains(HELP_COMMAND)) {
 
+			//event.get
+			
 			new MessageBuilder().setEmbed(new EmbedBuilder().setTitle(
 					"To use this command first type the '!setReminder' command, followed by the time you want to be reminded (In Military Time), a comma, then your remind message")
-					.setDescription("P.S. Make sure when you input your time use a colon between the hours and minutes").setFooter("")).send(event.getChannel());
+					.setDescription("P.S. Make sure when you input your time use a colon between the hours and minutes")
+					.setFooter("")).send(event.getChannel());
 
 		} else if (event.getMessageContent().contains(REMIND_COMMAND)) {
 
@@ -63,6 +64,9 @@ public class Reminder extends CustomMessageCreateListener implements ActionListe
 
 				parameters = parameters.substring(parameters.indexOf(',') + 1, parameters.length());
 			} catch (StringIndexOutOfBoundsException e) {
+				// This catches if there is no comma, which probably means there is no message
+				// so I set that to an empty string
+
 				timeParameter = parameters.substring(0, parameters.length());
 
 				parameters = "";
@@ -98,6 +102,8 @@ public class Reminder extends CustomMessageCreateListener implements ActionListe
 			timers.add(new Timer(timeUntil * 1000, this));
 			timers.get(timers.size() - 1).start();
 
+			event.getChannel().sendMessage("Successfully created a reminder for " + time.toString());
+			
 		}
 
 	}

@@ -103,10 +103,6 @@ public class Bot  {
 		MaxTicTacToe mttt = new MaxTicTacToe(channelName);
 		api.addMessageCreateListener(mttt);
 		helpListener.addHelpEmbed(mttt.getHelpEmbed());
-    
-		Greeter g = new Greeter(channelName);
-		api.addMessageCreateListener(g);
-		helpListener.addHelpEmbed(g.getHelpEmbed());
 
 		pythagcalc pythagCalc = new pythagcalc(channelName);
 		api.addMessageCreateListener(pythagCalc);
@@ -179,5 +175,6 @@ public class Bot  {
 
 		api.addMessageCreateListener(new Hello(channelName));
 		api.addMessageCreateListener(new Reminder(channelName));
+		api.addMessageCreateListener(new Poll(channelName));
 	}
 }
