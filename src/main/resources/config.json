@@ -1,7 +1,5 @@
-
 {
 
-    "channels": ["bot-lab"],
-    "token": "NzkxNDg5MzY4MDgxNTYzNjg4.X-P56g.AW0ZMmrtS8td7FFC-qjBIoc7urQ"
-
+   "channels": ["channel"],
+   "token": "token"
 }
