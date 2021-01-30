@@ -105,11 +105,9 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 			}
 		}
 		
-			
+		boolean settingRoles = true;
 		//Playing		
 		if (Playing) {
-			boolean settingRoles = true;
-			System.out.println("settingroles = true");
 			if (settingRoles) {
 				setRoles();
 				settingRoles = false;
@@ -199,17 +197,11 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 	}
 	
 		
-	long pmchannelID;
-	String pmchannel;
-	DiscordApi api;
-	
+	long pmchannelID;	
 	int day = 1;
+	org.javacord.api.entity.user.User user = null;
+	
 	private void Mafia(MessageCreateEvent event) throws InterruptedException {
-		BotInfo n = Utilities.loadBotsFromJson();
-//		
-		api = new DiscordApiBuilder().setToken(n.getToken()).login().join();
-		MafiaPlayer mp = new MafiaPlayer(channelName);
-				
 		String msg = event.getMessageContent();
 		
 		event.getChannel().sendMessage("Day " + day);
@@ -217,7 +209,6 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 		if (day == 1) {
 			event.getChannel().sendMessage(beginningStorylines[(int) new Random().nextInt(beginningStorylines.length)]);
 			event.getChannel().sendMessage("The night cycle now begins.");
-			System.out.println(event.getChannel().getId());
 			mafiatime = true;
 		} else {
 			event.getChannel().sendMessage("The night cycle now begins.");
@@ -227,26 +218,12 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 		//get Mafia input
 		if (mafiatime) {
 			try {
-				org.javacord.api.entity.user.User user = null;
-				pmchannelID = Mafia.get(0).openPrivateChannel().get().getId();
-				
-//				api.getPrivateChannelById(pmchannelID).get().sendMessage("Bot Cooonenencnntend");
-				api.getPrivateChannelById(pmchannelID).get().addMessageCreateListener(mp);
-				Mafia.get(0).openPrivateChannel().get().sendMessage("Who would you like to kill?").wait();
-
-				Message killmsg = (Message) Mafia.get(0).openPrivateChannel().get().sendMessage("Who would you like to kill?");
-				killmsg.addReaction(":one:").notifyAll();
-				
-				if (event.getMessageContent().startsWith(mafiaKill) && event.getMessageAuthor() == Mafia.get(0)) {
-					for (int j = 0; j < names.size(); j++) {
-						if (names.get(j).getName().equalsIgnoreCase(msg.replaceAll(" ", "").replace(mafiaKill,""))) {
-							user = names.get(j);
-						}
-					}
+				Mafia.get(0).openPrivateChannel().get().sendMessage("Who would you like to kill?");
+				if (user != null) {
 					kill(event, user);
 					doctortime = true;
 					mafiatime = false;
-				} 
+				}
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}
@@ -354,13 +331,20 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 	}
 	
 	public void onMessageCreate(MessageCreateEvent event) {
-//		event.getPrivateChannel().ifPresent(e -> {
-//			if (e.getId() == pmchannelID) {
-//				System.out.println(event.getMessageContent() + "  |  " + event.getMessageAuthor());
-//				handle(event);
-//			}
-//		});
-		
+		event.getPrivateChannel().ifPresent(e -> {
+			if (e.getId() == pmchannelID) {			
+				if (event.isPrivateMessage() && event.getMessageContent().startsWith(mafiaKill) && event.getMessageAuthor() == Mafia.get(0)) {
+					System.out.println("found match for mafia");
+					for (int j = 0; j < names.size(); j++) {
+						if (names.get(j).getName().equalsIgnoreCase(event.getMessageContent().replaceAll(" ", "").replace(mafiaKill,""))) {
+							user = names.get(j);
+						}
+					}
+				} 
+				
+				handle(event);
+			}
+		});
 		
 		event.getServerTextChannel().ifPresent(e -> {
 			if (e.getName().equals(channelName)) {
