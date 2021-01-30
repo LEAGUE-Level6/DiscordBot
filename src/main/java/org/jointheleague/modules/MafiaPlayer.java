@@ -63,7 +63,7 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 	
 	public MafiaPlayer(String channelName) {
 		super(channelName);
-		helpEmbed = new HelpEmbed(COMMAND, "Starts a game of Mafia //(e.g. !playMafia 8). **Make sure all players enable messages from server members. Bot must also have permission to message server members. ");
+		helpEmbed = new HelpEmbed(COMMAND, "Starts a game of Mafia /(e.g. !playMafia 8). **Make sure all players enable messages from server members. Bot must also have permission to message server members. ");
 	}
 
 	
@@ -74,13 +74,17 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 		//!Playing
 		if (!Playing) {
 			if (msg.startsWith(COMMAND)) {
-				p = Integer.parseInt(msg.replace(COMMAND + " ", "").trim());
-				if (7 <= p && p <= 16) {
-					event.getChannel().sendMessage("Welcome To Mafia! Starting game with " + p + " players...");
-					event.getChannel().sendMessage("Player 1, please type below:   Player 1");
-					assigningPlayers = true;
-					return;
-				} 
+				try {
+					p = Integer.parseInt(msg.replace(COMMAND + " ", "").trim());
+					if (7 <= p && p <= 16) {
+						event.getChannel().sendMessage("Welcome To Mafia! Starting game with " + p + " players...");
+						event.getChannel().sendMessage("Player 1, please type below:   Player 1");
+						assigningPlayers = true;
+						return;
+					} 
+				} catch (NumberFormatException e) {
+					event.getChannel().sendMessage("Invalid command. Please include a number. /(e.g. !playMafia 8)");
+				}
 			}			
 			
 			if (msg.startsWith("Welcome To Mafia!")) {
@@ -105,10 +109,9 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 			}
 		}
 		
-			
+		boolean settingRoles = true;
 		//Playing		
 		if (Playing) {
-			boolean settingRoles = true;
 			System.out.println("settingroles = true");
 			if (settingRoles) {
 				setRoles();
@@ -354,12 +357,12 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 	}
 	
 	public void onMessageCreate(MessageCreateEvent event) {
-//		event.getPrivateChannel().ifPresent(e -> {
-//			if (e.getId() == pmchannelID) {
-//				System.out.println(event.getMessageContent() + "  |  " + event.getMessageAuthor());
-//				handle(event);
-//			}
-//		});
+		event.getPrivateChannel().ifPresent(e -> {
+			if (e.getId() == pmchannelID) {
+				System.out.println(event.getMessageContent() + "  |  " + event.getMessageAuthor());
+				handle(event);
+			}
+		});
 		
 		
 		event.getServerTextChannel().ifPresent(e -> {
