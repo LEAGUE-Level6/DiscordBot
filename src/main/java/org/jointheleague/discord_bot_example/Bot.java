@@ -104,9 +104,9 @@ public class Bot  {
 		api.addMessageCreateListener(mttt);
 		helpListener.addHelpEmbed(mttt.getHelpEmbed());
     
-		Greeter g = new Greeter(channelName);
-		api.addMessageCreateListener(g);
-		helpListener.addHelpEmbed(g.getHelpEmbed());
+//		Greeter g = new Greeter(channelName);
+//		api.addMessageCreateListener(g);
+//		helpListener.addHelpEmbed(g.getHelpEmbed());
 
 		pythagcalc pythagCalc = new pythagcalc(channelName);
 		api.addMessageCreateListener(pythagCalc);
@@ -131,6 +131,10 @@ public class Bot  {
 		UnbeatableRockPaperScissors rps = new UnbeatableRockPaperScissors(channelName);
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
+		
+		MTGAPI mtgapi = new MTGAPI(channelName);
+		api.addMessageCreateListener(mtgapi);
+		helpListener.addHelpEmbed(mtgapi.getHelpEmbed());
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
