@@ -198,9 +198,11 @@ public class MafiaPlayer extends CustomMessageCreateListener {
                 }
 
                 if (assigningPlayers) {
-                    event.getChannel().sendMessage("Player " + currentPlayerNumber++ + ", please type below:");
-                    addPlayer(event);
-                    if (villageMembers.size() >= numPlayers) {
+                    if (villageMembers.size() < numPlayers) {
+                        event.getChannel().sendMessage("Player " + currentPlayerNumber++ + ", please type below:");
+                        addPlayer(event);
+                    }
+                    else{
                         assigningPlayers = false;
                     }
                 }
@@ -247,7 +249,6 @@ public class MafiaPlayer extends CustomMessageCreateListener {
     }
 
     private void playRound(MessageCreateEvent event) throws InterruptedException {
-        MafiaPlayer mp = new MafiaPlayer(channelName);
 
         String msg = event.getMessageContent();
 
@@ -267,24 +268,29 @@ public class MafiaPlayer extends CustomMessageCreateListener {
         if (mafiatime) {
             try {
                 User user = null;
-                mafiaMembers.get(0).openPrivateChannel().get().sendMessage("Who would you like to kill?");
+                mafiaMembers.get(0).openPrivateChannel().get().sendMessage("Who would you like to kill?  Type " + mafiaKill + " playerName");
                 mafiaMembers.get(0).openPrivateChannel().get().sendMessage("Village Members: ");
 
                 String villageMemberString = villageMembers.stream().map(member -> member.getName() + "\n").collect(Collectors.joining());
                 mafiaMembers.get(0).openPrivateChannel().get().sendMessage(villageMemberString);
 
-                if (msg.contains(mafiaKill) && event.getMessageAuthor() == mafiaMembers.get(0)) {
-                    mafiaMembers.get(0).openPrivateChannel().get().sendMessage("thanks for the message");
-                    numResponseFromMafiaMembers++;
-                    for (int j = 0; j < villageMembers.size(); j++) {
-                        if (villageMembers.get(j).getName().equalsIgnoreCase(msg.replaceAll(" ", "").replace(mafiaKill, ""))) {
-                            user = villageMembers.get(j);
+
+                for(User mafiaMember : mafiaMembers) {
+                    if (msg.contains(mafiaKill) && event.getMessageAuthor().getName().equals(mafiaMember.getName())) {
+                        mafiaMember.openPrivateChannel().get().sendMessage("thanks for the message");
+                        numResponseFromMafiaMembers++;
+                        for (int j = 0; j < villageMembers.size(); j++) {
+                            if (villageMembers.get(j).getName().equalsIgnoreCase(msg.replaceAll(" ", "").replace(mafiaKill, ""))) {
+                                user = villageMembers.get(j);
+                            }
                         }
-                    }
-                    kill(event, user);
-                    if (numResponseFromMafiaMembers >= mafiaMembers.size()) {
-                        doctortime = true;
-                        mafiatime = false;
+                        kill(event, user);
+                        if (numResponseFromMafiaMembers >= mafiaMembers.size()) {
+                            doctortime = true;
+                            mafiatime = false;
+                        }
+                    } else if (event.getMessageAuthor().getName().equals(mafiaMember.getName())) {
+                        mafiaMember.openPrivateChannel().get().sendMessage("Please include the command " + mafiaKill);
                     }
                 }
             } catch (InterruptedException | ExecutionException e) {
