@@ -132,6 +132,10 @@ public class Bot  {
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
 		
+		ImageSearchAPI isapi = new ImageSearchAPI(channelName);
+		api.addMessageCreateListener(isapi);
+		helpListener.addHelpEmbed(isapi.getHelpEmbed());
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));

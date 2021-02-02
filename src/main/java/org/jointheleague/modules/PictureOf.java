@@ -147,7 +147,7 @@ public class PictureOf extends CustomMessageCreateListener {
 		        //Read the response
 		        JsonReader repoReader = Json.createReader(con.getInputStream());
 		        JsonObject userJSON = ((JsonObject) repoReader.read());
-
+		        System.out.println(userJSON.toString());
 		        //Disconnect
 		        con.disconnect();
 
