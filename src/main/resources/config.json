@@ -1,7 +1,5 @@
-
 {
-
-    "channels": ["lucas-h"],
-    "token": "-Dq0pjN0esQ7OM3ItMYt40v2XIqeNg0n"
-
+   "channels": ["channel"],
+   "token": "token"
 }
+
