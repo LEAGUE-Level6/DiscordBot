@@ -11,6 +11,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.jointheleague.modules.pojo.HelpEmbed;
 import org.jointheleague.modules.pojo.apiExample.ApiExampleWrapper;
 import org.jointheleague.pojo.age.Age;
 
@@ -18,13 +19,14 @@ import com.google.gson.Gson;
 
 import net.aksingh.owmjapis.api.APIException;
 
-public class WeatherAPI extends CustomMessageCreateListener{
+public class AgeGuesser extends CustomMessageCreateListener{
 
 	private static final String COMMAND = "!age";
 	private final Gson gson = new Gson();
 
-	public WeatherAPI(String channelName) {
+	public AgeGuesser(String channelName) {
 		super(channelName);
+		helpEmbed = new HelpEmbed(COMMAND, "User inputs a name and the bot returns an estimated age");
 		// TODO Auto-generated constructor stub
 	}
 

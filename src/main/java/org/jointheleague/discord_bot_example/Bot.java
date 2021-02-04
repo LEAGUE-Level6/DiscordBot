@@ -132,7 +132,7 @@ public class Bot  {
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
 		
-		WeatherAPI wapi = new WeatherAPI(channelName);
+		AgeGuesser wapi = new AgeGuesser(channelName);
 		api.addMessageCreateListener(wapi);
 		helpListener.addHelpEmbed(wapi.getHelpEmbed());
 		
