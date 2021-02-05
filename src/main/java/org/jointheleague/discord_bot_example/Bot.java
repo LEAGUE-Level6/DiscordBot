@@ -10,11 +10,12 @@ import org.javacord.api.DiscordApiBuilder;
  *
  */
 import org.jointheleague.modules.*;
+import org.jointheleague.modules.pojo.HelpEmbed;
 
 
 
 public class Bot  {
-	
+//	private static final String COMMAND = "!help";
 	// The string to show the custom :vomiting_robot: emoji
 	public static String emoji = "<:vomiting_robot:642414033290657803>";
 
@@ -22,8 +23,9 @@ public class Bot  {
 	private String channelName;
 	DiscordApi api;
 	_HelpListener helpListener;
-
+	
 	public Bot(String token, String channelName) {
+		//helpEmbed = new HelpEmbed(COMMAND, "Allows you to get a random number.  You can also specify a range of values (e.g. !random 50-100)");
 		this.token = token;
 		this.channelName = channelName;
 		helpListener = new _HelpListener(channelName);
@@ -61,6 +63,10 @@ public class Bot  {
 		api.addMessageCreateListener(randomNumber);
 		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
 		
+		Feature1 feature1 = new Feature1(channelName);
+		api.addMessageCreateListener(feature1);
+		helpListener.addHelpEmbed(feature1.getHelpEmbed());
+		
 		HypeMachine hypeMachine = new HypeMachine(channelName);
 		api.addMessageCreateListener(hypeMachine);
 		helpListener.addHelpEmbed(hypeMachine.getHelpEmbed());
@@ -93,6 +99,10 @@ public class Bot  {
 		api.addMessageCreateListener(newWeather);
 		helpListener.addHelpEmbed(newWeather.getHelpEmbed());
 		
+		DeathMatch hungerGames = new DeathMatch(channelName);
+		api.addMessageCreateListener(hungerGames);
+		helpListener.addHelpEmbed(hungerGames.getHelpEmbed());
+
 		CoinFlip cp = new CoinFlip(channelName);
 		api.addMessageCreateListener(cp);
 		
@@ -176,6 +186,7 @@ public class Bot  {
 		api.addMessageCreateListener(new RandomCase(channelName));
 		api.addMessageCreateListener(new GetTime(channelName));
 		api.addMessageCreateListener(new ScreenCapture(channelName));
-
+		api.addMessageCreateListener(new StarSignSeeker(channelName));
+		api.addMessageCreateListener(new War(channelName));
 	}
 }
