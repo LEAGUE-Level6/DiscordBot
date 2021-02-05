@@ -6,8 +6,8 @@ import java.util.Random;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.jointheleague.modules.pojo.HelpEmbed;
 
-public class HungerGames extends CustomMessageCreateListener{
-	private static final String COMMAND = "!HungerGames";
+public class DeathMatch extends CustomMessageCreateListener{
+	private static final String COMMAND = "!DeathMatch";
 	public boolean gS = false;
 	public int stage = 0;
 	public ArrayList<String> names = new ArrayList<String>(); 
@@ -17,7 +17,7 @@ public class HungerGames extends CustomMessageCreateListener{
 	public ArrayList<String> teamNames = new ArrayList<String>();
 	public ArrayList<String> deceased = new ArrayList<String>();
 	
-	public HungerGames (String channelName) {
+	public DeathMatch (String channelName) {
 		super(channelName);
 		helpEmbed = new HelpEmbed(COMMAND, "Use ! + sign to recieve a prediction about your life!");
 	}
@@ -29,10 +29,10 @@ public class HungerGames extends CustomMessageCreateListener{
 		if(event.getMessageAuthor().getName().equals("Deathmatch Bot")) {
 		return;
 		}
-		if(m.equals("!HungerGames")) {
+		if(m.equals("!DeathMatch")) {
 			gS = true;
 			stage = 1;
-			event.getChannel().sendMessage("Welcome to the Deathmatch. Enter 4-10 names to proceed:");
+			event.getChannel().sendMessage("Welcome to the Deathmatch. Enter 6-15 names to proceed:");
 		}
 		else if(m.equals("!Start")) {
 			System.out.println("START INITIALIZED");
@@ -74,7 +74,7 @@ public class HungerGames extends CustomMessageCreateListener{
 			
 			System.out.println("Number of teams: "+teams.size());
 			//String[] namesBank = {"Kinkou", "OotS", "Cultists", "MorningStar Crew", "Death Eaters","Void Monsters"};
-			String[] namesBank = {"GFX Castle", "DipyBrick's Slaves", "DipyBrick's Haters", "Sus Imposters", "Sus Impostors","Void Monsters"};
+			String[] namesBank = {"District 1", "District 2", "District 3", "District 4", "District 5","District 6"};
 			for(int i = 0; i < teams.size(); i++) {
 				teamNames.add(namesBank[i]);
 			}
@@ -91,13 +91,13 @@ public class HungerGames extends CustomMessageCreateListener{
 				}
 				event.getChannel().sendMessage(" ");
 			}
-			event.getChannel().sendMessage("Say 'Continue' to view round one");
+			event.getChannel().sendMessage("Say '!N' to view round one. If you would like to view the current list of teams and alligiences, type '!Teams' at any time.");
 			
 			
 		}
 		//Adding players to the game
 		else if(stage == 1) {
-			event.getChannel().sendMessage(m+" has been added to the game.");
+			event.getChannel().sendMessage(m+" has been added to the game. Say '!Start' to begin.");
 			names.add(m);
 		}
 		else if(stage == 2 && m.equals("!N")) {
@@ -114,7 +114,9 @@ public class HungerGames extends CustomMessageCreateListener{
 					event.getChannel().sendMessage(death());
 				}
 				event.getChannel().sendMessage(dissolveTeams());
+				
 			}
+			
 		}
 		else if(m.equals("!Teams")) {
 			//printing all teams
@@ -148,6 +150,7 @@ public class HungerGames extends CustomMessageCreateListener{
 		teams.get(newTeam).add(teams.get(oldTeam).get(member));
 		teams.get(oldTeam).remove(member);
 		return announcement;
+		
 	}
 	
 	public String death(){
@@ -175,7 +178,8 @@ public class HungerGames extends CustomMessageCreateListener{
 		int rebirthed = new Random().nextInt(deceased.size());
 		int tTeam = new Random().nextInt(teams.size()); 
 		teams.get(tTeam).add(deceased.get(rebirthed));
-		String announcement = deceased.get(rebirthed) + " has been reborn and pledges alligience to "+names.get(tTeam);
+		String announcement = deceased.get(rebirthed) + " has been reborn and pledges alligience to "+teamNames.get(tTeam);
+		deceased.remove(rebirthed);
 		return announcement;
 		}
 		else {
@@ -191,7 +195,8 @@ public class HungerGames extends CustomMessageCreateListener{
 			for(int i =0; i < teams.get(0).size(); i++) {
 				winnerNames+=teams.get(0).get(i)+"\n";
 			}
-			String winners = "**"+teamNames.get(0)+"** wins the Deathmatch! Congratulations to: "+winnerNames;
+			String winners = "**"+teamNames.get(0)+"** wins the Deathmatch! Congratulations to: "+winnerNames+"\nThis game has ended. Type '!DeathMatch' to play again!";
+			stage = 0;
 			return winners;
 		}
 		for(int i = 0; i < teams.size(); i++) {
@@ -205,6 +210,12 @@ public class HungerGames extends CustomMessageCreateListener{
 				
 		}
 		return null;		
+	}
+	public boolean gameOver() {
+		if(teams.size()==1) {
+			return true;
+		}
+		return false;
 	}
 	
 	
