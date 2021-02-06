@@ -71,7 +71,7 @@ public class MafiaPlayer extends CustomMessageCreateListener {
     public MafiaPlayer(String channelName) {
         super(channelName);
         BotInfo n = Utilities.loadBotsFromJson();
-        api = new DiscordApiBuilder().setToken(n.getToken()).login().join();
+        //api = new DiscordApiBuilder().setToken(n.getToken()).login().join();
         helpEmbed = new HelpEmbed(COMMAND, "Starts a game of Mafia /(e.g. !playMafia 8). **Make sure all players enable messages from server members. Bot must also have permission to message server members. ");
     }
 
@@ -97,53 +97,61 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 //
 //							"**" + again + "** - used only directly after the last game ends, it allows you to play a new game in quick succession");
         } else if (event.getMessageAuthor().getId() != botId) {
-            //!Playing
-            if (!gameStarted) {
-                if (msg.startsWith(COMMAND)) {
-                    try {
-                        numPlayers = Integer.parseInt(msg.replace(COMMAND + " ", "").trim());
-                        if (7 <= numPlayers && numPlayers <= 16) {
-                            event.getChannel().sendMessage("Welcome To Mafia! Starting game with " + numPlayers + " players...");
-                            event.getChannel().sendMessage("Player 1, please type below:");
-                            assigningPlayers = true;
-                            return;
-                        }
-                    } catch (NumberFormatException e) {
-                        event.getChannel().sendMessage("Invalid command. Please include a number. (e.g. !playMafia 8)");
-                    }
-                }
 
-                if (assigningPlayers) {
-                    if (villageMembers.size() < numPlayers) {
-                        if (villageMembers.size() < numPlayers - 1) {
-                            event.getChannel().sendMessage("Player " + currentPlayerNumber++ + ", please type below:");
+
+            if (msg.contains(COMMAND) ||
+                    msg.contains(vote) ||
+                    msg.contains(mafiaKill) ||
+                    msg.contains(detectiveInspect) ||
+                    msg.contains(doctorSave)) {
+                //!Playing
+                if (!gameStarted) {
+                    if (msg.startsWith(COMMAND)) {
+                        try {
+                            numPlayers = Integer.parseInt(msg.replace(COMMAND + " ", "").trim());
+                            if (7 <= numPlayers && numPlayers <= 16) {
+                                event.getChannel().sendMessage("Welcome To Mafia! Starting game with " + numPlayers + " players...");
+                                event.getChannel().sendMessage("Player 1, please type below:");
+                                assigningPlayers = true;
+                                return;
+                            }
+                        } catch (NumberFormatException e) {
+                            event.getChannel().sendMessage("Invalid command. Please include a number. (e.g. !playMafia 8)");
                         }
-                        addPlayer(event);
-                        if (villageMembers.size() == numPlayers) {
-                            assigningPlayers = false;
-                            gameStarted = true;
-                            try {
-                                event.getChannel().sendMessage("Selecting Mafia members, the Doctor, and the Detective.");
-                                setRoles(event);
-                                event.getChannel().sendMessage("Starting game!");
-                                playRound(event);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                    }
+
+                    if (assigningPlayers) {
+                        if (villageMembers.size() < numPlayers) {
+                            if (villageMembers.size() < numPlayers - 1) {
+                                event.getChannel().sendMessage("Player " + currentPlayerNumber++ + ", please type below:");
+                            }
+                            addPlayer(event);
+                            if (villageMembers.size() == numPlayers) {
+                                assigningPlayers = false;
+                                gameStarted = true;
+                                try {
+                                    event.getChannel().sendMessage("Selecting Mafia members, the Doctor, and the Detective.");
+                                    setRoles(event);
+                                    event.getChannel().sendMessage("Starting game!");
+                                    playRound(event);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
+
                 }
 
-            }
-
-            //Playing
-            else {
-                try {
-                    playRound(event);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                //Playing
+                else {
+                    try {
+                        playRound(event);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    checkGameOver(event);
                 }
-                checkGameOver(event);
             }
         }
     }
@@ -151,10 +159,10 @@ public class MafiaPlayer extends CustomMessageCreateListener {
     private void checkGameOver(MessageCreateEvent event) {
         if (mafiaMembers.isEmpty()) {
             event.getChannel().sendMessage("Villagers win!\n" + villageMembers.toString());
-            endGame();
+            restartGame();
         } else if (villageMembers.size() == 1) {
             event.getChannel().sendMessage("Mafia win!\n" + mafiaMembers.toString());
-            endGame();
+            restartGame();
         }
     }
 
@@ -241,7 +249,7 @@ public class MafiaPlayer extends CustomMessageCreateListener {
             //System.out.println("doc");
             try {
                 User user = null;
-                doctor.openPrivateChannel().get().sendMessage("Who would you like to attempt to save? Type " + doctorSave + " playerName");
+                //doctor.openPrivateChannel().get().sendMessage("Who would you like to attempt to save? Type " + doctorSave + " playerName");
                 doctor.openPrivateChannel().get().sendMessage("Players:\n" + allPlayerNamesString);
 
                 if (msg.startsWith(doctorSave) && event.getMessageAuthor() == doctor) {
@@ -426,7 +434,13 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 
     public void onMessageCreate(MessageCreateEvent event) {
         event.getPrivateChannel().ifPresent(e -> {
+            for (long privateChannelId : privateChannelIds) {
+                if (e.getId() == privateChannelId) {
+                    System.out.println(event.getMessageContent() + "  |  " + event.getMessageAuthor());
                     handle(event);
+                    break;
+                }
+            }
         });
 
 
