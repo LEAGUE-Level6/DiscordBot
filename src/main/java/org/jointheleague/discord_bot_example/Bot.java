@@ -104,6 +104,10 @@ public class Bot  {
 		EverythingSorter everySorter = new EverythingSorter(channelName);
 		api.addMessageCreateListener(everySorter);
 		helpListener.addHelpEmbed(everySorter.getHelpEmbed());
+		
+		ReactToImage imageReactor = new ReactToImage(channelName);
+		api.addMessageCreateListener(imageReactor);
+		helpListener.addHelpEmbed(imageReactor.getHelpEmbed());
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
