@@ -138,9 +138,16 @@ public class Bot  {
 		api.addMessageCreateListener(d);
 		helpListener.addHelpEmbed(d.getHelpEmbed());
 
+		
+		Hangman h = new Hangman(channelName);
+		api.addMessageCreateListener(h);
+		helpListener.addHelpEmbed(h.getHelpEmbed());
+
+
 		UnbeatableRockPaperScissors rps = new UnbeatableRockPaperScissors(channelName);
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
+
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
