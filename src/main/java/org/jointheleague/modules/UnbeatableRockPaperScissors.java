@@ -28,7 +28,7 @@ public class UnbeatableRockPaperScissors extends CustomMessageCreateListener{
 			else if(cmd.equalsIgnoreCase("scissors")) {
 				event.getChannel().sendMessage("Rock");
 			}else {
-				event.getChannel().sendMessage("Invalid Command");
+				//event.getChannel().sendMessage("Invalid Command");
 			}
 		}
 

@@ -44,24 +44,24 @@ public class Hangman extends CustomMessageCreateListener{
 				System.out.println(mode);
 				if(mode.equalsIgnoreCase("easy")) {
 					try {
-						brCount = new BufferedReader(new FileReader("/Users/THEHANS/Desktop/DiscordBot/src/main/java/org/jointheleague/modules/hangmanEasy.txt"));
-						br = new BufferedReader(new FileReader("/Users/THEHANS/Desktop/DiscordBot/src/main/java/org/jointheleague/modules/hangmanEasy.txt"));
+						brCount = new BufferedReader(new FileReader("src/main/java/org/jointheleague/modules/hangmanEasy.txt"));
+						br = new BufferedReader(new FileReader("src/main/java/org/jointheleague/modules/hangmanEasy.txt"));
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}else if(mode.equalsIgnoreCase("medium")) {
 					try {
-						brCount = new BufferedReader(new FileReader("/Users/THEHANS/Desktop/DiscordBot/src/main/java/org/jointheleague/modules/hangmanMedium.txt"));
-						br = new BufferedReader(new FileReader("/Users/THEHANS/Desktop/DiscordBot/src/main/java/org/jointheleague/modules/hangmanMedium.txt"));
+						brCount = new BufferedReader(new FileReader("src/main/java/org/jointheleague/modules/hangmanMedium.txt"));
+						br = new BufferedReader(new FileReader("src/main/java/org/jointheleague/modules/hangmanMedium.txt"));
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}else if(mode.equalsIgnoreCase("hard")) {
 					try {
-						brCount = new BufferedReader(new FileReader("/Users/THEHANS/Desktop/DiscordBot/src/main/java/org/jointheleague/modules/hangmanHard.txt"));
-						br = new BufferedReader(new FileReader("/Users/THEHANS/Desktop/DiscordBot/src/main/java/org/jointheleague/modules/hangmanHard.txt"));
+						brCount = new BufferedReader(new FileReader("src/main/java/org/jointheleague/modules/hangmanHard.txt"));
+						br = new BufferedReader(new FileReader("src/main/java/org/jointheleague/modules/hangmanHard.txt"));
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -184,7 +184,7 @@ public class Hangman extends CustomMessageCreateListener{
 	
 	public static void displayHangman(MessageCreateEvent event, int lives) {
 		String s = "";
-		if(lives == 6) {
+		if(lives == 0) {
 			s = "-------–––––––––––––––\n" + 
 					"        |                             |\n" + 
 					"        |                            O\n" + 
@@ -192,7 +192,7 @@ public class Hangman extends CustomMessageCreateListener{
 					"        |                          / \\\n" + 
 					"        |\n" + 
 					"–––––––––";
-		}else if(lives == 5) {
+		}else if(lives == 1) {
 			s = "-------–––––––––––––––\n" + 
 					"        |                             |\n" + 
 					"        |                            O\n" + 
@@ -200,7 +200,7 @@ public class Hangman extends CustomMessageCreateListener{
 					"        |                             \\\n" + 
 					"        |\n" + 
 					"–––––––––";
-		}else if(lives == 4) {
+		}else if(lives == 2) {
 			s = "-------–––––––––––––––\n" + 
 					"        |                             |\n" + 
 					"        |                            O\n" + 
@@ -216,7 +216,7 @@ public class Hangman extends CustomMessageCreateListener{
 					"        |\n" + 
 					"        |\n" + 
 					"–––––––––";
-		}else if(lives == 2) {
+		}else if(lives == 4) {
 			s = "-------–––––––––––––––\n" + 
 					"        |                             |\n" + 
 					"        |                            O\n" + 
@@ -224,7 +224,7 @@ public class Hangman extends CustomMessageCreateListener{
 					"        |\n" + 
 					"        |\n" + 
 					"–––––––––";
-		}else if(lives == 1) {
+		}else if(lives == 5) {
 			s = "-------–––––––––––––––\n" + 
 					"        |                             |\n" + 
 					"        |                            O\n" + 
