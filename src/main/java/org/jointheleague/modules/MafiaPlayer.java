@@ -35,10 +35,13 @@ public class MafiaPlayer extends CustomMessageCreateListener {
     private boolean voteTime = false;
     private boolean settingRoles = true;
     private boolean sendKillMessage = true;
+    private boolean sendSaveMessage = true;
+    private boolean sendInspectMessage = true;
+    
 
     //users
     ArrayList<User> mafiaMembers = new ArrayList<>();
-    ArrayList<User> villageMembers = new ArrayList<>();
+    ArrayList<User> villageMembers = new ArrayList<>(); //starts w/ all players
     User doctor;
     User detective;
     HashMap<User, Integer> votes;
@@ -59,7 +62,6 @@ public class MafiaPlayer extends CustomMessageCreateListener {
     DiscordApi api;
 
     int numResponseFromMafiaMembers;
-
 
     int day = 1;
 
@@ -167,7 +169,7 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 
             if (day == 1) {
                 event.getChannel().sendMessage(beginningStorylines[new Random().nextInt(beginningStorylines.length)]);
-                event.getChannel().sendMessage(":knife::syringe::mag: The night cycle now begins. :knife::syringe::mag:\n Waiting for Mafia members, the Doctor, and the Detective to respond to direct messages.");
+                event.getChannel().sendMessage(":knife::syringe::mag: The night cycle now begins. :knife::syringe::mag:\nWaiting for Mafia members, the Doctor, and the Detective to respond to direct messages.");
                 //System.out.println(event.getChannel().getId());
                 startDayTime = false;
                 mafiatime = true;
@@ -179,9 +181,7 @@ public class MafiaPlayer extends CustomMessageCreateListener {
         }
 
         //get Mafia input
-        if (mafiatime) {
-        	System.out.println("mafiatime");
-        	
+        if (mafiatime) {        	
             try {
                 if (sendKillMessage) {
                     for (User mafiaMember : mafiaMembers) {
@@ -235,8 +235,8 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 
 
         List<User> allPlayers = new ArrayList(villageMembers);
-        allPlayers.add(doctor);
-        allPlayers.add(detective);
+//      allPlayers.add(doctor);
+//      allPlayers.add(detective);
         allPlayers.addAll(mafiaMembers);
         Collections.shuffle(allPlayers);
         String allPlayerNamesString = allPlayers.stream().map(member -> member.getName() + "\n").collect(Collectors.joining());
@@ -246,12 +246,17 @@ public class MafiaPlayer extends CustomMessageCreateListener {
         	System.out.println("doctortime");
         	
             try {
-            	if (msg.startsWith(doctorSave) && event.getMessageAuthor() == doctor) {
-            		User user = null;
-            		boolean playerFound = false;
-
+            	if (sendSaveMessage) {
             		doctor.openPrivateChannel().get().sendMessage("Who would you like to attempt to save? Type " + doctorSave + " playerName");
             		doctor.openPrivateChannel().get().sendMessage("Player List:\n" + allPlayerNamesString);
+            		
+            		sendSaveMessage = false;
+            		return;
+				}
+            	
+            	if (msg.contains(doctorSave) && event.getMessageAuthor().getName().equals(doctor.getName())) {
+            		User user = null;
+            		boolean playerFound = false;         		
 
                     String doctorMessage = msg.replaceAll(" ", "").replace(doctorSave, "");
                 	for (int j = 0; j < villageMembers.size(); j++) {
@@ -259,8 +264,8 @@ public class MafiaPlayer extends CustomMessageCreateListener {
                             playerFound = true;
                             doctor.openPrivateChannel().get().sendMessage("You selected:  " + doctorMessage + " :syringe:\n\n");
                             save(event, user);
-                            detectivetime = true;
                             doctortime = false;
+                            detectivetime = true;
                         }
                     }
                     if (!playerFound) {
@@ -280,18 +285,23 @@ public class MafiaPlayer extends CustomMessageCreateListener {
         	System.out.println("detectivetime");
         	
             try {
+            	if (sendInspectMessage) {
+            		doctor.openPrivateChannel().get().sendMessage("Who would you like to inspect? Type " + detectiveInspect + " playerName");
+            		doctor.openPrivateChannel().get().sendMessage("Player List:\n" + allPlayerNamesString);
+            		
+            		sendInspectMessage = false;
+            		return;
+				}
+            	
             	if (msg.startsWith(detectiveInspect) && event.getMessageAuthor() == detective) {
             		User user = null;
             		boolean playerFound = false;
-
-            		detective.openPrivateChannel().get().sendMessage("Who would you like to attempt to save? Type " + detectiveInspect + " playerName");
-            		detective.openPrivateChannel().get().sendMessage("Player List:\n" + allPlayerNamesString);
 
                     String detectiveMessage = msg.replaceAll(" ", "").replace(detectiveInspect, "");
                 	for (int j = 0; j < villageMembers.size(); j++) {
                         if (villageMembers.get(j).getName().equalsIgnoreCase(detectiveMessage)) {
                             playerFound = true;
-                            detective.openPrivateChannel().get().sendMessage("You selected:  " + detectiveMessage + " :syringe:\n\n");
+                            detective.openPrivateChannel().get().sendMessage("You selected:  " + detectiveMessage + " :mag:\n\n");
                             inspect(event, user);
                             detectivetime = false;
                             voteTime = true;
@@ -445,13 +455,14 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 
     public void onMessageCreate(MessageCreateEvent event) {
         event.getPrivateChannel().ifPresent(e -> {
-        	System.out.println(event.getMessageContent() + " | " + event.getMessageAuthor());
+            //System.out.println(event.getMessageContent() + " | " + event.getMessageAuthor() + "\n");
         	handle(event);
         });
 
 
         event.getServerTextChannel().ifPresent(e -> {
             if (e.getName().equals(channelName)) {
+            	System.out.println("handle");
                 handle(event);
             }
         });
