@@ -181,7 +181,9 @@ public class MafiaPlayer extends CustomMessageCreateListener {
         }
 
         //get Mafia input
-        if (mafiatime) {        	
+        if (mafiatime) {       
+        	System.out.println(mafiatime);
+        	
             try {
                 if (sendKillMessage) {
                     for (User mafiaMember : mafiaMembers) {
@@ -205,7 +207,7 @@ public class MafiaPlayer extends CustomMessageCreateListener {
                         
                         String mafiaMessage = msg.replaceAll(" ", "").replace(mafiaKill, "");
                         for (int j = 0; j < villageMembers.size(); j++) {
-                            if (villageMembers.get(j).getName().equalsIgnoreCase(mafiaMessage)) {
+                            if (villageMembers.get(j).getName().equals(mafiaMessage)) {
                                 playerFound = true;
                                 mafiaMember.openPrivateChannel().get().sendMessage("You selected:  " + mafiaMessage + " :knife:\n\n");
                                 user = villageMembers.get(j);
@@ -220,7 +222,7 @@ public class MafiaPlayer extends CustomMessageCreateListener {
                         else if (numResponseFromMafiaMembers >= mafiaMembers.size()) {
                             User userToRemove = votes.entrySet().stream().max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getKey();
                             kill(event, userToRemove);
-                            sendKillMessage = true;
+//                          sendKillMessage = true;
                             mafiatime = false;
                             doctortime = true;
                         }
@@ -260,19 +262,21 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 
                     String doctorMessage = msg.replaceAll(" ", "").replace(doctorSave, "");
                 	for (int j = 0; j < villageMembers.size(); j++) {
-                        if (villageMembers.get(j).getName().equalsIgnoreCase(doctorMessage)) {
+                        if (villageMembers.get(j).getName().equals(doctorMessage)) {
                             playerFound = true;
                             doctor.openPrivateChannel().get().sendMessage("You selected:  " + doctorMessage + " :syringe:\n\n");
-                            save(event, user);
-                            doctortime = false;
-                            detectivetime = true;
+                            break;
                         }
                     }
-                    if (!playerFound) {
+                    if (playerFound) {
+                    	save(event, user);
+                        doctortime = false;
+                        detectivetime = true;
+                    } else {
                     	doctor.openPrivateChannel().get().sendMessage("Player " + doctorMessage + " not found. Please enter a user shown above");
-                    } 
+                    }
                     
-                } else if (event.getMessageAuthor().getName().equals(doctor.getName())) {
+                } else if (event.getMessageAuthor().getName().equals(doctor.getName()) && !event.getMessageContent().startsWith(mafiaKill)) {
                 	doctor.openPrivateChannel().get().sendMessage("Please include the command " + doctorSave);
                 }
             } catch (InterruptedException | ExecutionException e) {
@@ -286,32 +290,34 @@ public class MafiaPlayer extends CustomMessageCreateListener {
         	
             try {
             	if (sendInspectMessage) {
-            		doctor.openPrivateChannel().get().sendMessage("Who would you like to inspect? Type " + detectiveInspect + " playerName");
-            		doctor.openPrivateChannel().get().sendMessage("Player List:\n" + allPlayerNamesString);
+            		detective.openPrivateChannel().get().sendMessage("Who would you like to inspect? Type " + detectiveInspect + " playerName");
+            		detective.openPrivateChannel().get().sendMessage("Player List:\n" + allPlayerNamesString);
             		
             		sendInspectMessage = false;
             		return;
 				}
             	
-            	if (msg.startsWith(detectiveInspect) && event.getMessageAuthor() == detective) {
+            	if (msg.startsWith(detectiveInspect) && event.getMessageAuthor().getName().equals(detective.getName())) {
             		User user = null;
             		boolean playerFound = false;
 
                     String detectiveMessage = msg.replaceAll(" ", "").replace(detectiveInspect, "");
                 	for (int j = 0; j < villageMembers.size(); j++) {
-                        if (villageMembers.get(j).getName().equalsIgnoreCase(detectiveMessage)) {
+                        if (villageMembers.get(j).getName().equals(detectiveMessage)) {
                             playerFound = true;
                             detective.openPrivateChannel().get().sendMessage("You selected:  " + detectiveMessage + " :mag:\n\n");
-                            inspect(event, user);
-                            detectivetime = false;
-                            voteTime = true;
+                            break;
                         }
                     }
-                    if (!playerFound) {
+                    if (playerFound) {
+                    	inspect(event, user);
+                        detectivetime = false;
+                        voteTime = true;
+                    } else {
                     	detective.openPrivateChannel().get().sendMessage("Player " + detectiveMessage + " not found. Please enter a user shown above");
                     } 
                     
-                } else if (event.getMessageAuthor().getName().equals(doctor.getName())) {
+                } else if (event.getMessageAuthor().getName().equals(detective.getName()) && !event.getMessageContent().startsWith(doctorSave)) {
                 	detective.openPrivateChannel().get().sendMessage("Please include the command " + detectiveInspect);
                 }
             } catch (InterruptedException | ExecutionException e) {
