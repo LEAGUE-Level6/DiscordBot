@@ -93,21 +93,26 @@ public class Bot  {
 		api.addMessageCreateListener(randomString);
 		helpListener.addHelpEmbed(randomString.getHelpEmbed());
 		
-		Greeter g = new Greeter(channelName);
-		api.addMessageCreateListener(g);
-		helpListener.addHelpEmbed(g.getHelpEmbed());
+		BitcoinListener bc = new BitcoinListener(channelName);
+		api.addMessageCreateListener(bc);
+		helpListener.addHelpEmbed(bc.getHelpEmbed());
 		
-		ListMakerMessageListener LM = new ListMakerMessageListener(channelName);
-		api.addMessageCreateListener(LM);
-		helpListener.addHelpEmbed(LM.getHelpEmbed());
+		
+	//	Greeter g = new Greeter(channelName);
+//		api.addMessageCreateListener(g);
+	//	helpListener.addHelpEmbed(g.getHelpEmbed());
+		
+//		ListMakerMessageListener LM = new ListMakerMessageListener(channelName);
+//		api.addMessageCreateListener(LM);
+//		helpListener.addHelpEmbed(LM.getHelpEmbed());
 		
 		Dice d = new Dice(channelName);
 		api.addMessageCreateListener(d);
 		helpListener.addHelpEmbed(d.getHelpEmbed());
 
-		UnbeatableRockPaperScissors rps = new UnbeatableRockPaperScissors(channelName);
-		api.addMessageCreateListener(rps);
-		helpListener.addHelpEmbed(rps.getHelpEmbed());
+	//	UnbeatableRockPaperScissors rps = new UnbeatableRockPaperScissors(channelName);
+//		api.addMessageCreateListener(rps);
+//		helpListener.addHelpEmbed(rps.getHelpEmbed());
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
