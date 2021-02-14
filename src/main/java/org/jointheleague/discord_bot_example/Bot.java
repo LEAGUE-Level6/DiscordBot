@@ -114,9 +114,9 @@ public class Bot  {
 		api.addMessageCreateListener(mttt);
 		helpListener.addHelpEmbed(mttt.getHelpEmbed());
     
-		Greeter g = new Greeter(channelName);
-		api.addMessageCreateListener(g);
-		helpListener.addHelpEmbed(g.getHelpEmbed());
+		//Greeter g = new Greeter(channelName);
+		//api.addMessageCreateListener(g);
+		//helpListener.addHelpEmbed(g.getHelpEmbed());
 
 		pythagcalc pythagCalc = new pythagcalc(channelName);
 		api.addMessageCreateListener(pythagCalc);
@@ -142,6 +142,10 @@ public class Bot  {
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
 		
+		CountingListener counting = new CountingListener(channelName);
+		api.addMessageCreateListener(counting);
+		helpListener.addHelpEmbed(counting.getHelpEmbed());
+
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
