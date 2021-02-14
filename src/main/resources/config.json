@@ -1,4 +1,4 @@
 {
-    "channels": ["ellabot"],
-    "token": "" 
+    "channels": ["channel"],
+    "token": "token" 
 }
