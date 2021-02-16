@@ -132,12 +132,15 @@ public class FilmRecommendations extends CustomMessageCreateListener {
 		    List<Integer> getGenreStr = null;
 		    Double getVoteNum = null;
 		    List<Result> resultList = movie.getResults();
-		    for(int i = 0; i < resultList.size(); i++) {
-		    	Result r = resultList.get(i);
+		    	
+		    if(resultList.size() > 0) {
+		    	Result r = resultList.get(0);
 		    	getTitleStr = r.getTitle();
 		    	getOverviewStr = r.getOverview();
 		    	getGenreStr = r.getGenreIds();
 		    	getVoteNum = r.getVoteAverage();
+		    } else {
+		    	return "Please enter a movie.";
 		    }
 
 			//get the genre of movie (these are just java objects now)
@@ -155,7 +158,12 @@ public class FilmRecommendations extends CustomMessageCreateListener {
 //			String overview = movie.getOverview();
 			
 			//create the message
-			String message = "'" + getTitleStr + "' is in the genre " + genreMap.get(getGenreStr.get(0)) + ". "
+			String genre = "*not found*";
+			if(getGenreStr.size() > 0) {
+				genre = genreMap.get(getGenreStr.get(0));
+			}
+		    
+		    String message = "'" + getTitleStr + "' is in the genre " + genre + ". "
 					+ "Here is an overview of the movie: " + getOverviewStr + " " + " This movie got an average of " + getVoteNum + " votes.";
 			
 			//send the message 
@@ -168,10 +176,10 @@ public class FilmRecommendations extends CustomMessageCreateListener {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		
+		} 
 		//fix catch statement
-		return "No information found for: " + movieName;
+		return "No information found. Enter a different movie.";
+		
 	}
 	
 }
