@@ -105,6 +105,7 @@ public class RecipeGetter extends CustomMessageCreateListener{
 				for (int i = 0; i < steps.size(); i++) {
 					message+=steps.get(i).getStep();
 				}
+				System.out.println(instructions);
 				//send the message 
 				String message2 = "";
 				for (int i = 0; i < message.length(); i++) {
@@ -120,7 +121,9 @@ public class RecipeGetter extends CustomMessageCreateListener{
 						}
 					}
 				}
-				return message2;
+					return message2;
+				
+				
 				
 
 			} catch (MalformedURLException e) {
@@ -128,6 +131,8 @@ public class RecipeGetter extends CustomMessageCreateListener{
 			} catch (ProtocolException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (IndexOutOfBoundsException e) {
 				e.printStackTrace();
 			}
 
