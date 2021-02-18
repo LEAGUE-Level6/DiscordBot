@@ -136,6 +136,10 @@ public class Bot  {
 		api.addMessageCreateListener(wapi);
 		helpListener.addHelpEmbed(wapi.getHelpEmbed());
 		
+		RecipeGetter rg = new RecipeGetter(channelName);
+		api.addMessageCreateListener(rg);
+		helpListener.addHelpEmbed(rg.getHelpEmbed());
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
