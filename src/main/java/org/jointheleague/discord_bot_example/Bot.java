@@ -126,6 +126,10 @@ public class Bot  {
 		//api.addMessageCreateListener(g);
 		//helpListener.addHelpEmbed(g.getHelpEmbed());
     
+		Poker poker = new Poker(channelName);
+		api.addMessageCreateListener(poker);
+		helpListener.addHelpEmbed(poker.getHelpEmbed());
+		
 		CovidCaseGetter covid = new CovidCaseGetter(channelName);
 		api.addMessageCreateListener(covid);
 		helpListener.addHelpEmbed(covid.getHelpEmbed());
