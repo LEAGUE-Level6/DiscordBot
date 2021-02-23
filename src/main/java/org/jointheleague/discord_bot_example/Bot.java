@@ -52,7 +52,11 @@ public class Bot  {
 		ToDoList list = new ToDoList(channelName);
 		api.addMessageCreateListener(list);
 		helpListener.addHelpEmbed(list.getHelpEmbed());
-
+		
+		MazeGame maze = new MazeGame(channelName);
+		api.addMessageCreateListener(maze);
+		helpListener.addHelpEmbed(maze.getHelpEmbed());
+		
 		HeadlineListener head = new HeadlineListener(channelName);
 		api.addMessageCreateListener(head);
 		helpListener.addHelpEmbed(head.getHelpEmbed());
@@ -104,9 +108,9 @@ public class Bot  {
 		api.addMessageCreateListener(mttt);
 		helpListener.addHelpEmbed(mttt.getHelpEmbed());
     
-		Greeter g = new Greeter(channelName);
+	/*	Greeter g = new Greeter(channelName);
 		api.addMessageCreateListener(g);
-		helpListener.addHelpEmbed(g.getHelpEmbed());
+		helpListener.addHelpEmbed(g.getHelpEmbed());*/
 
 		pythagcalc pythagCalc = new pythagcalc(channelName);
 		api.addMessageCreateListener(pythagCalc);
