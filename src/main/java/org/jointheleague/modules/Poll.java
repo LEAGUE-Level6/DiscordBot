@@ -26,12 +26,14 @@ import org.javacord.api.listener.message.reaction.ReactionRemoveListener;
 
 import net.aksingh.owmjapis.api.APIException;
 
-public class Poll extends CustomMessageCreateListener {
+public class Poll extends CustomMessageCreateListener implements ReactionAddListener {
 
 	public static String[] emoji = { "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟" };
 
 	public static final String COMMAND = "!createPoll";
-
+	
+	ArrayList<Integer> votePercentages = new ArrayList<Integer>();
+	
 	public Poll(String channelName) {
 		super(channelName);
 	}
@@ -42,49 +44,71 @@ public class Poll extends CustomMessageCreateListener {
 		if (event.getMessageContent().contains(COMMAND)) {
 
 			String messageContent = event.getMessageContent().replace(COMMAND, "");
+			Parameters parameters = getParameters(messageContent);
 
-			ArrayList<String> parameters = getParameters(messageContent);
+			String time = parameters.time;
+			String title = parameters.title;
+			String[] options = parameters.options;
 
-			String time = parameters.get(0);
-			parameters.remove(0);
+			OptionContent[] oc = initializeOptions(options);
 
-			String title = parameters.get(0);
-			parameters.remove(0);
-
-			String[] options = new String[parameters.size()];
-			for (int i = 0; i < options.length; i++) {
-				options[i] = parameters.get(i);
-			}
-
-			buildEmbed(title, options, event.getChannel());
-
+			Message m = buildEmbed(title, oc, event.getChannel());
+			handleReactions(m, options.length);
+			
 		}
 
 	}
 
-	private void buildEmbed(String title, String[] options, TextChannel channel) {
+	private void handleReactions(Message m, int amount) {
+		for (int i = 0; i < amount; i++) {
+			m.addReaction(emoji[i]);
+		}
+		
+		try {
+			Thread.sleep(6000);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		
+		m.addReactionRemoveListener(e -> calcVotePercentages(m, amount));
+		m.addReactionAddListener(e -> calcVotePercentages(m, amount));
+	}
+
+	private OptionContent[] initializeOptions(String[] options) {
+		OptionContent[] oc = new OptionContent[options.length];
+
+		for (int i = 0; i < options.length; i++) {
+			oc[i] = new OptionContent(emoji[i], options[i], "0%");
+		}
+		return oc;
+	}
+
+	private Message buildEmbed(String title, OptionContent[] options, TextChannel channel) {
 		MessageBuilder mb = new MessageBuilder();
 		EmbedBuilder eb = new EmbedBuilder();
 
 		eb.setTitle(title);
+		eb.setFooter("Testing what this does");
 
-		String optionString = "";
-		for (String s : options) {
-			optionString += " " + s;
+		String descriptionContent = "";
+		for (OptionContent oc : options) {
+			descriptionContent += oc.toString() + "\n";
 		}
-
-		eb.setDescription(optionString);
+		eb.setDescription(descriptionContent);
 
 		mb.setEmbed(eb);
-
-		mb.send(channel);
+		Message m = null;
+		try {
+			m = mb.send(channel).get();
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+		return m;
 	}
 
-	private ArrayList<String> getParameters(String message) {
+	private Parameters getParameters(String message) {
 		String messageContent = message;
 		System.out.println("Message: " + messageContent);
-
-		ArrayList<String> group = new ArrayList<String>();
 
 		String time = messageContent.substring(0, messageContent.indexOf(',') + 1);
 		messageContent = messageContent.replace(time, "");
@@ -96,9 +120,6 @@ public class Poll extends CustomMessageCreateListener {
 
 		ArrayList<String> options = new ArrayList<String>();
 
-		group.add(time);
-		group.add(title);
-
 		while (messageContent != "") {
 			String option = messageContent.substring(0, messageContent.indexOf(',') + 1);
 			messageContent = messageContent.replace(option, "");
@@ -107,19 +128,58 @@ public class Poll extends CustomMessageCreateListener {
 
 		}
 
-		for (String s : options) {
-			group.add(s);
+		Parameters p = new Parameters(time, title, options.toArray(new String[options.size()]));
+
+		return p;
+	}
+
+	@Override
+	public void onReactionAdd(ReactionAddEvent event) {
+
+	}
+
+	private void calcVotePercentages(Message m, int amount) {		
+		List<Reaction> l = m.getReactions();
+		int totalVotes = 0;
+		
+		for (int i = 0; i < amount; i++) {
+			totalVotes += l.get(i).getCount() - 1;
 		}
+		for (int i = 0; i < amount; i++) {
+			int percentage = 100 * (l.get(i).getCount() - 1) / totalVotes;
+			votePercentages.add(percentage);
+		}
+	}
 
-		return group;
+}
 
-//		System.out.println("time: " + time);
-//		System.out.println("title: " + title);
-//		for (String s : options) {
-//			System.out.println("option: " + s);
-//		}
-//		System.out.println("final: " + messageContent);
+class Parameters {
+	String time;
+	String title;
+	String[] options;
 
+	Parameters(String time, String title, String[] options) {
+		this.time = time;
+		this.title = title;
+		this.options = options;
+	}
+
+}
+
+class OptionContent {
+	String emoji;
+	String option;
+	String percentage;
+
+	OptionContent(String emoji, String option, String percentage) {
+		this.emoji = emoji;
+		this.option = option;
+		this.percentage = percentage;
+	}
+
+	@Override
+	public String toString() {
+		return emoji + "  " + option + "   " + percentage;
 	}
 
 }
