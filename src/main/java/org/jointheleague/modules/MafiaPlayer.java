@@ -26,9 +26,6 @@ public class MafiaPlayer extends CustomMessageCreateListener {
     private static final String end = ".mafia-end";
 
     //game states
-//    enum gameStates {
-//    	
-//    }
     private boolean gameStarted = false;
     private boolean mafiatime = false;
     private boolean detectivetime = false;
@@ -43,8 +40,11 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 
     //users
     ArrayList<User> mafiaMembers = new ArrayList<>();
+	ArrayList<User> mafiabackup = new ArrayList<User>();
     ArrayList<User> villageMembers = new ArrayList<>(); 
+	ArrayList<User> villagersbackup = new ArrayList<User>();
     ArrayList<User> allPlayers = new ArrayList<>(); 
+	ArrayList<User> temp = new ArrayList<User>();
     User doctor;
     User detective;
     HashMap<User, Integer> votes;
@@ -68,8 +68,11 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 
     int day = 1;
 
-    static final String[] beginningStorylines = {"You are all passengers on a plane when suddenly, the engine gets stuck and the plane must take a crash landing. Luckily, the pilot(s) crash the plane onto a small, deserted island in the middle of the ocean, but the pilot is gone. " +
-            "Now, you must all work together to survive until help arrives. However, there are imposters among the group, the mafia. Collaborate together to find these imposters and survive until the end.\n"};
+    static final String[] beginningStorylines = {"You are all passengers on a plane when suddenly, the engine gets stuck and the plane must take a crash landing. "
+    		+ "Luckily, the pilot(s) crash the plane onto a small, deserted island in the middle of the ocean, but the pilot is gone. "
+    		+ "Now, you must all work together to survive until help arrives. However, there are imposters among the group, the mafia. "
+            + "Collaborate together to find these imposters and survive until the end.\n"};
+    
     static final String[] deathStorylines = {" was chased by a flock of angry pelicans.", " went for a swim and never came back.", " got crushed by a rock.", " hit their head too hard on a tree."};
     private boolean startDayTime = true;
 
@@ -77,7 +80,7 @@ public class MafiaPlayer extends CustomMessageCreateListener {
         super(channelName);
         BotInfo n = Utilities.loadBotsFromJson();
         api = new DiscordApiBuilder().setToken(n.getToken()).login().join();
-        helpEmbed = new HelpEmbed(COMMAND, "Starts a game of Mafia /(e.g. !playMafia 8). **Make sure all players enable messages from server members. Bot must also have permission to message server members. ");
+        helpEmbed = new HelpEmbed(COMMAND, "Starts a game of Mafia (e.g. !playMafia 8). For instructions, use the command: " + help +"\n**Make sure all players enable messages from server members. Bot must also have permission to message server members.");
     }
 
 
@@ -100,16 +103,26 @@ public class MafiaPlayer extends CustomMessageCreateListener {
                     "This is a version of the game Mafia, or Werewolf. \nFor help, use the command: " + help);
 			instructions.addField("To play the game, use these commands:",
 							"**" + COMMAND + "** - starts the game\n" +
-							"**" + mafiaKill + "** - used by the mafia to kill a player" +
-							"**" + doctorSave + "** - used by the doctor to attempt to save a player" +
-							"**" + detectiveInspect + "** - used by the detective to inspect a player" +
-							"**" + end + "** - ends the game at any point in the game");
+							"**" + mafiaKill + "** - used by the mafia to kill a player\n" +
+							"**" + doctorSave + "** - used by the doctor to attempt to save a player\n" +
+							"**" + detectiveInspect + "** - used by the detective to inspect a player\n" +
+							"**" + end + "** - ends the game at any point in the game\n" + 
+							"\n**Game Play:** There are 7 to 16 players, some with special roles, listed below. Over a series of day-night cycles, players must collaborate to eliminate mafia members "
+							+ "from the group. During the night, the Mafia, Doctor, and Detective perform their tasks, which can be found below. Then, once the day cycle beings, players discuss to "
+							+ "decide a player they wish to vote out. If all mafia members are eliminated, then villagers win! If all but one villager and any mafia remain, then the mafia wins!"
+							+ "\n**IMPORTANT:** Make sure all players enable messages from server members. Bot must also have permission to message server members.\n" +
+							"\n**Roles:**" +
+							"**Mafia** - vote to choose one villager to kill off during the night cycle\n" +
+							"**Doctor** - can select one player to attempt to save from the mafia\n" +
+							"**Detective** - can inspect one player which will reveal their role (Mafia or Villager)\n" +
+							"\nGood luck and enjoy the game play!");
         } 
         
         else if (event.getMessageAuthor().getId() != botId) {
             //!Playing
             if (!gameStarted) {
                 if (msg.startsWith(COMMAND)) {
+                	restartGame();
                     try {
                         numPlayers = Integer.parseInt(msg.replace(COMMAND + " ", "").trim());
                         if (7 <= numPlayers && numPlayers <= 16) {
@@ -153,17 +166,20 @@ public class MafiaPlayer extends CustomMessageCreateListener {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                //checkGameOver(event);
             }
         }
     }
 
     private void checkGameOver(MessageCreateEvent event) {
         if (mafiaMembers.isEmpty()) {
-            event.getChannel().sendMessage("Villagers win!\n" + villageMembers.toString());
+            String villagerss = villagersbackup.stream().map(member -> member.getName() + "\n").collect(Collectors.joining());
+            event.getChannel().sendMessage("Villagers win!\n" + villagerss);
+            System.out.println("mafia. " + mafiaMembers.size() + "\nvillagers. " + villageMembers.size());
             endGame();
         } else if (villageMembers.size() == 1) {
-            event.getChannel().sendMessage("Mafia win!\n" + mafiaMembers.toString());
+            String mafiaa = mafiabackup.stream().map(member -> member.getName() + "\n").collect(Collectors.joining());
+            event.getChannel().sendMessage("Mafia win!\n" + mafiaa);
+            System.out.println("mafia. " + mafiaMembers.size() + "\nvillagers. " + villageMembers.size());
             endGame();
         }
     }
@@ -221,7 +237,6 @@ public class MafiaPlayer extends CustomMessageCreateListener {
                         }
                         if (!playerFound) {
                             mafiaMember.openPrivateChannel().get().sendMessage("Player " + mafiaMessage + " not found. Please enter a user shown above");
-                            return;
                         } 
                         
                         else if (numResponseFromMafiaMembers >= mafiaMembers.size()) {
@@ -233,7 +248,6 @@ public class MafiaPlayer extends CustomMessageCreateListener {
                         }
                     } else if (event.getMessageAuthor().getName().equals(mafiaMember.getName()) && event.isPrivateMessage()) {
                         mafiaMember.openPrivateChannel().get().sendMessage("Please include the command " + mafiaKill);
-                        return;
                     }
                 }
             } catch (InterruptedException | ExecutionException e) {
@@ -242,9 +256,6 @@ public class MafiaPlayer extends CustomMessageCreateListener {
         }
 
 
-//      allPlayers.addAll(mafiaMembers);
-//      allPlayers.add(doctor);
-//      allPlayers.add(detective);
       Collections.shuffle(allPlayers);
       String allPlayerNamesString = allPlayers.stream().map(member -> member.getName() + "\n").collect(Collectors.joining());
 
@@ -256,7 +267,6 @@ public class MafiaPlayer extends CustomMessageCreateListener {
             		doctor.openPrivateChannel().get().sendMessage("Player List:\n" + allPlayerNamesString);
             		
             		sendSaveMessage = false;
-            		return;
 				}
             	
             	if (msg.contains(doctorSave) && event.getMessageAuthor().getName().equals(doctor.getName()) && event.isPrivateMessage()) {
@@ -277,14 +287,11 @@ public class MafiaPlayer extends CustomMessageCreateListener {
                         doctortime = false;
                         detectivetime = true;
                     } else {
-                    	doctor.openPrivateChannel().get().sendMessage("Player " + doctorMessage + " not found. Please enter a user shown above");
-                    	System.out.println("doc" + doctorMessage + ".");
-                    	return;
+                    	doctor.openPrivateChannel().get().sendMessage("Player " + doctorMessage + " not found. Please enter a user shown above");//                  	return;
                     }
                     
                 } else if (event.getMessageAuthor().getName().equals(doctor.getName()) && !event.getMessageContent().startsWith(mafiaKill)  && event.isPrivateMessage()) {
                 	doctor.openPrivateChannel().get().sendMessage("Please include the command " + doctorSave);
-                	return;
                 }
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
@@ -299,7 +306,6 @@ public class MafiaPlayer extends CustomMessageCreateListener {
             		detective.openPrivateChannel().get().sendMessage("Player List:\n" + allPlayerNamesString);
             		
             		sendInspectMessage = false;
-            		return;
 				}
             	
             	if (msg.startsWith(detectiveInspect) && event.getMessageAuthor().getName().equals(detective.getName()) && event.isPrivateMessage()) {
@@ -321,19 +327,17 @@ public class MafiaPlayer extends CustomMessageCreateListener {
                         deathannouncement = true;
                     } else {
                     	detective.openPrivateChannel().get().sendMessage("Player " + detectiveMessage + " not found. Please enter a user shown above");
-                    	return;
                     } 
                     
                 } else if (event.getMessageAuthor().getName().equals(detective.getName()) && !event.getMessageContent().startsWith(doctorSave) && event.isPrivateMessage()) {
                 	detective.openPrivateChannel().get().sendMessage("Please include the command " + detectiveInspect);
-                	return;
                 }
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
         }
 
-        if (deathannouncement) {
+        if (deathannouncement) {        	
         	api.getServerTextChannelById(channelId).get().sendMessage("The night cycle is over.");
         	if (saved) {
         		api.getServerTextChannelById(channelId).get().sendMessage(killed.getName() + " was saved Doctor!");
@@ -342,21 +346,19 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 			} else {
 				villageMembers.remove(killed);
 	            allPlayers.remove(killed);
-	            System.out.println("rev3");
-				api.getServerTextChannelById(channelId).get().sendMessage(killed.getName() + deathStorylines[new Random().nextInt(deathStorylines.length)] );
+	            api.getServerTextChannelById(channelId).get().sendMessage(killed.getName() + deathStorylines[new Random().nextInt(deathStorylines.length)] );
         		deathannouncement = false;
 				voteTime = true;
 			}   	    
-        	api.getServerTextChannelById(channelId).get().sendMessage(allPlayers.size() + " players now remain. \n\nDiscuss, then when ready, vote for a player you think is a Mafia. \n");
+        	api.getServerTextChannelById(channelId).get().sendMessage(allPlayers.size() + " players now remain. \nDiscuss, then when ready, vote for a player you think is a Mafia. \n");
         }
         
         //vote
         if (voteTime) {
         	if (sendVoteMessage) {
-            	api.getServerTextChannelById(channelId).get().sendMessage("Which player would you like to vote out? Type " + vote + " playerName");
+        		api.getServerTextChannelById(channelId).get().sendMessage("Which player would you like to vote out? Type " + vote + " playerName");
 
             	sendVoteMessage = false;
-        		return;
 			}
     		
             if (msg.startsWith(vote) && event.getServerTextChannel().get().getId() == channelId) {
@@ -369,8 +371,7 @@ public class MafiaPlayer extends CustomMessageCreateListener {
                     if (allPlayers.get(j).getName().equals(voteMessage)) {
                         playerFound = true;
                         user = allPlayers.get(j);
-                        System.out.println("voted for: " + user.getName());
-                        System.out.println(numVotesCast + " " + allPlayers.size());
+                        api.getServerTextChannelById(channelId).get().sendMessage("Voted for: " + user.getName());
                         break;
                     }
                 }
@@ -383,29 +384,33 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 				}
                 
             	if (numVotesCast >= allPlayers.size()) {
-                    System.out.println("\n2.0 " + numVotesCast + " " + allPlayers.size());
                     removeVotedOutPerson(event);
-                    day += 1;
-                    voteTime = false;
-                    startDayTime = true;
-                    sendKillMessage = true;
-                    sendSaveMessage = true;
-                    sendInspectMessage = true;
-                    sendVoteMessage = true;
-                    playRound(event);
+                    if (gameStarted) {
+                    	day += 1;
+                    	votes = null;
+                    	numVotesCast = 0;
+                        voteTime = false;
+                        startDayTime = true;
+                        sendKillMessage = true;
+                        sendSaveMessage = true;
+                        sendInspectMessage = true;
+                        sendVoteMessage = true;
+                        killed = null;
+                        playRound(event);
+					}
                 } 
                 
             } else if (!event.getMessageContent().startsWith(doctorSave) && !event.isPrivateMessage()) {
             	api.getServerTextChannelById(channelId).get().sendMessage("Please include the command " + vote);
-            	//return;
             }
-        }
-    
-               
+        }       
+        
     }
 
     //end the game
     private void endGame() {
+    	System.out.println("end");
+    	restartGame();
         gameStarted = false;
     }
 
@@ -414,8 +419,7 @@ public class MafiaPlayer extends CustomMessageCreateListener {
         allPlayers.add(event.getMessageAuthor().asUser().get());
     }
     
-	ArrayList<User> temp = new ArrayList<User>();
-
+    
     //Randomly assign roles
     private void setRoles(MessageCreateEvent event) throws ExecutionException, InterruptedException {
     	temp.addAll(allPlayers);
@@ -427,7 +431,7 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 	            mafiaMembers.add(temp.get(r));
 	            mafiaPrivateChannelId = mafiaMembers.get(0).openPrivateChannel().get().getId(); //change to get(r) later?
 	            try {
-	                api.getPrivateChannelById(mafiaPrivateChannelId).get().addMessageCreateListener(this);
+	                //api.getPrivateChannelById(mafiaPrivateChannelId).get().addMessageCreateListener(this);
 	                privateChannelIds.add(mafiaPrivateChannelId);
 	            } catch (NoSuchElementException e) {
 	                event.getChannel().sendMessage("An error occurred while creating private channels, please restart the game");
@@ -442,7 +446,7 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 	            mafiaMembers.add(temp.get(r));
 	            mafiaPrivateChannelId = mafiaMembers.get(0).openPrivateChannel().get().getId();
 	            try {
-	                api.getPrivateChannelById(mafiaPrivateChannelId).get().addMessageCreateListener(this);
+	                //api.getPrivateChannelById(mafiaPrivateChannelId).get().addMessageCreateListener(this);
 	                privateChannelIds.add(mafiaPrivateChannelId);
 	            } catch (NoSuchElementException e) {
 	                event.getChannel().sendMessage("An error occurred while creating private channels, please restart the game");
@@ -468,34 +472,35 @@ public class MafiaPlayer extends CustomMessageCreateListener {
         
         villageMembers.addAll(temp); 
         
+    	villagersbackup.addAll(villageMembers);
+    	mafiabackup.addAll(mafiaMembers);
+        
         System.out.println("mafia members: " + mafiaMembers.toString());
         System.out.println("doctor:" + doctor.toString());
         System.out.println("detective: " + detective.toString());
         System.out.println("village members" + villageMembers.toString());
+        
     }
 
     private void removeVotedOutPerson(MessageCreateEvent event) {
         User userToRemove = votes.entrySet().stream().max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getKey();
         
-        //System.out.println("votes: " + votes.toString());
         System.out.println("voted out user: " + userToRemove.getName());
+        api.getServerTextChannelById(channelId).get().sendMessage(userToRemove.getName() + " has been voted out!\n");
         
-        try {
-            villageMembers.remove(userToRemove);
-            allPlayers.remove(userToRemove);
-            System.out.println("villagear");
-        } catch (Exception e) {
-            //e.printStackTrace();
-        }
-        try {
-            mafiaMembers.remove(userToRemove);
-            allPlayers.remove(userToRemove);
-            System.out.println("moofia");
-        } catch (Exception e) {
-            //e.printStackTrace();
-        }
-
-        api.getServerTextChannelById(channelId).get().sendMessage(userToRemove.getName() + " has been voted out!");
+        for (int i = 0; i < mafiaMembers.size(); i++) {
+            if (mafiaMembers.get(i) == userToRemove) {
+            	mafiaMembers.remove(userToRemove);
+                allPlayers.remove(userToRemove);
+				break;
+            } else {
+            	 if (villageMembers.contains(userToRemove)) {
+            		 villageMembers.remove(userToRemove);
+                     allPlayers.remove(userToRemove);
+						break;
+                 }                	
+            }
+		}
         checkGameOver(event);
     }
 
@@ -508,13 +513,15 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 
     //save
     private void save(MessageCreateEvent event, User user) {
-        if (killed == user) {
-        	System.out.println("saved: " + user);
-            saved = true;
-        } else {
-        	System.out.println("wasn't saved: " + user);
-        	saved = false;
-        }
+    	if (killed != null) {
+    		if (killed == user) {
+            	System.out.println("saved: " + user);
+                saved = true;
+            } else {
+            	System.out.println("wasn't saved: " + killed + " | " + user);
+            	saved = false;
+            }
+		}
     }
 
     //inspect
@@ -540,17 +547,17 @@ public class MafiaPlayer extends CustomMessageCreateListener {
 		}
     }
 
-    public void onMessageCreate(MessageCreateEvent event) {
-        event.getPrivateChannel().ifPresent(e -> {
-            //System.out.println(event.getMessageContent() + " | " + event.getMessageAuthor() + "\n");
-        	handle(event);
-        });
-
-
+    public void onMessageCreate(MessageCreateEvent event) {    	
+    	event.getPrivateChannel().ifPresent(e -> {
+              handle(event);
+    	});
+       
         event.getServerTextChannel().ifPresent(e -> {
             if (e.getName().equals(channelName)) {
+        		//System.out.println(event.getMessageContent() + " | " + event.getMessageAuthor() + "\n");
                 handle(event);
-            }
+                return;
+            } 
         });
     }
 
