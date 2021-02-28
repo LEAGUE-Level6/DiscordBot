@@ -142,6 +142,10 @@ public class Bot  {
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
 		
+		_SammySamSam bam = new _SammySamSam(channelName);
+		api.addMessageCreateListener(bam);
+		helpListener.addHelpEmbed(bam.getHelpEmbed());
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
