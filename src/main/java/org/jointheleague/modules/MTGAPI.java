@@ -39,7 +39,7 @@ public class MTGAPI extends CustomMessageCreateListener{
 				URL url = new URL("https://api.tcgplayer.com/catalog/products?categoryId=1?productType=null%22");
 				    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 				    connection.setRequestMethod("GET");
-				    connection.setRequestProperty("Authorization","bearer 8XyHrBQS2xppq_sBA65b5OtywnRI_irlSOYLvIH_vPEjPdinEEj6dyc5ODXxfgV62WcWWFUTq-A50ZPl0MiTd6uWImNJ3OGdROaARHeXjJyIA4Gc4PGnvCHiUg6OSGsxZe9WRZkXYE-Vd9IQ_Z-CRGYyVK-VcMqQ-TDeXkmCjq9L3S4v_I0kNBjPOoSLI6dex6sQFXKZl1IOF0d9a7dM_4ixd1O6nMO4S5uIZ_Wt5pHHCEQdQqxof3GwjxyPvL0k4LVA5LJWr7K7sJG6fGwZez-bxCSzUZAwTNOT3p2FkdXxi9on2JCJ6CPHDdhuh4dvhT1dLQ");
+				    connection.setRequestProperty("Authorization","bearer ");
 				    connection.setRequestProperty("Accept","application/json");
 				    System.out.println(connection.getResponseMessage()); //This is error code, e.g. 401, or "OK"
 				    event.getChannel().sendMessage(connection.getResponseMessage());
