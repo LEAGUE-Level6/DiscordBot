@@ -1,4 +1,9 @@
 {
+<<<<<<< Updated upstream
     "channels": ["ellabot"],
     "token": "" 
+=======
+    "channels": ["gaby"],
+    "token": "ODEyODU2NTY5ODIwNzQxNjQ0.YDG1rA.5Qrfa580Z4_vUs7Qf1-MCNflcxs"
+>>>>>>> Stashed changes
 }
