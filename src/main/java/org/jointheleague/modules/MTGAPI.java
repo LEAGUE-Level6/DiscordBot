@@ -33,13 +33,16 @@ public class MTGAPI extends CustomMessageCreateListener{
 	public void handle(MessageCreateEvent event) throws APIException {
 		String eventContent = event.getMessageContent();
 		if(eventContent.contains(activator)) {
-			String card = new String(eventContent.substring(eventContent.indexOf(activator)+9,eventContent.length()));
+			String card = new String(eventContent.substring(eventContent.indexOf(activator)+10,eventContent.length()));
 			event.getChannel().sendMessage(card);
 			try{ 
-				URL url = new URL("https://api.tcgplayer.com/catalog/products?categoryId=1?productType=null%22");
+				String requestURL = "https://api.tcgplayer.com/catalog/products?" + 
+						"productName=" + card +"" ;		
+				URL url = new URL(requestURL);
+				System.out.println(url);
 				    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 				    connection.setRequestMethod("GET");
-				    connection.setRequestProperty("Authorization","bearer ");
+				    connection.setRequestProperty("Authorization","bearer goKejCH5gahYwBI2Kgq2hc_NN5btSfPDP7BhwNt6AXwGv9lPAU1Z5uDhqPRRe_9wZBoIEfmIHVtWsFwDgoEz7HtPME73EBN343bp9BSsodKh664O-_ujAYTDKllx5JZOldgLHXP91HfrVg_pi4suAPwXPe2cA82jU849UFvBzR56BSLd_ehzK655Gd6yyF1fLhkYstK7ucmrgaPLsqoTy6aeQqwkbyLjAdipUlqTCvQLO5qFRSv3ITbfZNEScyI16ujd9UoqguUZBXX--7Df2dwa7aiUpx1DVImYg0i2FN1UgQ8pHJH95zB8ppvRfTGfnBFwVA");
 				    connection.setRequestProperty("Accept","application/json");
 				    System.out.println(connection.getResponseMessage()); //This is error code, e.g. 401, or "OK"
 				    event.getChannel().sendMessage(connection.getResponseMessage());
@@ -56,23 +59,6 @@ public class MTGAPI extends CustomMessageCreateListener{
 				} catch (Exception e) {
 				e.printStackTrace();
 				}
-
-					}
-//			try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"))) {
-//			    for (String line; (line = reader.readLine()) != null;) {
-//			        System.out.println(line);
-//			    }
-//			} catch (UnsupportedEncodingException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-		
+					}		
 	}
 	}
-
-	//https://api.tcgplayer.com/v1.17.0/catalog/categories/24/search/manifest
-	//api.tcgplayer.comq= jace, vryn's prodigy&sortBy=popularity&apiKey=DNzc3NjAyNzUwNzU4Mzg3NzUy.X7F0_g.rCkANQqM-BX3tfpth5K_hSY5j3k
-
