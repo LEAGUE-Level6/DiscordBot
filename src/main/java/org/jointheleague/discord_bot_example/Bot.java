@@ -114,9 +114,9 @@ public class Bot  {
 		api.addMessageCreateListener(mttt);
 		helpListener.addHelpEmbed(mttt.getHelpEmbed());
     
-		Greeter g = new Greeter(channelName);
-		api.addMessageCreateListener(g);
-		helpListener.addHelpEmbed(g.getHelpEmbed());
+		//Greeter g = new Greeter(channelName);
+		//api.addMessageCreateListener(g);
+		//helpListener.addHelpEmbed(g.getHelpEmbed());
 
 		pythagcalc pythagCalc = new pythagcalc(channelName);
 		api.addMessageCreateListener(pythagCalc);
