@@ -54,7 +54,11 @@ public class Bot  {
 		ToDoList list = new ToDoList(channelName);
 		api.addMessageCreateListener(list);
 		helpListener.addHelpEmbed(list.getHelpEmbed());
-
+		
+		MazeGame maze = new MazeGame(channelName);
+		api.addMessageCreateListener(maze);
+		helpListener.addHelpEmbed(maze.getHelpEmbed());
+		
 		HeadlineListener head = new HeadlineListener(channelName);
 		api.addMessageCreateListener(head);
 		helpListener.addHelpEmbed(head.getHelpEmbed());
