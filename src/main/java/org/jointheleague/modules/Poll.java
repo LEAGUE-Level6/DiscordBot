@@ -12,11 +12,13 @@ import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.Timer;
+import javax.swing.plaf.metal.OceanTheme;
 
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.Reaction;
+import org.javacord.api.entity.message.embed.Embed;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.event.message.reaction.ReactionAddEvent;
@@ -24,6 +26,7 @@ import org.javacord.api.event.message.reaction.ReactionRemoveEvent;
 import org.javacord.api.listener.message.reaction.ReactionAddListener;
 import org.javacord.api.listener.message.reaction.ReactionRemoveListener;
 
+import javassist.compiler.MemberCodeGen;
 import net.aksingh.owmjapis.api.APIException;
 
 public class Poll extends CustomMessageCreateListener implements ReactionAddListener {
@@ -31,9 +34,9 @@ public class Poll extends CustomMessageCreateListener implements ReactionAddList
 	public static String[] emoji = { "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟" };
 
 	public static final String COMMAND = "!createPoll";
-	
-	ArrayList<Integer> votePercentages = new ArrayList<Integer>();
-	
+
+	boolean pollUp = false;
+
 	public Poll(String channelName) {
 		super(channelName);
 	}
@@ -50,35 +53,116 @@ public class Poll extends CustomMessageCreateListener implements ReactionAddList
 			String title = parameters.title;
 			String[] options = parameters.options;
 
-			OptionContent[] oc = initializeOptions(options);
+			OptionContent[] oc = initializeOptions(options, null);
 
 			Message m = buildEmbed(title, oc, event.getChannel());
 			handleReactions(m, options.length);
-			
+
+			createTimer(time, m);
+
+			try {
+				Thread.sleep(6000);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			m.addReactionRemoveListener(e -> votePercentages(m, options));
+			m.addReactionAddListener(e -> votePercentages(m, options));
+
+			pollUp = true;
+
 		}
 
+	}
+
+	private void createTimer(String timeParameter, Message m) {
+
+		String measure = timeParameter.substring(timeParameter.indexOf(' ') + 1, timeParameter.length());
+		String amount = timeParameter.substring(0, timeParameter.indexOf(' '));
+
+		int duration = 0;
+
+		if (measure.equals("hours") || measure.equals("hour")) {
+			duration = Integer.parseInt(amount) * 60 * 60;
+
+		} else if (measure.equals("minutes") || measure.equals("minute")) {
+			duration = Integer.parseInt(amount) * 60;
+
+		} else if (measure.equals("seconds") || measure.equals("second")) {
+			duration = Integer.parseInt(amount);
+
+		}
+
+		Timer timer = new Timer(duration * 1000, e -> {
+			pollUp = false;
+
+			String title = m.getEmbeds().get(0).getTitle().get();
+			String footer = m.getEmbeds().get(0).getFooter().get().getText().get() + "\n(POLL HAS ENDED)\n";
+			String description = m.getEmbeds().get(0).getDescription().get();
+
+			EmbedBuilder eb = new EmbedBuilder().setTitle(title).setDescription(description).setFooter(footer);
+
+			m.edit(eb);
+		});
+
+		timer.setRepeats(false);
+		timer.start();
+	}
+
+	private void votePercentages(Message m, String[] options) {
+		if (pollUp) {
+			List<Reaction> reactionList = m.getReactions();
+
+			int[] percentages = new int[options.length];
+
+			int totalVotes = 0;
+
+			for (int i = 0; i < options.length; i++) {
+				totalVotes += reactionList.get(i).getCount() - 1;
+			}
+
+			for (int i = 0; i < options.length; i++) {
+				int percentage = 0;
+				try {
+					percentage = (reactionList.get(i).getCount() - 1) * (100 / totalVotes);
+				} catch (Exception e) {
+					e.getStackTrace();
+				}
+				percentages[i] = percentage;
+			}
+
+			OptionContent[] oc = initializeOptions(options, percentages);
+
+			String descriptionContent = "";
+
+			for (OptionContent c : oc) {
+				descriptionContent += c.toString() + "\n";
+			}
+
+			String title = m.getEmbeds().get(0).getTitle().get();
+			String footer = m.getEmbeds().get(0).getFooter().get().getText().get();
+
+			m.edit(new EmbedBuilder().setTitle(title).setDescription(descriptionContent).setFooter(footer));
+		}
 	}
 
 	private void handleReactions(Message m, int amount) {
 		for (int i = 0; i < amount; i++) {
 			m.addReaction(emoji[i]);
 		}
-		
-		try {
-			Thread.sleep(6000);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
-		
-		m.addReactionRemoveListener(e -> calcVotePercentages(m, amount));
-		m.addReactionAddListener(e -> calcVotePercentages(m, amount));
 	}
 
-	private OptionContent[] initializeOptions(String[] options) {
+	private OptionContent[] initializeOptions(String[] options, int[] percentages) {
 		OptionContent[] oc = new OptionContent[options.length];
 
+		String percent = "     0%";
+
 		for (int i = 0; i < options.length; i++) {
-			oc[i] = new OptionContent(emoji[i], options[i], "0%");
+			if (percentages != null) {
+				percent = "     " + percentages[i] + "%";
+			}
+
+			oc[i] = new OptionContent(emoji[i], options[i], percent);
 		}
 		return oc;
 	}
@@ -98,6 +182,7 @@ public class Poll extends CustomMessageCreateListener implements ReactionAddList
 
 		mb.setEmbed(eb);
 		Message m = null;
+
 		try {
 			m = mb.send(channel).get();
 		} catch (InterruptedException | ExecutionException e) {
@@ -136,19 +221,6 @@ public class Poll extends CustomMessageCreateListener implements ReactionAddList
 	@Override
 	public void onReactionAdd(ReactionAddEvent event) {
 
-	}
-
-	private void calcVotePercentages(Message m, int amount) {		
-		List<Reaction> l = m.getReactions();
-		int totalVotes = 0;
-		
-		for (int i = 0; i < amount; i++) {
-			totalVotes += l.get(i).getCount() - 1;
-		}
-		for (int i = 0; i < amount; i++) {
-			int percentage = 100 * (l.get(i).getCount() - 1) / totalVotes;
-			votePercentages.add(percentage);
-		}
 	}
 
 }
