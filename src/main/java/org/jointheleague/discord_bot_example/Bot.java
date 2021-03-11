@@ -140,6 +140,9 @@ public class Bot  {
 		UnbeatableRockPaperScissors rps = new UnbeatableRockPaperScissors(channelName);
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
+		Depression depress = new Depression(channelName);
+		api.addMessageCreateListener(depress);
+		helpListener.addHelpEmbed(depress.getHelpEmbed());
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
@@ -187,5 +190,6 @@ public class Bot  {
 		api.addMessageCreateListener(new ScreenCapture(channelName));
 		api.addMessageCreateListener(new StarSignSeeker(channelName));
 		api.addMessageCreateListener(new War(channelName));
+		//api.addMessageCreateListener(new Depression(channelName));
 	}
 }
