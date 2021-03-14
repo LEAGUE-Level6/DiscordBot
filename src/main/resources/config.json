@@ -1,5 +1,4 @@
 {
-    "channels": ["gaby"],
-    "token": "ODEyODU2NTY5ODIwNzQxNjQ0.YDG1rA.I7SMPAv59O1OqpCnsQRugmKZQB4"
-
+    "channels": ["channelName"],
+    "token": "discordToken"
 }
