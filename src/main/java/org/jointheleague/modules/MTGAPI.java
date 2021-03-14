@@ -63,7 +63,12 @@ public class MTGAPI extends CustomMessageCreateListener{
 				    JsonObject userJSON = ((JsonObject) repoReader.read());
 				    CardReturn cardReturn = gson.fromJson(userJSON.toString(), CardReturn.class);
 				    temp = temp+cardReturn.getResults().get(0).getCleanName();
+				    if(card.equalsIgnoreCase("mountain")) {
+				    	temp = temp+" "+cardReturn.getResults().get(3).getImageUrl();
+				    }
+				    else {
 				    temp = temp+" "+cardReturn.getResults().get(0).getImageUrl();
+				    }
 				    connection.disconnect();
 				    System.out.println(response.toString());
 				    messageOut=temp;
