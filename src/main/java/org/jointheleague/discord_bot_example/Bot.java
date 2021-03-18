@@ -54,7 +54,11 @@ public class Bot  {
 		ToDoList list = new ToDoList(channelName);
 		api.addMessageCreateListener(list);
 		helpListener.addHelpEmbed(list.getHelpEmbed());
-
+		
+		MazeGame maze = new MazeGame(channelName);
+		api.addMessageCreateListener(maze);
+		helpListener.addHelpEmbed(maze.getHelpEmbed());
+		
 		HeadlineListener head = new HeadlineListener(channelName);
 		api.addMessageCreateListener(head);
 		helpListener.addHelpEmbed(head.getHelpEmbed());
@@ -109,14 +113,9 @@ public class Bot  {
 		RollDie rollDie = new RollDie(channelName);
 		api.addMessageCreateListener(rollDie);
 
-
 		MaxTicTacToe mttt = new MaxTicTacToe(channelName);
 		api.addMessageCreateListener(mttt);
 		helpListener.addHelpEmbed(mttt.getHelpEmbed());
-    
-		//Greeter g = new Greeter(channelName);
-		//api.addMessageCreateListener(g);
-		//helpListener.addHelpEmbed(g.getHelpEmbed());
 
 		pythagcalc pythagCalc = new pythagcalc(channelName);
 		api.addMessageCreateListener(pythagCalc);
@@ -144,6 +143,9 @@ public class Bot  {
 		UnbeatableRockPaperScissors rps = new UnbeatableRockPaperScissors(channelName);
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
+		Depression depress = new Depression(channelName);
+		api.addMessageCreateListener(depress);
+		helpListener.addHelpEmbed(depress.getHelpEmbed());
 		
 		
 		//old way to add listeners 
@@ -192,5 +194,6 @@ public class Bot  {
 		api.addMessageCreateListener(new ScreenCapture(channelName));
 		api.addMessageCreateListener(new StarSignSeeker(channelName));
 		api.addMessageCreateListener(new War(channelName));
+		//api.addMessageCreateListener(new Depression(channelName));
 	}
 }
