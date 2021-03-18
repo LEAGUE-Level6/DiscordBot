@@ -173,8 +173,6 @@ public class Bot  {
 		api.addMessageCreateListener(new GetTime(channelName));
 		api.addMessageCreateListener(new ScreenCapture(channelName));
 
-		api.addMessageCreateListener(new Hello(channelName));
-		api.addMessageCreateListener(new Reminder(channelName));
 		api.addMessageCreateListener(new Poll(channelName));
 	}
 }
