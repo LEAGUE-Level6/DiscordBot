@@ -109,6 +109,10 @@ public class Bot {
 		// api.addMessageCreateListener(g);
 		// helpListener.addHelpEmbed(g.getHelpEmbed());
 
+		Hello hello = new Hello(channelName);
+		api.addMessageCreateListener(hello);
+		helpListener.addHelpEmbed(hello.getHelpEmbed());
+		
 		CovidCaseGetter covid = new CovidCaseGetter(channelName);
 		api.addMessageCreateListener(covid);
 		helpListener.addHelpEmbed(covid.getHelpEmbed());
@@ -126,7 +130,7 @@ public class Bot {
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
 
 		// old way to add listeners
-		api.addMessageCreateListener(helpListener);
+		//api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
 		api.addMessageCreateListener(new DadJokes(channelName));
 		api.addMessageCreateListener(new ClockMessageListener(channelName));
@@ -170,6 +174,5 @@ public class Bot {
 		api.addMessageCreateListener(new GetTime(channelName));
 		api.addMessageCreateListener(new ScreenCapture(channelName));
 
-		api.addMessageCreateListener(new Hello(channelName));
 	}
 }

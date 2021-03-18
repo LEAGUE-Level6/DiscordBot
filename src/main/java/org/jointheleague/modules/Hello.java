@@ -1,6 +1,7 @@
 package org.jointheleague.modules;
 
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.jointheleague.modules.pojo.HelpEmbed;
 
 import net.aksingh.owmjapis.api.APIException;
 
@@ -10,6 +11,7 @@ public class Hello extends CustomMessageCreateListener {
 
 	public Hello(String channelName) {
 		super(channelName);
+		helpEmbed = new HelpEmbed(COMMAND, "This is a simple command that gives you a friendly Hello! To use it just type \\\"!Hello\\\"");
 	}
 
 	@Override
