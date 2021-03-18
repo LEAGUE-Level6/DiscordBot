@@ -124,6 +124,9 @@ public class Bot  {
 		//Greeter g = new Greeter(channelName);
 		//api.addMessageCreateListener(g);
 		//helpListener.addHelpEmbed(g.getHelpEmbed());
+		DiscordZoomAccess dza = new DiscordZoomAccess(channelName);
+		api.addMessageCreateListener(dza);
+		helpListener.addHelpEmbed(dza.getHelpEmbed());
     
 		CovidCaseGetter covid = new CovidCaseGetter(channelName);
 		api.addMessageCreateListener(covid);
@@ -143,6 +146,7 @@ public class Bot  {
 		Depression depress = new Depression(channelName);
 		api.addMessageCreateListener(depress);
 		helpListener.addHelpEmbed(depress.getHelpEmbed());
+		
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
