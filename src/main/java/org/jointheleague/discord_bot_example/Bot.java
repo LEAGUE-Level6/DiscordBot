@@ -109,6 +109,10 @@ public class Bot {
 		// api.addMessageCreateListener(g);
 		// helpListener.addHelpEmbed(g.getHelpEmbed());
 
+		Reminder reminder = new Reminder(channelName);
+		api.addMessageCreateListener(reminder);
+		helpListener.addHelpEmbed(reminder.getHelpEmbed());
+		
 		CovidCaseGetter covid = new CovidCaseGetter(channelName);
 		api.addMessageCreateListener(covid);
 		helpListener.addHelpEmbed(covid.getHelpEmbed());
@@ -169,7 +173,5 @@ public class Bot {
 		api.addMessageCreateListener(new RandomCase(channelName));
 		api.addMessageCreateListener(new GetTime(channelName));
 		api.addMessageCreateListener(new ScreenCapture(channelName));
-
-		api.addMessageCreateListener(new Reminder(channelName));
 	}
 }

@@ -1,4 +1,5 @@
 package org.jointheleague.modules;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalTime;
@@ -10,6 +11,7 @@ import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
+import org.jointheleague.modules.pojo.HelpEmbed;
 
 import net.aksingh.owmjapis.api.APIException;
 
@@ -21,26 +23,17 @@ public class Reminder extends CustomMessageCreateListener implements ActionListe
 	ArrayList<Timer> timers = new ArrayList<Timer>();
 
 	public static final String REMIND_COMMAND = "!setReminder";
-	public static final String HELP_COMMAND = "!setReminderHelp";
 
 	public Reminder(String channelName) {
 		super(channelName);
-
+		helpEmbed = new HelpEmbed(REMIND_COMMAND,
+				"To use this command first type the '!setReminder' command, followed by the time you want to be reminded (In Military Time), a comma, then your remind message \nP.S. Make sure when you input your time use a colon between the hours and minutes");
 	}
 
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
-		
-		if (event.getMessageContent().contains(HELP_COMMAND)) {
 
-			//event.get
-			
-			new MessageBuilder().setEmbed(new EmbedBuilder().setTitle(
-					"To use this command first type the '!setReminder' command, followed by the time you want to be reminded (In Military Time), a comma, then your remind message")
-					.setDescription("P.S. Make sure when you input your time use a colon between the hours and minutes")
-					.setFooter("")).send(event.getChannel());
-
-		} else if (event.getMessageContent().contains(REMIND_COMMAND)) {
+		if (event.getMessageContent().contains(REMIND_COMMAND)) {
 
 			// add use to the arraylist
 			String user = event.getMessageAuthor().getIdAsString();
@@ -103,7 +96,7 @@ public class Reminder extends CustomMessageCreateListener implements ActionListe
 			timers.get(timers.size() - 1).start();
 
 			event.getChannel().sendMessage("Successfully created a reminder for " + time.toString());
-			
+
 		}
 	}
 
