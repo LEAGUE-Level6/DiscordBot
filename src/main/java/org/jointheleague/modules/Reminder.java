@@ -27,7 +27,7 @@ public class Reminder extends CustomMessageCreateListener implements ActionListe
 	public Reminder(String channelName) {
 		super(channelName);
 		helpEmbed = new HelpEmbed(REMIND_COMMAND,
-				"To use this command first type the '!setReminder' command, followed by the time you want to be reminded (In Military Time), a comma, then your remind message \nP.S. Make sure when you input your time use a colon between the hours and minutes");
+				"To use this command first type the '!setReminder' command, followed by the time you want to be reminded (In Military Time, in PST), a comma, then your remind message \nP.S. Make sure when you input your time use a colon between the hours and minutes");
 	}
 
 	@Override
