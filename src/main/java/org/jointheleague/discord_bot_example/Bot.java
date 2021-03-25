@@ -129,6 +129,11 @@ public class Bot {
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
 
+    Depression depress = new Depression(channelName);
+		api.addMessageCreateListener(depress);
+		helpListener.addHelpEmbed(depress.getHelpEmbed());
+    
+    
 		// old way to add listeners
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
