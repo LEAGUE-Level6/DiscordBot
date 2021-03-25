@@ -200,7 +200,6 @@ public class Poll extends CustomMessageCreateListener implements ReactionAddList
 
 	private Parameters getParameters(String message) {
 		String messageContent = message;
-		System.out.println("Message: " + messageContent);
 
 		String time = messageContent.substring(0, messageContent.indexOf(',') + 1);
 		messageContent = messageContent.replace(time, "");
