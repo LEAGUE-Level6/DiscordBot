@@ -194,6 +194,7 @@ public class Bot  {
 		api.addMessageCreateListener(new ScreenCapture(channelName));
 		api.addMessageCreateListener(new StarSignSeeker(channelName));
 		api.addMessageCreateListener(new War(channelName));
+		api.addMessageCreateListener(new DndCompanion(channelName));
 		//api.addMessageCreateListener(new Depression(channelName));
 	}
 }
