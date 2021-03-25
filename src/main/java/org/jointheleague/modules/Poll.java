@@ -25,6 +25,7 @@ import org.javacord.api.event.message.reaction.ReactionAddEvent;
 import org.javacord.api.event.message.reaction.ReactionRemoveEvent;
 import org.javacord.api.listener.message.reaction.ReactionAddListener;
 import org.javacord.api.listener.message.reaction.ReactionRemoveListener;
+import org.jointheleague.modules.pojo.HelpEmbed;
 
 import javassist.compiler.MemberCodeGen;
 import net.aksingh.owmjapis.api.APIException;
@@ -39,6 +40,10 @@ public class Poll extends CustomMessageCreateListener implements ReactionAddList
 
 	public Poll(String channelName) {
 		super(channelName);
+		helpEmbed = new HelpEmbed(COMMAND,
+				"You can create polls where people can vote for options using emojis. In order to create a poll first type the command "
+						+ COMMAND
+						+ " and then enter how long you want the poll to be up, its name, and then list the options in the poll. Everything should be separated by a comma \n Ex. !createPoll 5 minutes, Cats vs Dogs, Cats, Dogs, Neither");
 	}
 
 	@Override
@@ -56,6 +61,7 @@ public class Poll extends CustomMessageCreateListener implements ReactionAddList
 			OptionContent[] oc = initializeOptions(options, null);
 
 			Message m = buildEmbed(title, oc, event.getChannel());
+			System.out.println(m.getContent());
 			handleReactions(m, options.length);
 
 			createTimer(time, m);
@@ -187,6 +193,7 @@ public class Poll extends CustomMessageCreateListener implements ReactionAddList
 			m = mb.send(channel).get();
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
+			System.out.println("exception");
 		}
 		return m;
 	}
@@ -206,10 +213,22 @@ public class Poll extends CustomMessageCreateListener implements ReactionAddList
 		ArrayList<String> options = new ArrayList<String>();
 
 		while (messageContent != "") {
-			String option = messageContent.substring(0, messageContent.indexOf(',') + 1);
-			messageContent = messageContent.replace(option, "");
-			option = option.replace(",", "").trim();
-			options.add(option);
+			String option = "";
+
+			if(messageContent.contains(",")) {
+				option = messageContent.substring(0, messageContent.indexOf(',') + 1);
+				messageContent = messageContent.replace(option, "");
+				option = option.replace(",", "").trim();
+				options.add(option);
+			} else {
+				option = messageContent.substring(0, messageContent.length());
+				messageContent = messageContent.replace(option, "");
+				option.trim();
+				options.add(option);
+			}
+			
+			
+		
 
 		}
 
