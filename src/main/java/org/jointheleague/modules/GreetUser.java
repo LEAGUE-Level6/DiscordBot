@@ -11,9 +11,9 @@ public class GreetUser extends CustomMessageCreateListener{
 	//set command to run feature in chat
 	private static final String COMMAND = "!hello";
 	
-	//description for the !help command
 	public GreetUser(String channelName) {
 		super(channelName);
+		//description for the !help command
 		helpEmbed = new HelpEmbed(COMMAND, "Will return a simple greeting from the bot with username");
 
 	}

@@ -152,6 +152,11 @@ public class Bot  {
 		api.addMessageCreateListener(gu);
 		helpListener.addHelpEmbed(gu.getHelpEmbed());
 		
+		//binary converter
+		BinaryTranslator b = new BinaryTranslator(channelName);
+		api.addMessageCreateListener(b);
+		helpListener.addHelpEmbed(b.getHelpEmbed());
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
