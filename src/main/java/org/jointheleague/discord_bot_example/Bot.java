@@ -95,6 +95,7 @@ public class Bot  {
 		
 		MafiaPlayer mafiaPlayer = new MafiaPlayer(channelName);
 		api.addMessageCreateListener(mafiaPlayer);
+		helpListener.addHelpEmbed(randomString.getHelpEmbed());
 
 		
 		//old way to add listeners 
