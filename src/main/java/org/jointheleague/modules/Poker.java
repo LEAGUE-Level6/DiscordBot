@@ -110,6 +110,32 @@ public class Poker extends CustomMessageCreateListener {
 					turn=true;
 					rewardGiven=false;
 					totalBet = 0;
+					highestCallChance=0;
+					botCallChance=0;
+					usedCards[0]=-1;
+					usedCards[1]=-1;
+					usedCards[2]=-1;
+					usedCards[3]=-1;
+					usedCards[4]=-1;
+					usedCards[5]=-1;
+					usedCards[6]=-1;
+					usedCards[7]=-1;
+					usedCards[8]=-1;
+					botAndMiddleCards[0]="";
+					botAndMiddleCards[1]="";
+					botAndMiddleCards[2]="";
+					botAndMiddleCards[3]="";
+					botAndMiddleCards[4]="";
+					botAndMiddleCards[5]="";
+					botAndMiddleCards[6]="";
+					playerAndMiddleCards[0]="";
+					playerAndMiddleCards[1]="";
+					playerAndMiddleCards[2]="";
+					playerAndMiddleCards[3]="";
+					playerAndMiddleCards[4]="";
+					playerAndMiddleCards[5]="";
+					playerAndMiddleCards[6]="";
+					
 					content = content.replace("poker", "");
 					try {
 						wager = Integer.parseInt(content);
@@ -350,6 +376,7 @@ public class Poker extends CustomMessageCreateListener {
 						}
 						event.getChannel().sendMessage("The bot has " + botAndMiddleCards[0] + botAndMiddleCards[1]
 								+ botAndMiddleCards[2] + botAndMiddleCards[3] + botAndMiddleCards[4]);
+						event.getChannel().sendMessage("Your hand is now the " +cards[playerCard1]+", "+cards[playerCard2]+", "+cards[middleCard1]+", "+cards[middleCard2]+", and "+cards[middleCard3]);
 						event.getChannel().sendMessage("How much would you like to bet");
 					}
 				} 
@@ -357,7 +384,11 @@ public class Poker extends CustomMessageCreateListener {
 					event.getChannel().sendMessage("You already have a game running.");
 			}
 			}
-				else if (content.contains("bet") && flop) {
+			else if(content.contains("fold") && !gameOver) {
+				event.getChannel().sendMessage("You folded. Your balance is now "+balance);
+				gameOver=true;
+			}
+				else if (content.contains("bet") && flop && !gameOver) {
 					flop = false;
 					content = content.replace("bet", "");
 					try {
@@ -387,6 +418,7 @@ public class Poker extends CustomMessageCreateListener {
 							// bot calls
 							event.getChannel().sendMessage(
 									"Bot calls. Bot chance of calling was " + botCallChance + ". The random was " + i);
+							middleCard4 = randCards.nextInt(52);
 							for (int k = 0; k < usedCards.length; k++) {
 								if (usedCards[k] == middleCard4) {
 									isUsed = true;
@@ -402,6 +434,7 @@ public class Poker extends CustomMessageCreateListener {
 									.sendMessage("The middle cards are now the " + cards[middleCard1] + ", the "
 											+ cards[middleCard2] + ", the " + cards[middleCard3] + " and the "
 											+ cards[middleCard4]);
+							event.getChannel().sendMessage("Your hand is now the " +cards[playerCard1]+", "+cards[playerCard2]+", "+cards[middleCard1]+", "+cards[middleCard2]+", "+cards[middleCard3]+", and "+cards[middleCard4]);
 
 							if (cards[middleCard4].contains("ace")) {
 								botAndMiddleCards[5] = "ace";
@@ -445,7 +478,7 @@ public class Poker extends CustomMessageCreateListener {
 
 						// in the future maybe add a choice to add players
 					}
-				} else if (content.contains("bet") && turn) {
+				} else if (content.contains("bet") && turn && !gameOver) {
 					turn = false;
 					content = content.replace("bet", "");
 					try {
@@ -475,6 +508,7 @@ public class Poker extends CustomMessageCreateListener {
 							// bot calls
 							event.getChannel().sendMessage(
 									"Bot calls. Bot chance of calling was " + botCallChance + ". The random was " + i);
+							middleCard5 = randCards.nextInt(52);
 							for (int k = 0; k < usedCards.length; k++) {
 								if (usedCards[k] == middleCard5) {
 									isUsed = true;
@@ -491,37 +525,38 @@ public class Poker extends CustomMessageCreateListener {
 											+ cards[middleCard2] + ", the " + cards[middleCard3] + " , the "
 											+ cards[middleCard4] + " and the " + cards[middleCard5]);
 
-							if (cards[middleCard4].contains("ace")) {
+							if (cards[middleCard5].contains("ace")) {
 								botAndMiddleCards[6] = "ace";
-							} else if (cards[middleCard4].contains("2")) {
+							} else if (cards[middleCard5].contains("2")) {
 								botAndMiddleCards[6] = "2";
-							} else if (cards[middleCard4].contains("3")) {
+							} else if (cards[middleCard5].contains("3")) {
 								botAndMiddleCards[6] = "3";
-							} else if (cards[middleCard4].contains("4")) {
+							} else if (cards[middleCard5].contains("4")) {
 								botAndMiddleCards[6] = "4";
-							} else if (cards[middleCard4].contains("5")) {
+							} else if (cards[middleCard5].contains("5")) {
 								botAndMiddleCards[6] = "5";
-							} else if (cards[middleCard4].contains("6")) {
+							} else if (cards[middleCard5].contains("6")) {
 								botAndMiddleCards[6] = "6";
-							} else if (cards[middleCard4].contains("7")) {
+							} else if (cards[middleCard5].contains("7")) {
 								botAndMiddleCards[6] = "7";
-							} else if (cards[middleCard4].contains("8")) {
+							} else if (cards[middleCard5].contains("8")) {
 								botAndMiddleCards[6] = "8";
-							} else if (cards[middleCard4].contains("9")) {
+							} else if (cards[middleCard5].contains("9")) {
 								botAndMiddleCards[6] = "9";
-							} else if (cards[middleCard4].contains("10")) {
+							} else if (cards[middleCard5].contains("10")) {
 								botAndMiddleCards[6] = "10";
-							} else if (cards[middleCard4].contains("jack")) {
+							} else if (cards[middleCard5].contains("jack")) {
 								botAndMiddleCards[6] = "jack";
-							} else if (cards[middleCard4].contains("queen")) {
+							} else if (cards[middleCard5].contains("queen")) {
 								botAndMiddleCards[6] = "queen";
-							} else if (cards[middleCard4].contains("king")) {
+							} else if (cards[middleCard5].contains("king")) {
 								botAndMiddleCards[6] = "king";
 							}
 							event.getChannel()
 									.sendMessage("The bot has " + botAndMiddleCards[0] + botAndMiddleCards[1]
 											+ botAndMiddleCards[2] + botAndMiddleCards[3] + botAndMiddleCards[4]
 											+ botAndMiddleCards[5] + botAndMiddleCards[6]);
+							event.getChannel().sendMessage("Your hand is now the " +cards[playerCard1]+", "+cards[playerCard2]+", "+cards[middleCard1]+", "+cards[middleCard2]+", "+cards[middleCard3]+", "+cards[middleCard4]+", and "+cards[middleCard5]);
 						} else {
 							balance += totalBet * 2;
 							event.getChannel().sendMessage(
@@ -720,6 +755,8 @@ public class Poker extends CustomMessageCreateListener {
 							playerAndMiddleCards[6] = "king";
 						}
 						if(!rewardGiven) {
+							event.getChannel().sendMessage("Your hand is now the " +cards[playerCard1]+", "+cards[playerCard2]+", "+cards[middleCard1]+", "+cards[middleCard2]+", "+cards[middleCard3]+", "+cards[middleCard4]+", and "+cards[middleCard5]);
+							event.getChannel().sendMessage("The bot's final hand has the "+cards[botCard1]+", "+cards[botCard2]+", "+cards[middleCard1]+", "+cards[middleCard2]+", "+cards[middleCard3]+", "+cards[middleCard4]+", and "+cards[middleCard5]);
 						playerWon=playerWins(playerAndMiddleCards, botAndMiddleCards);
 						if(playerWon) {
 							balance += totalBet * 2;
