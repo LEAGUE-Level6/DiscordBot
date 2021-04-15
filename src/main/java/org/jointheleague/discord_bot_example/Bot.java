@@ -47,9 +47,9 @@ public class Bot  {
 		api.addMessageCreateListener(dl);
 		helpListener.addHelpEmbed(dl.getHelpEmbed());
 		
-		CurrencyConverter cc = new CurrencyConverter(channelName);
-		api.addMessageCreateListener(cc);
-		helpListener.addHelpEmbed(cc.getHelpEmbed());
+		//CurrencyConverter cc = new CurrencyConverter(channelName);
+		//api.addMessageCreateListener(cc);
+		//helpListener.addHelpEmbed(cc.getHelpEmbed());
 		
 		ToDoList list = new ToDoList(channelName);
 		api.addMessageCreateListener(list);
@@ -143,10 +143,14 @@ public class Bot  {
 		UnbeatableRockPaperScissors rps = new UnbeatableRockPaperScissors(channelName);
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
+		
 		Depression depress = new Depression(channelName);
 		api.addMessageCreateListener(depress);
 		helpListener.addHelpEmbed(depress.getHelpEmbed());
 		
+		DndCompanion dc = new DndCompanion(channelName);
+		api.addMessageCreateListener(dc);
+		helpListener.addHelpEmbed(dc.getHelpEmbed());
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
