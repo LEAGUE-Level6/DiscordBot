@@ -19,4 +19,5 @@ public class CompareBrand extends CustomMessageCreateListener {
 	}
 
 }
-// TODO: Find 2021 car brand models and write down a few's mpg, cost, and horsepower
+// TODO: Find 2021 car brand models and write down a few's  seats, and horsepower, cost and put into a text file
+
