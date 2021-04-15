@@ -143,6 +143,7 @@ public class Bot  {
 		UnbeatableRockPaperScissors rps = new UnbeatableRockPaperScissors(channelName);
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
+		
 		Depression depress = new Depression(channelName);
 		api.addMessageCreateListener(depress);
 		helpListener.addHelpEmbed(depress.getHelpEmbed());

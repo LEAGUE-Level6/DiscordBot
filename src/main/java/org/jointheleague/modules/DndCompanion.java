@@ -31,21 +31,28 @@ public class DndCompanion extends CustomMessageCreateListener {
 //			}
 			if (str.length >= 3 && str[1].equals("links")) {
 				if (str[2].equals("table")) {
-					event.getChannel().sendMessage("ro1120.net for the table :)");
+					event.getChannel().sendMessage("httpS://ro1120.net for the table :)");
 				} else if (str.length >= 4 && str[2].equals("character") && str[3].equals("sheets")) {
 					event.getChannel().sendMessage("dndbeyond.com for the characters. They're not alive though :L");
 				} else if (str[2].equals("discord")) {
 					event.getChannel().sendMessage("this website for discord calls");
 				} else if(str[2].equals("all")){
-					event.getChannel().sendMessage("the links are: " + "\n" + "table: roll20.net" + "\n"
+					event.getChannel().sendMessage("the links are: " + "\n" + "table: httpS://roll20.net" + "\n"
 							+ "character sheets: dndbeyond.com" + "\n" + "this website");
 				}
 			} else if (str.length >= 4 && str[1].equals("roll")) {
 				Random rand = new Random();
-				int max = rand.nextInt(Integer.parseInt(str[2])) + 1;
-				int mod = Integer.parseInt(str[3]);
-				int finale = max + mod;
+				int max = 0;
+				int mod = 0;
+				int finale = 0;
+				if(Integer.parseInt(str[2]) <= 0) {
+					event.getChannel().sendMessage("you can't do a number less then 0");
+				} else {
+				max = rand.nextInt(Integer.parseInt(str[2])) + 1;
+				mod = Integer.parseInt(str[3]);
+				finale = max + mod;
 				event.getChannel().sendMessage("your number is: "+ max + " + " + mod + " = " + finale);
+				}
 			} else if (str[1].equals("advice")) {
 				try {
 					FileWriter fw = new FileWriter("src/main/java/org/jointheleague/modules/DndCompanionExtras");
