@@ -36,10 +36,12 @@ public class Poker extends CustomMessageCreateListener {
 	int numberSameCards;
 	int playerScore;
 	int botScore;
+	int numberPairs;
 	boolean userCooporates = false;
 	boolean isUsed = false;
 	boolean flop = true;
 	boolean turn = true;
+	boolean river=true;
 	boolean gameOver = true;
 	boolean playerWon;
 	boolean rewardGiven;
@@ -108,10 +110,12 @@ public class Poker extends CustomMessageCreateListener {
 					gameOver = false;
 					flop=true;
 					turn=true;
+					river=true;
 					rewardGiven=false;
 					totalBet = 0;
 					highestCallChance=0;
 					botCallChance=0;
+					numberPairs=0;
 					usedCards[0]=-1;
 					usedCards[1]=-1;
 					usedCards[2]=-1;
@@ -142,11 +146,14 @@ public class Poker extends CustomMessageCreateListener {
 					} catch (Exception e) {
 						event.getChannel().sendMessage("Choose a number after the command to gamble");
 					}
-					balance -= wager;
-					totalBet += wager;
 					if (balance < 0) {
 						event.getChannel().sendMessage("You don't have enough money to wager that much.");
-					} else {
+					} else if (wager<0) {
+						event.getChannel().sendMessage("Choose a positive number");
+					}
+					else {
+						balance -= wager;
+						totalBet += wager;
 						event.getChannel().sendMessage("Your balance is " + balance);
 						// send photos of cards in the middle, its only text currently
 						middleCard1 = randCards.nextInt(52);
@@ -206,7 +213,6 @@ public class Poker extends CustomMessageCreateListener {
 						event.getChannel().sendMessage(
 								"Your cards are the " + cards[playerCard1] + " and the " + cards[playerCard2]);
 
-						// bot logic
 						botCard1 = randCards.nextInt(52);
 						for (int i = 0; i < usedCards.length; i++) {
 							if (usedCards[i] == botCard1) {
@@ -233,8 +239,7 @@ public class Poker extends CustomMessageCreateListener {
 						usedCards[6] = botCard2;
 
 						// shows bot's cards
-						event.getChannel().sendMessage(
-								"Temporary: Bot's cards are the " + cards[botCard1] + " and the " + cards[botCard2]);
+						System.out.println("Temporary: Bot's cards are the " + cards[botCard1] + " and the " + cards[botCard2]);
 
 						if (cards[middleCard1].contains("ace")) {
 							botAndMiddleCards[0] = "ace";
@@ -374,8 +379,8 @@ public class Poker extends CustomMessageCreateListener {
 						} else if (cards[botCard2].contains("king")) {
 							botAndMiddleCards[4] = "king";
 						}
-						event.getChannel().sendMessage("The bot has " + botAndMiddleCards[0] + botAndMiddleCards[1]
-								+ botAndMiddleCards[2] + botAndMiddleCards[3] + botAndMiddleCards[4]);
+						System.out.println("The bot has " + botAndMiddleCards[0]+", "+botAndMiddleCards[1]+", "
+								+botAndMiddleCards[2]+", "+botAndMiddleCards[3]+", and "+botAndMiddleCards[4]);
 						event.getChannel().sendMessage("Your hand is now the " +cards[playerCard1]+", "+cards[playerCard2]+", "+cards[middleCard1]+", "+cards[middleCard2]+", and "+cards[middleCard3]);
 						event.getChannel().sendMessage("How much would you like to bet");
 					}
@@ -389,24 +394,26 @@ public class Poker extends CustomMessageCreateListener {
 				gameOver=true;
 			}
 				else if (content.contains("bet") && flop && !gameOver) {
-					flop = false;
 					content = content.replace("bet", "");
 					try {
 						wager = Integer.parseInt(content);
 					} catch (Exception e) {
 						event.getChannel().sendMessage("Choose a number after the command to gamble");
 					}
-					balance -= wager;
-					totalBet += wager;
 					System.out.println(totalBet);
 					if (balance < 0) {
 						event.getChannel().sendMessage("You don't have enough money to wager that much.");
-					} else {
+					} else if(wager<0) {
+						event.getChannel().sendMessage("Choose a positive number");
+					}
+					else {
+						flop = false;
+						balance -= wager;
+						totalBet += wager;
 						event.getChannel().sendMessage("Your balance is " + balance);
 
 						highestCallChance = botAlgorithm(botAndMiddleCards);
 
-						// add more ways of having good hand here, in method
 
 						if (500 > highestCallChance) {
 							highestCallChance = 500;
@@ -416,9 +423,10 @@ public class Poker extends CustomMessageCreateListener {
 						int i = callRandom.nextInt(1000);
 						if (botCallChance >= i) {
 							// bot calls
-							event.getChannel().sendMessage(
+							System.out.println(
 									"Bot calls. Bot chance of calling was " + botCallChance + ". The random was " + i);
 							middleCard4 = randCards.nextInt(52);
+							event.getChannel().sendMessage("Bot calls.");
 							for (int k = 0; k < usedCards.length; k++) {
 								if (usedCards[k] == middleCard4) {
 									isUsed = true;
@@ -463,10 +471,9 @@ public class Poker extends CustomMessageCreateListener {
 							} else if (cards[middleCard4].contains("king")) {
 								botAndMiddleCards[5] = "king";
 							}
-							event.getChannel()
-									.sendMessage("The bot has " + botAndMiddleCards[0] + botAndMiddleCards[1]
-											+ botAndMiddleCards[2] + botAndMiddleCards[3] + botAndMiddleCards[4]
-											+ botAndMiddleCards[5]);
+							System.out.println("The bot has "+botAndMiddleCards[0]+", "+botAndMiddleCards[1]
+											+", "+botAndMiddleCards[2]+", "+botAndMiddleCards[3]+", "+botAndMiddleCards[4]
+											+" and "+botAndMiddleCards[5]);
 							event.getChannel().sendMessage("How much would you like to bet");
 						} else {
 							balance += totalBet * 2;
@@ -475,23 +482,24 @@ public class Poker extends CustomMessageCreateListener {
 							gameOver = true;
 							rewardGiven=true;
 						}
-
-						// in the future maybe add a choice to add players
 					}
 				} else if (content.contains("bet") && turn && !gameOver) {
-					turn = false;
 					content = content.replace("bet", "");
 					try {
 						wager = Integer.parseInt(content);
 					} catch (Exception e) {
 						event.getChannel().sendMessage("Choose a number after the command to gamble");
 					}
-					balance -= wager;
-					totalBet += wager;
 					System.out.println(totalBet);
 					if (balance < 0) {
 						event.getChannel().sendMessage("You don't have enough money to wager that much.");
-					} else {
+					} else if(wager<0) {
+						event.getChannel().sendMessage("Choose a positive number.");
+					}
+					else {
+						turn = false;
+						balance -= wager;
+						totalBet += wager;
 						event.getChannel().sendMessage("Your balance is " + balance);
 
 						highestCallChance = botAlgorithm(botAndMiddleCards);
@@ -506,8 +514,8 @@ public class Poker extends CustomMessageCreateListener {
 						int i = callRandom.nextInt(1000);
 						if (botCallChance >= i) {
 							// bot calls
-							event.getChannel().sendMessage(
-									"Bot calls. Bot chance of calling was " + botCallChance + ". The random was " + i);
+							System.out.println("Bot calls. Bot chance of calling was " + botCallChance + ". The random was " + i);
+							event.getChannel().sendMessage("Bot calls.");
 							middleCard5 = randCards.nextInt(52);
 							for (int k = 0; k < usedCards.length; k++) {
 								if (usedCards[k] == middleCard5) {
@@ -552,19 +560,38 @@ public class Poker extends CustomMessageCreateListener {
 							} else if (cards[middleCard5].contains("king")) {
 								botAndMiddleCards[6] = "king";
 							}
-							event.getChannel()
-									.sendMessage("The bot has " + botAndMiddleCards[0] + botAndMiddleCards[1]
-											+ botAndMiddleCards[2] + botAndMiddleCards[3] + botAndMiddleCards[4]
-											+ botAndMiddleCards[5] + botAndMiddleCards[6]);
+							System.out.println("The bot has "+botAndMiddleCards[0]+", "+botAndMiddleCards[1]
+											+", "+botAndMiddleCards[2]+", "+botAndMiddleCards[3]+", "+botAndMiddleCards[4]
+											+", "+botAndMiddleCards[5]+" and "+botAndMiddleCards[6]);
 							event.getChannel().sendMessage("Your hand is now the " +cards[playerCard1]+", "+cards[playerCard2]+", "+cards[middleCard1]+", "+cards[middleCard2]+", "+cards[middleCard3]+", "+cards[middleCard4]+", and "+cards[middleCard5]);
+							event.getChannel().sendMessage("How much would you like to bet?");
 						} else {
 							balance += totalBet * 2;
 							event.getChannel().sendMessage(
 									"The bot folded, you win " + ((totalBet * 2)-wager) + ". Your balance is now " + balance);
 							gameOver = true;
 							rewardGiven=true;
-
 						}
+						}
+					}else if (content.contains("bet") && river && !gameOver) {
+							content = content.replace("bet", "");
+							try {
+								wager = Integer.parseInt(content);
+							} catch (Exception e) {
+								event.getChannel().sendMessage("Choose a number after the command to gamble");
+							}
+							System.out.println(totalBet);
+							if (balance < 0) {
+								event.getChannel().sendMessage("You don't have enough money to wager that much.");
+							} else if(wager<0) {
+								event.getChannel().sendMessage("Choose a positive number.");
+							}
+							else {
+								river = false;
+								balance -= wager;
+								totalBet += wager;
+								event.getChannel().sendMessage("Your balance is " + balance);
+								}
 						if (cards[middleCard1].contains("ace")) {
 							playerAndMiddleCards[0] = "ace";
 						} else if (cards[middleCard1].contains("2")) {
@@ -754,6 +781,7 @@ public class Poker extends CustomMessageCreateListener {
 						} else if (cards[middleCard5].contains("king")) {
 							playerAndMiddleCards[6] = "king";
 						}
+						
 						if(!rewardGiven) {
 							event.getChannel().sendMessage("Your hand is now the " +cards[playerCard1]+", "+cards[playerCard2]+", "+cards[middleCard1]+", "+cards[middleCard2]+", "+cards[middleCard3]+", "+cards[middleCard4]+", and "+cards[middleCard5]);
 							event.getChannel().sendMessage("The bot's final hand has the "+cards[botCard1]+", "+cards[botCard2]+", "+cards[middleCard1]+", "+cards[middleCard2]+", "+cards[middleCard3]+", "+cards[middleCard4]+", and "+cards[middleCard5]);
@@ -774,11 +802,12 @@ public class Poker extends CustomMessageCreateListener {
 					}
 				}
 				}
-	}
+	
 
 	public int botAlgorithm(String[] botAndMiddleCards) {
 		highestCallChance = 0;
 		numberSameCards = 0;
+		numberPairs=0;
 		for (int j = 0; j < botAndMiddleCards.length; j++) {
 			if (botAndMiddleCards[j] == "ace") {
 				numberSameCards += 1;
@@ -787,9 +816,10 @@ public class Poker extends CustomMessageCreateListener {
 		if (numberSameCards == 2) {
 			if (950 > highestCallChance) {
 				highestCallChance = 950;
+				numberPairs+=1;
 			}
 		} else if (numberSameCards == 3) {
-			highestCallChance = 970;
+			highestCallChance = 963;
 		}
 		else if(numberSameCards == 4) {
 			highestCallChance=1000;
@@ -804,6 +834,7 @@ public class Poker extends CustomMessageCreateListener {
 		if (numberSameCards == 2) {
 			if (700 > highestCallChance) {
 				highestCallChance = 700;
+				numberPairs+=1;
 			}
 		} else if (numberSameCards == 3) {
 			highestCallChance = 951;
@@ -821,6 +852,7 @@ public class Poker extends CustomMessageCreateListener {
 		if (numberSameCards == 2) {
 			if (750 > highestCallChance) {
 				highestCallChance = 750;
+				numberPairs+=1;
 			}
 		} else if (numberSameCards == 3) {
 			highestCallChance = 952;
@@ -838,6 +870,7 @@ public class Poker extends CustomMessageCreateListener {
 		if (numberSameCards == 2) {
 			if (751 > highestCallChance) {
 				highestCallChance = 751;
+				numberPairs+=1;
 			}
 		} else if (numberSameCards == 3) {
 			highestCallChance = 953;
@@ -855,6 +888,7 @@ public class Poker extends CustomMessageCreateListener {
 		if (numberSameCards == 2) {
 			if (800 > highestCallChance) {
 				highestCallChance = 800;
+				numberPairs+=1;
 			}
 		} else if (numberSameCards == 3) {
 			highestCallChance = 954;
@@ -872,6 +906,7 @@ public class Poker extends CustomMessageCreateListener {
 		if (numberSameCards == 2) {
 			if (801 > highestCallChance) {
 				highestCallChance = 801;
+				numberPairs+=1;
 			}
 		} else if (numberSameCards == 3) {
 			highestCallChance = 955;
@@ -889,6 +924,7 @@ public class Poker extends CustomMessageCreateListener {
 		if (numberSameCards == 2) {
 			if (850 > highestCallChance) {
 				highestCallChance = 850;
+				numberPairs+=1;
 			}
 		} else if (numberSameCards == 3) {
 			highestCallChance = 956;
@@ -906,6 +942,7 @@ public class Poker extends CustomMessageCreateListener {
 		if (numberSameCards == 2) {
 			if (851 > highestCallChance) {
 				highestCallChance = 851;
+				numberPairs+=1;
 			}
 		} else if (numberSameCards == 3) {
 			highestCallChance = 957;
@@ -923,12 +960,13 @@ public class Poker extends CustomMessageCreateListener {
 		if (numberSameCards == 2) {
 			if (852 > highestCallChance) {
 				highestCallChance = 852;
+				numberPairs+=1;
 			}
 		} else if (numberSameCards == 3) {
 			highestCallChance = 958;
 		}
 		else if(numberSameCards == 4) {
-			highestCallChance=958;
+			highestCallChance=978;
 		}
 
 		numberSameCards = 0;
@@ -940,12 +978,13 @@ public class Poker extends CustomMessageCreateListener {
 		if (numberSameCards == 2) {
 			if (900 > highestCallChance) {
 				highestCallChance = 900;
+				numberPairs+=1;
 			}
 		} else if (numberSameCards == 3) {
 			highestCallChance = 959;
 		}
 		else if(numberSameCards == 4) {
-			highestCallChance=959;
+			highestCallChance=979;
 		}
 
 		numberSameCards = 0;
@@ -957,6 +996,7 @@ public class Poker extends CustomMessageCreateListener {
 		if (numberSameCards == 2) {
 			if (910 > highestCallChance) {
 				highestCallChance = 910;
+				numberPairs+=1;
 			}
 		} else if (numberSameCards == 3) {
 			highestCallChance = 960;
@@ -974,6 +1014,7 @@ public class Poker extends CustomMessageCreateListener {
 		if (numberSameCards == 2) {
 			if (920 > highestCallChance) {
 				highestCallChance = 920;
+				numberPairs+=1;
 			}
 		} else if (numberSameCards == 3) {
 			highestCallChance = 961;
@@ -991,12 +1032,16 @@ public class Poker extends CustomMessageCreateListener {
 		if (numberSameCards == 2) {
 			if (930 > highestCallChance) {
 				highestCallChance = 930;
+				numberPairs+=1;
 			}
 		} else if (numberSameCards == 3) {
 			highestCallChance = 962;
 		}
 		else if(numberSameCards == 4) {
 			highestCallChance=982;
+		}
+		if(numberPairs==2) {
+			highestCallChance=964;
 		}
 		return highestCallChance;
 	}
