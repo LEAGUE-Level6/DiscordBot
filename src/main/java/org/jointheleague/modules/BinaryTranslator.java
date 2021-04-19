@@ -26,32 +26,35 @@ public class BinaryTranslator extends CustomMessageCreateListener{
 		//looks for first word entered
 		//check for !binary command
 		if(cmd[0].equals(COMMAND)) {
-			//check if user wants to go from decimal to binary
-			//if second word is "to" convert their number to binary
-			if(cmd[1].equals("to")) {
-				try {
-					int userNum = Integer.parseInt(cmd[2]);
-					event.getChannel().sendMessage("Here's your binary number " + decimalToBinary(userNum));
+			if(cmd.length == 3) {
+				//check if user wants to go from decimal to binary
+				//if second word is "to" convert their number to binary
+				if(cmd[1].equals("to")) {
+					try {
+						int userNum = Integer.parseInt(cmd[2]);
+						event.getChannel().sendMessage("Here's your binary number " + decimalToBinary(userNum));
+					}
+					catch (NumberFormatException e) {
+						e.printStackTrace();
+						sendErrorMessage(event);
+					}
 				}
-				catch (NumberFormatException e) {
-					e.printStackTrace();
-					sendErrorMessage(event);
-				}
+				//check if user wants to go from binary to decimal
+				//if second word is "from" convert from their number to decimal
+				else if(cmd[1].equals("from")){
+					//make sure user enters binary
+					if(cmd[2].contains("0") || cmd[2].contains("1")) {
+						event.getChannel().sendMessage("Here's your decimal number " + binaryToDecimal(cmd[2]));
+					}
+					else {
+						sendErrorMessage(event);
+					}
+				}	
 			}
-			//check if user wants to go from binary to decimal
-			//if second word is "from" convert from their number to decimal
-			else if(cmd[1].equals("from")){
-				//make sure user enters binary
-				if(cmd[2].contains("0") || cmd[2].contains("1")) {
-					event.getChannel().sendMessage("Here's your decimal number " + binaryToDecimal(cmd[2]));
-				}
-				else {
-					sendErrorMessage(event);
-				}
+			else {
+				sendErrorMessage(event);
 			}
-			
 		}
-		
 	}
 	
 	//use when user enters incorrect command parameters
