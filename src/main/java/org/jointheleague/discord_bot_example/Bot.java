@@ -43,6 +43,10 @@ public class Bot  {
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 		
 		//add Listeners
+		Lottery lotto = new Lottery(channelName);
+		api.addMessageCreateListener(lotto);
+		helpListener.addHelpEmbed(lotto.getHelpEmbed());
+		
 		DiscordLibrary dl = new DiscordLibrary(channelName);
 		api.addMessageCreateListener(dl);
 		helpListener.addHelpEmbed(dl.getHelpEmbed());

@@ -14,7 +14,8 @@ public class CovidCaseGetter extends CustomMessageCreateListener {
 	
 	public CovidCaseGetter(String channelName) {
 		super(channelName);
-		helpEmbed = new HelpEmbed(COMMAND, "Responds with live number of COVID-19 positive cases from the United States. Uses information & data from Johns Hopkins University Center for Systems Science and Engineering(JHU CSSE). Supported by Johns Hopkins University Applied Physics Lab. Data is updated every 10 minutes.");
+		helpEmbed = new HelpEmbed(COMMAND, "Responds with live number of COVID-19 positive cases from the United States. Uses information & data from Johns Hopkins University Center for Systems Science and Engineering(JHU CSSE). "
+				+ "Supported by Johns Hopkins University Applied Physics Lab. Data is updated every 10 minutes.");
 	}
 
 	@Override

@@ -86,15 +86,15 @@ public class CurrencyConverter extends CustomMessageCreateListener {
 		    //you can use postman to make the request and receive a response, then take that and put it right into jsonschema2pojo.com
 			//If using jsonschema2pojo.com, select Target Langue = java, Source Type = JSON, Annotation Style = Gson
 		     conversions = gson.fromJson(userJSON.toString(), Conversions.class);
-		     try {
-				conversions.getRates().initializeRatios2();
-			} catch (IllegalArgumentException e) {
+		    //try {
+			//	conversions.getRates().initializeRatios2();
+			//} catch (IllegalArgumentException e) {
 				// TODO Auto-generated catch block
 			//	e.printStackTrace();
-			} catch (IllegalAccessException e) {
+			//} catch (IllegalAccessException e) {
 				// TODO Auto-generated catch block
 				//e.printStackTrace();
-			}
+			//}
 		    /*
 			//get the first article (these are just java objects now)
 			Article article = conversions.getArticles().get(0);
