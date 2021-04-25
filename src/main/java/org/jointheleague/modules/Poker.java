@@ -45,8 +45,23 @@ public class Poker extends CustomMessageCreateListener {
 	boolean gameOver = true;
 	boolean playerWon;
 	boolean rewardGiven;
+	boolean tie=false;
+	boolean straight;
 	int highestCallChance = 0;
 	int botCallChance = 0;
+	boolean ace;
+	boolean two;
+	boolean three;
+	boolean four;
+	boolean five;
+	boolean six;
+	boolean seven;
+	boolean eight;
+	boolean nine;
+	boolean ten;
+	boolean jack;
+	boolean queen;
+	boolean king;
 
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
@@ -150,6 +165,7 @@ public class Poker extends CustomMessageCreateListener {
 						event.getChannel().sendMessage("You don't have enough money to wager that much.");
 					} else if (wager<0) {
 						event.getChannel().sendMessage("Choose a positive number");
+						gameOver=true;
 					}
 					else {
 						balance -= wager;
@@ -591,7 +607,7 @@ public class Poker extends CustomMessageCreateListener {
 								balance -= wager;
 								totalBet += wager;
 								event.getChannel().sendMessage("Your balance is " + balance);
-								}
+								
 						if (cards[middleCard1].contains("ace")) {
 							playerAndMiddleCards[0] = "ace";
 						} else if (cards[middleCard1].contains("2")) {
@@ -789,11 +805,18 @@ public class Poker extends CustomMessageCreateListener {
 						if(playerWon) {
 							balance += totalBet * 2;
 							event.getChannel().sendMessage(
-									"You have the better hand. You won " + ((totalBet * 2)-wager) + ". Your balance is now " + balance);
+									"You have the better hand. You won " + ((totalBet * 2)) + ". Your balance is now " + balance);
 							gameOver = true;
 						}
 						else if(!playerWon) {
+							if(tie) {
+								balance+=totalBet;
+								event.getChannel().sendMessage("It is a tie. You get back "+totalBet+". Your balance is now "+balance);
+							}
+							else {
 							event.getChannel().sendMessage("The bot has the better hand. You win nothing. Your balance is now "+balance);
+						}
+						}
 						}
 						else {
 							System.out.println("error");
@@ -808,14 +831,188 @@ public class Poker extends CustomMessageCreateListener {
 		highestCallChance = 0;
 		numberSameCards = 0;
 		numberPairs=0;
+		straight=false;
+		ace=false;
+		two=false;
+		three=false;
+		four=false;
+		five=false;
+		six=false;
+		seven=false;
+		eight=false;
+		nine=false;
+		ten=false;
+		jack=false;
+		queen=false;
+		king=false;
+		for (int j = 0; j < botAndMiddleCards.length; j++) {
+			if(botAndMiddleCards[j]=="ace") {
+				ace=true;
+			}
+			else if(botAndMiddleCards[j]=="2") {
+				two=true;
+			}
+			else if(botAndMiddleCards[j]=="3") {
+				three=true;
+			}
+			else if(botAndMiddleCards[j]=="4") {
+				four=true;
+			}
+			else if(botAndMiddleCards[j]=="5") {
+				five=true;
+			}
+			else if(botAndMiddleCards[j]=="6") {
+				six=true;
+			}
+			else if(botAndMiddleCards[j]=="7") {
+				seven=true;
+			}
+			else if(botAndMiddleCards[j]=="8") {
+				eight=true;
+			}
+			else if(botAndMiddleCards[j]=="9") {
+				nine=true;
+			}
+			else if(botAndMiddleCards[j]=="10") {
+				ten=true;
+			}
+			else if(botAndMiddleCards[j]=="jack") {
+				jack=true;
+			}
+			else if(botAndMiddleCards[j]=="queen") {
+				queen=true;
+			}
+			else if(botAndMiddleCards[j]=="king") {
+				king=true;
+			}
+			if(ace) {
+				if(two) {
+					if(three) {
+						if(four) {
+							if(five) {
+								straight=true;
+							}
+						}
+					}
+				}
+			}
+			else if(two) {
+				if(three) {
+					if(four) {
+						if(five) {
+							if(six) {
+								straight=true;
+							}
+						}
+					}
+				}
+			}
+			else if(three) {
+				if(four) {
+					if(five) {
+						if(six) {
+							if(seven) {
+								straight=true;
+							}
+						}
+					}
+				}
+			}
+			else if(four) {
+				if(five) {
+					if(six) {
+						if(seven) {
+							if(eight) {
+								straight=true;
+							}
+						}
+					}
+				}
+			}
+			else if(five) {
+				if(six) {
+					if(seven) {
+						if(eight) {
+							if(nine) {
+								straight=true;
+							}
+						}
+					}
+				}
+			}
+			else if(six) {
+				if(seven) {
+					if(eight) {
+						if(nine) {
+							if(ten) {
+								straight=true;
+							}
+						}
+					}
+				}
+			}
+			else if(seven) {
+				if(eight) {
+					if(nine) {
+						if(ten) {
+							if(jack) {
+								straight=true;
+							}
+						}
+					}
+				}
+			}
+			else if(eight) {
+				if(nine) {
+					if(ten) {
+						if(jack) {
+							if(queen) {
+								straight=true;
+							}
+						}
+					}
+				}
+			}
+			else if(nine) {
+				if(ten) {
+					if(jack) {
+						if(queen) {
+							if(king) {
+								straight=true;
+							}
+						}
+					}
+				}
+			}
+			else if(ten) {
+				if(jack) {
+					if(queen) {
+						if(king) {
+							if(ace) {
+								straight=true;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		
+		
+		
+		
+		
 		for (int j = 0; j < botAndMiddleCards.length; j++) {
 			if (botAndMiddleCards[j] == "ace") {
 				numberSameCards += 1;
+				if(513>highestCallChance) {
+				highestCallChance=513;
+				}
 			}
 		}
 		if (numberSameCards == 2) {
-			if (950 > highestCallChance) {
-				highestCallChance = 950;
+			if (949 > highestCallChance) {
+				highestCallChance = 949;
 				numberPairs+=1;
 			}
 		} else if (numberSameCards == 3) {
@@ -829,6 +1026,9 @@ public class Poker extends CustomMessageCreateListener {
 		for (int j = 0; j < botAndMiddleCards.length; j++) {
 			if (botAndMiddleCards[j] == "2") {
 				numberSameCards += 1;
+				if(501>highestCallChance) {
+				highestCallChance=501;
+				}
 			}
 		}
 		if (numberSameCards == 2) {
@@ -847,6 +1047,9 @@ public class Poker extends CustomMessageCreateListener {
 		for (int j = 0; j < botAndMiddleCards.length; j++) {
 			if (botAndMiddleCards[j] == "3") {
 				numberSameCards += 1;
+				if(502>highestCallChance) {
+				highestCallChance=502;
+				}
 			}
 		}
 		if (numberSameCards == 2) {
@@ -865,6 +1068,9 @@ public class Poker extends CustomMessageCreateListener {
 		for (int j = 0; j < botAndMiddleCards.length; j++) {
 			if (botAndMiddleCards[j] == "4") {
 				numberSameCards += 1;
+				if(503>highestCallChance) {
+				highestCallChance=503;
+				}
 			}
 		}
 		if (numberSameCards == 2) {
@@ -883,6 +1089,9 @@ public class Poker extends CustomMessageCreateListener {
 		for (int j = 0; j < botAndMiddleCards.length; j++) {
 			if (botAndMiddleCards[j] == "5") {
 				numberSameCards += 1;
+				if(504>highestCallChance) {
+				highestCallChance=504;
+				}
 			}
 		}
 		if (numberSameCards == 2) {
@@ -901,6 +1110,9 @@ public class Poker extends CustomMessageCreateListener {
 		for (int j = 0; j < botAndMiddleCards.length; j++) {
 			if (botAndMiddleCards[j] == "6") {
 				numberSameCards += 1;
+				if(505>highestCallChance) {
+				highestCallChance=505;
+				}
 			}
 		}
 		if (numberSameCards == 2) {
@@ -919,6 +1131,9 @@ public class Poker extends CustomMessageCreateListener {
 		for (int j = 0; j < botAndMiddleCards.length; j++) {
 			if (botAndMiddleCards[j] == "7") {
 				numberSameCards += 1;
+				if(506>highestCallChance) {
+				highestCallChance=506;
+				}
 			}
 		}
 		if (numberSameCards == 2) {
@@ -937,6 +1152,9 @@ public class Poker extends CustomMessageCreateListener {
 		for (int j = 0; j < botAndMiddleCards.length; j++) {
 			if (botAndMiddleCards[j] == "8") {
 				numberSameCards += 1;
+				if(507>highestCallChance) {
+				highestCallChance=507;
+				}
 			}
 		}
 		if (numberSameCards == 2) {
@@ -955,6 +1173,9 @@ public class Poker extends CustomMessageCreateListener {
 		for (int j = 0; j < botAndMiddleCards.length; j++) {
 			if (botAndMiddleCards[j] == "9") {
 				numberSameCards += 1;
+				if(508>highestCallChance) {
+				highestCallChance=508;
+				}
 			}
 		}
 		if (numberSameCards == 2) {
@@ -973,6 +1194,9 @@ public class Poker extends CustomMessageCreateListener {
 		for (int j = 0; j < botAndMiddleCards.length; j++) {
 			if (botAndMiddleCards[j] == "10") {
 				numberSameCards += 1;
+				if(509>highestCallChance) {
+				highestCallChance=509;
+				}
 			}
 		}
 		if (numberSameCards == 2) {
@@ -991,6 +1215,9 @@ public class Poker extends CustomMessageCreateListener {
 		for (int j = 0; j < botAndMiddleCards.length; j++) {
 			if (botAndMiddleCards[j] == "jack") {
 				numberSameCards += 1;
+				if(510>highestCallChance) {
+				highestCallChance=510;
+				}
 			}
 		}
 		if (numberSameCards == 2) {
@@ -1009,6 +1236,9 @@ public class Poker extends CustomMessageCreateListener {
 		for (int j = 0; j < botAndMiddleCards.length; j++) {
 			if (botAndMiddleCards[j] == "queen") {
 				numberSameCards += 1;
+				if(511>highestCallChance) {
+				highestCallChance=511;
+				}
 			}
 		}
 		if (numberSameCards == 2) {
@@ -1027,6 +1257,9 @@ public class Poker extends CustomMessageCreateListener {
 		for (int j = 0; j < botAndMiddleCards.length; j++) {
 			if (botAndMiddleCards[j] == "king") {
 				numberSameCards += 1;
+				if(512>highestCallChance) {
+				highestCallChance=512;
+				}
 			}
 		}
 		if (numberSameCards == 2) {
@@ -1041,7 +1274,7 @@ public class Poker extends CustomMessageCreateListener {
 			highestCallChance=982;
 		}
 		if(numberPairs==2) {
-			highestCallChance=964;
+			highestCallChance=950;
 		}
 		return highestCallChance;
 	}
@@ -1049,8 +1282,13 @@ public class Poker extends CustomMessageCreateListener {
 		playerScore=botAlgorithm(playerAndMiddleCards);
 		botScore=botAlgorithm(botAndMiddleCards);
 		gameOver=true;
+		tie=false;
 		if(playerScore>botScore) {
 			return true;
+		}
+		else if(playerScore==botScore) {
+			tie=true;
+			return false;
 		}
 		else {
 		return false;
