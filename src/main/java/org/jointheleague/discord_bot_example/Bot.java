@@ -157,6 +157,11 @@ public class Bot  {
 		api.addMessageCreateListener(b);
 		helpListener.addHelpEmbed(b.getHelpEmbed());
 		
+		//go fish
+		GoFish g = new GoFish(channelName);
+		api.addMessageCreateListener(g);
+		helpListener.addHelpEmbed(g.getHelpEmbed());
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
