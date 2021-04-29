@@ -149,6 +149,7 @@ public class Bot  {
 		
 		CompareBrand cb = new CompareBrand(channelName);
 		api.addMessageCreateListener(cb);
+		helpListener.addHelpEmbed(cb.getHelpEmbed());
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
