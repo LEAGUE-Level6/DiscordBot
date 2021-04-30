@@ -134,6 +134,7 @@ public class Bot  {
 		api.addMessageCreateListener(new RandomCase(channelName));
 		api.addMessageCreateListener(new GetTime(channelName));
 		api.addMessageCreateListener(new ScreenCapture(channelName));
+		api.addMessageCreateListener(new LisztsLists(channelName));
 
 	}
 }
