@@ -43,21 +43,25 @@ public class Bot  {
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 		
 		//add Listeners
-		DiscordLibrary dl = new DiscordLibrary(channelName);
-		api.addMessageCreateListener(dl);
-		helpListener.addHelpEmbed(dl.getHelpEmbed());
+//		DiscordLibrary dl = new DiscordLibrary(channelName);
+//		api.addMessageCreateListener(dl);
+//		helpListener.addHelpEmbed(dl.getHelpEmbed());
+//		
+//		CurrencyConverter cc = new CurrencyConverter(channelName);
+//		api.addMessageCreateListener(cc);
+//		helpListener.addHelpEmbed(cc.getHelpEmbed());
+//		
+//		ToDoList list = new ToDoList(channelName);
+//		api.addMessageCreateListener(list);
+//		helpListener.addHelpEmbed(list.getHelpEmbed());
+//		
+//		MazeGame maze = new MazeGame(channelName);
+//		api.addMessageCreateListener(maze);
+//		helpListener.addHelpEmbed(maze.getHelpEmbed());
 		
-		CurrencyConverter cc = new CurrencyConverter(channelName);
-		api.addMessageCreateListener(cc);
-		helpListener.addHelpEmbed(cc.getHelpEmbed());
-		
-		ToDoList list = new ToDoList(channelName);
-		api.addMessageCreateListener(list);
-		helpListener.addHelpEmbed(list.getHelpEmbed());
-		
-		MazeGame maze = new MazeGame(channelName);
-		api.addMessageCreateListener(maze);
-		helpListener.addHelpEmbed(maze.getHelpEmbed());
+		WW2Adventure ww2 = new WW2Adventure(channelName);
+		api.addMessageCreateListener(ww2);
+		helpListener.addHelpEmbed(ww2.getHelpEmbed());
 		
 		HeadlineListener head = new HeadlineListener(channelName);
 		api.addMessageCreateListener(head);
@@ -67,10 +71,10 @@ public class Bot  {
 		api.addMessageCreateListener(randomNumber);
 		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
 		
-		Feature1 feature1 = new Feature1(channelName);
-		api.addMessageCreateListener(feature1);
-		helpListener.addHelpEmbed(feature1.getHelpEmbed());
-		
+//		Feature1 feature1 = new Feature1(channelName);
+//		api.addMessageCreateListener(feature1);
+//		helpListener.addHelpEmbed(feature1.getHelpEmbed());
+//		
 		HypeMachine hypeMachine = new HypeMachine(channelName);
 		api.addMessageCreateListener(hypeMachine);
 		helpListener.addHelpEmbed(hypeMachine.getHelpEmbed());
@@ -99,53 +103,53 @@ public class Bot  {
 		api.addMessageCreateListener(apiExampleListener);
 		helpListener.addHelpEmbed(apiExampleListener.getHelpEmbed());
 		
-		NewWeather newWeather = new NewWeather(channelName);
-		api.addMessageCreateListener(newWeather);
-		helpListener.addHelpEmbed(newWeather.getHelpEmbed());
-		
-		DeathMatch hungerGames = new DeathMatch(channelName);
-		api.addMessageCreateListener(hungerGames);
-		helpListener.addHelpEmbed(hungerGames.getHelpEmbed());
-
-		CoinFlip cp = new CoinFlip(channelName);
-		api.addMessageCreateListener(cp);
-		
-		RollDie rollDie = new RollDie(channelName);
-		api.addMessageCreateListener(rollDie);
-
-		MaxTicTacToe mttt = new MaxTicTacToe(channelName);
-		api.addMessageCreateListener(mttt);
-		helpListener.addHelpEmbed(mttt.getHelpEmbed());
-
-		pythagcalc pythagCalc = new pythagcalc(channelName);
-		api.addMessageCreateListener(pythagCalc);
-		helpListener.addHelpEmbed(pythagCalc.getHelpEmbed());
-
-		//Greeter g = new Greeter(channelName);
-		//api.addMessageCreateListener(g);
-		//helpListener.addHelpEmbed(g.getHelpEmbed());
-		DiscordZoomAccess dza = new DiscordZoomAccess(channelName);
-		api.addMessageCreateListener(dza);
-		helpListener.addHelpEmbed(dza.getHelpEmbed());
-    
-		CovidCaseGetter covid = new CovidCaseGetter(channelName);
-		api.addMessageCreateListener(covid);
-		helpListener.addHelpEmbed(covid.getHelpEmbed());
-
-		ListMakerMessageListener LM = new ListMakerMessageListener(channelName);
-		api.addMessageCreateListener(LM);
-		helpListener.addHelpEmbed(LM.getHelpEmbed());
-		
-		Dice d = new Dice(channelName);
-		api.addMessageCreateListener(d);
-		helpListener.addHelpEmbed(d.getHelpEmbed());
-
-		UnbeatableRockPaperScissors rps = new UnbeatableRockPaperScissors(channelName);
-		api.addMessageCreateListener(rps);
-		helpListener.addHelpEmbed(rps.getHelpEmbed());
-		Depression depress = new Depression(channelName);
-		api.addMessageCreateListener(depress);
-		helpListener.addHelpEmbed(depress.getHelpEmbed());
+//		NewWeather newWeather = new NewWeather(channelName);
+//		api.addMessageCreateListener(newWeather);
+//		helpListener.addHelpEmbed(newWeather.getHelpEmbed());
+//		
+//		DeathMatch hungerGames = new DeathMatch(channelName);
+//		api.addMessageCreateListener(hungerGames);
+//		helpListener.addHelpEmbed(hungerGames.getHelpEmbed());
+//
+//		CoinFlip cp = new CoinFlip(channelName);
+//		api.addMessageCreateListener(cp);
+//		
+//		RollDie rollDie = new RollDie(channelName);
+//		api.addMessageCreateListener(rollDie);
+//
+//		MaxTicTacToe mttt = new MaxTicTacToe(channelName);
+//		api.addMessageCreateListener(mttt);
+//		helpListener.addHelpEmbed(mttt.getHelpEmbed());
+//
+//		pythagcalc pythagCalc = new pythagcalc(channelName);
+//		api.addMessageCreateListener(pythagCalc);
+//		helpListener.addHelpEmbed(pythagCalc.getHelpEmbed());
+//
+//		//Greeter g = new Greeter(channelName);
+//		//api.addMessageCreateListener(g);
+//		//helpListener.addHelpEmbed(g.getHelpEmbed());
+//		DiscordZoomAccess dza = new DiscordZoomAccess(channelName);
+//		api.addMessageCreateListener(dza);
+//		helpListener.addHelpEmbed(dza.getHelpEmbed());
+//    
+//		CovidCaseGetter covid = new CovidCaseGetter(channelName);
+//		api.addMessageCreateListener(covid);
+//		helpListener.addHelpEmbed(covid.getHelpEmbed());
+//
+//		ListMakerMessageListener LM = new ListMakerMessageListener(channelName);
+//		api.addMessageCreateListener(LM);
+//		helpListener.addHelpEmbed(LM.getHelpEmbed());
+//		
+//		Dice d = new Dice(channelName);
+//		api.addMessageCreateListener(d);
+//		helpListener.addHelpEmbed(d.getHelpEmbed());
+//
+//		UnbeatableRockPaperScissors rps = new UnbeatableRockPaperScissors(channelName);
+//		api.addMessageCreateListener(rps);
+//		helpListener.addHelpEmbed(rps.getHelpEmbed());
+//		Depression depress = new Depression(channelName);
+//		api.addMessageCreateListener(depress);
+//		helpListener.addHelpEmbed(depress.getHelpEmbed());
 		
 		
 		//old way to add listeners 
@@ -192,8 +196,8 @@ public class Bot  {
 		api.addMessageCreateListener(new RandomCase(channelName));
 		api.addMessageCreateListener(new GetTime(channelName));
 		api.addMessageCreateListener(new ScreenCapture(channelName));
-		api.addMessageCreateListener(new StarSignSeeker(channelName));
-		api.addMessageCreateListener(new War(channelName));
+//		api.addMessageCreateListener(new StarSignSeeker(channelName));
+//		api.addMessageCreateListener(new War(channelName));
 		//api.addMessageCreateListener(new Depression(channelName));
 	}
 }
