@@ -53,7 +53,7 @@ public class NewWeather extends CustomMessageCreateListener {
 			}
 
 		}
-
+		
 	}
 
 	MessageBuilder getWeatherInfoByLocation(String city) {

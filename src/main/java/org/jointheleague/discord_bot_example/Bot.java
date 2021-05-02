@@ -47,9 +47,9 @@ public class Bot  {
 		api.addMessageCreateListener(dl);
 		helpListener.addHelpEmbed(dl.getHelpEmbed());
 		
-		CurrencyConverter cc = new CurrencyConverter(channelName);
-		api.addMessageCreateListener(cc);
-		helpListener.addHelpEmbed(cc.getHelpEmbed());
+		//CurrencyConverter cc = new CurrencyConverter(channelName);
+		//api.addMessageCreateListener(cc);
+		//helpListener.addHelpEmbed(cc.getHelpEmbed());
 		
 		ToDoList list = new ToDoList(channelName);
 		api.addMessageCreateListener(list);
@@ -147,6 +147,9 @@ public class Bot  {
 		api.addMessageCreateListener(depress);
 		helpListener.addHelpEmbed(depress.getHelpEmbed());
 		
+		Genderize gender = new Genderize(channelName);
+		api.addMessageCreateListener(gender);
+		helpListener.addHelpEmbed(gender.getHelpEmbed());
 		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
