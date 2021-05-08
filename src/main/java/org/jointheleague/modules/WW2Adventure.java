@@ -46,11 +46,14 @@ public class WW2Adventure extends CustomMessageCreateListener {
 		if (stage >= 1) {
 			if (txt.equalsIgnoreCase("!DDay")) {
 				event.getChannel().sendMessage("Alright soldier, you have entered a really tough battle, "
+
 						+ "to survive this battle, you must play a game! Say !Continue to move on");
 				stage++;
 			}
 			if (stage >= 2) {
-				
+				if (txt.startsWith("!Continue")) {
+					DDay(event);
+				}
 			}
 		} else if (txt.startsWith("!Midway")) {
 
@@ -59,36 +62,36 @@ public class WW2Adventure extends CustomMessageCreateListener {
 		} else if (txt.startsWith("!Stalingrad")) {
 
 		}
-		
+
 	}
 
 	public void DDay(MessageCreateEvent event) {
 		int substage = 0;
 		String txt = event.getMessageContent();
 		EmbedBuilder build = new EmbedBuilder();
-		if (txt.startsWith("!Continue")) {
-			event.getChannel().sendMessage("Alright, your first task is to spell Soldier backwards");
-			substage++;
-			if (substage == 1) {
-				if (txt.startsWith("reidloS")) {
-					event.getChannel().sendMessage("Good work! You will continue");
-					substage++;
-				} else {
-					event.getChannel().sendMessage("Sorry, you got the answer incorect. You have died."
-							+ " \n If you wanna try again type !BeginWW2Journey");
-				}
 
-				event.getChannel().sendMessage("Now time for more questions.");
-				event.getChannel().sendMessage("What is dnaraG 1M spelt fowards?");
-				if (txt.startsWith("M1 Garand")) {
-					event.getChannel().sendMessage("Nice work soldier!");
-					event.getChannel().type();
-					build.setColor(Color.orange).setTitle("M1 Garand").addField(
-							"Fun facts about the M1 Garand:",
-							"Fun fact about the M1 Garand: This gun was used frequently used by"
-									+ " US soldiers during WW2 and during the reload it had a special ding sound.");
-					event.getChannel().sendMessage(build);
-				}
+		event.getChannel().sendMessage("Alright, your first task is to spell Soldier backwards");
+		substage++;
+		if (substage == 1) {
+			if (txt.startsWith("reidloS")) {
+				event.getChannel().sendMessage("Good work! You will continue");
+				substage++;
+			} else {
+				event.getChannel().sendMessage("Sorry, you got the answer incorect. You have died."
+						+ " \n If you wanna try again type !BeginWW2Journey");
+			}
+
+			event.getChannel().sendMessage("Now time for more questions.");
+			event.getChannel().sendMessage("What is dnaraG 1M spelt fowards?");
+			if (txt.startsWith("M1 Garand")) {
+				event.getChannel().sendMessage("Nice work soldier!");
+				event.getChannel().type();
+				build.setColor(Color.orange).setTitle("M1 Garand").addField("Fun facts about the M1 Garand:",
+						"Fun fact about the M1 Garand: This gun was used frequently used by"
+								+ " US soldiers during WW2 and during the reload it had a special ding sound.");
+				event.getChannel().sendMessage(build);
+				event.getChannel().sendMessage("Here's what the M1 looks like:");
+				
 			}
 		}
 	}
