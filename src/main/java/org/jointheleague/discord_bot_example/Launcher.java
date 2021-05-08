@@ -7,7 +7,7 @@ import java.util.Map;
  * @author keithgroves and https://tinystripz.com
  *
  */
-public class Launcher {
+public class Launcher {	
 	public static void main(String[] args) {
 		if (args.length == 0) {
 			args = new String[] { "default" };
