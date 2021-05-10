@@ -16,7 +16,6 @@ public class GoFish extends CustomMessageCreateListener{
 	static long botId = 825895501148585984L;
 	
 	//picking the player
-	boolean checkPlayerNumber = false;
 	String playerGuess ="";
 	Random r = new Random();
 	int randomNum = r.nextInt(11);
@@ -47,25 +46,30 @@ public class GoFish extends CustomMessageCreateListener{
 				
 			//shuffling the deck
 			case 1:
-				deck = shuffleDeck(deck);
+				deck = shuffleDeck(deck, event);
 				break;
 				
 			//dealing cards to player and bot
 			case 2:
 				dealCards(event);
 				break;
+			
+			//playing round
+			case 3:
+				playRound(event);
+			
 			}
 		}
-		
-		
 	}
 	
 	public String pickFirstPlayer(MessageCreateEvent event) {
 		String cmd = event.getMessageContent();
 
 		String firstPlayer = null;
-		
-		if(checkPlayerNumber) {
+		if(cmd.equals(COMMAND)) {
+			event.getChannel().sendMessage(randomNum+"Guess my number between 0 and 10 and I'll let you go first");
+		}
+		else if(state == 0) {
 			playerGuess = event.getMessageContent();
 			//checkPlayerNumber = false;
 			if(Integer.parseInt(playerGuess) == randomNum) {
@@ -76,13 +80,9 @@ public class GoFish extends CustomMessageCreateListener{
 				event.getChannel().sendMessage("I'll go first");
 				firstPlayer = "bot";
 			}
-			state++;
 			
-		}
-		
-		if(cmd.equals(COMMAND)) {
-			event.getChannel().sendMessage(randomNum+"Guess my number between 0 and 10 and I'll let you go first");
-			checkPlayerNumber= true;
+			state = 1;
+			
 		}
 		
 		return firstPlayer;
@@ -97,15 +97,16 @@ public class GoFish extends CustomMessageCreateListener{
 		}
 	}
 	
-	public ArrayList<String> shuffleDeck(ArrayList<String> cards) {
+	public ArrayList<String> shuffleDeck(ArrayList<String> cards, MessageCreateEvent event) {
 		createDeck();
 		ArrayList<String> shuffledCards = new ArrayList<String>();
 		for(int i = 0; i < deck.size(); i ++) {
 			int randomIndex = new Random().nextInt(deck.size());
 			shuffledCards.add(deck.get(randomIndex));
 		}
-
-		state++;
+		
+		state = 2;
+		event.getChannel().sendMessage("I shuffled the deck");
 		return shuffledCards;
 	}
 	
@@ -113,7 +114,7 @@ public class GoFish extends CustomMessageCreateListener{
 		//show the player's cards in list format
 		//store in ArrayList
 		//save bot's cards in ArrayList
-		//save rest of deck into ArrayList for drawing pile
+		//rest of deck to be used for go fish
 		for(int i = 0; i < 7; i ++) {
 			playerCards.add(deck.get(i));
 			deck.remove(i);
@@ -122,11 +123,51 @@ public class GoFish extends CustomMessageCreateListener{
 			botCards.add(deck.get(i));
 			deck.remove(i);
 		}
-		for(String s : playerCards) {
-			System.out.println(s);
-		}
 		
 		
+		state = 3;
 	}
-
+	
+	
+	public void playRound(MessageCreateEvent event) {
+		//user asks for card
+			//scenario 1:
+				//user receives card and is added to player deck, removed from bot deck
+			
+			//scenario 2:
+				//user does not receive card and bot says "Go Fish"
+				//user draws one card from deck, adds to player deck
+		//bot takes a turn
+			//scenario 1:
+				//receives cards from player, add to bot deck, remove from player deck
+		
+			//scenario 2:
+				//does not receive card and player says "Go Fish"
+		
+		char [] request = event.getMessageContent().toCharArray();
+		for(char c : request) {
+			if(Character.isDigit(c)) {
+				int requestedCardNum = Character.getNumericValue(c);
+				if(requestedCardNum >= 2 && requestedCardNum <= 10) {
+					searchDeck(botCards, Integer.toString(requestedCardNum));
+				}
+			}
+		}
+	}
+	
+	
+	public ArrayList<String> searchDeck(ArrayList<String> deckToSearch, String cardToSearch) {
+		ArrayList<String> cardsFound = new ArrayList<String>();
+		for(String s : deckToSearch) {
+			if(s.equals(cardToSearch)) {
+				cardsFound.add(s);
+			}
+		}
+		if(cardsFound.size() > 0) {
+		System.out.println(cardsFound.get(0));
+		}
+		return cardsFound;
+	}
+	
+	
 }
