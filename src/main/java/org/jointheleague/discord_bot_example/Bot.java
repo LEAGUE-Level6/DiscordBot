@@ -47,6 +47,10 @@ public class Bot  {
 		api.addMessageCreateListener(dl);
 		helpListener.addHelpEmbed(dl.getHelpEmbed());
 		
+		FantasyName fn = new FantasyName(channelName);
+		api.addMessageCreateListener(fn);
+		helpListener.addHelpEmbed(fn.getHelpEmbed());
+		
 		CurrencyConverter cc = new CurrencyConverter(channelName);
 		api.addMessageCreateListener(cc);
 		helpListener.addHelpEmbed(cc.getHelpEmbed());
@@ -195,5 +199,6 @@ public class Bot  {
 		api.addMessageCreateListener(new StarSignSeeker(channelName));
 		api.addMessageCreateListener(new War(channelName));
 		//api.addMessageCreateListener(new Depression(channelName));
+		
 	}
 }
