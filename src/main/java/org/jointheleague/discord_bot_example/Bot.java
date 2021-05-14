@@ -47,17 +47,16 @@ public class Bot  {
 		api.addMessageCreateListener(dl);
 		helpListener.addHelpEmbed(dl.getHelpEmbed());
 		
-		CurrencyConverter cc = new CurrencyConverter(channelName);
-		api.addMessageCreateListener(cc);
-		helpListener.addHelpEmbed(cc.getHelpEmbed());
+		FortuneTeller ft=new FortuneTeller(channelName);
+		api.addMessageCreateListener(ft);
+		helpListener.addHelpEmbed(ft.getHelpEmbed());
+		
 		
 		ToDoList list = new ToDoList(channelName);
 		api.addMessageCreateListener(list);
 		helpListener.addHelpEmbed(list.getHelpEmbed());
 		
-		MazeGame maze = new MazeGame(channelName);
-		api.addMessageCreateListener(maze);
-		helpListener.addHelpEmbed(maze.getHelpEmbed());
+		
 		
 		HeadlineListener head = new HeadlineListener(channelName);
 		api.addMessageCreateListener(head);
