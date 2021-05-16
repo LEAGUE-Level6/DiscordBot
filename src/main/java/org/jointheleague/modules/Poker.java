@@ -69,6 +69,7 @@ public class Poker extends CustomMessageCreateListener {
 	int playerClubs;
 	int highestSuit;
 	int highCard;
+	int highStraightCard;
 	boolean ace;
 	boolean two;
 	boolean three;
@@ -537,7 +538,7 @@ public class Poker extends CustomMessageCreateListener {
 						}
 						botCallChance = highestCallChance;
 						Random callRandom = new Random();
-						int i = callRandom.nextInt(800);
+						int i = callRandom.nextInt(750);
 						if (botCallChance >= i) {
 							// bot calls
 							System.out.println(
@@ -600,6 +601,7 @@ public class Poker extends CustomMessageCreateListener {
 							else if(cards[middleCard4].contains("clubs")) {
 								botClubs+=1;
 							}
+							
 							System.out.println("The bot has "+botAndMiddleCards[0]+", "+botAndMiddleCards[1]
 											+", "+botAndMiddleCards[2]+", "+botAndMiddleCards[3]+", "+botAndMiddleCards[4]
 											+" and "+botAndMiddleCards[5]);
@@ -651,7 +653,7 @@ public class Poker extends CustomMessageCreateListener {
 						}
 						botCallChance = highestCallChance;
 						Random callRandom = new Random();
-						int i = callRandom.nextInt(800);
+						int i = callRandom.nextInt(750);
 						if (botCallChance >= i) {
 							// bot calls
 							System.out.println("Bot calls. Bot chance of calling was " + botCallChance + ". The random was " + i);
@@ -1021,6 +1023,25 @@ public class Poker extends CustomMessageCreateListener {
 							playerClubs+=1;
 						}
 						
+						//test certain hands
+						botAndMiddleCards[0]="ace";
+						botAndMiddleCards[1]="2";
+						botAndMiddleCards[2]="3";
+						botAndMiddleCards[3]="4";
+						botAndMiddleCards[4]="6";
+						botAndMiddleCards[5]="7";
+						botAndMiddleCards[6]="8";
+						
+						playerAndMiddleCards[0]="ace";
+						playerAndMiddleCards[1]="2";
+						playerAndMiddleCards[2]="3";
+						playerAndMiddleCards[3]="4";
+						playerAndMiddleCards[4]="6";
+						playerAndMiddleCards[5]="7";
+						playerAndMiddleCards[6]="8";
+						
+						
+						
 						if(!rewardGiven) {
 							event.getChannel().sendMessage("Your hand is now the " +cards[playerCard1]+", "+cards[playerCard2]+", "+cards[middleCard1]+", "+cards[middleCard2]+", "+cards[middleCard3]+", "+cards[middleCard4]+", and "+cards[middleCard5]);
 							event.getChannel().sendMessage("The bot's final hand has the "+cards[botCard1]+", "+cards[botCard2]+", "+cards[middleCard1]+", "+cards[middleCard2]+", "+cards[middleCard3]+", "+cards[middleCard4]+", and "+cards[middleCard5]);
@@ -1062,6 +1083,7 @@ public class Poker extends CustomMessageCreateListener {
 		playerLowPair=0;
 		botLowPair=0;
 		highCard=0;
+		highStraightCard=0;
 		playerHighCard=0;
 		botHighCard=0;
 		straight=false;
@@ -1126,6 +1148,8 @@ public class Poker extends CustomMessageCreateListener {
 							if(five) {
 								if(740>highestCallChance) {
 								highestCallChance=740;
+								straight=true;
+								highStraightCard=1;
 								}
 							}
 						}
@@ -1139,6 +1163,8 @@ public class Poker extends CustomMessageCreateListener {
 							if(six) {
 								if(741>highestCallChance) {
 									highestCallChance=741;
+									straight=true;
+									highStraightCard=2;
 								}
 							}
 						}
@@ -1152,6 +1178,8 @@ public class Poker extends CustomMessageCreateListener {
 							if(seven) {
 								if(742>highestCallChance) {
 									highestCallChance=742;
+									straight=true;
+									highStraightCard=3;
 								}
 							}
 						}
@@ -1165,6 +1193,8 @@ public class Poker extends CustomMessageCreateListener {
 							if(eight) {
 								if(743>highestCallChance) {
 									highestCallChance=743;
+									straight=true;
+									highStraightCard=4;
 								}
 							}
 						}
@@ -1178,6 +1208,8 @@ public class Poker extends CustomMessageCreateListener {
 							if(nine) {
 								if(744>highestCallChance) {
 									highestCallChance=744;
+									straight=true;
+									highStraightCard=5;
 								}
 							}
 						}
@@ -1191,6 +1223,8 @@ public class Poker extends CustomMessageCreateListener {
 							if(ten) {
 								if(745>highestCallChance) {
 									highestCallChance=745;
+									straight=true;
+									highStraightCard=6;
 								}
 							}
 						}
@@ -1204,6 +1238,8 @@ public class Poker extends CustomMessageCreateListener {
 							if(jack) {
 								if(746>highestCallChance) {
 									highestCallChance=746;
+									straight=true;
+									highStraightCard=7;
 								}
 							}
 						}
@@ -1217,6 +1253,8 @@ public class Poker extends CustomMessageCreateListener {
 							if(queen) {
 								if(747>highestCallChance) {
 									highestCallChance=747;
+									straight=true;
+									highStraightCard=8;
 								}
 							}
 						}
@@ -1230,6 +1268,8 @@ public class Poker extends CustomMessageCreateListener {
 							if(king) {
 								if(748>highestCallChance) {
 									highestCallChance=748;
+									straight=true;
+									highStraightCard=9;
 								}
 							}
 						}
@@ -1243,6 +1283,8 @@ public class Poker extends CustomMessageCreateListener {
 							if(ace) {
 								if(749>highestCallChance) {
 									highestCallChance=749;
+									straight=true;
+									highStraightCard=10;
 								}
 							}
 						}
@@ -1673,7 +1715,10 @@ public class Poker extends CustomMessageCreateListener {
 			highestCallChance=713+highestPairValue;
 		}
 		if(suits>=5) {
-			if((750+highCard)>highestCallChance) {
+			if(straight && 791+highStraightCard>highestCallChance) {
+				highestCallChance=791+highStraightCard;
+			}
+			else if((750+highCard)>highestCallChance) {
 			highestCallChance=750+highCard;
 			}
 		}
@@ -1722,24 +1767,24 @@ public class Poker extends CustomMessageCreateListener {
 			return true;
 		}
 		else if(playerScore==botScore) {
-			if(playerPairValue>=botPairValue) {
+			if(playerPairValue>botPairValue) {
 				return true;
 			}
-			else if(playerPairValue<=botPairValue) {
+			else if(playerPairValue<botPairValue) {
 				return false;
 			}
 			else if(playerPairValue==botPairValue) {
-				if(playerLowPair>=botLowPair) {
+				if(playerLowPair>botLowPair) {
 					return true;
 				}
-				else if(playerLowPair<=botLowPair) {
+				else if(playerLowPair<botLowPair) {
 					return false;
 				}
 				else if(playerLowPair==botLowPair) {
-					if(playerHighCard>=botHighCard) {
+					if(playerHighCard>botHighCard) {
 						return true;
 					}
-					else if(playerHighCard<=botHighCard) {
+					else if(playerHighCard<botHighCard) {
 						return false;
 					}
 					else if(playerHighCard==botHighCard) {
