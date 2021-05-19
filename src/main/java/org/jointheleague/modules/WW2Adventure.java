@@ -34,11 +34,10 @@ public class WW2Adventure extends CustomMessageCreateListener {
 			build.setTitle("**" + "Hello soldier, you have received a draft to the war!" + "**" + "\n" + "**"
 					+ "What battle would you like to be deployed in, soldier?" + "**");
 			build.setDescription(
-					"1) Normandy beach (!DDay) \n 2) Midway island (!Midway) \n 3) Dunkirk (!Dunkirk) \n 4) Stalingrad (!Stalingrad)");
+					"1) Normandy beach (!DDay) \n 2) Midway island (!Midway) \n 3) Stalingrad (!Stalingrad)");
 
 			event.getChannel().sendMessage(new File(image + "Normandy.jpg"));
 			event.getChannel().sendMessage(new File(image + "midway.jpg"));
-			event.getChannel().sendMessage(new File(image + "dunkirk.jpg"));
 			event.getChannel().sendMessage(new File(image + "stalingrad.jpg"));
 			event.getChannel().sendMessage(build);
 			stage++;
@@ -64,9 +63,7 @@ public class WW2Adventure extends CustomMessageCreateListener {
 					}
 
 				}
-			} else if (txt.startsWith("!Dunkirk")) {
-				stage++;
-			} else if (txt.startsWith("!Stalingrad")) {
+			}  else if (txt.startsWith("!Stalingrad")) {
 				stage++;
 			}
 		}
@@ -189,7 +186,8 @@ public class WW2Adventure extends CustomMessageCreateListener {
 						"The USA would do something known as \"Island Hopping\" which refers to them battling against japan "
 								+ "\n and then setting up their bases on each island, helping them to progress closer to japan, towards victory");
 				event.getChannel().sendMessage(build);
-
+				
+				substage1++;
 			}
 		}
 
