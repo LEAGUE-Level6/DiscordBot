@@ -45,7 +45,15 @@ public class Poker extends CustomMessageCreateListener {
 	int playerLowPair;
 	int botLowPair;
 	int playerHighCard;
+	int playerSecondHighCard;
+	int playerThirdHighCard;
+	int playerFourthHighCard;
+	int playerFifthHighCard;
 	int botHighCard;
+	int botSecondHighCard;
+	int botThirdHighCard;
+	int botFourthHighCard;
+	int botFifthHighCard;
 	boolean triple;
 	boolean userCooporates = false;
 	boolean isUsed = false;
@@ -57,6 +65,7 @@ public class Poker extends CustomMessageCreateListener {
 	boolean rewardGiven;
 	boolean tie=false;
 	boolean straight;
+	boolean number;
 	int highestCallChance = 0;
 	int botCallChance = 0;
 	int botSpades;
@@ -69,6 +78,10 @@ public class Poker extends CustomMessageCreateListener {
 	int playerClubs;
 	int highestSuit;
 	int highCard;
+	int secondHighCard;
+	int thirdHighCard;
+	int fourthHighCard;
+	int fifthHighCard;
 	int highStraightCard;
 	boolean ace;
 	boolean two;
@@ -142,6 +155,15 @@ public class Poker extends CustomMessageCreateListener {
 		if (event.getMessageContent().contains(command)) {
 			String content = event.getMessageContent().replaceAll(" ", "").replace("!gamble", "");
 			if (content.contains("poker")) {
+				number=false;
+				content = content.replace("poker", "");
+				try {
+					wager = Integer.parseInt(content);
+					number=true;
+				} catch (Exception e) {
+					event.getChannel().sendMessage("Choose a number after the command to gamble");
+					return;
+				}
 				if (gameOver == true) {
 					gameOver = false;
 					flop=true;
@@ -185,12 +207,6 @@ public class Poker extends CustomMessageCreateListener {
 					playerHearts=0;
 					playerClubs=0;
 					
-					content = content.replace("poker", "");
-					try {
-						wager = Integer.parseInt(content);
-					} catch (Exception e) {
-						event.getChannel().sendMessage("Choose a number after the command to gamble");
-					}
 					if (balance < 0) {
 						event.getChannel().sendMessage("You don't have enough money to wager that much.");
 					} else if (wager<0) {
@@ -506,6 +522,7 @@ public class Poker extends CustomMessageCreateListener {
 						wager = Integer.parseInt(content);
 					} catch (Exception e) {
 						event.getChannel().sendMessage("Choose a number after the command to gamble");
+						return;
 					}
 					System.out.println(totalBet);
 					if (balance < 0) {
@@ -620,6 +637,7 @@ public class Poker extends CustomMessageCreateListener {
 						wager = Integer.parseInt(content);
 					} catch (Exception e) {
 						event.getChannel().sendMessage("Choose a number after the command to gamble");
+						return;
 					}
 					System.out.println(totalBet);
 					if (balance < 0) {
@@ -734,6 +752,7 @@ public class Poker extends CustomMessageCreateListener {
 								wager = Integer.parseInt(content);
 							} catch (Exception e) {
 								event.getChannel().sendMessage("Choose a number after the command to gamble");
+								return;
 							}
 							System.out.println(totalBet);
 							if (balance < 0) {
@@ -1024,21 +1043,21 @@ public class Poker extends CustomMessageCreateListener {
 						}
 						
 						//test certain hands
-						botAndMiddleCards[0]="ace";
-						botAndMiddleCards[1]="2";
-						botAndMiddleCards[2]="3";
-						botAndMiddleCards[3]="4";
-						botAndMiddleCards[4]="6";
-						botAndMiddleCards[5]="7";
-						botAndMiddleCards[6]="8";
+						botAndMiddleCards[0]="6";
+						botAndMiddleCards[1]="5";
+						botAndMiddleCards[2]="10";
+						botAndMiddleCards[3]="8";
+						botAndMiddleCards[4]="5";
+						botAndMiddleCards[5]="ace";
+						botAndMiddleCards[6]="7";
 						
-						playerAndMiddleCards[0]="ace";
-						playerAndMiddleCards[1]="2";
-						playerAndMiddleCards[2]="3";
-						playerAndMiddleCards[3]="4";
-						playerAndMiddleCards[4]="6";
-						playerAndMiddleCards[5]="7";
-						playerAndMiddleCards[6]="8";
+						playerAndMiddleCards[0]="queen";
+						playerAndMiddleCards[1]="5";
+						playerAndMiddleCards[2]="10";
+						playerAndMiddleCards[3]="8";
+						playerAndMiddleCards[4]="5";
+						playerAndMiddleCards[5]="ace";
+						playerAndMiddleCards[6]="7";
 						
 						
 						
@@ -1072,6 +1091,7 @@ public class Poker extends CustomMessageCreateListener {
 	
 
 	public int botAlgorithm(String[] botAndMiddleCards, int suits) {
+		//move these variables that are set to 0 because they are messing up the final check who wins checks
 		highestCallChance = 0;
 		numberSameCards = 0;
 		numberPairs=0;
@@ -1083,9 +1103,11 @@ public class Poker extends CustomMessageCreateListener {
 		playerLowPair=0;
 		botLowPair=0;
 		highCard=0;
+		secondHighCard=0;
+		thirdHighCard=0;
+		fourthHighCard=0;
+		fifthHighCard=0;
 		highStraightCard=0;
-		playerHighCard=0;
-		botHighCard=0;
 		straight=false;
 		ace=false;
 		two=false;
@@ -1304,6 +1326,18 @@ public class Poker extends CustomMessageCreateListener {
 				if(13>highCard) {
 				highCard=13;
 				}
+				else if(13>secondHighCard) {
+					secondHighCard=13;
+				}
+				else if(13>thirdHighCard) {
+					thirdHighCard=13;
+				}
+				else if(13>fourthHighCard) {
+					fourthHighCard=13;
+				}
+				else if (13>fifthHighCard) {
+					fifthHighCard=13;
+				}
 				if(513>highestCallChance) {
 				highestCallChance=513;
 				}
@@ -1336,6 +1370,18 @@ public class Poker extends CustomMessageCreateListener {
 				if(1>highCard) {
 					highCard=1;
 					}
+				else if(1>secondHighCard) {
+					secondHighCard=1;
+				}
+				else if(1>thirdHighCard) {
+					thirdHighCard=1;
+				}
+				else if(1>fourthHighCard) {
+					fourthHighCard=1;
+				}
+				else if (1>fifthHighCard) {
+					fifthHighCard=1;
+				}
 				if(501>highestCallChance) {
 				highestCallChance=501;
 				}
@@ -1368,6 +1414,18 @@ public class Poker extends CustomMessageCreateListener {
 				if(2>highCard) {
 					highCard=2;
 					}
+				else if(2>secondHighCard) {
+					secondHighCard=2;
+				}
+				else if(2>thirdHighCard) {
+					thirdHighCard=2;
+				}
+				else if(2>fourthHighCard) {
+					fourthHighCard=2;
+				}
+				else if (2>fifthHighCard) {
+					fifthHighCard=2;
+				}
 				if(502>highestCallChance) {
 				highestCallChance=502;
 				}
@@ -1400,6 +1458,18 @@ public class Poker extends CustomMessageCreateListener {
 				if(3>highCard) {
 					highCard=3;
 					}
+				else if(3>secondHighCard) {
+					secondHighCard=3;
+				}
+				else if(3>thirdHighCard) {
+					thirdHighCard=3;
+				}
+				else if(3>fourthHighCard) {
+					fourthHighCard=3;
+				}
+				else if (3>fifthHighCard) {
+					fifthHighCard=3;
+				}
 				if(503>highestCallChance) {
 				highestCallChance=503;
 				}
@@ -1431,6 +1501,18 @@ public class Poker extends CustomMessageCreateListener {
 				numberSameCards += 1;
 				if(4>highCard) {
 					highCard=4;
+					}
+					else if(4>secondHighCard) {
+						secondHighCard=4;
+					}
+					else if(4>thirdHighCard) {
+						thirdHighCard=4;
+					}
+					else if(4>fourthHighCard) {
+						fourthHighCard=4;
+					}
+					else if (4>fifthHighCard) {
+						fifthHighCard=4;
 					}
 				if(504>highestCallChance) {
 				highestCallChance=504;
@@ -1464,6 +1546,18 @@ public class Poker extends CustomMessageCreateListener {
 				if(5>highCard) {
 					highCard=5;
 					}
+				else if(5>secondHighCard) {
+					secondHighCard=5;
+				}
+				else if(5>thirdHighCard) {
+					thirdHighCard=5;
+				}
+				else if(5>fourthHighCard) {
+					fourthHighCard=5;
+				}
+				else if (5>fifthHighCard) {
+					fifthHighCard=5;
+				}
 				if(505>highestCallChance) {
 				highestCallChance=505;
 				}
@@ -1496,6 +1590,18 @@ public class Poker extends CustomMessageCreateListener {
 				if(6>highCard) {
 					highCard=6;
 					}
+				else if(6>secondHighCard) {
+					secondHighCard=6;
+				}
+				else if(6>thirdHighCard) {
+					thirdHighCard=6;
+				}
+				else if(6>fourthHighCard) {
+					fourthHighCard=6;
+				}
+				else if (6>fifthHighCard) {
+					fifthHighCard=6;
+				}
 				if(506>highestCallChance) {
 				highestCallChance=506;
 				}
@@ -1527,6 +1633,18 @@ public class Poker extends CustomMessageCreateListener {
 				if(7>highCard) {
 					highCard=7;
 					}
+				else if(7>secondHighCard) {
+					secondHighCard=7;
+				}
+				else if(7>thirdHighCard) {
+					thirdHighCard=7;
+				}
+				else if(7>fourthHighCard) {
+					fourthHighCard=7;
+				}
+				else if (7>fifthHighCard) {
+					fifthHighCard=7;
+				}
 				if(507>highestCallChance) {
 				highestCallChance=507;
 				}
@@ -1559,6 +1677,18 @@ public class Poker extends CustomMessageCreateListener {
 				if(8>highCard) {
 					highCard=8;
 					}
+				else if(8>secondHighCard) {
+					secondHighCard=8;
+				}
+				else if(8>thirdHighCard) {
+					thirdHighCard=8;
+				}
+				else if(8>fourthHighCard) {
+					fourthHighCard=8;
+				}
+				else if (8>fifthHighCard) {
+					fifthHighCard=8;
+				}
 				if(508>highestCallChance) {
 				highestCallChance=508;
 				}
@@ -1591,6 +1721,18 @@ public class Poker extends CustomMessageCreateListener {
 				if(9>highCard) {
 					highCard=9;
 					}
+				else if(9>secondHighCard) {
+					secondHighCard=9;
+				}
+				else if(9>thirdHighCard) {
+					thirdHighCard=9;
+				}
+				else if(9>fourthHighCard) {
+					fourthHighCard=9;
+				}
+				else if (9>fifthHighCard) {
+					fifthHighCard=9;
+				}
 				if(509>highestCallChance) {
 				highestCallChance=509;
 				}
@@ -1623,6 +1765,18 @@ public class Poker extends CustomMessageCreateListener {
 				if(10>highCard) {
 					highCard=10;
 					}
+				else if(10>secondHighCard) {
+					secondHighCard=10;
+				}
+				else if(10>thirdHighCard) {
+					thirdHighCard=10;
+				}
+				else if(10>fourthHighCard) {
+					fourthHighCard=10;
+				}
+				else if (10>fifthHighCard) {
+					fifthHighCard=10;
+				}
 				if(510>highestCallChance) {
 				highestCallChance=510;
 				}
@@ -1655,6 +1809,18 @@ public class Poker extends CustomMessageCreateListener {
 				if(11>highCard) {
 					highCard=11;
 					}
+				else if(11>secondHighCard) {
+					secondHighCard=11;
+				}
+				else if(11>thirdHighCard) {
+					thirdHighCard=11;
+				}
+				else if(11>fourthHighCard) {
+					fourthHighCard=11;
+				}
+				else if (11>fifthHighCard) {
+					fifthHighCard=11;
+				}
 				if(511>highestCallChance) {
 				highestCallChance=511;
 				}
@@ -1687,6 +1853,18 @@ public class Poker extends CustomMessageCreateListener {
 				if(12>highCard) {
 					highCard=12;
 					}
+				else if(12>secondHighCard) {
+					secondHighCard=12;
+				}
+				else if(12>thirdHighCard) {
+					thirdHighCard=12;
+				}
+				else if(12>fourthHighCard) {
+					fourthHighCard=12;
+				}
+				else if (12>fifthHighCard) {
+					fifthHighCard=12;
+				}
 				if(512>highestCallChance) {
 				highestCallChance=512;
 				}
@@ -1742,10 +1920,17 @@ public class Poker extends CustomMessageCreateListener {
 		if(playerSpades>highestSuit) {
 			highestSuit=playerSpades;
 		}
+		if(playerClubs>highestSuit) {
+			highestSuit=playerClubs;
+		}
 		playerScore=botAlgorithm(playerAndMiddleCards, highestSuit);
 		playerPairValue=highestPairValue;
 		playerLowPair=lowestPairValue;
 		playerHighCard=highCard;
+		playerSecondHighCard=secondHighCard;
+		playerThirdHighCard=thirdHighCard;
+		playerFourthHighCard=fourthHighCard;
+		playerFifthHighCard=fifthHighCard;
 		highestSuit=0;
 		highestSuit=botSpades;
 		if(botDiamonds>highestSuit) {
@@ -1757,10 +1942,17 @@ public class Poker extends CustomMessageCreateListener {
 		if(botSpades>highestSuit) {
 			highestSuit=botSpades;
 		}
+		if(botClubs>highestSuit) {
+			highestSuit=botClubs;
+		}
 		botScore=botAlgorithm(botAndMiddleCards, highestSuit);
 		botPairValue=highestPairValue;
 		botLowPair=lowestPairValue;
 		botHighCard=highCard;
+		botSecondHighCard=secondHighCard;
+		botThirdHighCard=thirdHighCard;
+		botFourthHighCard=fourthHighCard;
+		botFifthHighCard=fifthHighCard;
 		gameOver=true;
 		tie=false;
 		if(playerScore>botScore) {
@@ -1788,19 +1980,46 @@ public class Poker extends CustomMessageCreateListener {
 						return false;
 					}
 					else if(playerHighCard==botHighCard) {
-						//I got lazy and didn't want to add more checks for the highest to low cards
-						tie=true;
-						return false;
+						if(playerSecondHighCard>botSecondHighCard) {
+							return true;
+						}
+						else if(playerSecondHighCard<botSecondHighCard) {
+							return false;
+						}
+						else if(playerSecondHighCard==botSecondHighCard) {
+							if(playerThirdHighCard>botThirdHighCard) {
+								return true;
+							}
+							else if(playerThirdHighCard<botThirdHighCard) {
+								return false;
+							}
+							else if(playerThirdHighCard==botThirdHighCard) {
+								if(playerFourthHighCard>botFourthHighCard) {
+									return true;
+								}
+								else if(playerFourthHighCard<botFourthHighCard) {
+									return false;
+								}
+								else if(playerFourthHighCard==botFourthHighCard) {
+									if(playerFifthHighCard>botFifthHighCard) {
+										return true;
+									}
+									else if(playerFifthHighCard<botFifthHighCard) {
+										return false;
+									}
+									else if(playerFifthHighCard==botFifthHighCard) {
+										tie=true;
+										return false;
+									}
+								}
+							}
+						}
 					}
 				}
 			}
 			else {
-			tie=true;
-			return false;
+				System.out.println("error");
 			}
-		}
-		else {
-		return false;
 		}
 		return false;
 	}
