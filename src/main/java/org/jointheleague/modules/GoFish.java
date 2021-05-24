@@ -36,11 +36,11 @@ public class GoFish extends CustomMessageCreateListener{
 	
 	
 	//decks
-	ArrayList<String> playerCards = new ArrayList<String>();
-	ArrayList<String> botCards = new ArrayList<String>();
-	ArrayList<String> pile = new ArrayList<String>();
-	ArrayList<String> deck = new ArrayList<String>();
-	ArrayList<String> cardsFound = new ArrayList<String>();
+	ArrayList<Integer> playerCards = new ArrayList<Integer>();
+	ArrayList<Integer> botCards = new ArrayList<Integer>();
+	ArrayList<Integer> pile = new ArrayList<Integer>();
+	ArrayList<Integer> deck = new ArrayList<Integer>();
+	ArrayList<Integer> cardsFound = new ArrayList<Integer>();
 	
 	public GoFish(String channelName) {
 		super(channelName);
@@ -110,14 +110,14 @@ public class GoFish extends CustomMessageCreateListener{
 	public void createDeck() {
 		for(int i = 0; i < 4; i++) {
 			for(int j = 0; j < 13; j ++) {
-				deck.add(i +" " + j);
+				deck.add(j);
 			}
 		}
 	}
 	
-	public ArrayList<String> shuffleDeck(ArrayList<String> cards, MessageCreateEvent event) {
+	public ArrayList<Integer> shuffleDeck(ArrayList<Integer> cards, MessageCreateEvent event) {
 		createDeck();
-		ArrayList<String> shuffledCards = new ArrayList<String>();
+		ArrayList<Integer> shuffledCards = new ArrayList<Integer>();
 		for(int i = 0; i < deck.size(); i ++) {
 			int randomIndex = new Random().nextInt(deck.size());
 			shuffledCards.add(deck.get(randomIndex));
@@ -170,11 +170,15 @@ public class GoFish extends CustomMessageCreateListener{
 		if(firstPlayer.equals("player")) {
 			char [] request = event.getMessageContent().toCharArray();
 			for(char c : request) {
+				
 				if(Character.isDigit(c)) {
 					int requestedCardNum = Character.getNumericValue(c);
 					if(requestedCardNum >= 2 && requestedCardNum <= 10) {
-						searchDeck(botCards, Integer.toString(requestedCardNum), playerCards, event);
+						searchDeck(botCards, requestedCardNum, playerCards, event);
 					}
+				}
+				else if(c == 'k') {
+					searchDeck(botCards, 12, playerCards, event);
 				}
 			}
 		}
@@ -194,18 +198,16 @@ public class GoFish extends CustomMessageCreateListener{
 		
 		//search player deck
 		if(randCard >= 2 && randCard <= 10) {
-			searchDeck(playerCards, Integer.toString(randCard), botCards, event);
+			searchDeck(playerCards, randCard, botCards, event);
 		}
 		
 	}
 	
-	public void searchDeck(ArrayList<String> deckToSearch, String cardToSearch, ArrayList<String> deckToAdd, MessageCreateEvent event) {
+	public void searchDeck(ArrayList<Integer> deckToSearch, int cardToSearch, ArrayList<Integer> deckToAdd, MessageCreateEvent event) {
 		
-		for(String s : deckToSearch) {
-
-			if(s.substring(s.length()-1, s.length()).equals(cardToSearch)) {
-
-				cardsFound.add(s);
+		for(int i : deckToSearch) {
+			if(i == cardToSearch) {
+				cardsFound.add(i);
 			}
 		}
 		if(cardsFound.size() > 0) {
@@ -214,10 +216,11 @@ public class GoFish extends CustomMessageCreateListener{
 					if(deckToSearch.get(i).equals(cardsFound.get(j))) {
 						deckToAdd.add(deckToSearch.get(i));
 						deckToSearch.remove(i);
-						event.getChannel().sendMessage("Here you go :/");
 					}
+					
 				}
 			}
+			state = 4;
 		}
 		cardsFound.clear();
 	}
