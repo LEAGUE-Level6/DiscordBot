@@ -148,6 +148,9 @@ public class Bot  {
 		helpListener.addHelpEmbed(depress.getHelpEmbed());
 		
 		
+		ConwaysGameOfLife gametest = new ConwaysGameOfLife(channelName);
+		api.addMessageCreateListener(gametest);
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
