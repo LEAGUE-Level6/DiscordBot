@@ -47,9 +47,9 @@ public class Bot  {
 		api.addMessageCreateListener(dl);
 		helpListener.addHelpEmbed(dl.getHelpEmbed());
 		
-		CurrencyConverter cc = new CurrencyConverter(channelName);
-		api.addMessageCreateListener(cc);
-		helpListener.addHelpEmbed(cc.getHelpEmbed());
+//		CurrencyConverter cc = new CurrencyConverter(channelName);
+//		api.addMessageCreateListener(cc);
+//		helpListener.addHelpEmbed(cc.getHelpEmbed());
 		
 		ToDoList list = new ToDoList(channelName);
 		api.addMessageCreateListener(list);
@@ -58,6 +58,10 @@ public class Bot  {
 		MazeGame maze = new MazeGame(channelName);
 		api.addMessageCreateListener(maze);
 		helpListener.addHelpEmbed(maze.getHelpEmbed());
+		
+		MarsPictures marsPictures = new MarsPictures(channelName);
+		api.addMessageCreateListener(marsPictures);
+		helpListener.addHelpEmbed(marsPictures.getHelpEmbed());
 		
 		HeadlineListener head = new HeadlineListener(channelName);
 		api.addMessageCreateListener(head);
