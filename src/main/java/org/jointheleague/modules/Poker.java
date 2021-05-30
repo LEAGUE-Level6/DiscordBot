@@ -1043,21 +1043,21 @@ public class Poker extends CustomMessageCreateListener {
 						}
 						
 						//test certain hands
-						botAndMiddleCards[0]="6";
-						botAndMiddleCards[1]="5";
-						botAndMiddleCards[2]="10";
-						botAndMiddleCards[3]="8";
-						botAndMiddleCards[4]="5";
-						botAndMiddleCards[5]="ace";
-						botAndMiddleCards[6]="7";
+						botAndMiddleCards[0]="7";
+						botAndMiddleCards[1]="8";
+						botAndMiddleCards[2]="9";
+						botAndMiddleCards[3]="jack";
+						botAndMiddleCards[4]="queen";
+						botAndMiddleCards[5]="king";
+						botAndMiddleCards[6]="ace";
 						
-						playerAndMiddleCards[0]="queen";
-						playerAndMiddleCards[1]="5";
-						playerAndMiddleCards[2]="10";
-						playerAndMiddleCards[3]="8";
-						playerAndMiddleCards[4]="5";
-						playerAndMiddleCards[5]="ace";
-						playerAndMiddleCards[6]="7";
+						playerAndMiddleCards[0]="7";
+						playerAndMiddleCards[1]="8";
+						playerAndMiddleCards[2]="9";
+						playerAndMiddleCards[3]="jack";
+						playerAndMiddleCards[4]="queen";
+						playerAndMiddleCards[5]="king";
+						playerAndMiddleCards[6]="ace";
 						
 						
 						
@@ -1091,17 +1091,12 @@ public class Poker extends CustomMessageCreateListener {
 	
 
 	public int botAlgorithm(String[] botAndMiddleCards, int suits) {
-		//move these variables that are set to 0 because they are messing up the final check who wins checks
 		highestCallChance = 0;
 		numberSameCards = 0;
 		numberPairs=0;
 		highestPairValue=0;
 		lowestPairValue=0;
 		highestTripleValue=0;
-		playerPairValue=0;
-		botPairValue=0;
-		playerLowPair=0;
-		botLowPair=0;
 		highCard=0;
 		secondHighCard=0;
 		thirdHighCard=0;
@@ -1321,7 +1316,10 @@ public class Poker extends CustomMessageCreateListener {
 		
 		
 		for (int j = 0; j < botAndMiddleCards.length; j++) {
-			if (botAndMiddleCards[j] == "ace") {
+			if(secondHighCard==12) {
+				System.out.println("");
+			}
+			if (botAndMiddleCards[j].equals("ace")) {
 				numberSameCards += 1;
 				if(13>highCard) {
 				highCard=13;
@@ -1362,449 +1360,54 @@ public class Poker extends CustomMessageCreateListener {
 		else if(numberSameCards == 4) {
 			highestCallChance=790;
 		}
-
+		
 		numberSameCards = 0;
 		for (int j = 0; j < botAndMiddleCards.length; j++) {
-			if (botAndMiddleCards[j] == "2") {
+			if (botAndMiddleCards[j].equals("king")) {
 				numberSameCards += 1;
-				if(1>highCard) {
-					highCard=1;
+				if(12>highCard) {
+					highCard=12;
 					}
-				else if(1>secondHighCard) {
-					secondHighCard=1;
+				else if(12>secondHighCard) {
+					secondHighCard=12;
 				}
-				else if(1>thirdHighCard) {
-					thirdHighCard=1;
+				else if(12>thirdHighCard) {
+					thirdHighCard=12;
 				}
-				else if(1>fourthHighCard) {
-					fourthHighCard=1;
+				else if(12>fourthHighCard) {
+					fourthHighCard=12;
 				}
-				else if (1>fifthHighCard) {
-					fifthHighCard=1;
+				else if (12>fifthHighCard) {
+					fifthHighCard=12;
 				}
-				if(501>highestCallChance) {
-				highestCallChance=501;
+				if(512>highestCallChance) {
+				highestCallChance=512;
 				}
 			}
 		}
 		if (numberSameCards == 2) {
-			if (700 > highestCallChance) {
-				highestCallChance = 700;
+			if (711 > highestCallChance) {
+				highestCallChance = 711;
 				numberPairs+=1;
-				if(1>highestPairValue) {
-					highestPairValue=1;
+				if(12>highestPairValue) {
+					highestPairValue=12;
 				}
 				else {
-					lowestPairValue=1;
+					lowestPairValue=12;
 				}
 			}
 		} else if (numberSameCards == 3) {
-			highestCallChance = 727;
+			highestCallChance = 738;
 			triple=true;
-			highestTripleValue=1;
+			highestTripleValue=12;
 		}
 		else if(numberSameCards == 4) {
-			highestCallChance=778;
+			highestCallChance=789;
 		}
-
+		
 		numberSameCards = 0;
 		for (int j = 0; j < botAndMiddleCards.length; j++) {
-			if (botAndMiddleCards[j] == "3") {
-				numberSameCards += 1;
-				if(2>highCard) {
-					highCard=2;
-					}
-				else if(2>secondHighCard) {
-					secondHighCard=2;
-				}
-				else if(2>thirdHighCard) {
-					thirdHighCard=2;
-				}
-				else if(2>fourthHighCard) {
-					fourthHighCard=2;
-				}
-				else if (2>fifthHighCard) {
-					fifthHighCard=2;
-				}
-				if(502>highestCallChance) {
-				highestCallChance=502;
-				}
-			}
-		}
-		if (numberSameCards == 2) {
-			if (701 > highestCallChance) {
-				highestCallChance = 701;
-				numberPairs+=1;
-				if(2>highestPairValue) {
-					highestPairValue=2;
-				}
-				else {
-					lowestPairValue=2;
-				}
-			}
-		} else if (numberSameCards == 3) {
-			highestCallChance = 728;
-			triple=true;
-			highestTripleValue=2;
-		}
-		else if(numberSameCards == 4) {
-			highestCallChance=779;
-		}
-
-		numberSameCards = 0;
-		for (int j = 0; j < botAndMiddleCards.length; j++) {
-			if (botAndMiddleCards[j] == "4") {
-				numberSameCards += 1;
-				if(3>highCard) {
-					highCard=3;
-					}
-				else if(3>secondHighCard) {
-					secondHighCard=3;
-				}
-				else if(3>thirdHighCard) {
-					thirdHighCard=3;
-				}
-				else if(3>fourthHighCard) {
-					fourthHighCard=3;
-				}
-				else if (3>fifthHighCard) {
-					fifthHighCard=3;
-				}
-				if(503>highestCallChance) {
-				highestCallChance=503;
-				}
-			}
-		}
-		if (numberSameCards == 2) {
-			if (702 > highestCallChance) {
-				highestCallChance = 702;
-				numberPairs+=1;
-				if(3>highestPairValue) {
-					highestPairValue=3;
-				}
-				else {
-					lowestPairValue=3;
-				}
-			}
-		} else if (numberSameCards == 3) {
-			highestCallChance = 729;
-			triple=true;
-			highestTripleValue=3;
-		}
-		else if(numberSameCards == 4) {
-			highestCallChance=780;
-		}
-
-		numberSameCards = 0;
-		for (int j = 0; j < botAndMiddleCards.length; j++) {
-			if (botAndMiddleCards[j] == "5") {
-				numberSameCards += 1;
-				if(4>highCard) {
-					highCard=4;
-					}
-					else if(4>secondHighCard) {
-						secondHighCard=4;
-					}
-					else if(4>thirdHighCard) {
-						thirdHighCard=4;
-					}
-					else if(4>fourthHighCard) {
-						fourthHighCard=4;
-					}
-					else if (4>fifthHighCard) {
-						fifthHighCard=4;
-					}
-				if(504>highestCallChance) {
-				highestCallChance=504;
-				}
-			}
-		}
-		if (numberSameCards == 2) {
-			if (703 > highestCallChance) {
-				highestCallChance = 703;
-				numberPairs+=1;
-				if(4>highestPairValue) {
-					highestPairValue=4;
-				}
-				else {
-					lowestPairValue=4;
-				}
-			}
-		} else if (numberSameCards == 3) {
-			highestCallChance = 730;
-			triple=true;
-			highestTripleValue=4;
-		}
-		else if(numberSameCards == 4) {
-			highestCallChance=781;
-		}
-
-		numberSameCards = 0;
-		for (int j = 0; j < botAndMiddleCards.length; j++) {
-			if (botAndMiddleCards[j] == "6") {
-				numberSameCards += 1;
-				if(5>highCard) {
-					highCard=5;
-					}
-				else if(5>secondHighCard) {
-					secondHighCard=5;
-				}
-				else if(5>thirdHighCard) {
-					thirdHighCard=5;
-				}
-				else if(5>fourthHighCard) {
-					fourthHighCard=5;
-				}
-				else if (5>fifthHighCard) {
-					fifthHighCard=5;
-				}
-				if(505>highestCallChance) {
-				highestCallChance=505;
-				}
-			}
-		}
-		if (numberSameCards == 2) {
-			if (704 > highestCallChance) {
-				highestCallChance = 704;
-				numberPairs+=1;
-				if(5>highestPairValue) {
-					highestPairValue=5;
-				}
-				else {
-					lowestPairValue=5;
-				}
-			}
-		} else if (numberSameCards == 3) {
-			highestCallChance = 731;
-			triple=true;
-			highestTripleValue=5;
-		}
-		else if(numberSameCards == 4) {
-			highestCallChance=782;
-		}
-
-		numberSameCards = 0;
-		for (int j = 0; j < botAndMiddleCards.length; j++) {
-			if (botAndMiddleCards[j] == "7") {
-				numberSameCards += 1;
-				if(6>highCard) {
-					highCard=6;
-					}
-				else if(6>secondHighCard) {
-					secondHighCard=6;
-				}
-				else if(6>thirdHighCard) {
-					thirdHighCard=6;
-				}
-				else if(6>fourthHighCard) {
-					fourthHighCard=6;
-				}
-				else if (6>fifthHighCard) {
-					fifthHighCard=6;
-				}
-				if(506>highestCallChance) {
-				highestCallChance=506;
-				}
-			}
-		}
-		if (numberSameCards == 2) {
-			if (705 > highestCallChance) {
-				highestCallChance = 705;
-				numberPairs+=1;
-				if(6>highestPairValue) {
-					highestPairValue=6;
-				}else {
-					lowestPairValue=6;
-				}
-			}
-		} else if (numberSameCards == 3) {
-			highestCallChance = 732;
-			triple=true;
-			highestTripleValue=6;
-		}
-		else if(numberSameCards == 4) {
-			highestCallChance=783;
-		}
-
-		numberSameCards = 0;
-		for (int j = 0; j < botAndMiddleCards.length; j++) {
-			if (botAndMiddleCards[j] == "8") {
-				numberSameCards += 1;
-				if(7>highCard) {
-					highCard=7;
-					}
-				else if(7>secondHighCard) {
-					secondHighCard=7;
-				}
-				else if(7>thirdHighCard) {
-					thirdHighCard=7;
-				}
-				else if(7>fourthHighCard) {
-					fourthHighCard=7;
-				}
-				else if (7>fifthHighCard) {
-					fifthHighCard=7;
-				}
-				if(507>highestCallChance) {
-				highestCallChance=507;
-				}
-			}
-		}
-		if (numberSameCards == 2) {
-			if (706 > highestCallChance) {
-				highestCallChance = 706;
-				numberPairs+=1;
-				if(7>highestPairValue) {
-					highestPairValue=7;
-				}
-				else {
-					lowestPairValue=7;
-				}
-			}
-		} else if (numberSameCards == 3) {
-			highestCallChance = 733;
-			triple=true;
-			highestTripleValue=7;
-		}
-		else if(numberSameCards == 4) {
-			highestCallChance=784;
-		}
-
-		numberSameCards = 0;
-		for (int j = 0; j < botAndMiddleCards.length; j++) {
-			if (botAndMiddleCards[j] == "9") {
-				numberSameCards += 1;
-				if(8>highCard) {
-					highCard=8;
-					}
-				else if(8>secondHighCard) {
-					secondHighCard=8;
-				}
-				else if(8>thirdHighCard) {
-					thirdHighCard=8;
-				}
-				else if(8>fourthHighCard) {
-					fourthHighCard=8;
-				}
-				else if (8>fifthHighCard) {
-					fifthHighCard=8;
-				}
-				if(508>highestCallChance) {
-				highestCallChance=508;
-				}
-			}
-		}
-		if (numberSameCards == 2) {
-			if (707 > highestCallChance) {
-				highestCallChance = 707;
-				numberPairs+=1;
-				if(8>highestPairValue) {
-					highestPairValue=8;
-				}
-				else {
-					lowestPairValue=8;
-				}
-			}
-		} else if (numberSameCards == 3) {
-			highestCallChance = 734;
-			triple=true;
-			highestTripleValue=8;
-		}
-		else if(numberSameCards == 4) {
-			highestCallChance=785;
-		}
-
-		numberSameCards = 0;
-		for (int j = 0; j < botAndMiddleCards.length; j++) {
-			if (botAndMiddleCards[j] == "10") {
-				numberSameCards += 1;
-				if(9>highCard) {
-					highCard=9;
-					}
-				else if(9>secondHighCard) {
-					secondHighCard=9;
-				}
-				else if(9>thirdHighCard) {
-					thirdHighCard=9;
-				}
-				else if(9>fourthHighCard) {
-					fourthHighCard=9;
-				}
-				else if (9>fifthHighCard) {
-					fifthHighCard=9;
-				}
-				if(509>highestCallChance) {
-				highestCallChance=509;
-				}
-			}
-		}
-		if (numberSameCards == 2) {
-			if (708 > highestCallChance) {
-				highestCallChance = 708;
-				numberPairs+=1;
-				if(9>highestPairValue) {
-					highestPairValue=9;
-				}
-				else {
-					lowestPairValue=9;
-				}
-			}
-		} else if (numberSameCards == 3) {
-			highestCallChance = 735;
-			triple=true;
-			highestTripleValue=9;
-		}
-		else if(numberSameCards == 4) {
-			highestCallChance=786;
-		}
-
-		numberSameCards = 0;
-		for (int j = 0; j < botAndMiddleCards.length; j++) {
-			if (botAndMiddleCards[j] == "jack") {
-				numberSameCards += 1;
-				if(10>highCard) {
-					highCard=10;
-					}
-				else if(10>secondHighCard) {
-					secondHighCard=10;
-				}
-				else if(10>thirdHighCard) {
-					thirdHighCard=10;
-				}
-				else if(10>fourthHighCard) {
-					fourthHighCard=10;
-				}
-				else if (10>fifthHighCard) {
-					fifthHighCard=10;
-				}
-				if(510>highestCallChance) {
-				highestCallChance=510;
-				}
-			}
-		}
-		if (numberSameCards == 2) {
-			if (709 > highestCallChance) {
-				highestCallChance = 709;
-				numberPairs+=1;
-				if(10>highestPairValue) {
-					highestPairValue=10;
-				}
-				else {
-					lowestPairValue=10;
-				}
-			}
-		} else if (numberSameCards == 3) {
-			highestCallChance = 736;
-			triple=true;
-			highestTripleValue=10;
-		}
-		else if(numberSameCards == 4) {
-			highestCallChance=787;
-		}
-
-		numberSameCards = 0;
-		for (int j = 0; j < botAndMiddleCards.length; j++) {
-			if (botAndMiddleCards[j] == "queen") {
+			if (botAndMiddleCards[j].equals("queen")) {
 				numberSameCards += 1;
 				if(11>highCard) {
 					highCard=11;
@@ -1848,47 +1451,443 @@ public class Poker extends CustomMessageCreateListener {
 
 		numberSameCards = 0;
 		for (int j = 0; j < botAndMiddleCards.length; j++) {
-			if (botAndMiddleCards[j] == "king") {
+			if (botAndMiddleCards[j].equals("jack")) {
 				numberSameCards += 1;
-				if(12>highCard) {
-					highCard=12;
+				if(10>highCard) {
+					highCard=10;
 					}
-				else if(12>secondHighCard) {
-					secondHighCard=12;
+				else if(10>secondHighCard) {
+					secondHighCard=10;
 				}
-				else if(12>thirdHighCard) {
-					thirdHighCard=12;
+				else if(10>thirdHighCard) {
+					thirdHighCard=10;
 				}
-				else if(12>fourthHighCard) {
-					fourthHighCard=12;
+				else if(10>fourthHighCard) {
+					fourthHighCard=10;
 				}
-				else if (12>fifthHighCard) {
-					fifthHighCard=12;
+				else if (10>fifthHighCard) {
+					fifthHighCard=10;
 				}
-				if(512>highestCallChance) {
-				highestCallChance=512;
+				if(510>highestCallChance) {
+				highestCallChance=510;
 				}
 			}
 		}
 		if (numberSameCards == 2) {
-			if (711 > highestCallChance) {
-				highestCallChance = 711;
+			if (709 > highestCallChance) {
+				highestCallChance = 709;
 				numberPairs+=1;
-				if(12>highestPairValue) {
-					highestPairValue=12;
+				if(10>highestPairValue) {
+					highestPairValue=10;
 				}
 				else {
-					lowestPairValue=12;
+					lowestPairValue=10;
 				}
 			}
 		} else if (numberSameCards == 3) {
-			highestCallChance = 738;
+			highestCallChance = 736;
 			triple=true;
-			highestTripleValue=12;
+			highestTripleValue=10;
 		}
 		else if(numberSameCards == 4) {
-			highestCallChance=789;
+			highestCallChance=787;
 		}
+
+		numberSameCards = 0;
+		for (int j = 0; j < botAndMiddleCards.length; j++) {
+			if (botAndMiddleCards[j].equals("10")) {
+				numberSameCards += 1;
+				if(9>highCard) {
+					highCard=9;
+					}
+				else if(9>secondHighCard) {
+					secondHighCard=9;
+				}
+				else if(9>thirdHighCard) {
+					thirdHighCard=9;
+				}
+				else if(9>fourthHighCard) {
+					fourthHighCard=9;
+				}
+				else if (9>fifthHighCard) {
+					fifthHighCard=9;
+				}
+				if(509>highestCallChance) {
+				highestCallChance=509;
+				}
+			}
+		}
+		if (numberSameCards == 2) {
+			if (708 > highestCallChance) {
+				highestCallChance = 708;
+				numberPairs+=1;
+				if(9>highestPairValue) {
+					highestPairValue=9;
+				}
+				else {
+					lowestPairValue=9;
+				}
+			}
+		} else if (numberSameCards == 3) {
+			highestCallChance = 735;
+			triple=true;
+			highestTripleValue=9;
+		}
+		else if(numberSameCards == 4) {
+			highestCallChance=786;
+		}
+		
+		numberSameCards = 0;
+		for (int j = 0; j < botAndMiddleCards.length; j++) {
+			if (botAndMiddleCards[j].equals("9")) {
+				numberSameCards += 1;
+				if(8>highCard) {
+					highCard=8;
+					}
+				else if(8>secondHighCard) {
+					secondHighCard=8;
+				}
+				else if(8>thirdHighCard) {
+					thirdHighCard=8;
+				}
+				else if(8>fourthHighCard) {
+					fourthHighCard=8;
+				}
+				else if (8>fifthHighCard) {
+					fifthHighCard=8;
+				}
+				if(508>highestCallChance) {
+				highestCallChance=508;
+				}
+			}
+		}
+		if (numberSameCards == 2) {
+			if (707 > highestCallChance) {
+				highestCallChance = 707;
+				numberPairs+=1;
+				if(8>highestPairValue) {
+					highestPairValue=8;
+				}
+				else {
+					lowestPairValue=8;
+				}
+			}
+		} else if (numberSameCards == 3) {
+			highestCallChance = 734;
+			triple=true;
+			highestTripleValue=8;
+		}
+		else if(numberSameCards == 4) {
+			highestCallChance=785;
+		}
+
+		numberSameCards = 0;
+		for (int j = 0; j < botAndMiddleCards.length; j++) {
+			if (botAndMiddleCards[j].equals("8")) {
+				numberSameCards += 1;
+				if(7>highCard) {
+					highCard=7;
+					}
+				else if(7>secondHighCard) {
+					secondHighCard=7;
+				}
+				else if(7>thirdHighCard) {
+					thirdHighCard=7;
+				}
+				else if(7>fourthHighCard) {
+					fourthHighCard=7;
+				}
+				else if (7>fifthHighCard) {
+					fifthHighCard=7;
+				}
+				if(507>highestCallChance) {
+				highestCallChance=507;
+				}
+			}
+		}
+		if (numberSameCards == 2) {
+			if (706 > highestCallChance) {
+				highestCallChance = 706;
+				numberPairs+=1;
+				if(7>highestPairValue) {
+					highestPairValue=7;
+				}
+				else {
+					lowestPairValue=7;
+				}
+			}
+		} else if (numberSameCards == 3) {
+			highestCallChance = 733;
+			triple=true;
+			highestTripleValue=7;
+		}
+		else if(numberSameCards == 4) {
+			highestCallChance=784;
+		}
+
+		numberSameCards = 0;
+		for (int j = 0; j < botAndMiddleCards.length; j++) {
+			if (botAndMiddleCards[j].equals("7")) {
+				numberSameCards += 1;
+				if(6>highCard) {
+					highCard=6;
+					}
+				else if(6>secondHighCard) {
+					secondHighCard=6;
+				}
+				else if(6>thirdHighCard) {
+					thirdHighCard=6;
+				}
+				else if(6>fourthHighCard) {
+					fourthHighCard=6;
+				}
+				else if (6>fifthHighCard) {
+					fifthHighCard=6;
+				}
+				if(506>highestCallChance) {
+				highestCallChance=506;
+				}
+			}
+		}
+		if (numberSameCards == 2) {
+			if (705 > highestCallChance) {
+				highestCallChance = 705;
+				numberPairs+=1;
+				if(6>highestPairValue) {
+					highestPairValue=6;
+				}else {
+					lowestPairValue=6;
+				}
+			}
+		} else if (numberSameCards == 3) {
+			highestCallChance = 732;
+			triple=true;
+			highestTripleValue=6;
+		}
+		else if(numberSameCards == 4) {
+			highestCallChance=783;
+		}
+		
+		numberSameCards = 0;
+		for (int j = 0; j < botAndMiddleCards.length; j++) {
+			if (botAndMiddleCards[j].equals("6")) {
+				numberSameCards += 1;
+				if(5>highCard) {
+					highCard=5;
+					}
+				else if(5>secondHighCard) {
+					secondHighCard=5;
+				}
+				else if(5>thirdHighCard) {
+					thirdHighCard=5;
+				}
+				else if(5>fourthHighCard) {
+					fourthHighCard=5;
+				}
+				else if (5>fifthHighCard) {
+					fifthHighCard=5;
+				}
+				if(505>highestCallChance) {
+				highestCallChance=505;
+				}
+			}
+		}
+		if (numberSameCards == 2) {
+			if (704 > highestCallChance) {
+				highestCallChance = 704;
+				numberPairs+=1;
+				if(5>highestPairValue) {
+					highestPairValue=5;
+				}
+				else {
+					lowestPairValue=5;
+				}
+			}
+		} else if (numberSameCards == 3) {
+			highestCallChance = 731;
+			triple=true;
+			highestTripleValue=5;
+		}
+		else if(numberSameCards == 4) {
+			highestCallChance=782;
+		}
+		
+		numberSameCards = 0;
+		for (int j = 0; j < botAndMiddleCards.length; j++) {
+			if (botAndMiddleCards[j].equals("5")) {
+				numberSameCards += 1;
+				if(4>highCard) {
+					highCard=4;
+					}
+					else if(4>secondHighCard) {
+						secondHighCard=4;
+					}
+					else if(4>thirdHighCard) {
+						thirdHighCard=4;
+					}
+					else if(4>fourthHighCard) {
+						fourthHighCard=4;
+					}
+					else if (4>fifthHighCard) {
+						fifthHighCard=4;
+					}
+				if(504>highestCallChance) {
+				highestCallChance=504;
+				}
+			}
+		}
+		if (numberSameCards == 2) {
+			if (703 > highestCallChance) {
+				highestCallChance = 703;
+				numberPairs+=1;
+				if(4>highestPairValue) {
+					highestPairValue=4;
+				}
+				else {
+					lowestPairValue=4;
+				}
+			}
+		} else if (numberSameCards == 3) {
+			highestCallChance = 730;
+			triple=true;
+			highestTripleValue=4;
+		}
+		else if(numberSameCards == 4) {
+			highestCallChance=781;
+		}
+		
+		numberSameCards = 0;
+		for (int j = 0; j < botAndMiddleCards.length; j++) {
+			if (botAndMiddleCards[j].equals("4")) {
+				numberSameCards += 1;
+				if(3>highCard) {
+					highCard=3;
+					}
+				else if(3>secondHighCard) {
+					secondHighCard=3;
+				}
+				else if(3>thirdHighCard) {
+					thirdHighCard=3;
+				}
+				else if(3>fourthHighCard) {
+					fourthHighCard=3;
+				}
+				else if (3>fifthHighCard) {
+					fifthHighCard=3;
+				}
+				if(503>highestCallChance) {
+				highestCallChance=503;
+				}
+			}
+		}
+		if (numberSameCards == 2) {
+			if (702 > highestCallChance) {
+				highestCallChance = 702;
+				numberPairs+=1;
+				if(3>highestPairValue) {
+					highestPairValue=3;
+				}
+				else {
+					lowestPairValue=3;
+				}
+			}
+		} else if (numberSameCards == 3) {
+			highestCallChance = 729;
+			triple=true;
+			highestTripleValue=3;
+		}
+		else if(numberSameCards == 4) {
+			highestCallChance=780;
+		}
+		
+		numberSameCards = 0;
+		for (int j = 0; j < botAndMiddleCards.length; j++) {
+			if (botAndMiddleCards[j].equals("3")) {
+				numberSameCards += 1;
+				if(2>highCard) {
+					highCard=2;
+					}
+				else if(2>secondHighCard) {
+					secondHighCard=2;
+				}
+				else if(2>thirdHighCard) {
+					thirdHighCard=2;
+				}
+				else if(2>fourthHighCard) {
+					fourthHighCard=2;
+				}
+				else if (2>fifthHighCard) {
+					fifthHighCard=2;
+				}
+				if(502>highestCallChance) {
+				highestCallChance=502;
+				}
+			}
+		}
+		if (numberSameCards == 2) {
+			if (701 > highestCallChance) {
+				highestCallChance = 701;
+				numberPairs+=1;
+				if(2>highestPairValue) {
+					highestPairValue=2;
+				}
+				else {
+					lowestPairValue=2;
+				}
+			}
+		} else if (numberSameCards == 3) {
+			highestCallChance = 728;
+			triple=true;
+			highestTripleValue=2;
+		}
+		else if(numberSameCards == 4) {
+			highestCallChance=779;
+		}
+		
+		numberSameCards = 0;
+		for (int j = 0; j < botAndMiddleCards.length; j++) {
+			if (botAndMiddleCards[j].equals("2")) {
+				numberSameCards += 1;
+				if(1>highCard) {
+					highCard=1;
+					}
+				else if(1>secondHighCard) {
+					secondHighCard=1;
+				}
+				else if(1>thirdHighCard) {
+					thirdHighCard=1;
+				}
+				else if(1>fourthHighCard) {
+					fourthHighCard=1;
+				}
+				else if (1>fifthHighCard) {
+					fifthHighCard=1;
+				}
+				if(501>highestCallChance) {
+				highestCallChance=501;
+				}
+			}
+		}
+		if (numberSameCards == 2) {
+			if (700 > highestCallChance) {
+				highestCallChance = 700;
+				numberPairs+=1;
+				if(1>highestPairValue) {
+					highestPairValue=1;
+				}
+				else {
+					lowestPairValue=1;
+				}
+			}
+		} else if (numberSameCards == 3) {
+			highestCallChance = 727;
+			triple=true;
+			highestTripleValue=1;
+		}
+		else if(numberSameCards == 4) {
+			highestCallChance=778;
+		}
+
 		if(numberPairs==2) {
 			highestCallChance=713+highestPairValue;
 		}
@@ -1910,6 +1909,10 @@ public class Poker extends CustomMessageCreateListener {
 	}
 	public boolean playerWins(String [] playerAndMiddleCards, String [] botAndMiddleCards) {
 		highestSuit=0;
+		playerPairValue=0;
+		botPairValue=0;
+		playerLowPair=0;
+		botLowPair=0;
 		highestSuit=playerSpades;
 		if(playerDiamonds>highestSuit) {
 			highestSuit=playerDiamonds;
@@ -1923,6 +1926,7 @@ public class Poker extends CustomMessageCreateListener {
 		if(playerClubs>highestSuit) {
 			highestSuit=playerClubs;
 		}
+		
 		playerScore=botAlgorithm(playerAndMiddleCards, highestSuit);
 		playerPairValue=highestPairValue;
 		playerLowPair=lowestPairValue;
