@@ -67,12 +67,12 @@ public class GoFish extends CustomMessageCreateListener{
 				dealCards(event);
 				break;
 			
-			//playing round
+			//playing round user
 			case 3:
 				userAsksBot(event);
 				break;
 			
-			
+			//playing round bot
 			case 4:
 				botAsksUser(event);
 				break;
@@ -168,23 +168,20 @@ public class GoFish extends CustomMessageCreateListener{
 		//player asks for card and cards are removed if found in bot deck and added to player
 		
 		if(firstPlayer.equals("player")) {
-			char [] request = event.getMessageContent().toCharArray();
-			for(char c : request) {
-				
-				if(Character.isDigit(c)) {
-					int requestedCardNum = Character.getNumericValue(c);
-					if(requestedCardNum >= 2 && requestedCardNum <= 10) {
-						searchDeck(botCards, requestedCardNum, playerCards, event);
+			String request = event.getMessageContent();
+			//search for number in request message
+			for(int i = 0; i < request.length(); i ++){
+				if(Character.isDigit(request.charAt(i))) {
+					int requestedCard = Integer.parseInt(request.substring(i, i +1));
+					if(searchDeck(botCards, requestedCard, playerCards, event)) {
+						event.getChannel().sendMessage("Here you go");
 					}
-				}
-				else if(c == 'k') {
-					searchDeck(botCards, 12, playerCards, event);
 				}
 			}
 		}
 		else {
 			//move to bot asks user
-			state =4;
+			state = 4;
 		}
 		
 		
@@ -198,14 +195,17 @@ public class GoFish extends CustomMessageCreateListener{
 		
 		//search player deck
 		if(randCard >= 2 && randCard <= 10) {
+			//getting weird error when this is thrown into if statement
 			searchDeck(playerCards, randCard, botCards, event);
 		}
 		
 	}
 	
-	public void searchDeck(ArrayList<Integer> deckToSearch, int cardToSearch, ArrayList<Integer> deckToAdd, MessageCreateEvent event) {
-		
+	public boolean searchDeck(ArrayList<Integer> deckToSearch, int cardToSearch, ArrayList<Integer> deckToAdd, MessageCreateEvent event) {
+		boolean found = false;
+		System.out.println(deckToSearch.size());
 		for(int i : deckToSearch) {
+			
 			if(i == cardToSearch) {
 				cardsFound.add(i);
 			}
@@ -217,12 +217,13 @@ public class GoFish extends CustomMessageCreateListener{
 						deckToAdd.add(deckToSearch.get(i));
 						deckToSearch.remove(i);
 					}
-					
 				}
 			}
+			found = true;
 			state = 4;
 		}
 		cardsFound.clear();
+		return found;
 	}
 	
 	
