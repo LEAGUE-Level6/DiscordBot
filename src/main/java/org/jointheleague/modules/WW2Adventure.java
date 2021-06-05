@@ -55,7 +55,6 @@ public class WW2Adventure extends CustomMessageCreateListener {
 				}
 			}
 			if (stage1 >= 0) {
-
 				if (txt.equalsIgnoreCase("!Midway")) {
 					event.getChannel().sendMessage("Ok soldier, you will be deployed out in the pacific against japan!"
 							+ "to survive this battle, you must play a game! Say !deploy to move on");
@@ -101,7 +100,7 @@ public class WW2Adventure extends CustomMessageCreateListener {
 			event.getChannel().sendMessage("What is dnaraG 1M spelt fowards?");
 			stage++;
 		}
-		if (stage >= 6) {
+		if (stage >= 7) {
 			if (txt.startsWith("M1 Garand")) {
 				event.getChannel().sendMessage("Nice work soldier!");
 				event.getChannel().type();
