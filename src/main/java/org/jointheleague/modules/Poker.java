@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
+import org.jointheleague.modules.pojo.HelpEmbed;
 
 import net.aksingh.owmjapis.api.APIException;
 
@@ -13,12 +14,14 @@ public class Poker extends CustomMessageCreateListener {
 	public Poker(String channelName) {
 		// TODO Auto-generated constructor stub
 		super(channelName);
+		helpEmbed = new HelpEmbed("!gamble poker", "This command starts a new poker game. You add a number after this command as the starting wager. The command !gamble bet with a number after it as the next wager continues the game. You can fold by using !gamble fold. If you run out of money, you can use !gamble work with a number after it to gain money in your balance.");
 	}
 
 	private static final String command = "!gamble";
 	int balance = 50;
 	int wager;
 	int totalBet;
+	int payment;
 	Random randCards = new Random();
 	String[] cards = new String[52];
 	String[] botAndMiddleCards = new String[7];
@@ -207,8 +210,9 @@ public class Poker extends CustomMessageCreateListener {
 					playerHearts=0;
 					playerClubs=0;
 					
-					if (balance < 0) {
+					if (balance-wager < 0) {
 						event.getChannel().sendMessage("You don't have enough money to wager that much.");
+						gameOver=true;
 					} else if (wager<0) {
 						event.getChannel().sendMessage("Choose a positive number");
 						gameOver=true;
@@ -525,8 +529,9 @@ public class Poker extends CustomMessageCreateListener {
 						return;
 					}
 					System.out.println(totalBet);
-					if (balance < 0) {
+					if (balance-wager < 0) {
 						event.getChannel().sendMessage("You don't have enough money to wager that much.");
+						gameOver=true;
 					} else if(wager<0) {
 						event.getChannel().sendMessage("Choose a positive number");
 					}
@@ -640,8 +645,9 @@ public class Poker extends CustomMessageCreateListener {
 						return;
 					}
 					System.out.println(totalBet);
-					if (balance < 0) {
+					if (balance-wager < 0) {
 						event.getChannel().sendMessage("You don't have enough money to wager that much.");
+						gameOver=true;
 					} else if(wager<0) {
 						event.getChannel().sendMessage("Choose a positive number.");
 					}
@@ -755,8 +761,9 @@ public class Poker extends CustomMessageCreateListener {
 								return;
 							}
 							System.out.println(totalBet);
-							if (balance < 0) {
+							if (balance-wager < 0) {
 								event.getChannel().sendMessage("You don't have enough money to wager that much.");
+								gameOver=true;
 							} else if(wager<0) {
 								event.getChannel().sendMessage("Choose a positive number.");
 							}
@@ -1043,7 +1050,7 @@ public class Poker extends CustomMessageCreateListener {
 						}
 						
 						//test certain hands
-						botAndMiddleCards[0]="7";
+						/*botAndMiddleCards[0]="7";
 						botAndMiddleCards[1]="8";
 						botAndMiddleCards[2]="9";
 						botAndMiddleCards[3]="jack";
@@ -1053,12 +1060,12 @@ public class Poker extends CustomMessageCreateListener {
 						
 						playerAndMiddleCards[0]="7";
 						playerAndMiddleCards[1]="8";
-						playerAndMiddleCards[2]="9";
+						playerAndMiddleCards[2]="10";
 						playerAndMiddleCards[3]="jack";
 						playerAndMiddleCards[4]="queen";
 						playerAndMiddleCards[5]="king";
 						playerAndMiddleCards[6]="ace";
-						
+						*/
 						
 						
 						if(!rewardGiven) {
@@ -1086,9 +1093,20 @@ public class Poker extends CustomMessageCreateListener {
 						}
 						}
 					}
+					else if(event.getMessageContent().contains("work")) {
+				String work = event.getMessageContent().replaceAll(" ", "").replace("!gamble", "").replace("work", "");
+			try {
+				payment=Integer.parseInt(work);
+			}
+			catch (Exception e){
+				event.getChannel().sendMessage("Choose a number after the command to gamble");
+				return;
+			}
+			balance+=payment;
+			event.getChannel().sendMessage("Your balance is now "+balance);
 				}
 				}
-	
+	}
 
 	public int botAlgorithm(String[] botAndMiddleCards, int suits) {
 		highestCallChance = 0;
