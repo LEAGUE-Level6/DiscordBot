@@ -14,7 +14,7 @@ public class Poker extends CustomMessageCreateListener {
 	public Poker(String channelName) {
 		// TODO Auto-generated constructor stub
 		super(channelName);
-		helpEmbed = new HelpEmbed("!gamble poker", "This command starts a new poker game. You add a number after this command as the starting wager. The command !gamble bet with a number after it as the next wager continues the game. You can fold by using !gamble fold. If you run out of money, you can use !gamble work with a number after it to gain money in your balance.");
+		helpEmbed = new HelpEmbed("!gamble poker", "This command starts a new poker game. You add a number after this command as the starting wager. The command !gamble bet with a number after it is the next wager continues the game. You can fold by using !gamble fold. If you run out of money, you can use !gamble work with a number after it to gain money in your balance.");
 	}
 
 	private static final String command = "!gamble";
