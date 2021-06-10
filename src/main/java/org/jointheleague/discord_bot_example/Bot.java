@@ -46,6 +46,10 @@ public class Bot  {
 		DiscordLibrary dl = new DiscordLibrary(channelName);
 		api.addMessageCreateListener(dl);
 		helpListener.addHelpEmbed(dl.getHelpEmbed());
+
+		WeatherForecast wf = new WeatherForecast(channelName);
+		api.addMessageCreateListener(wf);
+		helpListener.addHelpEmbed(wf.getHelpEmbed());
 		
 //		CurrencyConverter cc = new CurrencyConverter(channelName);
 //		api.addMessageCreateListener(cc);
@@ -148,9 +152,6 @@ public class Bot  {
 		api.addMessageCreateListener(depress);
 		helpListener.addHelpEmbed(depress.getHelpEmbed());
 		
-		WeatherForecast wf = new WeatherForecast(channelName);
-		api.addMessageCreateListener(wf);
-		helpListener.addHelpEmbed(wf.getHelpEmbed());
 		
 		
 		//old way to add listeners 
