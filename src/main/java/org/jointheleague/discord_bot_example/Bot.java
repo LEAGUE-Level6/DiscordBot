@@ -10,12 +10,9 @@ import org.javacord.api.DiscordApiBuilder;
  *
  */
 import org.jointheleague.modules.*;
-import org.jointheleague.modules.pojo.HelpEmbed;
 
+public class Bot {
 
-
-public class Bot  {
-//	private static final String COMMAND = "!help";
 	// The string to show the custom :vomiting_robot: emoji
 	public static String emoji = "<:vomiting_robot:642414033290657803>";
 
@@ -23,16 +20,15 @@ public class Bot  {
 	private String channelName;
 	DiscordApi api;
 	_HelpListener helpListener;
-	
+
 	public Bot(String token, String channelName) {
-		//helpEmbed = new HelpEmbed(COMMAND, "Allows you to get a random number.  You can also specify a range of values (e.g. !random 50-100)");
 		this.token = token;
 		this.channelName = channelName;
 		helpListener = new _HelpListener(channelName);
 	}
 
 	public void connect(boolean printInvite) {
-		
+
 		api = new DiscordApiBuilder().setToken(token).login().join();
 
 		// Print the URL to invite the bot
@@ -41,12 +37,12 @@ public class Bot  {
 		}
 
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
-		
-		//add Listeners
+
+		// add Listeners
 		DiscordLibrary dl = new DiscordLibrary(channelName);
 		api.addMessageCreateListener(dl);
 		helpListener.addHelpEmbed(dl.getHelpEmbed());
-		
+
 //		CurrencyConverter cc = new CurrencyConverter(channelName);
 //		api.addMessageCreateListener(cc);
 //		helpListener.addHelpEmbed(cc.getHelpEmbed());
@@ -67,53 +63,45 @@ public class Bot  {
 		api.addMessageCreateListener(head);
 		helpListener.addHelpEmbed(head.getHelpEmbed());
 
-		RandomNumber randomNumber = new RandomNumber(channelName); //replace with feature class later
+		RandomNumber randomNumber = new RandomNumber(channelName); // replace with feature class later
 		api.addMessageCreateListener(randomNumber);
 		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
-		
-		Feature1 feature1 = new Feature1(channelName);
-		api.addMessageCreateListener(feature1);
-		helpListener.addHelpEmbed(feature1.getHelpEmbed());
-		
+
 		HypeMachine hypeMachine = new HypeMachine(channelName);
 		api.addMessageCreateListener(hypeMachine);
 		helpListener.addHelpEmbed(hypeMachine.getHelpEmbed());
-		
+
 		TextStyler textStyler = new TextStyler(channelName);
 		api.addMessageCreateListener(textStyler);
 		helpListener.addHelpEmbed(textStyler.getHelpEmbed());
-		
+
 		Tomagachi tomagachi = new Tomagachi(channelName);
 		api.addMessageCreateListener(tomagachi);
 		helpListener.addHelpEmbed(tomagachi.getHelpEmbed());
-		
+
 		SetProfilePic setPFP = new SetProfilePic(channelName);
 		api.addMessageCreateListener(setPFP);
 		helpListener.addHelpEmbed(setPFP.getHelpEmbed());
-		
+
 		ToGif toGif = new ToGif(channelName);
 		api.addMessageCreateListener(toGif);
 		helpListener.addHelpEmbed(toGif.getHelpEmbed());
-		
+
 		RandomCase randomCase = new RandomCase(channelName);
 		api.addMessageCreateListener(randomCase);
 		helpListener.addHelpEmbed(randomCase.getHelpEmbed());
-		
+
 		_ApiExampleListener apiExampleListener = new _ApiExampleListener(channelName);
 		api.addMessageCreateListener(apiExampleListener);
 		helpListener.addHelpEmbed(apiExampleListener.getHelpEmbed());
-		
+
 		NewWeather newWeather = new NewWeather(channelName);
 		api.addMessageCreateListener(newWeather);
 		helpListener.addHelpEmbed(newWeather.getHelpEmbed());
-		
-		DeathMatch hungerGames = new DeathMatch(channelName);
-		api.addMessageCreateListener(hungerGames);
-		helpListener.addHelpEmbed(hungerGames.getHelpEmbed());
 
 		CoinFlip cp = new CoinFlip(channelName);
 		api.addMessageCreateListener(cp);
-		
+
 		RollDie rollDie = new RollDie(channelName);
 		api.addMessageCreateListener(rollDie);
 
@@ -124,6 +112,10 @@ public class Bot  {
 		pythagcalc pythagCalc = new pythagcalc(channelName);
 		api.addMessageCreateListener(pythagCalc);
 		helpListener.addHelpEmbed(pythagCalc.getHelpEmbed());
+
+		Poll poll = new Poll(channelName);
+		api.addMessageCreateListener(poll);
+		helpListener.addHelpEmbed(poll.getHelpEmbed());
 
 		//Greeter g = new Greeter(channelName);
 		//api.addMessageCreateListener(g);
@@ -143,7 +135,7 @@ public class Bot  {
 		ListMakerMessageListener LM = new ListMakerMessageListener(channelName);
 		api.addMessageCreateListener(LM);
 		helpListener.addHelpEmbed(LM.getHelpEmbed());
-		
+
 		Dice d = new Dice(channelName);
 		api.addMessageCreateListener(d);
 		helpListener.addHelpEmbed(d.getHelpEmbed());
@@ -151,12 +143,13 @@ public class Bot  {
 		UnbeatableRockPaperScissors rps = new UnbeatableRockPaperScissors(channelName);
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
-		Depression depress = new Depression(channelName);
+    
+    Depression depress = new Depression(channelName);
 		api.addMessageCreateListener(depress);
 		helpListener.addHelpEmbed(depress.getHelpEmbed());
-		
-		
-		//old way to add listeners 
+    
+
+		// old way to add listeners
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
 		api.addMessageCreateListener(new DadJokes(channelName));
@@ -183,7 +176,7 @@ public class Bot  {
 		api.addMessageCreateListener(new LatexRender(channelName));
 		api.addMessageCreateListener(new MinesweeperListener(channelName));
 		api.addMessageCreateListener(new Bot1Listener(channelName));
-		api.addMessageCreateListener(new PingMessageListener(channelName));	
+		api.addMessageCreateListener(new PingMessageListener(channelName));
 		api.addMessageCreateListener(new CoinFlipMessageListener(channelName));
 		api.addMessageCreateListener(new PlayRPSMessageListener(channelName));
 		api.addMessageCreateListener(new KickMessageListener(channelName));
@@ -200,8 +193,6 @@ public class Bot  {
 		api.addMessageCreateListener(new RandomCase(channelName));
 		api.addMessageCreateListener(new GetTime(channelName));
 		api.addMessageCreateListener(new ScreenCapture(channelName));
-		api.addMessageCreateListener(new StarSignSeeker(channelName));
-		api.addMessageCreateListener(new War(channelName));
-		//api.addMessageCreateListener(new Depression(channelName));
+
 	}
 }
