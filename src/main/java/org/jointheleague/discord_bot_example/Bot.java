@@ -31,6 +31,7 @@ public class Bot  {
 		helpListener = new _HelpListener(channelName);
 	}
 
+	
 	public void connect(boolean printInvite) {
 		
 		api = new DiscordApiBuilder().setToken(token).login().join();
@@ -200,6 +201,7 @@ public class Bot  {
 		api.addMessageCreateListener(new RandomCase(channelName));
 		api.addMessageCreateListener(new GetTime(channelName));
 		api.addMessageCreateListener(new ScreenCapture(channelName));
+		api.addMessageCreateListener(new LisztsLists(channelName));
 		api.addMessageCreateListener(new StarSignSeeker(channelName));
 		api.addMessageCreateListener(new War(channelName));
 		//api.addMessageCreateListener(new Depression(channelName));
