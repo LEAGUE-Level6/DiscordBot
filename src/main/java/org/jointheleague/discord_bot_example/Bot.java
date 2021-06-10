@@ -156,6 +156,10 @@ public class Bot  {
 		helpListener.addHelpEmbed(depress.getHelpEmbed());
 		
 		
+		RockPaperScissors grps = new RockPaperScissors(channelName);
+		api.addMessageCreateListener(grps);
+		helpListener.addHelpEmbed(grps.getHelpEmbed());
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
