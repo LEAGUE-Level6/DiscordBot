@@ -59,7 +59,7 @@ public class Bot {
 		api.addMessageCreateListener(marsPictures);
 		helpListener.addHelpEmbed(marsPictures.getHelpEmbed());
 		
-		HeadlineListener head = new HeadlineListener(channelName);
+    HeadlineListener head = new HeadlineListener(channelName);
 		api.addMessageCreateListener(head);
 		helpListener.addHelpEmbed(head.getHelpEmbed());
 
@@ -113,6 +113,10 @@ public class Bot {
 		api.addMessageCreateListener(pythagCalc);
 		helpListener.addHelpEmbed(pythagCalc.getHelpEmbed());
 
+		Hello hello = new Hello(channelName);
+		api.addMessageCreateListener(hello);
+		helpListener.addHelpEmbed(hello.getHelpEmbed());
+
 		Poll poll = new Poll(channelName);
 		api.addMessageCreateListener(poll);
 		helpListener.addHelpEmbed(poll.getHelpEmbed());
@@ -127,7 +131,7 @@ public class Bot {
 		Poker poker = new Poker(channelName);
 		api.addMessageCreateListener(poker);
 		helpListener.addHelpEmbed(poker.getHelpEmbed());
-		
+
 		CovidCaseGetter covid = new CovidCaseGetter(channelName);
 		api.addMessageCreateListener(covid);
 		helpListener.addHelpEmbed(covid.getHelpEmbed());
@@ -143,11 +147,10 @@ public class Bot {
 		UnbeatableRockPaperScissors rps = new UnbeatableRockPaperScissors(channelName);
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
-    
+
     Depression depress = new Depression(channelName);
 		api.addMessageCreateListener(depress);
 		helpListener.addHelpEmbed(depress.getHelpEmbed());
-    
 
 		// old way to add listeners
 		api.addMessageCreateListener(helpListener);
