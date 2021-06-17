@@ -24,6 +24,7 @@ public class CompareBrand extends CustomMessageCreateListener {
 	boolean hasSeats = false;
 	int horsepower = 0;
 	boolean hasHorsies = false;
+	boolean matchess = false;
 	
 	public CompareBrand(String channelName) {
 		super(channelName);
@@ -42,22 +43,38 @@ public class CompareBrand extends CustomMessageCreateListener {
 		horsepower = 0;
 		hasHorsies = false;
 		if (str[0].equals(COMMAND)) {
+			if(event.getMessageContent().contains("help") && str.length == 2) {
+				event.getChannel().sendMessage("Type /compare and followed by budget/seats/horsepower followed by a parameter. you can do all 3 at once. Ex: /compare horsepower 2 seats 1 budget 200000");
+			}
 			for (int i = 0; i < str.length; i++) {
-				if (str[i].contains("budget")) {
-					budget = Integer.parseInt(str[i + 1]);
-					hasBudget = true;
-				} else if (str[i].contains("seats")) {
+				if (str[i].contains("budget") && str.length > 2 && !event.getMessageContent().contains("help")) {
+					try {
+						budget = Integer.parseInt(str[i + 1]);
+						hasBudget = true;
+					} catch(Exception bad) {
+						event.getChannel().sendMessage("The budget should only include numbers!");
+					}
+				} else if (str[i].contains("seats") && str.length > 2 && !event.getMessageContent().contains("help")) {
+					try {
 					seats = Integer.parseInt(str[i + 1]);
 					hasSeats = true;
-				} else if (str[i].contains("horsepower")) {
+					} catch(Exception no) {
+						event.getChannel().sendMessage("seats aren't letters! They are numerical!");
+					}
+				} else if (str[i].contains("horsepower") && str.length > 2 && !event.getMessageContent().contains("help")) {
+					try {
 					horsepower = Integer.parseInt(str[i + 1]);
 					hasHorsies = true;
+					} catch(Exception e) {
+						event.getChannel().sendMessage("horsepower should only be explained in numbers >:(");
+					}
 				}
 			}
-
 			event.getChannel().sendMessage(printCar());
+			if(matchess == false) {
+				event.getChannel().sendMessage("your search results didn't pull anything up. Horse power should be no less than 350, seats no less than 6, and budget no less than around 34000");
+			}
 		}
-
 	}
 
 	public String printCar() {
@@ -78,6 +95,11 @@ public class CompareBrand extends CustomMessageCreateListener {
 			if ((budgetMet || !hasBudget) && (hpMet || !hasHorsies) && (seatsMet || !hasSeats)) {
 				matches +=  cars[i].toString() + "\n";
 			}
+		}
+		if(!matches.isEmpty()) {
+			matchess = true;
+		} else {
+			matchess = false;
 		}
 		return matches;
 	}
