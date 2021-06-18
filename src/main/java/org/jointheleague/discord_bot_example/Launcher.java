@@ -25,6 +25,7 @@ public class Launcher {
 		// Load all of the bots for every channel
 		for (int i = 0; i < channels.length; i++) {
 			new Bot(n.getToken(), channels[i]).connect(i == 0);
+			
 		}
 	}
 }

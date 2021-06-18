@@ -48,9 +48,9 @@ public class Bot  {
 		api.addMessageCreateListener(dl);
 		helpListener.addHelpEmbed(dl.getHelpEmbed());
 		
-		CurrencyConverter cc = new CurrencyConverter(channelName);
-		api.addMessageCreateListener(cc);
-		helpListener.addHelpEmbed(cc.getHelpEmbed());
+//		CurrencyConverter cc = new CurrencyConverter(channelName);
+//		api.addMessageCreateListener(cc);
+//		helpListener.addHelpEmbed(cc.getHelpEmbed());
 		
 		ToDoList list = new ToDoList(channelName);
 		api.addMessageCreateListener(list);
@@ -128,6 +128,9 @@ public class Bot  {
 		DiscordZoomAccess dza = new DiscordZoomAccess(channelName);
 		api.addMessageCreateListener(dza);
 		helpListener.addHelpEmbed(dza.getHelpEmbed());
+		
+		EquatonSolver eq = new EquatonSolver(channelName);
+		api.addMessageCreateListener(eq);
     
 		CovidCaseGetter covid = new CovidCaseGetter(channelName);
 		api.addMessageCreateListener(covid);
