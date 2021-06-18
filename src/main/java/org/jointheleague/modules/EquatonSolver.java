@@ -35,11 +35,6 @@ public class EquatonSolver extends CustomMessageCreateListener {
 
 			hold = new ArrayList<String>();
 			for (int i = 0; i < eq.length(); i++) {
-				if (eq.charAt(eq.length() - 1) == '+' || eq.charAt(eq.length() - 1) == '-'
-						|| eq.charAt(eq.length() - 1) == '/' || eq.charAt(eq.length() - 1) == '*') {
-					System.out.println("Not A Valid Equation");
-					System.exit(0);
-				}
 
 				if (Character.isDigit(eq.charAt(i))) {
 					num += "" + eq.charAt(i);
@@ -63,6 +58,16 @@ public class EquatonSolver extends CustomMessageCreateListener {
 				if (eq.charAt(i) == '/') {
 					hold.add("/");
 				}
+				if (eq.charAt(i) == '%') {
+					hold.add("%");
+
+				}
+				if (eq.charAt(i) == '(') {
+					hold.add("(");
+				}
+				if (eq.charAt(i) == ')') {
+					hold.add(")");
+				}
 				/*
 				 * 5+6*7-8/2 5+42-8/2 5+42-4 47-4 43
 				 */
@@ -71,7 +76,7 @@ public class EquatonSolver extends CustomMessageCreateListener {
 			num = "";
 
 			boolean done = false;
-			String[] symbols = { "*", "/", "+", "-" };
+			String[] symbols = { "(", ")", "*", "/", "%", "+", "-" };
 			int currentIndex = 0;
 			String currentSym = symbols[currentIndex];
 			while (!done) {
@@ -84,15 +89,23 @@ public class EquatonSolver extends CustomMessageCreateListener {
 						double solution = 0;
 						if (hold.get(i).equals("*")) {
 							solution = fVal * sVal;
+
 						}
 						if (hold.get(i).equals("/")) {
 							solution = fVal / sVal;
+
 						}
 						if (hold.get(i).equals("+")) {
 							solution = fVal + sVal;
+
 						}
 						if (hold.get(i).equals("-")) {
 							solution = fVal - sVal;
+
+						}
+						if (hold.get(i).equals("%")) {
+							solution = fVal % sVal;
+
 						}
 						hold.remove(i - 1);
 						hold.remove(i - 1);
