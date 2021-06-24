@@ -152,6 +152,10 @@ public class Bot {
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
 
+		FilmRecommendations f = new FilmRecommendations(channelName);
+		api.addMessageCreateListener(f);
+		helpListener.addHelpEmbed(f.getHelpEmbed());
+
     Depression depress = new Depression(channelName);
 		api.addMessageCreateListener(depress);
 		helpListener.addHelpEmbed(depress.getHelpEmbed());
