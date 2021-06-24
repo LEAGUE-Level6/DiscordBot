@@ -112,7 +112,11 @@ public class Bot {
 		pythagcalc pythagCalc = new pythagcalc(channelName);
 		api.addMessageCreateListener(pythagCalc);
 		helpListener.addHelpEmbed(pythagCalc.getHelpEmbed());
-
+    
+		Reminder reminder = new Reminder(channelName);
+		api.addMessageCreateListener(reminder);
+		helpListener.addHelpEmbed(reminder.getHelpEmbed());
+    
 		Hello hello = new Hello(channelName);
 		api.addMessageCreateListener(hello);
 		helpListener.addHelpEmbed(hello.getHelpEmbed());
@@ -147,6 +151,10 @@ public class Bot {
 		UnbeatableRockPaperScissors rps = new UnbeatableRockPaperScissors(channelName);
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
+
+    Depression depress = new Depression(channelName);
+		api.addMessageCreateListener(depress);
+		helpListener.addHelpEmbed(depress.getHelpEmbed());
 
     Depression depress = new Depression(channelName);
 		api.addMessageCreateListener(depress);
@@ -196,6 +204,5 @@ public class Bot {
 		api.addMessageCreateListener(new RandomCase(channelName));
 		api.addMessageCreateListener(new GetTime(channelName));
 		api.addMessageCreateListener(new ScreenCapture(channelName));
-
 	}
 }
