@@ -43,15 +43,23 @@ public class Bot {
 		api.addMessageCreateListener(dl);
 		helpListener.addHelpEmbed(dl.getHelpEmbed());
 
-		CurrencyConverter cc = new CurrencyConverter(channelName);
-		api.addMessageCreateListener(cc);
-		helpListener.addHelpEmbed(cc.getHelpEmbed());
-
+//		CurrencyConverter cc = new CurrencyConverter(channelName);
+//		api.addMessageCreateListener(cc);
+//		helpListener.addHelpEmbed(cc.getHelpEmbed());
+		
 		ToDoList list = new ToDoList(channelName);
 		api.addMessageCreateListener(list);
 		helpListener.addHelpEmbed(list.getHelpEmbed());
-
-		HeadlineListener head = new HeadlineListener(channelName);
+		
+		MazeGame maze = new MazeGame(channelName);
+		api.addMessageCreateListener(maze);
+		helpListener.addHelpEmbed(maze.getHelpEmbed());
+		
+		MarsPictures marsPictures = new MarsPictures(channelName);
+		api.addMessageCreateListener(marsPictures);
+		helpListener.addHelpEmbed(marsPictures.getHelpEmbed());
+		
+    HeadlineListener head = new HeadlineListener(channelName);
 		api.addMessageCreateListener(head);
 		helpListener.addHelpEmbed(head.getHelpEmbed());
 
@@ -104,15 +112,30 @@ public class Bot {
 		pythagcalc pythagCalc = new pythagcalc(channelName);
 		api.addMessageCreateListener(pythagCalc);
 		helpListener.addHelpEmbed(pythagCalc.getHelpEmbed());
-
-		// Greeter g = new Greeter(channelName);
-		// api.addMessageCreateListener(g);
-		// helpListener.addHelpEmbed(g.getHelpEmbed());
-
+    
 		Reminder reminder = new Reminder(channelName);
 		api.addMessageCreateListener(reminder);
 		helpListener.addHelpEmbed(reminder.getHelpEmbed());
-		
+    
+		Hello hello = new Hello(channelName);
+		api.addMessageCreateListener(hello);
+		helpListener.addHelpEmbed(hello.getHelpEmbed());
+
+		Poll poll = new Poll(channelName);
+		api.addMessageCreateListener(poll);
+		helpListener.addHelpEmbed(poll.getHelpEmbed());
+
+		//Greeter g = new Greeter(channelName);
+		//api.addMessageCreateListener(g);
+		//helpListener.addHelpEmbed(g.getHelpEmbed());
+		DiscordZoomAccess dza = new DiscordZoomAccess(channelName);
+		api.addMessageCreateListener(dza);
+		helpListener.addHelpEmbed(dza.getHelpEmbed());
+    
+		Poker poker = new Poker(channelName);
+		api.addMessageCreateListener(poker);
+		helpListener.addHelpEmbed(poker.getHelpEmbed());
+
 		CovidCaseGetter covid = new CovidCaseGetter(channelName);
 		api.addMessageCreateListener(covid);
 		helpListener.addHelpEmbed(covid.getHelpEmbed());
@@ -128,12 +151,15 @@ public class Bot {
 		UnbeatableRockPaperScissors rps = new UnbeatableRockPaperScissors(channelName);
 		api.addMessageCreateListener(rps);
 		helpListener.addHelpEmbed(rps.getHelpEmbed());
-    
+
     Depression depress = new Depression(channelName);
 		api.addMessageCreateListener(depress);
 		helpListener.addHelpEmbed(depress.getHelpEmbed());
-   
-    
+
+    Depression depress = new Depression(channelName);
+		api.addMessageCreateListener(depress);
+		helpListener.addHelpEmbed(depress.getHelpEmbed());
+
 		// old way to add listeners
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
@@ -180,4 +206,3 @@ public class Bot {
 		api.addMessageCreateListener(new ScreenCapture(channelName));
 	}
 }
-

@@ -1,4 +1,4 @@
 {
-    "channels": ["channelName"],
-    "token": "discordToken"
+    "channels": [""],
+    "token": ""
 }
