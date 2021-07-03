@@ -16,27 +16,28 @@ public class WW2Adventure extends CustomMessageCreateListener {
 	private static final String CONTINUECMD = "!deploy";
 	private final Color col = Color.CYAN;
 	private final String image = "src/main/resources/WW2Images/";
-	private int stage = 0;
-	private int stage1 = 0;
-	
+	private int gameState = 0;
+	private int gameState1 = 0;
+
 	boolean dday = false;
 	boolean midway = false;
-	
+
 	int menuState = 0;
-	int gameState = 0;
+	int menuState1 = 0;
+
 	public WW2Adventure(String channelName) {
 		// TODO Auto-generated constructor stub
 		super(channelName);
 		helpEmbed = new HelpEmbed(COMMAND, "Type !BeginWW2Journey to begin your journey soldier! (Story mode cmd)");
 	}
-	
+
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		// TODO Auto-generated method stub
 
 		EmbedBuilder build = new EmbedBuilder();
 		String txt = event.getMessageContent();
-		
+
 		if (txt.equalsIgnoreCase(COMMAND)) {
 			build.setColor(col);
 			build.setTitle("**" + "Hello soldier, you have received a draft to the war!" + "**" + "\n" + "**"
@@ -50,55 +51,55 @@ public class WW2Adventure extends CustomMessageCreateListener {
 			event.getChannel().sendMessage(build);
 
 		}
-		
-		if (menuState >= 0) {
+
+		if (menuState == 0) {
 			if (txt.equalsIgnoreCase("!DDay")) {
-				
+
 				event.getChannel().sendMessage("Alright soldier, you have entered a really tough battle, "
 						+ "to survive this battle, you must play a game! Say !deploy to move on");
-				
+
 				menuState++;
-				
-			}  
-			
-		} else if (menuState >= 1) {
-				if (txt.equalsIgnoreCase(CONTINUECMD) || dday) {
-					
-					DDay(event);
-					dday = true;
-				}
+
 			}
-		
-		if (stage1 >= 0) {
+
+		} else if (menuState == 1) {
+			if (txt.equalsIgnoreCase(CONTINUECMD) || dday) {
+
+				DDay(event);
+				dday = true;
+			}
+		}
+
+		if (menuState1 == 0) {
 			if (txt.equalsIgnoreCase("!Midway")) {
 				event.getChannel().sendMessage("Ok soldier, you will be deployed out in the pacific against japan!"
 						+ "to survive this battle, you must play a game! Say !deploy to move on");
-				stage1++;
+				menuState1++;
 			}
+		} else if (menuState1 == 1) {
+			if (txt.equalsIgnoreCase(CONTINUECMD)) {
+				middway(event);
 			}
-		else if (stage1 >= 1) {
-				if (txt.equalsIgnoreCase(CONTINUECMD)) {
-					middway(event);
-				}
 
-			}
-		
+		}
 
 	}
-	
-	public void DDay(MessageCreateEvent event) {		
-		String txt = event.getMessage().getContent();
-		EmbedBuilder build = new EmbedBuilder();
-		if (txt.isEmpty()) {
-		
+
+	public void DDay(MessageCreateEvent event) {
+		if (event.getMessageAuthor().isBotUser()) {
 			return;
 		}
-		System.out.println(txt);
-		if (stage == 2) {
-			event.getChannel().sendMessage("Alright, your first task is to spell Soldier backwards");
-			stage++;
+		String txt = event.getMessage().getContent().trim();
+		EmbedBuilder build = new EmbedBuilder();
+		if (txt.isEmpty()) {
+
+			return;
 		}
-		else if (stage == 3) {
+		System.out.println(txt + gameState);
+		if (gameState == 0) {
+			event.getChannel().sendMessage("Alright, your first task is to spell Soldier backwards");
+			gameState++;
+		} else if (gameState == 1) {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
@@ -107,34 +108,34 @@ public class WW2Adventure extends CustomMessageCreateListener {
 			}
 			if (txt.equalsIgnoreCase("reidloS")) {
 				event.getChannel().sendMessage("Good work! You will continue");
-				stage += 2;
-			
+				event.getChannel().sendMessage("Now time for more questions.");
+				event.getChannel().type();
+				event.getChannel().sendMessage("What is dnaraG 1M spelt fowards?");
+				gameState += 2;
+
 			} else {
-				stage++;
+				gameState++;
+				System.out.println(txt);
 
 			}
-		}
-		else if (stage == 4) {
+		} else if (gameState == 2) {
+
 			event.getChannel().sendMessage("Sorry, you got the answer incorect. You have died."
 					+ " \n the correct answer was reidloS. If you wanna try again type !BeginWW2Journey");
-			stage = 0;
+			gameState = 0;
 
 		}
-		else if (stage == 5) {
-			event.getChannel().sendMessage("Now time for more questions.");
-			event.getChannel().type();
-			event.getChannel().sendMessage("What is dnaraG 1M spelt fowards?");
-			stage++;
-		}
-		else if (stage == 6) {
+
+		else if (gameState == 3) {
 			if (txt.startsWith("M1 Garand")) {
 				event.getChannel().sendMessage("Nice work soldier!");
 				event.getChannel().type();
-				stage++;
-			}
-			}
-		else if (stage == 7) {
-			
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				build = new EmbedBuilder();
 				build.setColor(Color.orange).setTitle("M1 Garand").addField("Fun facts about the M1 Garand:",
 						" This gun was used frequently used by"
@@ -144,25 +145,27 @@ public class WW2Adventure extends CustomMessageCreateListener {
 				event.getChannel().sendMessage(build);
 				event.getChannel().sendMessage("Here's what the M1 looks like:");
 				event.getChannel().sendMessage(new File(image + "m1.jpg"));
-				stage++;
-
-			} else {
-				event.getChannel().sendMessage("Sorry, you got the answer incorect. You have died. "
-						+ " \n The correct answer was M1 Garand. If you wanna try again type !BeginWW2Journey");
-				stage = 0;
-
-			}
-
-	
-		 if (stage == 8) {
+				
+				event.getChannel().type();
+				try {
+					Thread.sleep(1500);
+				} catch(InterruptedException e) {
+					e.printStackTrace();
+				}
 			event.getChannel().sendMessage("**"
 					+ "Alright, heres a hard question. 2 more of these hard questions till u win the battle!" + "**");
 			event.getChannel().sendMessage("What do many people call the Battle Of Normandy? Hint: it starts with a D");
-			stage++;
+			gameState += 6;
+			} else {
+			event.getChannel().sendMessage("Sorry, you got the answer incorect. You have died. "
+					+ " \n The correct answer was M1 Garand. If you wanna try again type !BeginWW2Journey");
+			gameState = 0;
+			}
 		}
-		else if (stage == 9) {
-			if (txt.equals("DDay") || txt.equals("dday") || txt.equals("invasion of normandy") || txt.equals("D-Day")
-					|| txt.equals("d-day")) {
+
+		 else if (gameState == 9) {
+			if (txt.equalsIgnoreCase("DDay") || txt.equals("invasion of normandy") || txt.equalsIgnoreCase("D-Day")
+					) {
 				event.getChannel().sendMessage("Great job!");
 				event.getChannel().type();
 				build = new EmbedBuilder();
@@ -174,51 +177,48 @@ public class WW2Adventure extends CustomMessageCreateListener {
 				build.addField("Heres an image of a map where DDAY happened", "");
 				build.setImage("https://i.pinimg.com/originals/9a/b1/bf/9ab1bfb9b109aa1b13af667d9d9b1a93.jpg");
 				event.getChannel().sendMessage(build);
-
-				stage++;
+				event.getChannel().sendMessage("**" + "Final Question. If you get this right then you win!" + "**");
+				event.getChannel().sendMessage("Lets see if you were paying attention: What gun was used in WW2 alot?");
+				gameState+=2;
 			} else {
 				event.getChannel().sendMessage("Sorry, you got the answer incorect. You have died. "
 						+ " \n The correct answer was D-Day. If you wanna try again type !BeginWW2Journey");
-				stage = 0;
+				gameState = 0;
 
 			}
 
 		}
-		if (stage == 10) {
-			event.getChannel().sendMessage("**" + "Final Question. If you get this right then you win!" + "**");
-			event.getChannel().sendMessage("Lets see if you were paying attention: What gun was used in WW2 alot?");
-			stage++;
-		}
-		if (stage == 11) {
+	
+		 else if (gameState == 11) {
 			if (txt.equals("M1 garand") || txt.equals("M1") || txt.equals("garand") || txt.equals("M1 Garand")
 					|| txt.equals("m1 garand")) {
 				event.getChannel().sendMessage("Awesome job! You survived this battle!");
-
-				stage++;
+				event.getChannel()
+					.sendMessage("If you want to start again you could do one of the battles listed above, or if you're"
+							+ "done then type !go home, or say !continue if you want to continue");
+				
+				gameState+=2;
 			} else {
 				event.getChannel().sendMessage(
 						"Sorry, you got the answer incorect. You have died when you almost won the battle. "
 								+ " \n The correct answer was M1 Garand. If you wanna try again type !BeginWW2Journey");
-				stage = 0;
+				gameState = 0;
 
 			}
 		}
-		if (stage == 12) {
-			event.getChannel()
-					.sendMessage("If you want to start again you could do one of the battles listed above, or if you're"
-							+ "done then type !go home, or say !continue if you want to continue");
-			stage++;
-		}
-		if (stage == 13) {
+		 
+		 else if (gameState == 13) {
 			if (txt.equals("!go home")) {
 				event.getChannel().sendMessage("Congrats soldier you have made it home safely!");
-				
-				stage = 0;
+
+				gameState = 0;
+				menuState = 0;
 
 			} else if (txt.equals(CONTINUECMD)) {
 				event.getChannel().sendMessage(
 						"Ok soldier, check the embed of the battle choices above so you can decide what battle you want to go to next!");
-				stage = 0;
+				gameState = 0;
+				menuState = 0;
 
 			}
 		}
@@ -229,12 +229,12 @@ public class WW2Adventure extends CustomMessageCreateListener {
 		String txt = event.getMessageContent();
 		EmbedBuilder build = new EmbedBuilder();
 		event.getChannel().sendMessage("Here is your first question: ");
-		stage1++;
-		if (stage1 >= 3) {
+		gameState1++;
+		if (gameState1 == 3) {
 			event.getChannel().sendMessage("Spell Japan backwards");
-			stage1++;
+			gameState1++;
 		}
-		if (stage1 >= 4) {
+		if (gameState1 >= 4) {
 			if (txt.equals("napaJ") || txt.equals("napaj")) {
 				event.getChannel().sendMessage("Great work soldier");
 				event.getChannel().type();
@@ -248,16 +248,16 @@ public class WW2Adventure extends CustomMessageCreateListener {
 						"The USA would do something known as \"Island Hopping\" which refers to them battling against japan "
 								+ "\n and then setting up their bases on each island, helping them to progress closer to japan, towards victory");
 				event.getChannel().sendMessage(build);
-				stage1++;
+				gameState1++;
 			} else {
 				event.getChannel().sendMessage(
 						"Sorry soldier, you have died! The correct answer was napaJ. Type !BeginWW2Journey if you wanna start over.");
-				stage1 = 0;
+				gameState1 = 0;
 
 			}
 
 		}
-		if (stage1 == 5) {
+		if (gameState1 == 5) {
 			event.getChannel().sendMessage("Here is your next question: ");
 			event.getChannel().type();
 			event.getChannel().sendMessage("What ocean did the battle of midway happen in?");
@@ -271,26 +271,26 @@ public class WW2Adventure extends CustomMessageCreateListener {
 				build.addField("Another Fact: ",
 						"After the US won this battle, victory for Japan and the axis were no longer able to happen");
 				event.getChannel().sendMessage(build);
-				stage1++;
+				gameState1++;
 			} else {
 				event.getChannel().sendMessage("You have died, the Correct answer is pacific ocean");
-				stage1 = 0;
+				gameState1 = 0;
 
 			}
 		}
-		if (stage1 == 6) {
+		if (gameState1 == 6) {
 			event.getChannel().type();
 			event.getChannel().sendMessage("Your next question is: /n spell Midway in alphabetical order");
 			if (txt.equalsIgnoreCase("adiMwy")) {
 				event.getChannel().sendMessage("Nice one!");
-				stage1++;
+				gameState1++;
 			} else {
 				event.getChannel().sendMessage("Sorry you have died. The correct answer is adiMwy.");
-				stage = 0;
+				gameState = 0;
 
 			}
 		}
-		if (stage1 == 7) {
+		if (gameState1 == 7) {
 			event.getChannel().type();
 			event.getChannel().sendMessage(
 					"Here is your final question. This will be tough, but if you get it right then you win this battle!");
@@ -304,11 +304,11 @@ public class WW2Adventure extends CustomMessageCreateListener {
 			event.getChannel().sendMessage("WWOOO U GOT IT BRO!");
 			event.getChannel().type();
 			event.getChannel().sendMessage("If you wanna play again type !BeginWW2Journey. If you want");
-			stage1 = 0;
+			gameState1 = 0;
 
 		} else {
 			event.getChannel().sendMessage("Sorry you have died. The correct answer is true.");
-			stage1 = 0;
+			gameState1 = 0;
 
 		}
 
