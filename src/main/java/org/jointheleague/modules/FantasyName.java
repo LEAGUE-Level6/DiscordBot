@@ -30,9 +30,15 @@ public class FantasyName extends CustomMessageCreateListener {
 			Boolean f=false;
 			Random r = new Random();
 			
-			if(cmd.contains("f")) {
+			if(cmd.length()==12) {
+				if(r.nextInt(2)==0) {
+					f=true;
+				}else {
+					f=false;
+				}
+			}else if (cmd.charAt(12)=='f') {
 				f=true;
-			}else if(cmd.contains("m")) {
+			}else if(cmd.charAt(12)=='m') {
 				f=false;
 			}else {
 				if(r.nextInt(2)==0) {

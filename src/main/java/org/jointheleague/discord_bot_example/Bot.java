@@ -47,9 +47,17 @@ public class Bot  {
 		api.addMessageCreateListener(dl);
 		helpListener.addHelpEmbed(dl.getHelpEmbed());
 		
+		DnDRules dnd = new DnDRules(channelName);
+		api.addMessageCreateListener(dnd);
+		helpListener.addHelpEmbed(dnd.getHelpEmbed());
+		
 		FantasyName fn = new FantasyName(channelName);
 		api.addMessageCreateListener(fn);
 		helpListener.addHelpEmbed(fn.getHelpEmbed());
+				
+		GetXkcd xkcd = new GetXkcd(channelName);
+		api.addMessageCreateListener(xkcd);
+		helpListener.addHelpEmbed(xkcd.getHelpEmbed());
 		
 		CurrencyConverter cc = new CurrencyConverter(channelName);
 		api.addMessageCreateListener(cc);
