@@ -32,7 +32,8 @@ public class EquatonSolver extends CustomMessageCreateListener {
 
 			String num = "";
 			ArrayList<String> hold;
-
+			int start = -1;
+			int end = -1;
 			hold = new ArrayList<String>();
 			for (int i = 0; i < eq.length(); i++) {
 
@@ -64,31 +65,48 @@ public class EquatonSolver extends CustomMessageCreateListener {
 				}
 				if (eq.charAt(i) == '(') {
 					hold.add("(");
+					start = i;
+					start++;
 				}
 				if (eq.charAt(i) == ')') {
 					hold.add(")");
+					end = i;
 				}
-				/*
-				 * 5+6*7-8/2 5+42-8/2 5+42-4 47-4 43
-				 */
+
 			}
+//			ArrayList<String> input = new ArrayList<String>();
+//			
+//			for (int i = start; i < end; i++) {
+//				
+//				input.add("" + eq.charAt(i));
+//				
+//				
+//			}
+//
+//		
+//			
 			hold.add(num);
 			num = "";
-
+//			solveEquation(input);
+//			System.out.println("input " +solveEquation(input));
+//			hold.add(0, solveEquation(input));
+			System.out.println("hold is " + hold);
+			event.getChannel().sendMessage(solveEquation(hold));
 		}
 
 	}
 
-	public void solveEquation(ArrayList<String> hold) {
+	public String solveEquation(ArrayList<String> hold) {
+
 		boolean done = false;
-		String[] symbols = { "*", "/", "%", "+", "-" };
+		String[] symbols = { "*", "/", "%", "-", "+" };
 		int currentIndex = 0;
 		String currentSym = symbols[currentIndex];
 		while (!done) {
 			boolean found = false;
 
 			for (int i = 0; i < hold.size(); i++) {
-				System.out.println(hold.get(i));
+
 				if (hold.get(i).equals(currentSym)) {
 					double fVal = Double.parseDouble(hold.get(i - 1));
 					double sVal = Double.parseDouble(hold.get(i + 1));
@@ -134,7 +152,8 @@ public class EquatonSolver extends CustomMessageCreateListener {
 				}
 			}
 		}
+		String ans = hold.get(0);
+		return (ans);
 
-		event.getChannel().sendMessage(hold.get(0));
 	}
 }
