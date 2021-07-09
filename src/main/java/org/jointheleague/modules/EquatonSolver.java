@@ -75,61 +75,66 @@ public class EquatonSolver extends CustomMessageCreateListener {
 			hold.add(num);
 			num = "";
 
-			boolean done = false;
-			String[] symbols = { "(", ")", "*", "/", "%", "+", "-" };
-			int currentIndex = 0;
-			String currentSym = symbols[currentIndex];
-			while (!done) {
-				boolean found = false;
-
-				for (int i = 0; i < hold.size(); i++) {
-					if (hold.get(i).equals(currentSym)) {
-						double fVal = Double.parseDouble(hold.get(i - 1));
-						double sVal = Double.parseDouble(hold.get(i + 1));
-						double solution = 0;
-						if (hold.get(i).equals("*")) {
-							solution = fVal * sVal;
-
-						}
-						if (hold.get(i).equals("/")) {
-							solution = fVal / sVal;
-
-						}
-						if (hold.get(i).equals("+")) {
-							solution = fVal + sVal;
-
-						}
-						if (hold.get(i).equals("-")) {
-							solution = fVal - sVal;
-
-						}
-						if (hold.get(i).equals("%")) {
-							solution = fVal % sVal;
-
-						}
-						hold.remove(i - 1);
-						hold.remove(i - 1);
-						String ans = "" + solution;
-						hold.set(i - 1, ans);
-						found = true;
-						break;
-					}
-				}
-				if (!found) {
-					currentIndex++;
-
-					if (currentIndex >= symbols.length) {
-						done = true;
-					} else {
-
-						currentSym = symbols[currentIndex];
-					}
-				}
-			}
-
-			event.getChannel().sendMessage(hold.get(0));
 		}
 
 	}
 
+	public void solveEquation(ArrayList<String> hold) {
+		boolean done = false;
+		String[] symbols = { "*", "/", "%", "+", "-" };
+		int currentIndex = 0;
+		String currentSym = symbols[currentIndex];
+		while (!done) {
+			boolean found = false;
+
+			for (int i = 0; i < hold.size(); i++) {
+				System.out.println(hold.get(i));
+				if (hold.get(i).equals(currentSym)) {
+					double fVal = Double.parseDouble(hold.get(i - 1));
+					double sVal = Double.parseDouble(hold.get(i + 1));
+					double solution = 0;
+
+					if (hold.get(i).equals("*")) {
+						solution = fVal * sVal;
+
+					}
+					if (hold.get(i).equals("/")) {
+						solution = fVal / sVal;
+
+					}
+					if (hold.get(i).equals("+")) {
+						solution = fVal + sVal;
+
+					}
+					if (hold.get(i).equals("-")) {
+						solution = fVal - sVal;
+
+					}
+					if (hold.get(i).equals("%")) {
+						solution = fVal % sVal;
+
+					}
+
+					hold.remove(i - 1);
+					hold.remove(i - 1);
+					String ans = "" + solution;
+					hold.set(i - 1, ans);
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				currentIndex++;
+
+				if (currentIndex >= symbols.length) {
+					done = true;
+				} else {
+
+					currentSym = symbols[currentIndex];
+				}
+			}
+		}
+
+		event.getChannel().sendMessage(hold.get(0));
+	}
 }
