@@ -51,9 +51,9 @@ public class Bot {
 		api.addMessageCreateListener(list);
 		helpListener.addHelpEmbed(list.getHelpEmbed());
 		
-		MazeGame maze = new MazeGame(channelName);
-		api.addMessageCreateListener(maze);
-		helpListener.addHelpEmbed(maze.getHelpEmbed());
+		//MazeGame maze = new MazeGame(channelName);
+		//api.addMessageCreateListener(maze);
+		//helpListener.addHelpEmbed(maze.getHelpEmbed());
 		
 		MarsPictures marsPictures = new MarsPictures(channelName);
 		api.addMessageCreateListener(marsPictures);
@@ -127,6 +127,10 @@ public class Bot {
 		Poker poker = new Poker(channelName);
 		api.addMessageCreateListener(poker);
 		helpListener.addHelpEmbed(poker.getHelpEmbed());
+		
+		PokemonBattle pokemonBattle=new PokemonBattle(channelName);
+		api.addMessageCreateListener(pokemonBattle);
+		helpListener.addHelpEmbed(pokemonBattle.getHelpEmbed());
 		
 		CovidCaseGetter covid = new CovidCaseGetter(channelName);
 		api.addMessageCreateListener(covid);
