@@ -47,6 +47,10 @@ public class Bot  {
 		api.addMessageCreateListener(dl);
 		helpListener.addHelpEmbed(dl.getHelpEmbed());
 		
+		Millbot mb = new Millbot(channelName);
+		api.addMessageCreateListener(mb);
+		helpListener.addHelpEmbed(mb.getHelpEmbed());
+		
 		CurrencyConverter cc = new CurrencyConverter(channelName);
 		api.addMessageCreateListener(cc);
 		helpListener.addHelpEmbed(cc.getHelpEmbed());
