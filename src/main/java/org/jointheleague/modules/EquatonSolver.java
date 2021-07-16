@@ -27,23 +27,29 @@ public class EquatonSolver extends CustomMessageCreateListener {
 					continue;
 				} else {
 					eq += eqws.charAt(i);
+					
 				}
 			}
-
+			//eq is good here
 			String num = "";
 			ArrayList<String> hold;
-			int start = -1;
-			int end = -1;
+		
 			hold = new ArrayList<String>();
 			for (int i = 0; i < eq.length(); i++) {
-
+				
 				if (Character.isDigit(eq.charAt(i))) {
+					num="";
 					num += "" + eq.charAt(i);
 
 				} else {
+					if(num.equals("")) {
+						
+					}
 					// int add = Integer.parseInt(num);
+					else {
 					hold.add(num);
-					num = "";
+					}
+					
 
 				}
 
@@ -65,12 +71,9 @@ public class EquatonSolver extends CustomMessageCreateListener {
 				}
 				if (eq.charAt(i) == '(') {
 					hold.add("(");
-					start = i;
-					start++;
 				}
 				if (eq.charAt(i) == ')') {
 					hold.add(")");
-					end = i;
 				}
 
 			}
@@ -85,12 +88,11 @@ public class EquatonSolver extends CustomMessageCreateListener {
 //
 //		
 //			
-			hold.add(num);
-			num = "";
+		
 //			solveEquation(input);
 //			System.out.println("input " +solveEquation(input));
 //			hold.add(0, solveEquation(input));
-			System.out.println("hold is " + hold);
+		
 			event.getChannel().sendMessage(solveEquation(hold));
 		}
 
@@ -99,14 +101,14 @@ public class EquatonSolver extends CustomMessageCreateListener {
 	public String solveEquation(ArrayList<String> hold) {
 
 		boolean done = false;
-		String[] symbols = { "*", "/", "%", "-", "+" };
+		String[] symbols = {"*", "/", "%", "-", "+" };
 		int currentIndex = 0;
 		String currentSym = symbols[currentIndex];
 		while (!done) {
 			boolean found = false;
 
 			for (int i = 0; i < hold.size(); i++) {
-
+//System.out.println("hold.geti is " + hold.get(i));
 				if (hold.get(i).equals(currentSym)) {
 					double fVal = Double.parseDouble(hold.get(i - 1));
 					double sVal = Double.parseDouble(hold.get(i + 1));
@@ -132,7 +134,8 @@ public class EquatonSolver extends CustomMessageCreateListener {
 						solution = fVal % sVal;
 
 					}
-
+					
+					
 					hold.remove(i - 1);
 					hold.remove(i - 1);
 					String ans = "" + solution;
@@ -140,6 +143,11 @@ public class EquatonSolver extends CustomMessageCreateListener {
 					found = true;
 					break;
 				}
+				if(hold.get(i).equals("(")) {
+					
+					solveParenth(hold, i);
+				}
+
 			}
 			if (!found) {
 				currentIndex++;
@@ -155,5 +163,35 @@ public class EquatonSolver extends CustomMessageCreateListener {
 		String ans = hold.get(0);
 		return (ans);
 
+	}
+	public void solveParenth(ArrayList<String> hold, int place) {
+		ArrayList<String> in = new ArrayList<String>();
+		int end = -1;
+		for(int i = place+=1;i<hold.size();i++) {
+			
+			if(hold.get(i).equals(")")) {
+				end=i;
+				
+				break;
+				
+			}
+			else {
+				in.add(hold.get(i));
+			}
+		}	
+		solveEquation(in);
+		System.out.println("in is "+ in);
+			System.out.println("hold before removes "+hold);
+		//in is good here
+			hold.remove(place);
+			hold.remove(end-1);
+		for(int i = place;i<end+1;i++) {
+			System.out.println(i-1);
+			System.out.println(hold);
+			hold.remove(i-1);
+		}
+		
+
+		System.out.println("hold after all of the removes " + hold);
 	}
 }
