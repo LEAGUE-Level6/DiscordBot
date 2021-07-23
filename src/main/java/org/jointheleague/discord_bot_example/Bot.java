@@ -135,6 +135,10 @@ public class Bot {
 		Poker poker = new Poker(channelName);
 		api.addMessageCreateListener(poker);
 		helpListener.addHelpEmbed(poker.getHelpEmbed());
+		
+		EquationSolver eq = new EquationSolver(channelName);
+		api.addMessageCreateListener(eq);
+		helpListener.addHelpEmbed(eq.getHelpEmbed());
 
 		CovidCaseGetter covid = new CovidCaseGetter(channelName);
 		api.addMessageCreateListener(covid);
@@ -160,10 +164,7 @@ public class Bot {
 		api.addMessageCreateListener(depress);
 		helpListener.addHelpEmbed(depress.getHelpEmbed());
 
-    Depression depress = new Depression(channelName);
-		api.addMessageCreateListener(depress);
-		helpListener.addHelpEmbed(depress.getHelpEmbed());
-
+    
 		// old way to add listeners
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
