@@ -17,7 +17,13 @@ public class Millbot extends CustomMessageCreateListener{
 	static final String DIVIDE = "!divide ";
 	static final String LOG = "!log ";
 	static final String POWER = "!power ";
-	static final String helpMe = "!help";
+	static final String SIN = "!sin ";
+	static final String COS = "!cos ";
+	static final String TAN = "!tan ";
+	static final String ANSWER = "/ans/";
+	static final String HELPME = "!help";
+	public static String answer = "";
+	
 
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
@@ -25,67 +31,72 @@ public class Millbot extends CustomMessageCreateListener{
 		String m = event.getMessageContent();
 		
 		if(m.contains(ADD)) {
-			event.getChannel().sendMessage("Command received");
 			String newM = m.replace(ADD, "");
+			newM = newM.replace(ANSWER, answer);
 			String[] addends = newM.split(",");
-			int counter = 0;
+			double counter = 0;
 			String botMessage = "";
 			for (int i = 0; i < addends.length; i++) {
 				botMessage = botMessage + addends[i] + " + ";
-				counter = counter + Integer.parseInt(addends[i]);
+				counter = counter + Double.parseDouble(addends[i]);
 			}
+			answer = Double.toString(counter);
 			botMessage = botMessage.substring(0, botMessage.length() - 3) + " = " + counter;
 			System.out.println(botMessage + "this is a bot message");
 			System.out.println(botMessage);
-			event.getChannel().sendMessage(botMessage);
+			event.getChannel().sendMessage(botMessage);		
 		} else if (m.contains(SUBTRACT)) {
-			event.getChannel().sendMessage("Command received");
 			String newM = m.replace(SUBTRACT, "");
+			newM = newM.replace(ANSWER, answer);
 			String[] subtractends = newM.split(",");
-			int counter = Integer.parseInt(subtractends[0]);
+			double counter = Double.parseDouble(subtractends[0]);
 			String botMessage = subtractends[0] + " - ";
 			for (int i = 1; i < subtractends.length; i++) {
 				botMessage = botMessage + subtractends[i] + " - ";
-				counter = counter - Integer.parseInt(subtractends[i]);
+				counter = counter - Double.parseDouble(subtractends[i]);
 			}
+			answer = Double.toString(counter);
 			botMessage = botMessage.substring(0, botMessage.length() - 3) + " = " + counter;
 			System.out.println(botMessage + "this is a bot message");
 			System.out.println(botMessage);
 			event.getChannel().sendMessage(botMessage);
 		} else if (m.contains(MULTIPLY)){
-			event.getChannel().sendMessage("Command received");
 			String newM = m.replace(MULTIPLY, "");
+			newM = newM.replace(ANSWER, answer);
 			String[] products = newM.split(",");
-			int counter = 1;
+			double counter = 1;
 			String botMessage = "";
 			for (int i = 0; i < products.length; i++) {
 				botMessage = botMessage + products[i] + " × ";
-				counter = counter * Integer.parseInt(products[i]);
+				counter = counter * Double.parseDouble(products[i]);
 			}
+			answer = Double.toString(counter);
 			botMessage = botMessage.substring(0, botMessage.length() - 3) + " = " + counter;
 			System.out.println(botMessage + "this is a bot message");
 			System.out.println(botMessage);
 			event.getChannel().sendMessage(botMessage);
 		} else if (m.contains(DIVIDE)) {
-			event.getChannel().sendMessage("Command received");
 			String newM = m.replace(DIVIDE, "");
+			newM = m.replace(ANSWER, answer);
 			String[] theStuff = newM.split(",");
-			int counter = Integer.parseInt(theStuff[0]);
+			double counter = Double.parseDouble(theStuff[0]);
 			String botMessage = theStuff[0] + " / ";
 			for (int i = 1; i < theStuff.length; i++) {
 				botMessage = botMessage + theStuff[i] + " / ";
-				counter = counter / Integer.parseInt(theStuff[i]);
+				counter = counter / Double.parseDouble(theStuff[i]);
 			}
+			answer = Double.toString(counter);
 			botMessage = botMessage.substring(0, botMessage.length() - 3) + " = " + counter;
 			System.out.println(botMessage + "this is a bot message");
 			System.out.println(botMessage);
 			event.getChannel().sendMessage(botMessage);
 		} else if (m.contains(LOG)) {
-			event.getChannel().sendMessage("Command received");
 			String newM = m.replace(LOG, "");
+			newM = newM.replace(ANSWER, answer);
 			String[] theStuff = newM.split(",");
 			if (theStuff.length == 2) {
-				double answer = Math.log(Integer.parseInt(theStuff[1])) / Math.log(Integer.parseInt(theStuff[0]));
+				double answer = Math.log(Double.parseDouble(theStuff[1])) / Math.log(Double.parseDouble(theStuff[0]));
+				this.answer = Double.toString(answer);
 				String message = "log" + subscript(theStuff[0]) + "(" + theStuff[1] + ") = " + Double.toString(answer);
 				System.out.println(message + "this is a bot message");
 				System.out.println(message);
@@ -95,22 +106,23 @@ public class Millbot extends CustomMessageCreateListener{
 			}
 			
 		} else if (m.contains(POWER)){
-			event.getChannel().sendMessage("Command received");
 			String newM = m.replace(POWER, "");
+			newM = newM.replace(ANSWER, answer);
 			String[] theStuff = newM.split(",");
 			String botMessage = "";
-			int counter = 1;
+			double counter = 1;
 			for (int i = 1; i < theStuff.length; i++) {
-				counter = counter * Integer.parseInt(theStuff[i]);
+				counter = counter * Double.parseDouble(theStuff[i]);
 			}
-			double answer = Math.pow(Integer.parseInt(theStuff[0]), counter);
-			String message = theStuff[0] + superscript(Integer.toString(counter)) + " = " + answer;
+			double answer = Math.pow(Double.parseDouble(theStuff[0]), counter);
+			this.answer = Double.toString(answer);
+			String message = theStuff[0] + superscript(Double.toString(counter)) + " = " + answer;
 			event.getChannel().sendMessage(message);
 		}
 		
-		else if(m.equals(helpMe)) {
+		else if(m.equals(HELPME)) {
 			event.getChannel().sendMessage("Type ![name of function] and put the numbers you want to add after it in a list like so:\n!add A,B,C");
-			event.getChannel().sendMessage("Supported functions are addition, subtraction, multiplication, division, logarithms, exponents, and all trigonometric functions.");
+			event.getChannel().sendMessage("Supported functions are addition, subtraction, multiplication, division, logarithms, and exponents.");
 			event.getChannel().sendMessage("For logarithmic functions, type numbers in order of base then answer.");
 		}
 		
