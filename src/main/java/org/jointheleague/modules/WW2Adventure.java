@@ -77,8 +77,9 @@ public class WW2Adventure extends CustomMessageCreateListener {
 				menuState1++;
 			}
 		} else if (menuState1 == 1) {
-			if (txt.equalsIgnoreCase(CONTINUECMD)) {
+			if (txt.equalsIgnoreCase(CONTINUECMD) || midway) {
 				middway(event);
+				midway = true;
 			}
 
 		}
@@ -237,11 +238,15 @@ public class WW2Adventure extends CustomMessageCreateListener {
 		if (gameState1 == 0) {
 			event.getChannel().sendMessage("Here is your first question: ");
 			event.addReactionsToMessage("😂");
-
 			event.getChannel().sendMessage("Spell Japan backwards");
 			gameState1++;
 		} else if (gameState1 == 1) {
-
+			try {
+				Thread.sleep(1001);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			if (txt.equalsIgnoreCase("napaJ")) {
 				event.getChannel().sendMessage("Great work soldier");
 				event.getChannel().type();
@@ -268,10 +273,8 @@ public class WW2Adventure extends CustomMessageCreateListener {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				event.getChannel().sendMessage("Here is your next question: ");
-				event.getChannel().type();
-				event.getChannel().sendMessage("What ocean did the battle of midway happen in?");
-				gameState1 += 3;
+
+				gameState1 += 2;
 			} else {
 
 				gameState1++;
@@ -281,8 +284,19 @@ public class WW2Adventure extends CustomMessageCreateListener {
 			event.getChannel().sendMessage(
 					"Sorry soldier, you have died! The correct answer was napaJ. Type !BeginWW2Journey if you wanna start over.");
 			gameState1 = 0;
-		} else if (gameState1 == 5) {
+		} else if (gameState == 3) {
+			event.getChannel().sendMessage("Here is your next question: ");
+			event.getChannel().type();
+			event.getChannel().sendMessage("What ocean did the battle of midway happen in?");
+			gameState1++;
+		} else if (gameState1 == 4) {
 			if (txt.equalsIgnoreCase("Pacific") || txt.equalsIgnoreCase("Pacific ocean")) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				event.getChannel().sendMessage("Nice Job soldier!!");
 				build.setThumbnail(
 						"https://omniatlas-1598b.kxcdn.com/media/img/articles/subst/asia-pacific/asia-pacific19420607.png");
@@ -292,39 +306,59 @@ public class WW2Adventure extends CustomMessageCreateListener {
 				build.addField("Another Fact: ",
 						"After the US won this battle, victory for Japan and the axis were no longer able to happen");
 				event.getChannel().sendMessage(build);
-
-				gameState1++;
+				event.getChannel().type();
+				event.getChannel().sendMessage("Your next question is: /n spell Midway in alphabetical order");
+				gameState1 += 2;
 			} else {
-				event.getChannel().sendMessage("You have died, the Correct answer is pacific ocean");
-				gameState1 = 0;
-
+				gameState++;
 			}
+
+		} else if (gameState1 == 5) {
+			event.getChannel().sendMessage("You have died, the Correct answer is pacific ocean");
+			gameState1 = 0;
+
 		} else if (gameState1 == 6) {
-			event.getChannel().type();
-			event.getChannel().sendMessage("Your next question is: /n spell Midway in alphabetical order");
+			try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			if (txt.equalsIgnoreCase("adiMwy")) {
 				event.getChannel().sendMessage("Nice one!");
+				event.getChannel().type();
+				event.getChannel().sendMessage(
+					"Here is your final question. This will be tough, but if you get it right then you win this battle!");
+				event.getChannel().type();
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				event.getChannel().type();
-				event.getChannel().sendMessage(
-						"Here is your final question. This will be tough, but if you get it right then you win this battle!");
-				build = new EmbedBuilder();
-				build.setTitle("Your final question (true or false): is this midway island?");
-				build.setColor(Color.gray);
-				build.setThumbnail("https://web.mst.edu/~rogersda/military_service/Eastern%20Island.jpg");
-				event.getChannel().sendMessage(build);
-				gameState1++;
+				gameState1 += 2;
 			} else {
-				event.getChannel().sendMessage("Sorry you have died. The correct answer is adiMwy.");
-				gameState = 0;
-
+				gameState1++;
 			}
-		} else if (gameState1 == 7) {
+		} else if (gameState1 == 8) {
+
+			build = new EmbedBuilder();
+			build.setTitle("Your final question (true or false): is this midway island?");
+			build.setColor(Color.gray);
+			build.setThumbnail("https://web.mst.edu/~rogersda/military_service/Eastern%20Island.jpg");
+			event.getChannel().sendMessage(build);
+			gameState1 += 2;
+		}
+
+		else if (gameState1 == 7) {
+			event.getChannel().sendMessage("Sorry you have died. The correct answer is adiMwy.");
+			gameState = 0;
+
+		} else if (gameState == 11) {
+			event.getChannel().sendMessage("Sorry you have died. The correct answer is true.");
+			gameState1 = 0;
+			menuState1 = 0;
+		} else if (gameState1 == 10) {
 			if (txt.equalsIgnoreCase("true") || txt.equalsIgnoreCase("yes")) {
 				event.getChannel().sendMessage("WWOOO U GOT IT BRO!");
 				event.getChannel().type();
@@ -333,9 +367,8 @@ public class WW2Adventure extends CustomMessageCreateListener {
 				menuState1 = 0;
 
 			} else {
-				event.getChannel().sendMessage("Sorry you have died. The correct answer is true.");
-				gameState1 = 0;
 
+				gameState1 = 11;
 			}
 		}
 	}
