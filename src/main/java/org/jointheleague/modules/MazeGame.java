@@ -27,7 +27,7 @@ public class MazeGame extends CustomMessageCreateListener {
 	@Override
 	// listens for command and parses parameters
 	public void handle(MessageCreateEvent event) throws APIException {
-		System.out.println("Heard message: " + event.getMessageContent());
+		/*System.out.println("Heard message: " + event.getMessageContent());
 		if (event.getMessageContent().contains(COMMAND) && !event.getMessageAuthor().isBotUser()) {			
 			if (event.getMessageContent().contains("start") || event.getMessageContent().contains("load")) {
 				String target = event.getMessageContent().substring(11).strip();
@@ -82,7 +82,7 @@ public class MazeGame extends CustomMessageCreateListener {
 			}
 			
 			
-		}
+		}*/
 	}
 
 	/*

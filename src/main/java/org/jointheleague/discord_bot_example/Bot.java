@@ -51,9 +51,9 @@ public class Bot {
 		api.addMessageCreateListener(list);
 		helpListener.addHelpEmbed(list.getHelpEmbed());
 		
-		MazeGame maze = new MazeGame(channelName);
-		api.addMessageCreateListener(maze);
-		helpListener.addHelpEmbed(maze.getHelpEmbed());
+//		MazeGame maze = new MazeGame(channelName);
+//		api.addMessageCreateListener(maze);
+//		helpListener.addHelpEmbed(maze.getHelpEmbed());
 		
 		MarsPictures marsPictures = new MarsPictures(channelName);
 		api.addMessageCreateListener(marsPictures);
@@ -160,9 +160,17 @@ public class Bot {
 		api.addMessageCreateListener(depress);
 		helpListener.addHelpEmbed(depress.getHelpEmbed());
 
-    Depression depress = new Depression(channelName);
-		api.addMessageCreateListener(depress);
-		helpListener.addHelpEmbed(depress.getHelpEmbed());
+		LeagueChamp leagueChamp = new LeagueChamp(channelName);
+		api.addMessageCreateListener(leagueChamp);
+		helpListener.addHelpEmbed(leagueChamp.getHelpEmbed());
+
+		GuessTheNumber guessNum = new GuessTheNumber(channelName);
+		api.addMessageCreateListener(guessNum);
+		helpListener.addHelpEmbed(guessNum.getHelpEmbed());
+
+//    Depression depress = new Depression(channelName);
+//		api.addMessageCreateListener(depress);
+//		helpListener.addHelpEmbed(depress.getHelpEmbed());
 
 		// old way to add listeners
 		api.addMessageCreateListener(helpListener);
@@ -208,5 +216,7 @@ public class Bot {
 		api.addMessageCreateListener(new RandomCase(channelName));
 		api.addMessageCreateListener(new GetTime(channelName));
 		api.addMessageCreateListener(new ScreenCapture(channelName));
+		api.addMessageCreateListener(new LeagueChamp(channelName));
+		api.addMessageCreateListener(new GuessTheNumber(channelName));
 	}
 }
