@@ -14,6 +14,7 @@ import javax.json.JsonReader;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.jointheleague.modules.pojo.HelpEmbed;
 import org.jointheleague.modules.pojo.dnd.Feature;
+import org.jointheleague.modules.pojo.dnd.Monster;
 import org.jointheleague.modules.pojo.dnd.Spell;
 
 import com.google.gson.Gson;
@@ -43,6 +44,9 @@ public class DnDRules extends CustomMessageCreateListener{
 					}else if(msg.contains("spell")) {
 						String lol=msg.replace("spell", "");
 						getSpell(lol, event);
+					}else if(msg.contains("monster")) {
+						String lol=msg.replace("monster", "");
+						getMonster(lol, event);
 					}
 				}
 			}
@@ -164,6 +168,95 @@ public class DnDRules extends CustomMessageCreateListener{
 					event.getChannel().sendMessage("**at higher levels:** "+upcast);
 				}
 				event.getChannel().sendMessage("Available to: "+classes);
+					
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ProtocolException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			
+			
+				
+			}
+			public void getMonster(String msg, MessageCreateEvent event) {
+
+				String requestURL = "https://www.dnd5eapi.co/api/monsters/"+msg;
+				System.out.println(requestURL);
+				
+					URL url;
+					try {
+						url = new URL(requestURL);
+					
+						HttpURLConnection con = (HttpURLConnection) url.openConnection();
+						con.setRequestMethod("GET");
+						JsonReader repoReader = Json.createReader(con.getInputStream());
+					    JsonObject userJSON = ((JsonObject) repoReader.read());
+					    con.disconnect();
+
+					//turn the json response into a java object
+					//you will need to create a java class that represents the response in org.jointheleague.modules.pojo
+					//you can use a tools like Postman and jsonschema2pojo.com to help with that
+				    
+				    //you can use postman to make the request and receive a response, then take that and put it right into jsonschema2pojo.com
+					//If using jsonschema2pojo.com, select Target Langue = java, Source Type = JSON, Annotation Style = Gson
+
+
+					//get the first article (these are just java objects now)
+				Monster m= gson.fromJson(userJSON.toString(), Monster.class);
+
+		
+					event.getChannel().sendMessage(m.getName());
+					event.getChannel().sendMessage(m.getTypes());
+					event.getChannel().sendMessage("**----------------**");
+					event.getChannel().sendMessage(m.getAC());
+					event.getChannel().sendMessage(m.getHP());
+					event.getChannel().sendMessage(m.getSpeed());
+					event.getChannel().sendMessage("**----------------**");
+					event.getChannel().sendMessage(m.getScores());
+					event.getChannel().sendMessage("**----------------**");
+					if(m.getSaves().length()>=0) {
+						event.getChannel().sendMessage(m.getSaves());
+					}
+					if(m.getProfs().length()>=0) {
+						event.getChannel().sendMessage(m.getProfs());
+					}
+					if(m.getProfs().length()>=0) {
+						event.getChannel().sendMessage(m.getProfs());
+					}
+					if(m.getV().length()>=0) {
+						event.getChannel().sendMessage(m.getV());
+					}
+					if(m.getR().length()>=0) {
+						event.getChannel().sendMessage(m.getR());
+					}
+					if(m.getI().length()>=0) {
+						event.getChannel().sendMessage(m.getI());
+					}
+					if(m.getCI().length()>=0) {
+						event.getChannel().sendMessage(m.getCI());
+					}
+					event.getChannel().sendMessage(m.getSenses());
+					event.getChannel().sendMessage(m.getLangs());
+					event.getChannel().sendMessage(m.getCR());
+					event.getChannel().sendMessage("**----------------**");
+					event.getChannel().sendMessage(m.getAbilities());
+					event.getChannel().sendMessage("**Actions**");
+					event.getChannel().sendMessage("----------------");
+					event.getChannel().sendMessage(m.getActions());
+					if(m.getLActions().length() >=0) {
+						event.getChannel().sendMessage("**Legendary Actions**");
+						event.getChannel().sendMessage("----------------");
+						event.getChannel().sendMessage("The "+m.getSmallName()+" can take 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. The sphinx regains spent legendary actions at the start of its turn.");
+						event.getChannel().sendMessage(m.getLActions());
+					}
+					
+					
+					
 					
 					} catch (MalformedURLException e) {
 						// TODO Auto-generated catch block
