@@ -10,9 +10,20 @@ public class Action {
  @SerializedName("desc")
     @Expose
     private String text;
+ @SerializedName("usage")
+ @Expose
+ private Usage usage;
  
  public String getName() {
-	   return name;
+	 String s=name;
+	 if(usage!=null) {
+
+	s+=usage.getUsage();
+		 
+	 }else {
+	System.out.println("no usages for "+name);
+	 }
+	 return s;
  }
  
  public String getText() {

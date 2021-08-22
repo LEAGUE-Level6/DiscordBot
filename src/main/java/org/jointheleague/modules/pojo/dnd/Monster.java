@@ -77,10 +77,10 @@ public class Monster {
 	    private int xp;
 	 @SerializedName("special_abilities")
 	    @Expose
-	    private Action[] abilities;
+	    private Action[] abilities=new Action[] {};
 	 @SerializedName("actions")
 	    @Expose
-	    private Action[] actions;
+	    private Action[] actions=new Action[] {};
 	 @SerializedName("legendary_actions")
 	    @Expose
 	    private Action[] lactions;

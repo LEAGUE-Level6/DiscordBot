@@ -1,6 +1,7 @@
 package org.jointheleague.modules;
 
 import java.io.IOException;
+
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -18,6 +19,11 @@ import org.jointheleague.modules.pojo.dnd.Monster;
 import org.jointheleague.modules.pojo.dnd.Spell;
 
 import com.google.gson.Gson;
+
+
+
+//NOTE TO SELF REDO TOKEN ENTRY
+
 
 public class DnDRules extends CustomMessageCreateListener{
 	public DnDRules(String channelName) {
@@ -247,6 +253,7 @@ public class DnDRules extends CustomMessageCreateListener{
 					event.getChannel().sendMessage(m.getAbilities());
 					event.getChannel().sendMessage("**Actions**");
 					event.getChannel().sendMessage("----------------");
+					System.out.println(m.getActions());
 					event.getChannel().sendMessage(m.getActions());
 					if(m.getLActions().length() >=0) {
 						event.getChannel().sendMessage("**Legendary Actions**");
