@@ -29,11 +29,13 @@ public class GoFish extends CustomMessageCreateListener{
 	String playerGuess ="";
 	Random r = new Random();
 	int randomNum = r.nextInt(11);
-	String firstPlayer = null;
+	public String firstPlayer = null;
 	
 	//state of the game
 	int state = 0;
 	
+	//boolean for finding card
+	public boolean found;
 	
 	//decks
 	ArrayList<Integer> playerCards = new ArrayList<Integer>();
@@ -44,13 +46,13 @@ public class GoFish extends CustomMessageCreateListener{
 	
 	public GoFish(String channelName) {
 		super(channelName);
-		helpEmbed = new HelpEmbed(COMMAND, "Go Fish description goes here");
+		helpEmbed = new HelpEmbed(getCommand(), "Go Fish description goes here");
 	}
 
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		if(event.getMessageAuthor().getId() != botId) {
-			System.out.println("State: "+state);
+			checkWin();
 			switch(state) {
 			//starting the game/deciding who goes first
 			case 0:
@@ -59,12 +61,13 @@ public class GoFish extends CustomMessageCreateListener{
 				
 			//shuffling the deck
 			case 1:
-				deck = shuffleDeck(deck, event);
+				deck = shuffleDeck(deck);
+				event.getChannel().sendMessage("I shuffled the deck");
 				break;
 				
 			//dealing cards to player and bot
 			case 2:
-				dealCards(event);
+				dealCards();
 				break;
 			
 			//playing round user
@@ -79,13 +82,13 @@ public class GoFish extends CustomMessageCreateListener{
 			}
 				
 		}
+		
 	}
 	
 	public void pickFirstPlayer(MessageCreateEvent event) {
 		String cmd = event.getMessageContent();
 
-		
-		if(cmd.equals(COMMAND)) {
+		if(cmd.equals(getCommand())) {
 			event.getChannel().sendMessage(randomNum+"Guess my number between 0 and 10 and I'll let you go first");
 		}
 		else if(state == 0) {
@@ -115,7 +118,7 @@ public class GoFish extends CustomMessageCreateListener{
 		}
 	}
 	
-	public ArrayList<Integer> shuffleDeck(ArrayList<Integer> cards, MessageCreateEvent event) {
+	public ArrayList<Integer> shuffleDeck(ArrayList<Integer> cards) {
 		createDeck();
 		ArrayList<Integer> shuffledCards = new ArrayList<Integer>();
 		for(int i = 0; i < deck.size(); i ++) {
@@ -124,11 +127,10 @@ public class GoFish extends CustomMessageCreateListener{
 		}
 		 
 		state = 2;
-		event.getChannel().sendMessage("I shuffled the deck");
 		return shuffledCards;
 	}
 	
-	public void dealCards(MessageCreateEvent event) {
+	public void dealCards() {
 		//show the player's cards in list format
 		//store in ArrayList
 		//save bot's cards in ArrayList
@@ -139,11 +141,11 @@ public class GoFish extends CustomMessageCreateListener{
 		}
 		for(int i = 0; i < 7; i ++) {
 			botCards.add(deck.get(i));
-			System.out.println(deck.get(i));
+			//System.out.println(deck.get(i));
 
 			deck.remove(i);
 		}
-		System.out.println("cards dealt");
+		//System.out.println("cards dealt");
 		
 		state = 3;
 	}
@@ -176,6 +178,11 @@ public class GoFish extends CustomMessageCreateListener{
 					if(searchDeck(botCards, requestedCard, playerCards, event)) {
 						event.getChannel().sendMessage("Here you go");
 					}
+					else{
+						event.getChannel().sendMessage("Go fish");
+						playerCards.add(deck.get(0));
+						state = 4;
+					}
 				}
 			}
 		}
@@ -183,9 +190,6 @@ public class GoFish extends CustomMessageCreateListener{
 			//move to bot asks user
 			state = 4;
 		}
-		
-		
-		
 	}
 	
 	public void botAsksUser(MessageCreateEvent event) {
@@ -195,15 +199,20 @@ public class GoFish extends CustomMessageCreateListener{
 		
 		//search player deck
 		if(randCard >= 2 && randCard <= 10) {
-			//getting weird error when this is thrown into if statement
-			searchDeck(playerCards, randCard, botCards, event);
+			
+			if(searchDeck(playerCards, randCard, botCards, event)) {
+				event.getChannel().sendMessage("Hand it over");
+			}
+			else {
+				botCards.add(deck.get(0));
+			}
 		}
+		state = 3;
 		
 	}
 	
 	public boolean searchDeck(ArrayList<Integer> deckToSearch, int cardToSearch, ArrayList<Integer> deckToAdd, MessageCreateEvent event) {
-		boolean found = false;
-		System.out.println(deckToSearch.size());
+		found = false;
 		for(int i : deckToSearch) {
 			
 			if(i == cardToSearch) {
@@ -225,6 +234,58 @@ public class GoFish extends CustomMessageCreateListener{
 		cardsFound.clear();
 		return found;
 	}
+	
+	int playerCount = 0;
+	int botCount = 0;
+	public String checkWin() {
+		
+		String winner = "";
+		if(deck.size()==0) {
+			//check to see if player wins
+			for(int i = 0; i < playerCards.size(); i ++) {
+				for(int j = 0; j < playerCards.size(); j++) {
+					if(playerCards.get(i) == playerCards.get(j)) {
+						playerCount++;
+					}
+				}
+				
+			}
+			//check to see if bot wins
+			for(int i = 0; i < botCards.size(); i ++){
+				for(int j = 0; j < botCards.size(); j ++) {
+					if(botCards.get(i) == botCards.get(j)) {
+						botCount++;
+					}
+				}
+			}
+		}
+		if(playerCount > botCount) {
+			winner = "You win!";
+		}
+		else {
+			winner = "Haha I win!";
+		}
+		
+		return winner;
+	}
+	
+	
+	public int getBotCardsSize(){
+		return botCards.size();
+	}
+	
+	public int getPlayerCardsSize(){
+		return playerCards.size();
+	}
+	
+	public int getDeckSize(){
+		return deck.size();
+	}
+
+	public static String getCommand() {
+		return COMMAND;
+	}
+	
 	
 	
 }

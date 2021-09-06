@@ -109,4 +109,9 @@ public class BinaryTranslator extends CustomMessageCreateListener{
         }
         return binaryStr;
 	}
+
+	public static String getCommand() {
+		// TODO Auto-generated method stub
+		return COMMAND;
+	}
 }

@@ -162,6 +162,11 @@ public class Bot  {
 		api.addMessageCreateListener(g);
 		helpListener.addHelpEmbed(g.getHelpEmbed());
 		
+		//age guesser
+		GuessAge a = new GuessAge(channelName);
+		api.addMessageCreateListener(a);
+		helpListener.addHelpEmbed(a.getHelpEmbed());
+		
 		//old way to add listeners 
 		api.addMessageCreateListener(helpListener);
 		api.addMessageCreateListener(new MomBot(channelName));
