@@ -168,6 +168,10 @@ public class Bot {
 		api.addMessageCreateListener(guessNum);
 		helpListener.addHelpEmbed(guessNum.getHelpEmbed());
 
+		NumberVs numberVs = new NumberVs(channelName);
+		api.addMessageCreateListener(numberVs);
+		helpListener.addHelpEmbed(numberVs.getHelpEmbed());
+
 //    Depression depress = new Depression(channelName);
 //		api.addMessageCreateListener(depress);
 //		helpListener.addHelpEmbed(depress.getHelpEmbed());
@@ -218,5 +222,6 @@ public class Bot {
 		api.addMessageCreateListener(new ScreenCapture(channelName));
 		api.addMessageCreateListener(new LeagueChamp(channelName));
 		api.addMessageCreateListener(new GuessTheNumber(channelName));
+		api.addMessageCreateListener(new NumberVs(channelName));
 	}
 }
