@@ -17,7 +17,7 @@ public class BinaryTranslator extends CustomMessageCreateListener{
 		//description for the !binary command
 
 		helpEmbed = new HelpEmbed(COMMAND, "Will either convert between binary and decimal.  Type '!binary to' to convert from decimal to binary.  Type '!binary from' to convert from binary to decimal");
-	}
+	} 
 
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
@@ -30,15 +30,14 @@ public class BinaryTranslator extends CustomMessageCreateListener{
 				//check if user wants to go from decimal to binary
 				//if second word is "to" convert their number to binary
 				if(cmd[1].equals("to")) {
-					try {
-						int userNum = Integer.parseInt(cmd[2]);
-						event.getChannel().sendMessage("Here's your binary number " + decimalToBinary(userNum));
+					try { 
+						event.getChannel().sendMessage("Here's your binary number " + decimalToBinary(cmd[2]));
 					}
 					catch (NumberFormatException e) {
-						e.printStackTrace();
+						e.printStackTrace(); 
 						sendErrorMessage(event);
 					}
-				}
+				} 
 				//check if user wants to go from binary to decimal
 				//if second word is "from" convert from their number to decimal
 				else if(cmd[1].equals("from")){
@@ -50,7 +49,7 @@ public class BinaryTranslator extends CustomMessageCreateListener{
 						sendErrorMessage(event);
 					}
 				}	
-			}
+			} 
 			else {
 				sendErrorMessage(event);
 			}
@@ -87,23 +86,26 @@ public class BinaryTranslator extends CustomMessageCreateListener{
 	}
 	
 	//convert from decimal to binary
-	public String decimalToBinary(int decimal) {
+	public String decimalToBinary(String decimal) {
+		int dec = Integer.parseInt(decimal);
+
 		String binaryStr = "";
         do {
             // 1. Logical right shift by 1
-            int quotient = decimal >>> 1;
+            int quotient = dec >>> 1;
         
             // 2. Check remainder and add '1' or '0'
-            if( decimal % 2 != 0 ){
+            if( dec % 2 != 0 ){
                 binaryStr = '1' + binaryStr;
             } else {
                 binaryStr = '0' + binaryStr;
             }
             
-            decimal = quotient;
+            
+            dec = quotient;
             
         // 3. Repeat until number is 0
-        } while( decimal != 0 );
+        } while( dec != 0 );
         while (binaryStr.length() != 8) {
         	binaryStr = '0' + binaryStr;
         }

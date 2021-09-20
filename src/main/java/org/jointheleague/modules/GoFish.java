@@ -21,7 +21,7 @@ import net.aksingh.owmjapis.api.APIException;
 public class GoFish extends CustomMessageCreateListener{
 	//game command
 	private static final String COMMAND = "!gofish";
-	
+	 
 	//bot id
 	static long botId = 825895501148585984L;
 	
@@ -51,6 +51,10 @@ public class GoFish extends CustomMessageCreateListener{
 
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
+		
+		//System.out.println("player: "+ playerCards);
+		//System.out.println("bot: "+ botCards);
+
 		if(event.getMessageAuthor().getId() != botId) {
 			checkWin();
 			switch(state) {
@@ -213,6 +217,7 @@ public class GoFish extends CustomMessageCreateListener{
 	
 	public boolean searchDeck(ArrayList<Integer> deckToSearch, int cardToSearch, ArrayList<Integer> deckToAdd, MessageCreateEvent event) {
 		found = false;
+		cardsFound.clear();
 		for(int i : deckToSearch) {
 			
 			if(i == cardToSearch) {
@@ -220,8 +225,8 @@ public class GoFish extends CustomMessageCreateListener{
 			}
 		}
 		if(cardsFound.size() > 0) {
-			for(int i = 0; i < deckToSearch.size(); i ++) {
-				for(int j = 0; j < cardsFound.size(); j ++) {
+			for(int i = 0; i < deckToSearch.size()-1; i ++) {
+				for(int j = 0; j < cardsFound.size()-1; j ++) {
 					if(deckToSearch.get(i).equals(cardsFound.get(j))) {
 						deckToAdd.add(deckToSearch.get(i));
 						deckToSearch.remove(i);
@@ -231,7 +236,7 @@ public class GoFish extends CustomMessageCreateListener{
 			found = true;
 			state = 4;
 		}
-		cardsFound.clear();
+		
 		return found;
 	}
 	
@@ -285,7 +290,6 @@ public class GoFish extends CustomMessageCreateListener{
 	public static String getCommand() {
 		return COMMAND;
 	}
-	
 	
 	
 }

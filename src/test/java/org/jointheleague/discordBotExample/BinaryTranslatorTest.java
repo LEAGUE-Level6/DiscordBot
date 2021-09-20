@@ -44,7 +44,7 @@ class BinaryTranslatorTest {
         MockitoAnnotations.openMocks(this);
         System.setOut(new PrintStream(outContent));
     }
-	
+	 
 	@AfterEach
     public void itShouldNotPrintToSystemOut() {
         String expected = "";
@@ -88,26 +88,96 @@ class BinaryTranslatorTest {
         verify(textChannel, times(1)).sendMessage(anyString());
     }
 	
+	
+	
 	@Test
 	void shouldConvertToBinary() {
 		//given
-		int decimal = 4;
+		String decimal = "4";
 		String expectedBinary = "00000100";
+		String command = BinaryTranslator.getCommand() + "to 4";
+		when(testEvent.getMessageContent()).thenReturn(command);
 		//when
 		String actualBinary = bTranslate.decimalToBinary(decimal);
+		
 		//then
 		assertEquals(expectedBinary, actualBinary);
 	}
-	
+	 
 	@Test
 	void shouldConvertToDecimal() {
 		//given
 		String binary ="100";
 		int expectedDecimal = 4;
+		String command = BinaryTranslator.getCommand() + "from 100"
+				+ "";
+		when(testEvent.getMessageContent()).thenReturn(command);
 		//when
 		int actualDecimal = bTranslate.binaryToDecimal(binary);
 		//then
 		assertEquals(expectedDecimal, actualDecimal);
+	}
+	
+	@Test
+	void shouldSendBinaryValue() {
+		//given
+		int decimal = 4;
+		String expectedBinary = "00000100";
+		String command = BinaryTranslator.getCommand() + " to 4"
+				+ "";
+		when(testEvent.getMessageContent()).thenReturn(command);
+		when(testEvent.getChannel()).thenReturn(textChannel);
+        when(testEvent.getMessageAuthor()).thenReturn(author);
+        when(author.getId()).thenReturn(869256021326049280L);
+        
+        //when
+        try {
+			bTranslate.handle(testEvent);
+		} catch (APIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace(); 
+		}
+        
+        verify(textChannel, times(1)).sendMessage("Here's your binary number " + expectedBinary);
+        
+	} 
+	
+	@Test
+	void shouldSendDecimalValue() {
+		//given
+		String binary = "100";
+		int expectedDec = 4;
+		String command = BinaryTranslator.getCommand() + " from 100";
+		when(testEvent.getMessageContent()).thenReturn(command);
+		when(testEvent.getChannel()).thenReturn(textChannel);
+        when(testEvent.getMessageAuthor()).thenReturn(author);
+        when(author.getId()).thenReturn(869256021326049280L);
+        
+		//when
+        try {
+			bTranslate.handle(testEvent);
+		} catch (APIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace(); 
+		}
+        
+        verify(textChannel, times(1)).sendMessage("Here's your decimal number " + expectedDec);
+        
+		
+	}
+	
+	@Test
+	void shouldGiveNumFormatException() throws NumberFormatException{
+		//given
+		String decimal = "four";
+		String command = BinaryTranslator.getCommand() + " to four"
+				+ "";
+		when(testEvent.getMessageContent()).thenReturn(command);
+		when(testEvent.getChannel()).thenReturn(textChannel);
+        when(testEvent.getMessageAuthor()).thenReturn(author);
+        when(author.getId()).thenReturn(869256021326049280L);
+        //when
+       assertThrows(NumberFormatException.class, () -> bTranslate.decimalToBinary(decimal));
 	}
 	
 	

@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 import net.aksingh.owmjapis.api.APIException;
 
 public class GuessAge extends CustomMessageCreateListener {
-	private final Gson gson = new Gson();
+	private final Gson gson = new Gson(); 
 	private WebClient webClient;
 	private static final String COMMAND = "!age";
 
@@ -72,6 +72,10 @@ public class GuessAge extends CustomMessageCreateListener {
     public void setWebClient(WebClient webClient) {
         this.webClient = webClient;
     }
+	public static String getCommand() {
+		// TODO Auto-generated method stub
+		return COMMAND;
+	}
 
 
 

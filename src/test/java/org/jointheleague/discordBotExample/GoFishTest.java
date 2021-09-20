@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-
+ 
 
 class GoFishTest {
 	
@@ -32,7 +32,7 @@ class GoFishTest {
     private final PrintStream originalOut = System.out;
 
 	ArrayList<Integer> testCards = new ArrayList<Integer>();
-	
+	 
 	@Mock
 	private MessageCreateEvent testEvent;
 	
@@ -190,9 +190,10 @@ class GoFishTest {
 	
 	@Test
 	void shouldSayPlayerWins() {
+		//given
 		
-     
-
+		//when
+		
 	}
 	
 	@Test 
