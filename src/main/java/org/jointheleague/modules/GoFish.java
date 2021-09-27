@@ -35,7 +35,8 @@ public class GoFish extends CustomMessageCreateListener{
 	int state = 0;
 	
 	//boolean for finding card
-	public boolean found;
+	public boolean found; 
+	int numCardsFound;
 	
 	//decks
 	ArrayList<Integer> playerCards = new ArrayList<Integer>();
@@ -52,8 +53,8 @@ public class GoFish extends CustomMessageCreateListener{
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		
-		//System.out.println("player: "+ playerCards);
-		//System.out.println("bot: "+ botCards);
+		System.out.println("player: "+ playerCards);
+		System.out.println("bot: "+ botCards);
 
 		if(event.getMessageAuthor().getId() != botId) {
 			checkWin();
@@ -175,18 +176,27 @@ public class GoFish extends CustomMessageCreateListener{
 		
 		if(firstPlayer.equals("player")) {
 			String request = event.getMessageContent();
+			int requestedCard = -1;
 			//search for number in request message
 			for(int i = 0; i < request.length(); i ++){
 				if(Character.isDigit(request.charAt(i))) {
-					int requestedCard = Integer.parseInt(request.substring(i, i +1));
+					requestedCard = Integer.parseInt(request.substring(i, i +1));
 					if(searchDeck(botCards, requestedCard, playerCards, event)) {
 						event.getChannel().sendMessage("Here you go");
+						for(int j = 0; j < numCardsFound; j ++) {
+							playerCards.add(requestedCard);
+						}
 					}
 					else{
+						playerCards.add(new Random().nextInt(13));
 						event.getChannel().sendMessage("Go fish");
-						playerCards.add(deck.get(0));
 						state = 4;
 					}
+				}
+			}
+			for(int i = 0; i < botCards.size(); i ++) {
+				if(botCards.get(i) == requestedCard) {
+					botCards.remove(i);
 				}
 			}
 		}
@@ -202,13 +212,23 @@ public class GoFish extends CustomMessageCreateListener{
 		event.getChannel().sendMessage("Do you have any " + randCard + "s?");
 		
 		//search player deck
+
 		if(randCard >= 2 && randCard <= 10) {
-			
 			if(searchDeck(playerCards, randCard, botCards, event)) {
 				event.getChannel().sendMessage("Hand it over");
+				for(int j = 0; j < numCardsFound; j ++) {
+					botCards.add(randCard);
+				}
 			}
 			else {
-				botCards.add(deck.get(0));
+				botCards.add(new Random().nextInt(13));
+			} 
+			
+		}
+		for(int i = 0; i < playerCards.size(); i ++) {
+
+			if(playerCards.get(i) == randCard) {
+				playerCards.remove(i);
 			}
 		}
 		state = 3;
@@ -217,6 +237,7 @@ public class GoFish extends CustomMessageCreateListener{
 	
 	public boolean searchDeck(ArrayList<Integer> deckToSearch, int cardToSearch, ArrayList<Integer> deckToAdd, MessageCreateEvent event) {
 		found = false;
+		numCardsFound = 0;
 		cardsFound.clear();
 		for(int i : deckToSearch) {
 			
@@ -225,17 +246,11 @@ public class GoFish extends CustomMessageCreateListener{
 			}
 		}
 		if(cardsFound.size() > 0) {
-			for(int i = 0; i < deckToSearch.size()-1; i ++) {
-				for(int j = 0; j < cardsFound.size()-1; j ++) {
-					if(deckToSearch.get(i).equals(cardsFound.get(j))) {
-						deckToAdd.add(deckToSearch.get(i));
-						deckToSearch.remove(i);
-					}
-				}
-			}
+
 			found = true;
 			state = 4;
 		}
+		numCardsFound = cardsFound.size();
 		
 		return found;
 	}

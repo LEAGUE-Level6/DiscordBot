@@ -2,7 +2,7 @@ package org.jointheleague.discord_bot_example;
 
 import java.util.Map;
 
-/**
+/** 
  * Launches the bot.
  * @author keithgroves and https://tinystripz.com
  *

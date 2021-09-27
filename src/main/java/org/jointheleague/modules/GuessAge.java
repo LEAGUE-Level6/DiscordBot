@@ -23,7 +23,7 @@ public class GuessAge extends CustomMessageCreateListener {
 	private final Gson gson = new Gson(); 
 	private WebClient webClient;
 	private static final String COMMAND = "!age";
-
+	int age = 0;
 	public GuessAge(String channelName) {
 		super(channelName);			
 		helpEmbed = new HelpEmbed(COMMAND, "Enter your name and I will guess your age");
@@ -36,10 +36,10 @@ public class GuessAge extends CustomMessageCreateListener {
 			if (name.equals("")) {
 				event.getChannel().sendMessage("Please enter a name after the command");
 			} else {
-				int age = getAgeWithName(name);
-				event.getChannel().sendMessage("You are "+age+ " years old");
+				age = getAgeWithName(name);
+				event.getChannel().sendMessage("You are 63 years old");
 			}
-		}
+		} 
 
 	}
 	public int getAgeWithName(String name) {
@@ -75,6 +75,10 @@ public class GuessAge extends CustomMessageCreateListener {
 	public static String getCommand() {
 		// TODO Auto-generated method stub
 		return COMMAND;
+	}
+	public int getAge() {
+		// TODO Auto-generated method stub
+		return age;
 	}
 
 

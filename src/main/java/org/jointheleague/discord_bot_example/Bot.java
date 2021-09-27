@@ -12,7 +12,7 @@ import org.javacord.api.DiscordApiBuilder;
 import org.jointheleague.modules.*;
 import org.jointheleague.modules.pojo.HelpEmbed;
 
-
+ 
 
 public class Bot  {
 //	private static final String COMMAND = "!help";
@@ -29,7 +29,7 @@ public class Bot  {
 		this.token = token;
 		this.channelName = channelName;
 		helpListener = new _HelpListener(channelName);
-	}
+	} 
 
 	public void connect(boolean printInvite) {
 		
