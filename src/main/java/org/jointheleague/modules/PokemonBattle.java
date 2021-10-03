@@ -19,6 +19,10 @@ import javax.json.JsonValue;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.jointheleague.modules.pojo.HelpEmbed;
 import org.jointheleague.modules.pojo.Pokemon.PokemonWrapper;
+import org.jointheleague.modules.pojo.Pokemon.types.DoubleDamageTo;
+import org.jointheleague.modules.pojo.Pokemon.types.HalfDamageTo;
+import org.jointheleague.modules.pojo.Pokemon.types.NoDamageTo;
+import org.jointheleague.modules.pojo.Pokemon.types.PokemonType;
 import org.jointheleague.modules.pojo.apiExample.ApiExampleWrapper;
 
 import com.google.gson.Gson;
@@ -33,6 +37,7 @@ private static final String COMMAND2="use";
 private final Gson gson = new Gson();
 List<String> movesList=new ArrayList<String>();
 boolean comma=false;
+boolean hasMove=false;
 String chars;
 String move;
 String pokemon1;
@@ -46,8 +51,8 @@ List<String> randomList2=new ArrayList<String>();
 int random;
 int players=0;
 int turn=1;
-int power1;
-int power2;
+double power1;
+double power2;
 String type1;
 String type2;
 double damageMultiplier=1;
@@ -77,7 +82,7 @@ public void handle(MessageCreateEvent event) throws APIException {
 			pokemon1=msg;
 			//hpMultiplierInt=hpMultiplier.nextInt(2);
 			//hpMultiplierInt+=2;
-			//pokemon1Health=getHP(pokemon1)*hpMultiplierInt;
+			pokemon1Health=getHP(pokemon1);
 			System.out.println(pokemon1Health);
 			PokemonWrapper moves=getMoves(msg);
 			pokemon1Types=getTypePokemon(pokemon1);
@@ -105,6 +110,7 @@ public void handle(MessageCreateEvent event) throws APIException {
 			for(int i=0; i<4; i++) {
 			random=rand.nextInt(movesList.size());
 			randomList.add(movesList.get(random));
+			movesList.remove(random);
 			System.out.println(movesList.get(random));
 			}
 			event.getChannel().sendMessage("You selected "+msg+". Your moves are "+randomList.get(0)+", "+randomList.get(1)+", "+randomList.get(2)+" and "+randomList.get(3)+ ". Waiting for second player.");
@@ -114,7 +120,7 @@ public void handle(MessageCreateEvent event) throws APIException {
 			pokemon2=msg;
 			//hpMultiplierInt=hpMultiplier.nextInt(2);
 			//hpMultiplierInt+=2;
-			//pokemon2Health=getHP(pokemon2)*hpMultiplierInt;
+			pokemon2Health=getHP(pokemon2);
 			System.out.println(pokemon2Health);
 			PokemonWrapper moves=getMoves(msg);
 			pokemon2Types=getTypePokemon(pokemon2);
@@ -142,6 +148,7 @@ public void handle(MessageCreateEvent event) throws APIException {
 			for(int i=0; i<4; i++) {
 				random=rand.nextInt(movesList.size());
 				randomList2.add(movesList.get(random));
+				movesList.remove(random);
 				System.out.println(movesList.get(random));
 				}
 				event.getChannel().sendMessage("You selected "+msg+". Your moves are "+randomList2.get(0)+", "+randomList2.get(1)+", "+randomList2.get(2)+" and "+randomList2.get(3)+ ". The battle has begun.");
@@ -153,27 +160,53 @@ public void handle(MessageCreateEvent event) throws APIException {
 			event.getChannel().sendMessage("Please put a word after the command");
 		}
 		else if(msg.contains(pokemon1) && turn==1) {
-			turn=2;
+			hasMove=false;
 			System.out.println(msg);
 				String msg2=msg.replace(pokemon1, "");
 				System.out.println(msg2);
+				for(int i=0; i<randomList.size(); i++) {
+					if(randomList.get(i).equals(msg2)) {
+						hasMove=true;
+					}
+				}
+				if(hasMove==true) {
+				turn=2;
 				power1=getMovePower(msg2);
 				type1=getMoveType(msg2);
+				damageMultiplier=getDamageRelations(type1);
+				power1=power1*=damageMultiplier;
 				pokemon2Health-=power1;
 				event.getChannel().sendMessage(pokemon1+" did "+power1+" damage to "+pokemon2+". "+pokemon2+" now has "+pokemon2Health+" health left.");
 				if(pokemon2Health<=0) {
 					event.getChannel().sendMessage(pokemon1+" has won the battle.");
-				}		
+				}
+				}
+				else {
+					event.getChannel().sendMessage("Use a real move, or a move that your pokemon knows");	
+				}
 		}
 		else if(msg.contains(pokemon2) && turn==2) {
-			turn=1;
+			hasMove=false;
 				String msg2=msg.replace(pokemon2, "");
+				for(int i=0; i<randomList2.size(); i++) {
+					if(randomList2.get(i).equals(msg2)) {
+						hasMove=true;
+					}
+				}
+				if(hasMove==true) {
+					turn=1;
 				power2=getMovePower(msg2);
 				type2=getMoveType(msg2);
+				damageMultiplier=getDamageRelations(type2);
+				power2=power2*=damageMultiplier;
 				pokemon1Health-=power2;
 				event.getChannel().sendMessage(pokemon2+" did "+power2+" damage to "+pokemon1+". "+pokemon1+" now has "+pokemon1Health+" health left.");
 				if(pokemon1Health<=0) {
 					event.getChannel().sendMessage(pokemon2+" has won the battle.");
+				}
+				}
+				else {
+					event.getChannel().sendMessage("Use a real move, or a move that your pokemon knows");	
 				}
 		}
 		else if(msg.contains(pokemon1) && turn==2) {
@@ -271,7 +304,7 @@ public int getHP(String pokemon) {
 	   System.out.println(hp.get(0));
 	   int hpint=hp.get(0).asJsonObject().getInt("base_stat");
 	   // PokemonWrapper pokemonWrapper=gson.fromJson(userJSON.toString(), PokemonWrapper.class);
-	    return hpint;
+	    return hpint+1000;
 	}
 	catch (MalformedURLException e) {
 		System.out.println("url");
@@ -302,10 +335,12 @@ public String[] getTypePokemon(String pokemon) {
 	   JsonObject pokemonType1=pokemonTypes.get(0).asJsonObject().getJsonObject("type");
 	   String pokemonType1Name=pokemonType1.getString("name");
 	   System.out.println(pokemonType1Name);
-	   try {
+	   pokemonTypesArray[0]=pokemonType1Name;
+		try {
 	   JsonObject pokemonType2=pokemonTypes.get(1).asJsonObject().getJsonObject("type");
 	   String pokemonType2Name=pokemonType2.getString("name");
 	   System.out.println(pokemonType2Name);
+	   pokemonTypesArray[1]=pokemonType2Name;
 	   }
 	   catch (IndexOutOfBoundsException i) {
 		   System.out.println("outOfBounds");
@@ -327,7 +362,7 @@ public String[] getTypePokemon(String pokemon) {
 	}
 	return null;
 }
-public int getMovePower(String move) {
+public double getMovePower(String move) {
 	String requestURL = "https://pokeapi.co/api/v2/move/" +
 	          move+"/";
 	try {
@@ -342,7 +377,7 @@ public int getMovePower(String move) {
 		//System.out.println("getinput");
 	    JsonObject userJSON = ((JsonObject) repoReader.read());
 	    con.disconnect();
-	    int power=userJSON.getInt("power");
+	    double power=userJSON.getInt("power");
 	    System.out.println(power);
 	   // PokemonWrapper pokemonWrapper=gson.fromJson(userJSON.toString(), PokemonWrapper.class);
 	    return power;
@@ -404,31 +439,109 @@ public double getDamageRelations(String moveType) {
 	//System.out.println("getinput");
     JsonObject userJSON = ((JsonObject) repoReader.read());
     con.disconnect();
-    JsonArray damageRelations=userJSON.getJsonArray("damage_relations");
-    JsonArray doubleDamage=damageRelations.getJsonArray(1);
-    JsonArray doubleDamageToTypes = null;
-    for(int i=0; i<doubleDamage.size(); i++) {
-    	JsonObject doubleDamageTo=doubleDamage.get(0).asJsonObject().getJsonObject("name");
-    	doubleDamageToTypes.add(doubleDamageTo);
-    }
-    JsonArray halfDamage=damageRelations.getJsonArray(3);
-    JsonArray halfDamageToTypes = null;
-    for(int i=0; i<halfDamage.size(); i++) {
-    	JsonObject halfDamageTo=halfDamage.get(0).asJsonObject().getJsonObject("name");
-    	halfDamageToTypes.add(halfDamageTo);
-    }
+    damageMultiplier=1;
+    PokemonType pokemonType=gson.fromJson(userJSON.toString(), PokemonType.class);
+    //JsonArray damageRelations=userJSON.getJsonArray("damage_relations");
+   // JsonArray doubleDamage=damageRelations.getJsonArray(1);
+    List<DoubleDamageTo> doubleDamageToTypes = pokemonType.getDamageRelations().getDoubleDamageTo();
+   // for(int i=0; i<doubleDamageToTypes.size(); i++) {
+    //	JsonObject doubleDamageTo=doubleDamage.get(i).asJsonObject().getJsonObject("name");
+   // 	doubleDamageToTypes.add(doubleDamageTo);
+   // }
+    //JsonArray halfDamage=damageRelations.getJsonArray(3);
+    //JsonArray halfDamageToTypes = null;
+    List<HalfDamageTo> halfDamageToTypes = pokemonType.getDamageRelations().getHalfDamageTo();
+    //for(int i=0; i<halfDamage.size(); i++) {
+    //	JsonObject halfDamageTo=halfDamage.get(i).asJsonObject().getJsonObject("name");
+    //	halfDamageToTypes.add(halfDamageTo);
+  //  }
+   // JsonArray noDamage=damageRelations.getJsonArray(5);
+   // JsonArray noDamageToTypes = null;
+    List<NoDamageTo> noDamageToTypes = pokemonType.getDamageRelations().getNoDamageTo();
+    //for(int i=0; i<noDamage.size(); i++) {
+    //	JsonObject noDamageTo=noDamage.get(i).asJsonObject().getJsonObject("name");
+    //	noDamageToTypes.add(noDamageTo);
+    //}
     
     
-    
-    if(turn==2) {
+   if(turn==2) {
+	   //if pokemon 1 attacks
     	for(int i=0; i<doubleDamageToTypes.size(); i++) {
-    	if(pokemon2Types[1].equals(doubleDamageToTypes.get(i))) {
+    	if(pokemon2Types[0].equals(doubleDamageToTypes.get(i).getName())) {
     		damageMultiplier*=2;
     	}
     	}
-    }
+    	for(int i=0; i<halfDamageToTypes.size(); i++) {
+    		if(pokemon2Types[0].equals(halfDamageToTypes.get(i).getName())) {
+    			damageMultiplier*=.5;
+    		}
+    	}
+    	for(int i=0; i<noDamageToTypes.size(); i++) {
+    		if(pokemon2Types[0].equals(noDamageToTypes.get(i).getName())) {
+    			damageMultiplier*=0;
+    		}
+    	}
+    	try {
+    	for(int i=0; i<doubleDamageToTypes.size(); i++) {
+        	if(pokemon2Types[1].equals(doubleDamageToTypes.get(i).getName())) {
+        		damageMultiplier*=2;
+        	}
+        	}
+        	for(int i=0; i<halfDamageToTypes.size(); i++) {
+        		if(pokemon2Types[1].equals(halfDamageToTypes.get(i).getName())) {
+        			damageMultiplier*=.5;
+        		}
+        	}
+        	for(int i=0; i<noDamageToTypes.size(); i++) {
+        		if(pokemon2Types[1].equals(noDamageToTypes.get(i).getName())) {
+        			damageMultiplier*=0;
+        		}
+        	}
+    	}
+    	catch(Exception e) {
+    		
+    	}
+   }
+   else if(turn==1) {
+	   //if pokemon 2 attacks
+	   for(int i=0; i<doubleDamageToTypes.size(); i++) {
+	    	if(pokemon1Types[0].equals(doubleDamageToTypes.get(i).getName())) {
+	    		damageMultiplier*=2;
+	    	}
+	    	}
+	    	for(int i=0; i<halfDamageToTypes.size(); i++) {
+	    		if(pokemon1Types[0].equals(halfDamageToTypes.get(i).getName())) {
+	    			damageMultiplier*=.5;
+	    		}
+	    	}
+	    	for(int i=0; i<noDamageToTypes.size(); i++) {
+	    		if(pokemon1Types[0].equals(noDamageToTypes.get(i).getName())) {
+	    			damageMultiplier*=0;
+	    		}
+	    	}
+	    	try {
+	    	for(int i=0; i<doubleDamageToTypes.size(); i++) {
+	        	if(pokemon1Types[1].equals(doubleDamageToTypes.get(i).getName())) {
+	        		damageMultiplier*=2;
+	        	}
+	        	}
+	        	for(int i=0; i<halfDamageToTypes.size(); i++) {
+	        		if(pokemon1Types[1].equals(halfDamageToTypes.get(i).getName())) {
+	        			damageMultiplier*=.5;
+	        		}
+	        	}
+	        	for(int i=0; i<noDamageToTypes.size(); i++) {
+	        		if(pokemon1Types[1].equals(noDamageToTypes.get(i).getName())) {
+	        			damageMultiplier*=0;
+	        		}
+	        	}
+	    	}
+	    	catch(Exception e) {
+	    		
+	    	}
+   }
 // PokemonWrapper pokemonWrapper=gson.fromJson(userJSON.toString(), PokemonWrapper.class);
-    
+    System.out.println("damageMultiplier="+damageMultiplier);
     return damageMultiplier;
 }
 catch (MalformedURLException e) {
