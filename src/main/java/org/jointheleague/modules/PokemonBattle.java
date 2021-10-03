@@ -110,8 +110,8 @@ public void handle(MessageCreateEvent event) throws APIException {
 			for(int i=0; i<4; i++) {
 			random=rand.nextInt(movesList.size());
 			randomList.add(movesList.get(random));
-			movesList.remove(random);
 			System.out.println(movesList.get(random));
+			movesList.remove(random);
 			}
 			event.getChannel().sendMessage("You selected "+msg+". Your moves are "+randomList.get(0)+", "+randomList.get(1)+", "+randomList.get(2)+" and "+randomList.get(3)+ ". Waiting for second player.");
 		}
@@ -148,14 +148,14 @@ public void handle(MessageCreateEvent event) throws APIException {
 			for(int i=0; i<4; i++) {
 				random=rand.nextInt(movesList.size());
 				randomList2.add(movesList.get(random));
-				movesList.remove(random);
 				System.out.println(movesList.get(random));
+				movesList.remove(random);
 				}
 				event.getChannel().sendMessage("You selected "+msg+". Your moves are "+randomList2.get(0)+", "+randomList2.get(1)+", "+randomList2.get(2)+" and "+randomList2.get(3)+ ". The battle has begun.");
 		}
 	}
-	else if(event.getMessageContent().contains(COMMAND2) && players==2) {
-		String msg = event.getMessageContent().replaceAll(" ", "").replace(COMMAND2, "");
+	else if(event.getMessageContent().toLowerCase().contains(COMMAND2) && players==2) {
+		String msg = event.getMessageContent().replaceAll(" ", "").replace(COMMAND2, "").toLowerCase();
 		if (msg.equals("")) {
 			event.getChannel().sendMessage("Please put a word after the command");
 		}
