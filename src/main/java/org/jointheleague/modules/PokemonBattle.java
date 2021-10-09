@@ -131,7 +131,7 @@ public void handle(MessageCreateEvent event) throws APIException {
 			System.out.println(pokemon2Health);
 			PokemonWrapper moves=getMoves(msg);
 			pokemon2Types=getTypePokemon(pokemon2);
-			pokemon2Types=getTypePokemon(pokemon1);
+			//pokemon1Types=getTypePokemon(pokemon1);
 			//moves.getMoves().get(0);
 			movesList.clear();
 			for(int i=0; i<moves.getMoves().size(); i++) {
