@@ -61,6 +61,12 @@ int hpMultiplierInt;
 String[] pokemonTypesArray=new String[2];
 String[] pokemon1Types=new String[2];
 String[] pokemon2Types=new String[2];
+JsonArray pokemonTypes;
+JsonObject pokemonType1;
+String pokemonType1Name;
+JsonObject pokemonType2;
+String pokemonType2Name;
+boolean getTypesPokemon2=false;
 
 public PokemonBattle (String channelName){
 super(channelName);
@@ -86,6 +92,7 @@ public void handle(MessageCreateEvent event) throws APIException {
 			System.out.println(pokemon1Health);
 			PokemonWrapper moves=getMoves(msg);
 			pokemon1Types=getTypePokemon(pokemon1);
+			getTypesPokemon2=true;
 			//moves.getMoves().get(0);
 			for(int i=0; i<moves.getMoves().size(); i++) {
 			//event.getChannel().sendMessage(moves.getMoves().get(i).toString());
@@ -124,6 +131,7 @@ public void handle(MessageCreateEvent event) throws APIException {
 			System.out.println(pokemon2Health);
 			PokemonWrapper moves=getMoves(msg);
 			pokemon2Types=getTypePokemon(pokemon2);
+			pokemon2Types=getTypePokemon(pokemon1);
 			//moves.getMoves().get(0);
 			movesList.clear();
 			for(int i=0; i<moves.getMoves().size(); i++) {
@@ -321,6 +329,15 @@ public int getHP(String pokemon) {
 public String[] getTypePokemon(String pokemon) {
 	String requestURL = "https://pokeapi.co/api/v2/pokemon/" +
 	          pokemon+"/";
+	if(getTypesPokemon2==true) {
+		//pokemonTypes.clear();
+		//pokemonType1.clear();
+		pokemonType1Name="";
+		pokemonTypesArray[0]="";
+		pokemonTypesArray[1]="";
+		//pokemonType2.clear();
+		pokemonType2Name="";
+		}
 	try {
 		URL url = new URL(requestURL);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -331,14 +348,14 @@ public String[] getTypePokemon(String pokemon) {
 		//System.out.println("getinput");
 	    JsonObject userJSON = ((JsonObject) repoReader.read());
 	    con.disconnect();
-	    JsonArray pokemonTypes=userJSON.getJsonArray("types");
-	   JsonObject pokemonType1=pokemonTypes.get(0).asJsonObject().getJsonObject("type");
-	   String pokemonType1Name=pokemonType1.getString("name");
+	    pokemonTypes=userJSON.getJsonArray("types");
+	   pokemonType1=pokemonTypes.get(0).asJsonObject().getJsonObject("type");
+	   pokemonType1Name=pokemonType1.getString("name");
 	   System.out.println(pokemonType1Name);
 	   pokemonTypesArray[0]=pokemonType1Name;
 		try {
-	   JsonObject pokemonType2=pokemonTypes.get(1).asJsonObject().getJsonObject("type");
-	   String pokemonType2Name=pokemonType2.getString("name");
+	   pokemonType2=pokemonTypes.get(1).asJsonObject().getJsonObject("type");
+	   pokemonType2Name=pokemonType2.getString("name");
 	   System.out.println(pokemonType2Name);
 	   pokemonTypesArray[1]=pokemonType2Name;
 	   }
