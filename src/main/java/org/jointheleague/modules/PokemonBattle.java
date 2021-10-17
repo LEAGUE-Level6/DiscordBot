@@ -58,14 +58,8 @@ String type2;
 double damageMultiplier=1;
 Random hpMultiplier=new Random();
 int hpMultiplierInt;
-String[] pokemonTypesArray=new String[2];
 String[] pokemon1Types=new String[2];
 String[] pokemon2Types=new String[2];
-JsonArray pokemonTypes;
-JsonObject pokemonType1;
-String pokemonType1Name;
-JsonObject pokemonType2;
-String pokemonType2Name;
 boolean getTypesPokemon2=false;
 
 public PokemonBattle (String channelName){
@@ -312,7 +306,7 @@ public int getHP(String pokemon) {
 	   System.out.println(hp.get(0));
 	   int hpint=hp.get(0).asJsonObject().getInt("base_stat");
 	   // PokemonWrapper pokemonWrapper=gson.fromJson(userJSON.toString(), PokemonWrapper.class);
-	    return hpint+1000;
+	    return hpint*3;
 	}
 	catch (MalformedURLException e) {
 		System.out.println("url");
@@ -329,15 +323,13 @@ public int getHP(String pokemon) {
 public String[] getTypePokemon(String pokemon) {
 	String requestURL = "https://pokeapi.co/api/v2/pokemon/" +
 	          pokemon+"/";
-	if(getTypesPokemon2==true) {
-		//pokemonTypes.clear();
-		//pokemonType1.clear();
-		pokemonType1Name="";
-		pokemonTypesArray[0]="";
-		pokemonTypesArray[1]="";
-		//pokemonType2.clear();
-		pokemonType2Name="";
-		}
+	JsonArray pokemonTypes;
+	JsonObject pokemonType1;
+	String pokemonType1Name;
+	JsonObject pokemonType2;
+	String pokemonType2Name;
+	String[] pokemonTypesArray=new String[2];
+		
 	try {
 		URL url = new URL(requestURL);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
