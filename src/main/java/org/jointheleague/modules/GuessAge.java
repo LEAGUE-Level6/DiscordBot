@@ -13,7 +13,6 @@ import javax.json.JsonReader;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.jointheleague.modules.pojo.Age;
 import org.jointheleague.modules.pojo.HelpEmbed;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.google.gson.Gson;
 
@@ -21,14 +20,14 @@ import net.aksingh.owmjapis.api.APIException;
 
 public class GuessAge extends CustomMessageCreateListener {
 	private final Gson gson = new Gson(); 
-	private WebClient webClient;
+	//private WebClient webClient;
 	private static final String COMMAND = "!age";
 	int age = 0;
-	public GuessAge(String channelName) {
+	public GuessAge(String channelName) { 
 		super(channelName);			
 		helpEmbed = new HelpEmbed(COMMAND, "Enter your name and I will guess your age");
 
-	}
+	}  
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		if(event.getMessageContent().contains(COMMAND)) {
@@ -37,7 +36,7 @@ public class GuessAge extends CustomMessageCreateListener {
 				event.getChannel().sendMessage("Please enter a name after the command");
 			} else {
 				age = getAgeWithName(name);
-				event.getChannel().sendMessage("You are 63 years old");
+				event.getChannel().sendMessage("You are " + age+" years old");
 			}
 		} 
 
@@ -69,9 +68,7 @@ public class GuessAge extends CustomMessageCreateListener {
 	    return 0;
 	}
 
-    public void setWebClient(WebClient webClient) {
-        this.webClient = webClient;
-    }
+  
 	public static String getCommand() {
 		// TODO Auto-generated method stub
 		return COMMAND;

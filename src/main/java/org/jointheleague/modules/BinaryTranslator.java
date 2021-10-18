@@ -36,7 +36,7 @@ public class BinaryTranslator extends CustomMessageCreateListener{
 					catch (NumberFormatException e) {
 						e.printStackTrace(); 
 						sendErrorMessage(event);
-					}
+					} 
 				} 
 				//check if user wants to go from binary to decimal
 				//if second word is "from" convert from their number to decimal
@@ -46,15 +46,15 @@ public class BinaryTranslator extends CustomMessageCreateListener{
 						event.getChannel().sendMessage("Here's your decimal number " + binaryToDecimal(cmd[2]));
 					}
 					else {
-						sendErrorMessage(event);
+						sendErrorMessage(event); 
 					}
 				}	
 			} 
 			else {
 				sendErrorMessage(event);
-			}
+			} 
 		}
-	}
+	} 
 	
 	//use when user enters incorrect command parameters
 	public void sendErrorMessage(MessageCreateEvent event) {
