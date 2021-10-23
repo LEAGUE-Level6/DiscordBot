@@ -36,8 +36,9 @@ private static final String COMMAND = "!pokemon";
 private static final String COMMAND2="use";
 private final Gson gson = new Gson();
 List<String> movesList=new ArrayList<String>();
-boolean comma=false;
-boolean hasMove=false;
+boolean comma;
+boolean hasMove;
+boolean battleOver=true;
 String chars;
 String move;
 String pokemon1;
@@ -49,18 +50,19 @@ Random rand=new Random();
 List<String> randomList=new ArrayList<String>();
 List<String> randomList2=new ArrayList<String>();
 int random;
-int players=0;
+int players;
 int turn=1;
 double power1;
 double power2;
 String type1;
 String type2;
-double damageMultiplier=1;
-Random hpMultiplier=new Random();
-int hpMultiplierInt;
+int speed1;
+int speed2;
+double damageMultiplier;
+//Random hpMultiplier=new Random();
+//int hpMultiplierInt;
 String[] pokemon1Types=new String[2];
 String[] pokemon2Types=new String[2];
-boolean getTypesPokemon2=false;
 
 public PokemonBattle (String channelName){
 super(channelName);
@@ -70,8 +72,7 @@ helpEmbed=new HelpEmbed("COMMAND", "");
 @Override
 public void handle(MessageCreateEvent event) throws APIException {
 	// TODO Auto-generated method stub
-	if(event.getMessageContent().contains(COMMAND)) {
-
+	if(event.getMessageContent().contains(COMMAND)&&battleOver==true) {
 		//remove the command so we are only left with the search term
 		String msg = event.getMessageContent().replaceAll(" ", "").replace(COMMAND, "");
 
@@ -83,10 +84,11 @@ public void handle(MessageCreateEvent event) throws APIException {
 			//hpMultiplierInt=hpMultiplier.nextInt(2);
 			//hpMultiplierInt+=2;
 			pokemon1Health=getHP(pokemon1);
+			speed1=getSpeed(pokemon1);
 			System.out.println(pokemon1Health);
+			System.out.println("Speed="+speed1);
 			PokemonWrapper moves=getMoves(msg);
 			pokemon1Types=getTypePokemon(pokemon1);
-			getTypesPokemon2=true;
 			//moves.getMoves().get(0);
 			for(int i=0; i<moves.getMoves().size(); i++) {
 			//event.getChannel().sendMessage(moves.getMoves().get(i).toString());
@@ -122,7 +124,9 @@ public void handle(MessageCreateEvent event) throws APIException {
 			//hpMultiplierInt=hpMultiplier.nextInt(2);
 			//hpMultiplierInt+=2;
 			pokemon2Health=getHP(pokemon2);
+			int speed2=getSpeed(pokemon2);
 			System.out.println(pokemon2Health);
+			System.out.println("Speed="+speed2);
 			PokemonWrapper moves=getMoves(msg);
 			pokemon2Types=getTypePokemon(pokemon2);
 			//pokemon1Types=getTypePokemon(pokemon1);
@@ -154,9 +158,20 @@ public void handle(MessageCreateEvent event) throws APIException {
 				movesList.remove(random);
 				}
 				event.getChannel().sendMessage("You selected "+msg+". Your moves are "+randomList2.get(0)+", "+randomList2.get(1)+", "+randomList2.get(2)+" and "+randomList2.get(3)+ ". The battle has begun.");
+				System.out.println("Speed="+speed2);
+				if(speed1>speed2) {
+					turn=1;
+				}
+				else if(speed1<speed2) {
+					turn=2;
+				}
+				else {
+					turn=1;
+				}
 		}
 	}
 	else if(event.getMessageContent().toLowerCase().contains(COMMAND2) && players==2) {
+		battleOver=false;
 		String msg = event.getMessageContent().replaceAll(" ", "").replace(COMMAND2, "").toLowerCase();
 		if (msg.equals("")) {
 			event.getChannel().sendMessage("Please put a word after the command");
@@ -181,6 +196,11 @@ public void handle(MessageCreateEvent event) throws APIException {
 				event.getChannel().sendMessage(pokemon1+" did "+power1+" damage to "+pokemon2+". "+pokemon2+" now has "+pokemon2Health+" health left.");
 				if(pokemon2Health<=0) {
 					event.getChannel().sendMessage(pokemon1+" has won the battle.");
+					battleOver=true;
+					players=0;
+					movesList.clear();
+					randomList.clear();
+					randomList2.clear();
 				}
 				}
 				else {
@@ -205,6 +225,11 @@ public void handle(MessageCreateEvent event) throws APIException {
 				event.getChannel().sendMessage(pokemon2+" did "+power2+" damage to "+pokemon1+". "+pokemon1+" now has "+pokemon1Health+" health left.");
 				if(pokemon1Health<=0) {
 					event.getChannel().sendMessage(pokemon2+" has won the battle.");
+					battleOver=true;
+					players=0;
+					movesList.clear();
+					randomList.clear();
+					randomList2.clear();
 				}
 				}
 				else {
@@ -563,6 +588,38 @@ catch (MalformedURLException e) {
 	System.out.println("io");
 	e.printStackTrace();
 }
+	return 0;
+}
+public int getSpeed(String pokemon) {
+	String requestURL = "https://pokeapi.co/api/v2/pokemon/" +
+	          pokemon+"/";
+	try {
+		
+		//the following code will probably be the same for your feature
+		URL url = new URL(requestURL);
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestProperty("User-Agent", "Jake");
+		//System.out.println("open");
+		con.setRequestMethod("GET");
+		JsonReader repoReader = Json.createReader(con.getInputStream());
+		//System.out.println("getinput");
+	    JsonObject userJSON = ((JsonObject) repoReader.read());
+	    con.disconnect();
+	    JsonArray stats=userJSON.getJsonArray("stats");
+	   System.out.println(stats.get(0));
+	   int speedInt=stats.get(5).asJsonObject().getInt("base_stat");
+	    return speedInt;
+	}
+	catch (MalformedURLException e) {
+		System.out.println("url");
+		e.printStackTrace();
+	} catch (ProtocolException e) {
+		System.out.println("prot");
+		e.printStackTrace();
+	} catch (IOException e) {
+		System.out.println("io");
+		e.printStackTrace();
+	}
 	return 0;
 }
 }
