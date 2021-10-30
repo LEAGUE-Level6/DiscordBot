@@ -107,8 +107,14 @@ public void handle(MessageCreateEvent event) throws APIException {
 				progress++;
 			}
 			}
-			movesList.add(move);
 			//System.out.println(move);
+			try {
+				double j=getMovePower(move);
+				movesList.add(move);
+			}
+			catch (Exception e) {
+				System.out.println("no move power");
+			}
 			}
 			for(int i=0; i<4; i++) {
 			random=rand.nextInt(movesList.size());
@@ -149,7 +155,13 @@ public void handle(MessageCreateEvent event) throws APIException {
 				progress++;
 			}
 			}
-			movesList.add(move);
+			try {
+				double j=getMovePower(move);
+				movesList.add(move);
+			}
+			catch (Exception e) {
+				System.out.println("no move power");
+			}
 			}
 			for(int i=0; i<4; i++) {
 				random=rand.nextInt(movesList.size());
@@ -412,7 +424,7 @@ public double getMovePower(String move) {
 	    JsonObject userJSON = ((JsonObject) repoReader.read());
 	    con.disconnect();
 	    double power=userJSON.getInt("power");
-	    System.out.println(power);
+	  //  System.out.println(power);
 	   // PokemonWrapper pokemonWrapper=gson.fromJson(userJSON.toString(), PokemonWrapper.class);
 	    return power;
 	}
