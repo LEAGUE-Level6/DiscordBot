@@ -39,6 +39,7 @@ List<String> movesList=new ArrayList<String>();
 boolean comma;
 boolean hasMove;
 boolean battleOver=true;
+boolean damage=false;
 String chars;
 String move;
 String pokemon1;
@@ -58,6 +59,7 @@ String type1;
 String type2;
 int speed1;
 int speed2;
+int realPokemon=-1;
 double damageMultiplier;
 //Random hpMultiplier=new Random();
 //int hpMultiplierInt;
@@ -75,10 +77,17 @@ public void handle(MessageCreateEvent event) throws APIException {
 	if(event.getMessageContent().contains(COMMAND)&&battleOver==true) {
 		//remove the command so we are only left with the search term
 		String msg = event.getMessageContent().replaceAll(" ", "").replace(COMMAND, "");
-
+try {
+	realPokemon=getValidURL(msg);
+	realPokemon++;
+}
+catch (Exception e){
+	event.getChannel().sendMessage("Use a real pokemon");
+}
 		if (msg.equals("")) {
 			event.getChannel().sendMessage("Please put a word after the command");
-		} else if(players==0) {
+		} else if(players==0 && realPokemon>0) {
+			realPokemon=-1;
 			players=1;
 			pokemon1=msg;
 			//hpMultiplierInt=hpMultiplier.nextInt(2);
@@ -108,23 +117,34 @@ public void handle(MessageCreateEvent event) throws APIException {
 			}
 			}
 			//System.out.println(move);
-			try {
-				double j=getMovePower(move);
-				movesList.add(move);
-			}
-			catch (Exception e) {
-				System.out.println("no move power");
-			}
+			//try {
+			//	double j=getMovePower(move);
+			movesList.add(move);
+			//}
+			//catch (Exception e) {
+				//System.out.println("no move power");
+			//}
 			}
 			for(int i=0; i<4; i++) {
-			random=rand.nextInt(movesList.size());
-			randomList.add(movesList.get(random));
-			System.out.println(movesList.get(random));
-			movesList.remove(random);
+				damage=false;
+			while(damage==false) {
+				random=rand.nextInt(movesList.size());
+				try {
+					double j=getMovePower(movesList.get(random));
+					randomList.add(movesList.get(random));
+					System.out.println(movesList.get(random));
+					damage=true;
+					movesList.remove(random);
+				}
+				catch (Exception e) {
+					System.out.println("no move power");
+					movesList.remove(random);
+				}
+			}
 			}
 			event.getChannel().sendMessage("You selected "+msg+". Your moves are "+randomList.get(0)+", "+randomList.get(1)+", "+randomList.get(2)+" and "+randomList.get(3)+ ". Waiting for second player.");
 		}
-		else if(players==1) {
+		else if(players==1 && realPokemon>0) {
 			players=2;
 			pokemon2=msg;
 			//hpMultiplierInt=hpMultiplier.nextInt(2);
@@ -155,30 +175,44 @@ public void handle(MessageCreateEvent event) throws APIException {
 				progress++;
 			}
 			}
-			try {
-				double j=getMovePower(move);
+			//try {
+			//	double j=getMovePower(move);
 				movesList.add(move);
-			}
-			catch (Exception e) {
-				System.out.println("no move power");
-			}
+			//}
+			//catch (Exception e) {
+				//System.out.println("no move power");
+			//}
 			}
 			for(int i=0; i<4; i++) {
-				random=rand.nextInt(movesList.size());
+				damage=false;
+				while(damage==false) {
+					random=rand.nextInt(movesList.size());
+				try {
+				double k=getMovePower(movesList.get(random));
 				randomList2.add(movesList.get(random));
 				System.out.println(movesList.get(random));
+				damage=true;
 				movesList.remove(random);
 				}
+				catch(Exception e) {
+					System.out.println("no move power");
+					movesList.remove(random);
+				}
+				}
+			}
 				event.getChannel().sendMessage("You selected "+msg+". Your moves are "+randomList2.get(0)+", "+randomList2.get(1)+", "+randomList2.get(2)+" and "+randomList2.get(3)+ ". The battle has begun.");
 				System.out.println("Speed="+speed2);
 				if(speed1>speed2) {
 					turn=1;
+					event.getChannel().sendMessage("It is "+pokemon1+"'s turn.");
 				}
 				else if(speed1<speed2) {
 					turn=2;
+					event.getChannel().sendMessage("It is "+pokemon2+"'s turn.");
 				}
 				else {
 					turn=1;
+					event.getChannel().sendMessage("It is "+pokemon1+"'s turn.");
 				}
 		}
 	}
@@ -200,7 +234,12 @@ public void handle(MessageCreateEvent event) throws APIException {
 				}
 				if(hasMove==true) {
 				turn=2;
-				power1=getMovePower(msg2);
+				try {
+					power1=getMovePower(msg2);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				type1=getMoveType(msg2);
 				damageMultiplier=getDamageRelations(type1);
 				power1=power1*=damageMultiplier;
@@ -229,7 +268,12 @@ public void handle(MessageCreateEvent event) throws APIException {
 				}
 				if(hasMove==true) {
 					turn=1;
-				power2=getMovePower(msg2);
+				try {
+					power2=getMovePower(msg2);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				type2=getMoveType(msg2);
 				damageMultiplier=getDamageRelations(type2);
 				power2=power2*=damageMultiplier;
@@ -256,6 +300,27 @@ public void handle(MessageCreateEvent event) throws APIException {
 		}
 		}
 	}
+public int getValidURL(String pokemon) throws Exception {
+	String requestURL = "https://pokeapi.co/api/v2/pokemon/" +
+	          pokemon+"/";
+	try {
+		
+		//the following code will probably be the same for your feature
+		URL url = new URL(requestURL);
+		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		con.setRequestProperty("User-Agent", "Jake");
+		//System.out.println("open");
+		con.setRequestMethod("GET");
+		JsonReader repoReader = Json.createReader(con.getInputStream());
+		//System.out.println("getinput");
+	    JsonObject userJSON = ((JsonObject) repoReader.read());
+	    con.disconnect();
+	}
+	catch (Exception e) {
+		throw new Exception();
+	}
+	return 0;
+}
 public PokemonWrapper getMoves(String pokemon) {
 			
 			//create the request URL (can be found in the documentation)
@@ -408,7 +473,7 @@ public String[] getTypePokemon(String pokemon) {
 	}
 	return null;
 }
-public double getMovePower(String move) {
+public double getMovePower(String move) throws Exception {
 	String requestURL = "https://pokeapi.co/api/v2/move/" +
 	          move+"/";
 	try {
@@ -428,17 +493,9 @@ public double getMovePower(String move) {
 	   // PokemonWrapper pokemonWrapper=gson.fromJson(userJSON.toString(), PokemonWrapper.class);
 	    return power;
 	}
-	catch (MalformedURLException e) {
-		System.out.println("url");
-		e.printStackTrace();
-	} catch (ProtocolException e) {
-		System.out.println("prot");
-		e.printStackTrace();
-	} catch (IOException e) {
-		System.out.println("io");
-		e.printStackTrace();
+	catch (Exception e) {
+		throw new Exception();
 	}
-	return 0;
 }
 public String getMoveType(String move) {
 	String requestURL = "https://pokeapi.co/api/v2/move/" +
