@@ -68,7 +68,7 @@ String[] pokemon2Types=new String[2];
 
 public PokemonBattle (String channelName){
 super(channelName);
-helpEmbed=new HelpEmbed("COMMAND", "");
+helpEmbed=new HelpEmbed("!pokemon 'pokemon'", "This command allows you to choose a pokemon. Once two players choose a pokemon, they can start battling by using the 'pokemon' use 'move' command.");
 }
 
 @Override
