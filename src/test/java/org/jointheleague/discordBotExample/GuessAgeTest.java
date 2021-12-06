@@ -45,7 +45,7 @@ class GuessAgeTest {
 	@Mock
 	GuessAge mockGuess;
 	
-	@BeforeEach
+	@BeforeEach 
 	void setUp() { 
         MockitoAnnotations.openMocks(this);
         guess = new GuessAge(null);
@@ -97,25 +97,5 @@ class GuessAgeTest {
 		//then
 		 assertEquals(expectedAge, actualAge);
 	}
-	@Test
-	void shouldAssignAge() {
-		String name = "Grace";
-		int expectedAge  = 63;
-		
-		when(testEvent.getMessageContent()).thenReturn(name);
-        when(testEvent.getChannel()).thenReturn(textChannel);
-
-		when(mockGuess.getAgeWithName(name)).thenReturn(63);
-		
-		try {
-			guess.handle(testEvent);
-
-		} catch (APIException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//assertEquals(mockGuess.getAgeWithName(name), expectedAge);
-		verify(textChannel, times(1)).sendMessage("You are "+expectedAge+ " years old");
-
-	}
+	
 }

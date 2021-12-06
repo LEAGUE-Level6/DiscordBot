@@ -29,5 +29,15 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="src/main/resources/WolframAlpha-1.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="lib" path="/Users/gracegabrielson/.m2/repository/org/springframework/spring-webflux/5.2.7.RELEASE/spring-webflux-5.2.7.RELEASE.jar" sourcepath="/Users/gracegabrielson/.m2/repository/org/springframework/spring-webflux/5.2.7.RELEASE/spring-webflux-5.2.7.RELEASE-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.springframework"/>
+			<attribute name="maven.artifactId" value="spring-webflux"/>
+			<attribute name="maven.version" value="5.2.7.RELEASE"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

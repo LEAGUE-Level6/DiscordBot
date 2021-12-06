@@ -27,8 +27,8 @@ public class GoFish extends CustomMessageCreateListener{
 	
 	//picking the player
 	String playerGuess ="";
-	static Random r = new Random();
-	static int randomNum = r.nextInt(11);
+	Random r = new Random();
+	int randomNum = r.nextInt(11);
 	public String firstPlayer = null;
 	
 	//state of the game
@@ -53,11 +53,11 @@ public class GoFish extends CustomMessageCreateListener{
 	@Override
 	public void handle(MessageCreateEvent event) throws APIException {
 		
-		//System.out.println("player: "+ playerCards);
-		//System.out.println("bot: "+ botCards);
+		System.out.println("player: "+ playerCards);
+		System.out.println("bot: "+ botCards);
+		checkWin();
 
 		if(event.getMessageAuthor().getId() != botId) {
-			checkWin();
 			switch(state) {
 			//starting the game/deciding who goes first
 			case 0:
@@ -77,18 +77,18 @@ public class GoFish extends CustomMessageCreateListener{
 			
 			//playing round user
 			case 3:
-				userAsksBot(event);
+				//userAsksBot(event);
 				break;
 			
 			//playing round bot
 			case 4:
-				botAsksUser(event);
+				//botAsksUser(event);
 				break;
 			}
 				
 		}
 		
-	} 
+	}
 	
 	public void pickFirstPlayer(MessageCreateEvent event) {
 		String cmd = event.getMessageContent();
@@ -116,8 +116,8 @@ public class GoFish extends CustomMessageCreateListener{
 	
 	
 	public void createDeck() {
-		for(int i = 0; i < 4; i++) {
-			for(int j = 0; j < 13; j ++) {
+		for(int i = 0; i < 0; i++) {
+			for(int j = 0; j < 0; j ++) {
 				deck.add(j);
 			}
 		}
@@ -132,6 +132,7 @@ public class GoFish extends CustomMessageCreateListener{
 		}
 		 
 		state = 2;
+		System.out.println(state);
 		return shuffledCards;
 	}
 	
@@ -188,7 +189,7 @@ public class GoFish extends CustomMessageCreateListener{
 						}
 					}
 					else{
-						playerCards.add(new Random().nextInt(13));
+						playerCards.add(new Random().nextInt(9));
 						event.getChannel().sendMessage("Go fish");
 						state = 4;
 					}
@@ -208,7 +209,7 @@ public class GoFish extends CustomMessageCreateListener{
 	
 	public void botAsksUser(MessageCreateEvent event) {
 		//bot asks for random card
-		int randCard = new Random().nextInt(13);
+		int randCard = new Random().nextInt(9);
 		event.getChannel().sendMessage("Do you have any " + randCard + "s?");
 		
 		//search player deck
@@ -221,7 +222,7 @@ public class GoFish extends CustomMessageCreateListener{
 				}
 			}
 			else {
-				botCards.add(new Random().nextInt(13));
+				botCards.add(new Random().nextInt(9));
 			} 
 			
 		}
@@ -258,17 +259,20 @@ public class GoFish extends CustomMessageCreateListener{
 	int playerCount = 0;
 	int botCount = 0;
 	public String checkWin() {
-		
+		System.out.println("win checked");
 		String winner = "";
 		if(deck.size()==0) {
+			System.out.println("win checked");
+
 			//check to see if player wins
 			for(int i = 0; i < playerCards.size(); i ++) {
 				for(int j = 0; j < playerCards.size(); j++) {
 					if(playerCards.get(i) == playerCards.get(j)) {
 						playerCount++;
+						System.out.println("playercount");
 					}
 				}
-				
+				 
 			}
 			//check to see if bot wins
 			for(int i = 0; i < botCards.size(); i ++){
@@ -305,11 +309,6 @@ public class GoFish extends CustomMessageCreateListener{
 	public static String getCommand() {
 		return COMMAND;
 	}
-	
-	public int getRandNum() {
-		return randomNum;
-	}
-	
 	
 	
 }

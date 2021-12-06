@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Random;
 
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.MessageAuthor;
@@ -38,6 +39,8 @@ class BinaryTranslatorTest {
 	@Mock
 	private MessageAuthor author;
 	
+	@Mock
+	private Random rand;
 	
 	@BeforeEach
     void setUp() {
@@ -159,26 +162,14 @@ class BinaryTranslatorTest {
 		} catch (APIException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace(); 
-		}
+		} 
         
         verify(textChannel, times(1)).sendMessage("Here's your decimal number " + expectedDec);
         
 		
-	}
+	} 
 	
-	@Test
-	void shouldGiveNumFormatException() throws NumberFormatException{
-		//given
-		String decimal = "four";
-		String command = BinaryTranslator.getCommand() + " to four"
-				+ "";
-		when(testEvent.getMessageContent()).thenReturn(command);
-		when(testEvent.getChannel()).thenReturn(textChannel);
-        when(testEvent.getMessageAuthor()).thenReturn(author);
-        when(author.getId()).thenReturn(869256021326049280L);
-        //when
-       assertThrows(NumberFormatException.class, () -> bTranslate.decimalToBinary(decimal));
-	}
-	
+
+	 
 	
 }

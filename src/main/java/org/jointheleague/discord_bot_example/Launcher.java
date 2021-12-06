@@ -5,8 +5,8 @@ import java.util.Map;
 /** 
  * Launches the bot.
  * @author keithgroves and https://tinystripz.com
- *
- */
+ * 
+ */ 
 public class Launcher {
 	public static void main(String[] args) {
 		if (args.length == 0) {
