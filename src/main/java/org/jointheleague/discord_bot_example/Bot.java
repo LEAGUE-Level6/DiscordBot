@@ -39,6 +39,11 @@ public class Bot {
 		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 
 		// add Listeners
+
+		NumberRandom rn = new NumberRandom(channelName);
+		api.addMessageCreateListener(rn);
+		helpListener.addHelpEmbed(rn.getHelpEmbed());
+
 		DiscordLibrary dl = new DiscordLibrary(channelName);
 		api.addMessageCreateListener(dl);
 		helpListener.addHelpEmbed(dl.getHelpEmbed());
@@ -160,9 +165,9 @@ public class Bot {
 		api.addMessageCreateListener(depress);
 		helpListener.addHelpEmbed(depress.getHelpEmbed());
 
-    Depression depress = new Depression(channelName);
-		api.addMessageCreateListener(depress);
-		helpListener.addHelpEmbed(depress.getHelpEmbed());
+    //Depression depress = new Depression(channelName);
+//		api.addMessageCreateListener(depress);
+//		helpListener.addHelpEmbed(depress.getHelpEmbed());
 
 		// old way to add listeners
 		api.addMessageCreateListener(helpListener);
