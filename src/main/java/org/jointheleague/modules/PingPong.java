@@ -5,7 +5,7 @@ import org.javacord.api.event.message.MessageCreateEvent;
 import org.jointheleague.modules.pojo.HelpEmbed;
 
 public class PingPong extends CustomMessageCreateListener {
-    private static final String prefix = "!ping";
+    private static final String prefix = "!pingpong";
 
     public PingPong(String channelName) {
         super(channelName);
