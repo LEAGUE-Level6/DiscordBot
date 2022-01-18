@@ -30,178 +30,180 @@ public class Bot {
 
         api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 
-        // add Listeners
-        DiscordLibrary dl = new DiscordLibrary(channelName);
-        api.addMessageCreateListener(dl);
-        helpListener.addHelpEmbed(dl.getHelpEmbed());
+		// add Listeners
+
+		NumberRandom rn = new NumberRandom(channelName);
+		api.addMessageCreateListener(rn);
+		helpListener.addHelpEmbed(rn.getHelpEmbed());
+
+		DiscordLibrary dl = new DiscordLibrary(channelName);
+		api.addMessageCreateListener(dl);
+		helpListener.addHelpEmbed(dl.getHelpEmbed());
 
 //		CurrencyConverter cc = new CurrencyConverter(channelName);
 //		api.addMessageCreateListener(cc);
 //		helpListener.addHelpEmbed(cc.getHelpEmbed());
+		
+		ToDoList list = new ToDoList(channelName);
+		api.addMessageCreateListener(list);
+		helpListener.addHelpEmbed(list.getHelpEmbed());
+		
+		MazeGame maze = new MazeGame(channelName);
+		api.addMessageCreateListener(maze);
+		helpListener.addHelpEmbed(maze.getHelpEmbed());
+		
+		MarsPictures marsPictures = new MarsPictures(channelName);
+		api.addMessageCreateListener(marsPictures);
+		helpListener.addHelpEmbed(marsPictures.getHelpEmbed());
+		
+    HeadlineListener head = new HeadlineListener(channelName);
+		api.addMessageCreateListener(head);
+		helpListener.addHelpEmbed(head.getHelpEmbed());
 
-        ToDoList list = new ToDoList(channelName);
-        api.addMessageCreateListener(list);
-        helpListener.addHelpEmbed(list.getHelpEmbed());
+		RandomNumber randomNumber = new RandomNumber(channelName); // replace with feature class later
+		api.addMessageCreateListener(randomNumber);
+		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
 
-        MazeGame maze = new MazeGame(channelName);
-        api.addMessageCreateListener(maze);
-        helpListener.addHelpEmbed(maze.getHelpEmbed());
+		HypeMachine hypeMachine = new HypeMachine(channelName);
+		api.addMessageCreateListener(hypeMachine);
+		helpListener.addHelpEmbed(hypeMachine.getHelpEmbed());
 
-        MarsPictures marsPictures = new MarsPictures(channelName);
-        api.addMessageCreateListener(marsPictures);
-        helpListener.addHelpEmbed(marsPictures.getHelpEmbed());
+		TextStyler textStyler = new TextStyler(channelName);
+		api.addMessageCreateListener(textStyler);
+		helpListener.addHelpEmbed(textStyler.getHelpEmbed());
 
-        HeadlineListener head = new HeadlineListener(channelName);
-        api.addMessageCreateListener(head);
-        helpListener.addHelpEmbed(head.getHelpEmbed());
+		Tomagachi tomagachi = new Tomagachi(channelName);
+		api.addMessageCreateListener(tomagachi);
+		helpListener.addHelpEmbed(tomagachi.getHelpEmbed());
 
-        RandomNumber randomNumber = new RandomNumber(channelName); // replace with feature class later
-        api.addMessageCreateListener(randomNumber);
-        helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
+		SetProfilePic setPFP = new SetProfilePic(channelName);
+		api.addMessageCreateListener(setPFP);
+		helpListener.addHelpEmbed(setPFP.getHelpEmbed());
 
-        HypeMachine hypeMachine = new HypeMachine(channelName);
-        api.addMessageCreateListener(hypeMachine);
-        helpListener.addHelpEmbed(hypeMachine.getHelpEmbed());
+		ToGif toGif = new ToGif(channelName);
+		api.addMessageCreateListener(toGif);
+		helpListener.addHelpEmbed(toGif.getHelpEmbed());
 
-        TextStyler textStyler = new TextStyler(channelName);
-        api.addMessageCreateListener(textStyler);
-        helpListener.addHelpEmbed(textStyler.getHelpEmbed());
+		RandomCase randomCase = new RandomCase(channelName);
+		api.addMessageCreateListener(randomCase);
+		helpListener.addHelpEmbed(randomCase.getHelpEmbed());
 
-        Tomagachi tomagachi = new Tomagachi(channelName);
-        api.addMessageCreateListener(tomagachi);
-        helpListener.addHelpEmbed(tomagachi.getHelpEmbed());
+		_ApiExampleListener apiExampleListener = new _ApiExampleListener(channelName);
+		api.addMessageCreateListener(apiExampleListener);
+		helpListener.addHelpEmbed(apiExampleListener.getHelpEmbed());
 
-        SetProfilePic setPFP = new SetProfilePic(channelName);
-        api.addMessageCreateListener(setPFP);
-        helpListener.addHelpEmbed(setPFP.getHelpEmbed());
+		NewWeather newWeather = new NewWeather(channelName);
+		api.addMessageCreateListener(newWeather);
+		helpListener.addHelpEmbed(newWeather.getHelpEmbed());
 
-        ToGif toGif = new ToGif(channelName);
-        api.addMessageCreateListener(toGif);
-        helpListener.addHelpEmbed(toGif.getHelpEmbed());
+		CoinFlip cp = new CoinFlip(channelName);
+		api.addMessageCreateListener(cp);
 
-        RandomCase randomCase = new RandomCase(channelName);
-        api.addMessageCreateListener(randomCase);
-        helpListener.addHelpEmbed(randomCase.getHelpEmbed());
+		RollDie rollDie = new RollDie(channelName);
+		api.addMessageCreateListener(rollDie);
 
-        _ApiExampleListener apiExampleListener = new _ApiExampleListener(channelName);
-        api.addMessageCreateListener(apiExampleListener);
-        helpListener.addHelpEmbed(apiExampleListener.getHelpEmbed());
+		MaxTicTacToe mttt = new MaxTicTacToe(channelName);
+		api.addMessageCreateListener(mttt);
+		helpListener.addHelpEmbed(mttt.getHelpEmbed());
 
-        NewWeather newWeather = new NewWeather(channelName);
-        api.addMessageCreateListener(newWeather);
-        helpListener.addHelpEmbed(newWeather.getHelpEmbed());
+		pythagcalc pythagCalc = new pythagcalc(channelName);
+		api.addMessageCreateListener(pythagCalc);
+		helpListener.addHelpEmbed(pythagCalc.getHelpEmbed());
+    
+		Reminder reminder = new Reminder(channelName);
+		api.addMessageCreateListener(reminder);
+		helpListener.addHelpEmbed(reminder.getHelpEmbed());
+    
+		Hello hello = new Hello(channelName);
+		api.addMessageCreateListener(hello);
+		helpListener.addHelpEmbed(hello.getHelpEmbed());
 
-        CoinFlip cp = new CoinFlip(channelName);
-        api.addMessageCreateListener(cp);
+		Poll poll = new Poll(channelName);
+		api.addMessageCreateListener(poll);
+		helpListener.addHelpEmbed(poll.getHelpEmbed());
 
-        RollDie rollDie = new RollDie(channelName);
-        api.addMessageCreateListener(rollDie);
+		//Greeter g = new Greeter(channelName);
+		//api.addMessageCreateListener(g);
+		//helpListener.addHelpEmbed(g.getHelpEmbed());
+		DiscordZoomAccess dza = new DiscordZoomAccess(channelName);
+		api.addMessageCreateListener(dza);
+		helpListener.addHelpEmbed(dza.getHelpEmbed());
+    
+		Poker poker = new Poker(channelName);
+		api.addMessageCreateListener(poker);
+		helpListener.addHelpEmbed(poker.getHelpEmbed());
 
-        MaxTicTacToe mttt = new MaxTicTacToe(channelName);
-        api.addMessageCreateListener(mttt);
-        helpListener.addHelpEmbed(mttt.getHelpEmbed());
+		CovidCaseGetter covid = new CovidCaseGetter(channelName);
+		api.addMessageCreateListener(covid);
+		helpListener.addHelpEmbed(covid.getHelpEmbed());
 
-        pythagcalc pythagCalc = new pythagcalc(channelName);
-        api.addMessageCreateListener(pythagCalc);
-        helpListener.addHelpEmbed(pythagCalc.getHelpEmbed());
+		ListMakerMessageListener LM = new ListMakerMessageListener(channelName);
+		api.addMessageCreateListener(LM);
+		helpListener.addHelpEmbed(LM.getHelpEmbed());
 
-        Reminder reminder = new Reminder(channelName);
-        api.addMessageCreateListener(reminder);
-        helpListener.addHelpEmbed(reminder.getHelpEmbed());
+		Dice d = new Dice(channelName);
+		api.addMessageCreateListener(d);
+		helpListener.addHelpEmbed(d.getHelpEmbed());
 
-        Hello hello = new Hello(channelName);
-        api.addMessageCreateListener(hello);
-        helpListener.addHelpEmbed(hello.getHelpEmbed());
+		UnbeatableRockPaperScissors rps = new UnbeatableRockPaperScissors(channelName);
+		api.addMessageCreateListener(rps);
+		helpListener.addHelpEmbed(rps.getHelpEmbed());
 
-        Poll poll = new Poll(channelName);
-        api.addMessageCreateListener(poll);
-        helpListener.addHelpEmbed(poll.getHelpEmbed());
+		FilmRecommendations f = new FilmRecommendations(channelName);
+		api.addMessageCreateListener(f);
+		helpListener.addHelpEmbed(f.getHelpEmbed());
 
-        //Greeter g = new Greeter(channelName);
-        //api.addMessageCreateListener(g);
-        //helpListener.addHelpEmbed(g.getHelpEmbed());
-        DiscordZoomAccess dza = new DiscordZoomAccess(channelName);
-        api.addMessageCreateListener(dza);
-        helpListener.addHelpEmbed(dza.getHelpEmbed());
+    Depression depress = new Depression(channelName);
+		api.addMessageCreateListener(depress);
+		helpListener.addHelpEmbed(depress.getHelpEmbed());
 
-        Poker poker = new Poker(channelName);
-        api.addMessageCreateListener(poker);
-        helpListener.addHelpEmbed(poker.getHelpEmbed());
-
-        CovidCaseGetter covid = new CovidCaseGetter(channelName);
-        api.addMessageCreateListener(covid);
-        helpListener.addHelpEmbed(covid.getHelpEmbed());
-
-        ListMakerMessageListener LM = new ListMakerMessageListener(channelName);
-        api.addMessageCreateListener(LM);
-        helpListener.addHelpEmbed(LM.getHelpEmbed());
-
-        Dice d = new Dice(channelName);
-        api.addMessageCreateListener(d);
-        helpListener.addHelpEmbed(d.getHelpEmbed());
-
-        UnbeatableRockPaperScissors rps = new UnbeatableRockPaperScissors(channelName);
-        api.addMessageCreateListener(rps);
-        helpListener.addHelpEmbed(rps.getHelpEmbed());
-
-        FilmRecommendations f = new FilmRecommendations(channelName);
-        api.addMessageCreateListener(f);
-        helpListener.addHelpEmbed(f.getHelpEmbed());
-
-        Depression depress = new Depression(channelName);
-        api.addMessageCreateListener(depress);
-        helpListener.addHelpEmbed(depress.getHelpEmbed());
-
-        PingPong pingPong = new PingPong(channelName);
-        api.addMessageCreateListener(pingPong);
-
-//    Depression depress = new Depression(channelName);
+    //Depression depress = new Depression(channelName);
 //		api.addMessageCreateListener(depress);
 //		helpListener.addHelpEmbed(depress.getHelpEmbed());
 
-        // old way to add listeners
-        api.addMessageCreateListener(helpListener);
-        api.addMessageCreateListener(new MomBot(channelName));
-        api.addMessageCreateListener(new DadJokes(channelName));
-        api.addMessageCreateListener(new ClockMessageListener(channelName));
-        api.addMessageCreateListener(new CalculatorMessageListener(channelName));
-        api.addMessageCreateListener(new ComicMessageListener(channelName));
-        api.addMessageCreateListener(new ElmoMessageListener(channelName));
-        api.addMessageCreateListener(new FactMessageListener(channelName));
-        api.addMessageCreateListener(new CasinoGameListener(channelName));
-        api.addMessageCreateListener(new HighLowListener(channelName));
-        api.addMessageCreateListener(new Ryland(channelName));
-        api.addMessageCreateListener(new RockPaperScissorsListener(channelName));
-        api.addMessageCreateListener(new leetMessageListener(channelName));
-        api.addMessageCreateListener(new ConnectFour(channelName));
-        api.addMessageCreateListener(new FlagMessageListener(channelName));
-        api.addMessageCreateListener(new EightBall(channelName));
-        api.addMessageCreateListener(new Reddit(channelName));
-        api.addMessageCreateListener(new DeepFrier(channelName));
-        api.addMessageCreateListener(new PictureOf(channelName));
-        api.addMessageCreateListener(new GetPicture(channelName));
-        api.addMessageCreateListener(new CuteAnimal(channelName));
-        api.addMessageCreateListener(new Weather(channelName));
-        api.addMessageCreateListener(new FashionAdvisor(channelName));
-        api.addMessageCreateListener(new LatexRender(channelName));
-        api.addMessageCreateListener(new MinesweeperListener(channelName));
-        api.addMessageCreateListener(new Bot1Listener(channelName));
-        api.addMessageCreateListener(new PingMessageListener(channelName));
-        api.addMessageCreateListener(new CoinFlipMessageListener(channelName));
-        api.addMessageCreateListener(new PlayRPSMessageListener(channelName));
-        api.addMessageCreateListener(new KickMessageListener(channelName));
-        api.addMessageCreateListener(new AssignRoleMessageListener(channelName));
-        api.addMessageCreateListener(new NicknameListener(channelName));
-        api.addMessageCreateListener(new SolveQuadraticListener(channelName));
-        api.addMessageCreateListener(new RollDiceMessageListener(channelName));
-        api.addMessageCreateListener(new MorseTranslator(channelName));
-        api.addMessageCreateListener(new HangmanListener(channelName));
-        api.addMessageCreateListener(new BogoSorterListener(channelName));
-        api.addMessageCreateListener(new ComplimentListener(channelName));
-        api.addMessageCreateListener(new CrazyEights(channelName));
-        api.addMessageCreateListener(new Blackjack(channelName));
-        api.addMessageCreateListener(new RandomCase(channelName));
-        api.addMessageCreateListener(new GetTime(channelName));
-        api.addMessageCreateListener(new ScreenCapture(channelName));
-    }
+		// old way to add listeners
+		api.addMessageCreateListener(helpListener);
+		api.addMessageCreateListener(new MomBot(channelName));
+		api.addMessageCreateListener(new DadJokes(channelName));
+		api.addMessageCreateListener(new ClockMessageListener(channelName));
+		api.addMessageCreateListener(new CalculatorMessageListener(channelName));
+		api.addMessageCreateListener(new ComicMessageListener(channelName));
+		api.addMessageCreateListener(new ElmoMessageListener(channelName));
+		api.addMessageCreateListener(new FactMessageListener(channelName));
+		api.addMessageCreateListener(new CasinoGameListener(channelName));
+		api.addMessageCreateListener(new HighLowListener(channelName));
+		api.addMessageCreateListener(new Ryland(channelName));
+		api.addMessageCreateListener(new RockPaperScissorsListener(channelName));
+		api.addMessageCreateListener(new leetMessageListener(channelName));
+		api.addMessageCreateListener(new ConnectFour(channelName));
+		api.addMessageCreateListener(new FlagMessageListener(channelName));
+		api.addMessageCreateListener(new EightBall(channelName));
+		api.addMessageCreateListener(new Reddit(channelName));
+		api.addMessageCreateListener(new DeepFrier(channelName));
+		api.addMessageCreateListener(new PictureOf(channelName));
+		api.addMessageCreateListener(new GetPicture(channelName));
+		api.addMessageCreateListener(new CuteAnimal(channelName));
+		api.addMessageCreateListener(new Weather(channelName));
+		api.addMessageCreateListener(new FashionAdvisor(channelName));
+		api.addMessageCreateListener(new LatexRender(channelName));
+		api.addMessageCreateListener(new MinesweeperListener(channelName));
+		api.addMessageCreateListener(new Bot1Listener(channelName));
+		api.addMessageCreateListener(new PingMessageListener(channelName));
+		api.addMessageCreateListener(new CoinFlipMessageListener(channelName));
+		api.addMessageCreateListener(new PlayRPSMessageListener(channelName));
+		api.addMessageCreateListener(new KickMessageListener(channelName));
+		api.addMessageCreateListener(new AssignRoleMessageListener(channelName));
+		api.addMessageCreateListener(new NicknameListener(channelName));
+		api.addMessageCreateListener(new SolveQuadraticListener(channelName));
+		api.addMessageCreateListener(new RollDiceMessageListener(channelName));
+		api.addMessageCreateListener(new MorseTranslator(channelName));
+		api.addMessageCreateListener(new HangmanListener(channelName));
+		api.addMessageCreateListener(new BogoSorterListener(channelName));
+		api.addMessageCreateListener(new ComplimentListener(channelName));
+		api.addMessageCreateListener(new CrazyEights(channelName));
+		api.addMessageCreateListener(new Blackjack(channelName));
+		api.addMessageCreateListener(new RandomCase(channelName));
+		api.addMessageCreateListener(new GetTime(channelName));
+		api.addMessageCreateListener(new ScreenCapture(channelName));
+	}
 }
