@@ -11,6 +11,7 @@ import org.javacord.api.DiscordApiBuilder;
  */
 import org.jointheleague.modules.*;
 
+
 public class Bot {
 
 	// The string to show the custom :vomiting_robot: emoji
@@ -68,9 +69,9 @@ public class Bot {
 		api.addMessageCreateListener(head);
 		helpListener.addHelpEmbed(head.getHelpEmbed());
 
-		RandomNumber randomNumber = new RandomNumber(channelName); // replace with feature class later
-		api.addMessageCreateListener(randomNumber);
-		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
+//		RandomNumber randomNumber = new RandomNumber(channelName); // replace with feature class later
+//		api.addMessageCreateListener(randomNumber);
+//		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
 
 		HypeMachine hypeMachine = new HypeMachine(channelName);
 		api.addMessageCreateListener(hypeMachine);
