@@ -1,42 +1,34 @@
 package org.jointheleague.discord_bot_example;
 
 import org.javacord.api.DiscordApi;
-
 import org.javacord.api.DiscordApiBuilder;
-
-/**
- * Launches all of the listeners for one channel.
- * @author keithgroves and https://tinystripz.com
- *
- */
 import org.jointheleague.modules.*;
 
 public class Bot {
 
-	// The string to show the custom :vomiting_robot: emoji
-	public static String emoji = "<:vomiting_robot:642414033290657803>";
+    // The string to show the custom :vomiting_robot: emoji
+    public static String emoji = "<:vomiting_robot:642414033290657803>";
 
-	private String token;
-	private String channelName;
-	DiscordApi api;
-	_HelpListener helpListener;
+    private final String token;
+    private final String channelName;
+    DiscordApi api;
+    _HelpListener helpListener;
 
-	public Bot(String token, String channelName) {
-		this.token = token;
-		this.channelName = channelName;
-		helpListener = new _HelpListener(channelName);
-	}
+    public Bot(String token, String channelName) {
+        this.token = token;
+        this.channelName = channelName;
+        helpListener = new _HelpListener(channelName);
+    }
 
-	public void connect(boolean printInvite) {
+    public void connect(boolean printInvite) {
+        api = new DiscordApiBuilder().setToken(token).login().join();
 
-		api = new DiscordApiBuilder().setToken(token).login().join();
+        // Print the URL to invite the bot
+        if (printInvite) {
+            System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
+        }
 
-		// Print the URL to invite the bot
-		if (printInvite) {
-			System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
-		}
-
-		api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
+        api.getServerTextChannelsByName(channelName).forEach(e -> e.sendMessage("Bot Connected"));
 
 		// add Listeners
 
