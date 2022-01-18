@@ -30,7 +30,7 @@ public class MazeGame extends CustomMessageCreateListener {
 		System.out.println("Heard message: " + event.getMessageContent());
 		if (event.getMessageContent().contains(COMMAND) && !event.getMessageAuthor().isBotUser()) {			
 			if (event.getMessageContent().contains("start") || event.getMessageContent().contains("load")) {
-				String target = event.getMessageContent().substring(11).strip();
+				String target = event.getMessageContent().substring(11);
 				
 				try {
 					if(!target.equalsIgnoreCase("upload")) {
