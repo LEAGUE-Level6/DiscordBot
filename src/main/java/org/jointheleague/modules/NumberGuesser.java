@@ -6,20 +6,13 @@ import org.javacord.api.event.message.MessageCreateEvent;
 
 import java.util.Random;
 
-public class NumberRandom extends CustomMessageCreateListener {
-    public NumberRandom(String channelName) {
+public class NumberGuesser extends CustomMessageCreateListener {
+    public NumberGuesser(String channelName) {
         super(channelName);
     }
 
     @Override
     public void handle(MessageCreateEvent event) throws APIException, InterruptedException {
-        String COMMAND = "!random";
-        String messageContent = event.getMessageContent();
-        if (messageContent.startsWith(COMMAND)) {
-            Random r = new Random();
-            event.getChannel().sendMessage("Your random number is " + r.nextInt(1001));
-        }
-
         String zero = "0";
         String one = "1";
         String two = "2";

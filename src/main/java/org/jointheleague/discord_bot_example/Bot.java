@@ -45,6 +45,10 @@ public class Bot {
 		api.addMessageCreateListener(rn);
 		helpListener.addHelpEmbed(rn.getHelpEmbed());
 
+		NumberGuesser ng = new NumberGuesser(channelName);
+		api.addMessageCreateListener(ng);
+		helpListener.addHelpEmbed(ng.getHelpEmbed());
+
 		DiscordLibrary dl = new DiscordLibrary(channelName);
 		api.addMessageCreateListener(dl);
 		helpListener.addHelpEmbed(dl.getHelpEmbed());
