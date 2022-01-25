@@ -45,9 +45,17 @@ public class Bot {
 		api.addMessageCreateListener(rn);
 		helpListener.addHelpEmbed(rn.getHelpEmbed());
 
+		RollDie rd = new RollDie(channelName);
+		api.addMessageCreateListener(rd);
+		helpListener.addHelpEmbed(rd.getHelpEmbed());
+
 		NumberGuesser ng = new NumberGuesser(channelName);
 		api.addMessageCreateListener(ng);
 		helpListener.addHelpEmbed(ng.getHelpEmbed());
+
+		BotKick bk = new BotKick(channelName);
+		api.addMessageCreateListener(bk);
+		helpListener.addHelpEmbed(bk.getHelpEmbed());
 
 		DiscordLibrary dl = new DiscordLibrary(channelName);
 		api.addMessageCreateListener(dl);
