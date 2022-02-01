@@ -4,6 +4,7 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.jointheleague.modules.*;
 
+
 public class Bot {
 
     // The string to show the custom :vomiting_robot: emoji
@@ -36,6 +37,18 @@ public class Bot {
 		api.addMessageCreateListener(rn);
 		helpListener.addHelpEmbed(rn.getHelpEmbed());
 
+		RollDie rd = new RollDie(channelName);
+		api.addMessageCreateListener(rd);
+		helpListener.addHelpEmbed(rd.getHelpEmbed());
+
+		NumberGuesser ng = new NumberGuesser(channelName);
+		api.addMessageCreateListener(ng);
+		helpListener.addHelpEmbed(ng.getHelpEmbed());
+
+		BotKick bk = new BotKick(channelName);
+		api.addMessageCreateListener(bk);
+		helpListener.addHelpEmbed(bk.getHelpEmbed());
+
 		DiscordLibrary dl = new DiscordLibrary(channelName);
 		api.addMessageCreateListener(dl);
 		helpListener.addHelpEmbed(dl.getHelpEmbed());
@@ -60,9 +73,9 @@ public class Bot {
 		api.addMessageCreateListener(head);
 		helpListener.addHelpEmbed(head.getHelpEmbed());
 
-		RandomNumber randomNumber = new RandomNumber(channelName); // replace with feature class later
-		api.addMessageCreateListener(randomNumber);
-		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
+//		RandomNumber randomNumber = new RandomNumber(channelName); // replace with feature class later
+//		api.addMessageCreateListener(randomNumber);
+//		helpListener.addHelpEmbed(randomNumber.getHelpEmbed());
 
 		HypeMachine hypeMachine = new HypeMachine(channelName);
 		api.addMessageCreateListener(hypeMachine);
