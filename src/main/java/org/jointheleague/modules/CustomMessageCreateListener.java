@@ -22,7 +22,7 @@ public abstract class CustomMessageCreateListener implements MessageCreateListen
 			if (e.getName().equals(channelName)) {
 				try {
 					handle(event);
-				} catch (APIException e1) {
+				} catch (APIException | InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
@@ -34,5 +34,5 @@ public abstract class CustomMessageCreateListener implements MessageCreateListen
 		return this.helpEmbed;
 	}
 
-	public abstract void handle(MessageCreateEvent event) throws APIException;
+	public abstract void handle(MessageCreateEvent event) throws APIException, InterruptedException;
 }
